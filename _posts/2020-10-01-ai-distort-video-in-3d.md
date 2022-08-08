@@ -15,9 +15,25 @@ header:
 
 Previous experiments messing with video textures were so successful that I'm eager to see if the 3D effects can be used to target more semantically meaningful content in a video -- that is, to drive video effects with a perceptual understanding of the content in the video. This experiment segments dancers in the video and applies depth effects to the geometry selectively. This is accomplished entirely inside the shader, and the 3D grid is a single mesh.
 
-segmentation test #1             |  segmentation test #2
-:-------------------------:|:-------------------------:
-[![Segmentation Test #1](https://img.youtube.com/vi/55A24omqleM/hqdefault.jpg)](https://www.youtube.com/watch?v=55A24omqleM "Segmentation Test #1") |  [![Segmentation Test #2](https://img.youtube.com/vi/PkeDwmLdZPk/hqdefault.jpg)](https://www.youtube.com/watch?v=PkeDwmLdZPk "Segmentation Test #2")
+<div class="video-wrap" style="width:100%; max-width: 512px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/55A24omqleM" title="YouTube video player"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+</div>
+
+<div class="video-wrap" style="width:100%; max-width: 512px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/PkeDwmLdZPk" title="YouTube video player"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+</div>
+
+---
 
 In the experiment above (ipod commercial), the effect is driven by a simple color threshold... which is far from a semantic understanding of the content. So to follow up, I decided to distort the 3D geometry of a mesh based on the content of a video, as interpreted by an artificial neural network. The rough process is as follows:
 ​
@@ -29,4 +45,13 @@ In the experiment above (ipod commercial), the effect is driven by a simple colo
 
 While the end result isn't as exciting or visually pleasing as past explorations, I enjoyed incorporating aspects of AI and computer vision to drive the visual effects. I think this could be used to drive more subtle effects (particles, distortions etc) in something like a music video or hyper stylized film.
 
-[![Connecting Instruments to Unreal Engine](https://yt-embed.herokuapp.com/embed?v=zAM2T98uUm8){:.align-center}](https://www.youtube.com/watch?v=zAM2T98uUm8 "Using AI to Distort Videos in 3D")
+<div class="video-wrap" style="width:100%; max-width: 800px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/zAM2T98uUm8" title="YouTube video player"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- [![Connecting Instruments to Unreal Engine](https://yt-embed.herokuapp.com/embed?v=zAM2T98uUm8){:.align-center}](https://www.youtube.com/watch?v=zAM2T98uUm8 "Using AI to Distort Videos in 3D") -->

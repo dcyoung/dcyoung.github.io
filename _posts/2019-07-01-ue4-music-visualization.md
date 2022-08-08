@@ -12,7 +12,15 @@ classes: wide
 excerpt: Early experiments creating interactive AV tools enabling a user to play with sound in a 3D context.
 ---
 
-[![Video](https://yt-embed.herokuapp.com/embed?v=pBBv5oWQoYE){:.align-center}](https://www.youtube.com/watch?v=pBBv5oWQoYE "Video")
+<!-- [![Video](https://yt-embed.herokuapp.com/embed?v=pBBv5oWQoYE){:.align-center}](https://www.youtube.com/watch?v=pBBv5oWQoYE "Video") -->
+<div class="video-wrap" style="width:100%; max-width: 600px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/pBBv5oWQoYE" title="YouTube video player"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+</div>
 
 ## Analyzing Audio
 
@@ -43,7 +51,17 @@ Details include:
 
 The goal is interactivity, and up until now all these visuals have been **reactive** but not **interactive**. I started with a simple experiment where the intensity/behavior of a reactive visualizer is influenced by the proximity of a target object.
 
-[![Interactive](https://yt-embed.herokuapp.com/embed?v=OxsfofZAA40){:.align-center}](https://www.youtube.com/watch?v=OxsfofZAA40 "Interactive")
+<!-- [![Interactive](https://yt-embed.herokuapp.com/embed?v=OxsfofZAA40){:.align-center}](https://www.youtube.com/watch?v=OxsfofZAA40 "Interactive") -->
+
+<div class="video-wrap" style="width:100%; max-width: 600px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/OxsfofZAA40" title="YouTube video player"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+</div>
+
 
 I then extended this experiment by using the proximity of tracked hand controllers to control the behavior/intensity of the reactive visualizer. Unfortunately I don't have a video as desktop capture in VR is wonky. It was cool though - trust me!
 
@@ -51,4 +69,13 @@ I then extended this experiment by using the proximity of tracked hand controlle
 
 I was playing around with video textures for another project (interactive cloth simulation), and thought it would be fun to try adding a dimension to what is traditionally a very 2D medium (video).
 
-[![Video](https://yt-embed.herokuapp.com/embed?v=pBBv5oWQoYE){:.align-center}](https://www.youtube.com/watch?v=pBBv5oWQoYE "Video")
+<!-- [![Video](https://yt-embed.herokuapp.com/embed?v=pBBv5oWQoYE){:.align-center}](https://www.youtube.com/watch?v=pBBv5oWQoYE "Video") -->
+
+<div class="video-wrap" style="width:100%; max-width: 800px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/pBBv5oWQoYE" title="YouTube video player"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+    </div>
+</div>
