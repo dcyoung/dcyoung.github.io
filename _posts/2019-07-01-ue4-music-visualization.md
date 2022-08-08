@@ -10,6 +10,9 @@ categories:
 permalink: /post-ue4-music-visualization/
 classes: wide
 excerpt: Early experiments creating interactive AV tools enabling a user to play with sound in a 3D context.
+header:
+  og_image: http://img.youtube.com/vi/pBBv5oWQoYE/0.jpg
+  teaser: http://img.youtube.com/vi/pBBv5oWQoYE/0.jpg
 ---
 
 <!-- [![Video](https://yt-embed.herokuapp.com/embed?v=pBBv5oWQoYE){:.align-center}](https://www.youtube.com/watch?v=pBBv5oWQoYE "Video") -->

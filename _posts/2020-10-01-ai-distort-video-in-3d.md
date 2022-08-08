@@ -11,6 +11,8 @@ permalink: /post-using-ai-to-add-dimensions-to-video/
 classes: wide
 excerpt: Experiments adding dimension to video footage, using simple and AI driven approaches.
 header:
+  og_image: http://img.youtube.com/vi/zAM2T98uUm8/0.jpg
+  teaser: http://img.youtube.com/vi/zAM2T98uUm8/0.jpg
 ---
 
 Previous experiments messing with video textures were so successful that I'm eager to see if the 3D effects can be used to target more semantically meaningful content in a video -- that is, to drive video effects with a perceptual understanding of the content in the video. This experiment segments dancers in the video and applies depth effects to the geometry selectively. This is accomplished entirely inside the shader, and the 3D grid is a single mesh.

@@ -17,9 +17,6 @@ title: David Young
 email: david@questionablyartificial.com
 description: >- # this means to ignore newlines until "baseurl:"
   I am a system thinker and passionate Machine Learning Engineer applying research to products.
-  I define problems fit for machine learning, translate SOTA research to production systems, and deploy scalable closed loop ML solutions to solve complex real-world challenges.
-  Beyond work, my passion projects combine data driven design, art and engineering.
-  You can find me adventuring outdoors.
 url: "https://dcyoung.github.io"
 github_username: dcyoung
 minimal_mistakes_skin: default
