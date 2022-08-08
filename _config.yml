@@ -16,7 +16,7 @@
 title: David Young
 email: david@questionablyartificial.com
 description: >- # this means to ignore newlines until "baseurl:"
-  A systems thinker and passionate Machine Learning Engineer.
+  systems thinker && passionate engineer
 url: "https://dcyoung.github.io"
 github_username: dcyoung
 minimal_mistakes_skin: default
@@ -30,7 +30,7 @@ remote_theme: mmistakes/minimal-mistakes
 permalink: /:year/:month/:title/
 paginate: 5 # amount of posts to show
 paginate_path: /page:num/
-timezone: Asia/Kathmandu
+timezone: Etc/GMT-7
 
 include:
   - _pages
@@ -59,7 +59,7 @@ plugins:
 author:
   name   : "David Young"
   avatar : "/images/site/profile_artsy.jpg"
-  bio    : "A systems thinker and passionate Machine Learning Engineer"
+  bio    : "systems thinker & passionate Machine Learning Engineer"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
@@ -67,6 +67,9 @@ author:
     - label: "Linkedin"
       icon: "fab fa-fw fa-linkedin"
       url: "https://www.linkedin.com/in/david-young-09509210a"
+    - label: "YouTube"
+      icon: "fab fa-fw fa-youtube"
+      url: "https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA"
     - label: "Email"
       icon: "fab fa-fw fa-envelope"
       url: "mailto:david@questionablyartificial.com"

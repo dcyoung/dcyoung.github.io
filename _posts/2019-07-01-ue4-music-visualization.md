@@ -15,15 +15,7 @@ header:
   teaser: http://img.youtube.com/vi/pBBv5oWQoYE/0.jpg
 ---
 
-<!-- [![Video](https://yt-embed.herokuapp.com/embed?v=pBBv5oWQoYE){:.align-center}](https://www.youtube.com/watch?v=pBBv5oWQoYE "Video") -->
-<div class="video-wrap" style="width:100%; max-width: 600px; margin: auto;">
-    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
-        <iframe src="https://www.youtube.com/embed/pBBv5oWQoYE" title="YouTube video player"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-    </div>
-</div>
+{% include video id="pBBv5oWQoYE" provider="youtube" %}
 
 ## Analyzing Audio
 
@@ -37,9 +29,22 @@ However, after some experimentation, FMOD proved to be an "all in" kind of solut
 
 I started by creating a ReactiveVisualizer interface and a manager which pipes the audio analysis to any implementations that exist in the scene. The first implementation was a simple exercise in moving from familiar frequency spectrum visualizations to actual 3D geometry. A procedurally generated row of cubes corresponds to various frequency ranges. Each cube grows in size based on the intensity/amplitude of the corresponding frequency. I extended these principles to 2D and spherical coordinates as well.
 
-row | grid | spherical
+<figure class="third">
+    <a href="https://www.youtube.com/watch?v=Vc32w8Er-L0">
+        <img src="https://yt-embed.herokuapp.com/embed?v=Vc32w8Er-L0">
+    </a>
+    <a href="https://www.youtube.com/watch?v=cBzsFvg_5VI">
+        <img src="https://yt-embed.herokuapp.com/embed?v=cBzsFvg_5VI">
+    </a>
+    <a href="https://www.youtube.com/watch?v=QBhdw1tvAQM">
+        <img src="https://yt-embed.herokuapp.com/embed?v=QBhdw1tvAQM">
+    </a>
+    <figcaption>Frequency Spectrum visualization for 1D, 2D and spherical geometry.</figcaption>
+</figure>
+
+<!-- row | grid | spherical
 :-------------------------:|:-------------------------:|:-------------------------:
-[![freq-1d](https://yt-embed.herokuapp.com/embed?v=Vc32w8Er-L0)](https://www.youtube.com/watch?v=Vc32w8Er-L0 "freq-1d") | [![freq-2d](https://yt-embed.herokuapp.com/embed?v=cBzsFvg_5VI)](https://www.youtube.com/watch?v=cBzsFvg_5VI "freq-2d")| [![spherical](https://yt-embed.herokuapp.com/embed?v=QBhdw1tvAQM)](https://www.youtube.com/watch?v=QBhdw1tvAQM "spherical")
+[![freq-1d](https://yt-embed.herokuapp.com/embed?v=Vc32w8Er-L0)](https://www.youtube.com/watch?v=Vc32w8Er-L0 "freq-1d") | [![freq-2d](https://yt-embed.herokuapp.com/embed?v=cBzsFvg_5VI)](https://www.youtube.com/watch?v=cBzsFvg_5VI "freq-2d")| [![spherical](https://yt-embed.herokuapp.com/embed?v=QBhdw1tvAQM)](https://www.youtube.com/watch?v=QBhdw1tvAQM "spherical") -->
 
 Details include:
 
@@ -54,16 +59,7 @@ Details include:
 
 The goal is interactivity, and up until now all these visuals have been **reactive** but not **interactive**. I started with a simple experiment where the intensity/behavior of a reactive visualizer is influenced by the proximity of a target object.
 
-<!-- [![Interactive](https://yt-embed.herokuapp.com/embed?v=OxsfofZAA40){:.align-center}](https://www.youtube.com/watch?v=OxsfofZAA40 "Interactive") -->
-
-<div class="video-wrap" style="width:100%; max-width: 600px; margin: auto;">
-    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
-        <iframe src="https://www.youtube.com/embed/OxsfofZAA40" title="YouTube video player"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-    </div>
-</div>
+{% include video id="OxsfofZAA40" provider="youtube" %}
 
 I then extended this experiment by using the proximity of tracked hand controllers to control the behavior/intensity of the reactive visualizer. Unfortunately I don't have a video as desktop capture in VR is wonky. It was cool though - trust me!
 
@@ -71,13 +67,4 @@ I then extended this experiment by using the proximity of tracked hand controlle
 
 I was playing around with video textures for another project (interactive cloth simulation), and thought it would be fun to try adding a dimension to what is traditionally a very 2D medium (video).
 
-<!-- [![Video](https://yt-embed.herokuapp.com/embed?v=pBBv5oWQoYE){:.align-center}](https://www.youtube.com/watch?v=pBBv5oWQoYE "Video") -->
-
-<div class="video-wrap" style="width:100%; max-width: 800px; margin: auto;">
-    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
-        <iframe src="https://www.youtube.com/embed/pBBv5oWQoYE" title="YouTube video player"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
-    </div>
-</div>
+{% include video id="pBBv5oWQoYE" provider="youtube" %}
