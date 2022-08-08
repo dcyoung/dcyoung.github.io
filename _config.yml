@@ -16,7 +16,7 @@
 title: David Young
 email: david@questionablyartificial.com
 description: >- # this means to ignore newlines until "baseurl:"
-  I am a system thinker and passionate Machine Learning Engineer applying research to products.
+  A systems thinker and passionate Machine Learning Engineer.
 url: "https://dcyoung.github.io"
 github_username: dcyoung
 minimal_mistakes_skin: default
@@ -59,7 +59,7 @@ plugins:
 author:
   name   : "David Young"
   avatar : "/images/site/profile_artsy.jpg"
-  bio    : "Research && Engineering"
+  bio    : "A systems thinker and passionate Machine Learning Engineer applying research to products."
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
