@@ -5,10 +5,21 @@ classes: wide
 excerpt: Learn about me, my current endeavors, research interest areas, and the motive behind this personal blog.
 ---
 
-In this blog, I ... 
+I am a system thinker and passionate Machine Learning Engineer applying research to products.
 
-**About Me**  
-...
+**At Work**  
+
+I have served as a visionary and developer of first party software, ML and AI solutions at early and growth stage companies, spearheading many efforts related to ML including R&D, data-science and engineering. I have identified and defined problems fit for machine learning, translated SOTA research to production systems, and deployed scalable closed loop ML solutions to solve complex real-world challenges. I have experience across domains including robotics, computer vision, natural language processing and document understanding. I have presented on vision, R&D, technology and roadmaps to diverse audiences.
+
+Day to day, I foster a friendly work atmosphere that promotes passionate, curious engagement around challenging problems. I champion the pragmatic use of agile process, the introduction of automation whenever possible, and the constant application of a product mindset.
+
+**At Play**  
+
+My passion projects combine data driven design, art and engineering.
+
+I love generative AI, interactive 3D graphics and rapid physical prototyping.
+
+You can usually find me mountain biking or adventuring outdoors.
 
 **Get in touch**  
 Please feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/david-young-09509210a) or via [email](mailto:david@questionablyartificial.com).

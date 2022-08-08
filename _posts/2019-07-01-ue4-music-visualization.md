@@ -62,7 +62,6 @@ The goal is interactivity, and up until now all these visuals have been **reacti
     </div>
 </div>
 
-
 I then extended this experiment by using the proximity of tracked hand controllers to control the behavior/intensity of the reactive visualizer. Unfortunately I don't have a video as desktop capture in VR is wonky. It was cool though - trust me!
 
 ## Adding dimensions to medium, Playing Video
