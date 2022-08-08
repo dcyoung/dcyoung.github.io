@@ -59,7 +59,7 @@ plugins:
 author:
   name   : "David Young"
   avatar : "/images/site/profile_artsy.jpg"
-  bio    : "A systems thinker and passionate Machine Learning Engineer applying research to products."
+  bio    : "A systems thinker and passionate Machine Learning Engineer"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
