@@ -15,13 +15,13 @@ header:
 ---
 
 <figure class="half">
-    <a href="https://dcyoung.github.io/3dof-stewart-simulator/">
-        <img src="https://raw.githubusercontent.com/dcyoung/3dof-stewart-simulator/90d4fdd3cc0b015444b43767d3137820594c0b6a/docs/images/motion.gif">
-    </a>
-    <a href="https://dcyoung.github.io/3dof-stewart-simulator/">
-        <img src="https://raw.githubusercontent.com/dcyoung/3dof-stewart-simulator/90d4fdd3cc0b015444b43767d3137820594c0b6a/docs/images/debug_hud.jpg">
-    </a>
-    <figcaption>Interactive simulator "look at" behavior (left), modular HUD for real-time debugging (right).</figcaption>
+  <a href="https://dcyoung.github.io/3dof-stewart-simulator/">
+    <img src="https://raw.githubusercontent.com/dcyoung/3dof-stewart-simulator/90d4fdd3cc0b015444b43767d3137820594c0b6a/docs/images/motion.gif">
+  </a>
+  <a href="https://dcyoung.github.io/3dof-stewart-simulator/">
+    <img src="https://raw.githubusercontent.com/dcyoung/3dof-stewart-simulator/90d4fdd3cc0b015444b43767d3137820594c0b6a/docs/images/debug_hud.jpg">
+  </a>
+  <figcaption>Interactive simulator "look at" behavior (left), modular HUD for real-time debugging (right).</figcaption>
 </figure>
 
 ​​This project explored:
