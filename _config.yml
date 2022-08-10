@@ -21,6 +21,8 @@ url: "https://dcyoung.github.io"
 github_username: dcyoung
 minimal_mistakes_skin: default
 search: true
+lunr:
+  search_within_pages: true
 
 # Build settings
 markdown: kramdown
@@ -120,7 +122,7 @@ comments:
     label: "comment" # Optional - must be existing label
 repository: "dcyoung/dcyoung.github.io"
 
-google_site_verification: "xETphZ5K1WItiUzH0YMRgZ8njDZlQMcGd_HD3zxGkuI"
+# google_site_verification: "..."
 
 social:
   type:  Person
@@ -131,5 +133,5 @@ social:
 analytics:
   provider: "google-gtag"
   google:
-    # tracking_id: "UA-98232022-1"
+    tracking_id: "G-8LFRSKS1E8"
     anonymize_ip: false

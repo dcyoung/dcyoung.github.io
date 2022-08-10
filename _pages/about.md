@@ -9,7 +9,7 @@ I am a systems thinker and passionate Machine Learning Engineer applying researc
 
 **At Work**
 
-I have served as a visionary and developer of first party software, ML and AI solutions at early and growth stage companies, spearheading many efforts related to ML including R&D, data-science and engineering. I have identified and defined problems fit for machine learning, translated SOTA research to production systems, and deployed scalable closed loop ML solutions to solve complex real-world challenges. I have experience across domains including robotics, computer vision, natural language processing and document understanding. I have presented on vision, R&D, technology and roadmaps to diverse audiences.
+I have served as a visionary and developer of first party software, ML and AI solutions at early and growth stage companies, spearheading many efforts related to ML including R&D, data-science and engineering. I have identified and defined problems fit for machine learning, translated state-of-the-art research to production systems, and deployed scalable closed loop ML solutions to solve complex real-world challenges. I have experience across domains including robotics, computer vision, natural language processing and document understanding. I have presented on vision, R&D, technology and roadmaps to diverse audiences.
 
 Day to day, I foster a friendly work atmosphere that promotes passionate, curious engagement around challenging problems. I champion the pragmatic use of agile process, the introduction of automation whenever possible, and the constant application of a product mindset.
 
