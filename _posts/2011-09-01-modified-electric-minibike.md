@@ -34,7 +34,6 @@ Being at school without a garage of tools, any serious fab work was out of the q
 - 4x 12V/12A UB12120 SLA Batteries
 - 48V 3.0 amp XLR Battery Charger
 
-
 The motor mounted up as expected. Three of the four batteries would have mounted just fine in the stock locations, but trying to cram four into a space meant for three required some "reforming" of the front case behind the front fairing and a couple of large zip ties holding the two upper batteries together. It was a bit kluged for my taste, and if I could do it again (with access to some power tools) I'd fabricate a new cage to hold everything without much trouble. All in all it worked out just fine and I wasn't worried about anything coming loose or undone, simply that water and condensation might find their way in.
 
 {: .text-justify}
