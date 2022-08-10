@@ -117,7 +117,8 @@ comments:
   utterances:
     theme: "github-light" # "github-dark"
     issue_term: "pathname"
-repository: "dcyoung/blog-comments"
+    label: "comment" # Optional - must be existing label
+repository: "dcyoung/dcyoung.github.io"
 
 google_site_verification: "xETphZ5K1WItiUzH0YMRgZ8njDZlQMcGd_HD3zxGkuI"
 
