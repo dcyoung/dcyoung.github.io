@@ -2,10 +2,11 @@ import os
 from pathlib import Path
 from PIL import Image
 
-CONVERTABLE_IMAGE_EXT = [".png", ".PNG", ".tiff", ".TIFF", ".tif", ".TIF"]
+CONVERTABLE_IMAGE_EXT = [".png", ".PNG", ".tiff", ".TIFF", ".tif", ".TIF", ".jpeg", ".JPEG", ".JPG"]
 def main(args) -> None:
     targets = []
-    for input_path in [Path(x) for x in args.input]:
+    input_paths = [Path(x) for x in args.input]
+    for input_path in input_paths:
         if input_path.is_file():
             targets.append(input_path)
         else:
@@ -21,7 +22,11 @@ def main(args) -> None:
         if args.delete:
             src.unlink()
 
-
+    if args.delete_identifiers:
+        for input_path in input_paths:
+            if input_path.is_dir():
+                for fpath in input_path.glob(f"*.Identifier"):
+                    fpath.unlink()
 
 if __name__ == "__main__":
     import argparse
@@ -53,6 +58,12 @@ if __name__ == "__main__":
         type=str2bool,
         default=True,
         help="If True, delete the source images.",
+    )
+    parser.add_argument(
+        "--delete_identifiers",
+        type=str2bool,
+        default=True,
+        help="If True, delete any identifier files.",
     )
     args, unparsed = parser.parse_known_args()
 
