@@ -19,7 +19,11 @@ header:
 
 The following is a development blog of sorts documenting a Virtual Reality and Leap Motion project built for a VR course at UIUC. The experience is an interactive Virtual Reality sandbox for the creation of digital logic circuits and graphical scripting. The goal was to visualize runtime flowpath in the context of interactive circuits formed of finite primitive elements.
 
-## Representing and Solving Digital Logic Circuits 
+## Project Proposal
+
+<object data="/images/runtime-flowpath-vr/proposal.pdf" width="1000" height="1000" type="application/pdf"></object>
+
+## Representing and Solving Digital Logic Circuits
 
 **(March 23rd, 2016)**
 

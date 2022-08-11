@@ -27,7 +27,7 @@ header:
 
 The main goal is to implement robust homography and fundamental matrix estimation to register pairs of images separated either by a 2D or 3D projective transformation. This page details the estimation of homography. Another page coming soon will detail the estimation of the fundamental matrix.
 
-The source code can be obtained here: https://github.com/dcyoung/ImageAlign
+The source code can be obtained here: [github.com/dcyoung/ImageAlign](https://github.com/dcyoung/ImageAlign)
 
 ## Fitting a Homography (Provided Known Matches)
 

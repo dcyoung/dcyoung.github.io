@@ -21,7 +21,7 @@ There were a few goals here. All goals refer to matching points from two images 
 - Find the centers of cameras from known camera matrices.
 - Use linear least squares to triangulate the position of each matching pair of points given two cameras. Display these two camera centers and reconstructed points in 3D. 
 
-The source code can be obtained here: https://github.com/dcyoung/FundamentalMatrixEstimation
+The source code can be obtained here: [github.com/dcyoung/FundamentalMatrixEstimation](https://github.com/dcyoung/FundamentalMatrixEstimation)
 
 ## Fitting a Fundamental Matrix (Provided Known Matches)
 
