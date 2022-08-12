@@ -4,7 +4,7 @@ date: 2015-12-02T00:00:00-00:00
 last_modified_at: 2015-12-02T00:00:00-00:00
 categories:
   - ai
-  - bio medical engineering
+  - biomedical engineering
   - school project
 permalink: /post-simulating-neuronal-learning-during-bci/
 classes: wide
