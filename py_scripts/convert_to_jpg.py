@@ -2,7 +2,21 @@ import os
 from pathlib import Path
 from PIL import Image
 
-CONVERTABLE_IMAGE_EXT = [".png", ".PNG", ".tiff", ".TIFF", ".tif", ".TIF", ".jpeg", ".JPEG", ".JPG"]
+CONVERTABLE_IMAGE_EXT = [
+    ".png",
+    ".PNG",
+    ".tiff",
+    ".TIFF",
+    ".tif",
+    ".TIF",
+    ".jpeg",
+    ".JPEG",
+    ".JPG",
+    ".gif",
+    ".GIF",
+]
+
+
 def main(args) -> None:
     targets = []
     input_paths = [Path(x) for x in args.input]
@@ -12,13 +26,13 @@ def main(args) -> None:
         else:
             for ext in CONVERTABLE_IMAGE_EXT:
                 targets += input_path.glob(f"*{ext}")
-    
+
     for src in targets:
         dst = (Path(args.output) if args.output else src.parent) / f"{src.stem}.jpg"
         dst.parent.mkdir(exist_ok=True)
         with Image.open(src) as im:
             im.convert("RGB").save(dst)
-        
+
         if args.delete:
             src.unlink()
 
@@ -28,8 +42,10 @@ def main(args) -> None:
                 for fpath in input_path.glob(f"*.Identifier"):
                     fpath.unlink()
 
+
 if __name__ == "__main__":
     import argparse
+
     def str2bool(v) -> bool:
         if isinstance(v, bool):
             return v
@@ -39,7 +55,7 @@ if __name__ == "__main__":
             return False
         else:
             raise argparse.ArgumentTypeError("Boolean value expected.")
-    
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--input",
@@ -68,4 +84,3 @@ if __name__ == "__main__":
     args, unparsed = parser.parse_known_args()
 
     main(args)
-    
