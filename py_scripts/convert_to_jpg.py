@@ -25,7 +25,7 @@ def main(args) -> None:
             targets.append(input_path)
         else:
             for ext in CONVERTABLE_IMAGE_EXT:
-                targets += input_path.glob(f"*{ext}")
+                targets += input_path.rglob(f"*{ext}")
 
     for src in targets:
         dst = (Path(args.output) if args.output else src.parent) / f"{src.stem}.jpg"
@@ -39,7 +39,7 @@ def main(args) -> None:
     if args.delete_identifiers:
         for input_path in input_paths:
             if input_path.is_dir():
-                for fpath in input_path.glob(f"*.Identifier"):
+                for fpath in input_path.rglob("*.Identifier"):
                     fpath.unlink()
 
 

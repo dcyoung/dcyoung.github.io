@@ -1,3 +1,4 @@
+scratch.sh
 images/**/*.Identifier
 _site
 .sass-cache
