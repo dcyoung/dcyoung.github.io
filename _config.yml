@@ -122,7 +122,7 @@ comments:
     label: "comment" # Optional - must be existing label
 repository: "dcyoung/dcyoung.github.io"
 
-# google_site_verification: "..."
+#google_site_verification: "yourVerificationCode"
 
 social:
   type:  Person
