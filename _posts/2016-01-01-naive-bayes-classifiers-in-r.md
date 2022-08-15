@@ -11,8 +11,8 @@ classes: wide
 toc: True
 excerpt: Writing a naive bayes classifier from scrach in R.
 header:
-  og_image: https://play-lh.googleusercontent.com/UeiCnTGunCg4qcuBpFoVqG1DgJZqDsnW2CfY5lldp5ZfcQfr65yKTD53V7ug0kaV48g
-  teaser: https://play-lh.googleusercontent.com/UeiCnTGunCg4qcuBpFoVqG1DgJZqDsnW2CfY5lldp5ZfcQfr65yKTD53V7ug0kaV48g
+  og_image: /images/logos/r.png
+  teaser: /images/logos/r.png
 ---
 
 ## Dataset

@@ -5,6 +5,7 @@ last_modified_at: 2012-01-01T00:00:00-00:00
 categories:
   - diy
   - automotive
+  - motorsports
 permalink: /post-track-day-mx5/
 classes: wide
 toc: true

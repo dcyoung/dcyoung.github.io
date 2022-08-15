@@ -4,6 +4,8 @@ date: 2011-09-01T00:00:00-00:00
 last_modified_at: 2011-09-01T00:00:00-00:00
 categories:
   - diy
+  - electronics
+  - motorsports
 permalink: /post-modified-electric-minibike/
 classes: wide
 excerpt: Building a ridiculous campus commuter from a childs toy.
