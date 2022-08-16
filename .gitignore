@@ -1,5 +1,6 @@
 scratch.sh
 images/**/*.Identifier
+images/hobbies/
 _site
 .sass-cache
 .jekyll-metadata
