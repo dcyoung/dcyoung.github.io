@@ -5,7 +5,7 @@ last_modified_at: 2014-01-15T00:00:00-00:00
 categories:
   - webdev
   - school project
-permalink: /post-javascript-calendar/
+permalink: /post-multi-room-chat-server/
 classes: wide
 excerpt: A simple multi-room chat server built using Node.JS and Socket.IO
 header:

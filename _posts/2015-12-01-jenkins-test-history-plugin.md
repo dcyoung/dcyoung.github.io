@@ -5,7 +5,7 @@ last_modified_at: 2015-02-15T00:00:00-00:00
 categories:
   - webdev
   - school project
-permalink: /post-webgl-animation-2d/
+permalink: /post-jenkins-plugin/
 classes: wide
 excerpt: Building a jenkins plugin extension to analyze test results.
 header:
