@@ -76,7 +76,8 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 
 Scanse was a small 3 person startup attempting to democratize LiDAR: a traditionally expensive and complicated sensing component for autonomous robots, self driving cars, and environment capture. In two years, my colleagues and I designed, manufactured and shipped over 5000 hardware units with supporting software. Throughout the process we fostered an active community of builders, researchers, artists and hobbyists, continuously releasing additional documentation, open source projects and accessory products. While delivering our primary scanning product, we also prototyped new products for non-invasive indoor occupancy tracking.
 
-- At a small startup, you play a role in everything! However, my main focus was the design and development of interactive software for both the sensing and visualization of complex 3D data. My accomplishments included the following:
+At a small startup, you play a role in everything! However, my main focus was the design and development of interactive software for both the sensing and visualization of complex 3D data. My accomplishments included the following:
+
 - Designed, implemented and shipped cross platform desktop application for visualizing, interpreting and interacting with realtime LiDAR data and 3D point cloud data. Primary technologies included electron and WebGL.
 - Implemented and maintained SDK's used to control LiDAR sensor in various programming languages.
 - Managed numerous contractors and external developers contributing to open software projects.
