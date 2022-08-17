@@ -44,7 +44,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Proven ability to translate techniques and concepts from research papers to working production code  
 - State of the art neural networks for computer vision tasks including classification, object detection and instance segmentation
 - Systems for analyzing model performance, visualization and explainability
-- NLP and mulit-modal models for the classification and organization of both structured and semi-structured text
+- NLP and multi-modal models for the classification and organization of both structured and semi-structured text
 - Unsupervised clustering for the organization of unlabeled data
 - Engineering of complex multi-modal feature vectors for clustering, classification and sequence related problems
 - Modeling uncertainty and calibrating networks
