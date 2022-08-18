@@ -1,7 +1,7 @@
 ---
 title: "Profiling Python w/ cProfile & Snakeviz"
-date: 2021-12-01T00:00:00-00:00
-last_modified_at: 2021-12-01T00:00:00-00:00
+date: 2019_02_01T00:00:00-00:00
+last_modified_at: 2019_02_01T00:00:00-00:00
 categories:
   - software notes
 permalink: /post-profiling-python/
