@@ -3,10 +3,12 @@ permalink: /resume/
 title: "Resume"
 classes: wide
 excerpt: Resume and work experience.
-# toc: true
+toc: true
 date: 2022-08-16T00:00-00:00
 last_modified_at: 2022-08-16T00:00:00-00:00
 ---
+
+# Work Experience
 
 ## Ripcord - Senior Staff ML Engineering Lead
 
@@ -48,9 +50,11 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Unsupervised clustering for the organization of unlabeled data
 - Engineering of complex multi-modal feature vectors for clustering, classification and sequence related problems
 - Modeling uncertainty and calibrating networks
+- Creating interactive tooling and dashboards to visualize insights around data, training exepriments and production
 
 ### ML Ops
 
+- Designed and implemented data engines for passive and pro-active fetching and subsequent organization of anomalous data from deployed robots
 - Designed and implemented ML Ops systems (workflow and orchestration systems for the ML lifecycle) including dataset maintenance, experiment tracking, model training and evaluation, model optimization, inference serving and deployment all based on open source technologies
 - Designed and implemented systems for highly efficient and scalable distributed training based on open source technologies
 
@@ -64,11 +68,21 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 
 ### Software Engineering
 
-// TODO: fill me in... lots of stuff to put here...
+- Familiar and practiced in Agile software engineering methodologies
+- Experience going from customer need to a roadmap of scoped projects
+- Designed and bootstrapped countless software systems and projects
+- Contract, Data Schema and API design, development and maintenance
+- Microservice and distributed system design and development
+- Complex optimization
+- Hardware acceleration
+- GUI applications
 
 ### DevOps
 
-// TODO: fill me in... lots of stuff to put here...
+- Automation wherever possible
+- CI/CD design and maintenance
+- Complex distributed systems testing
+- Package, model and version management
 
 ## Scanse - Director of software
 
@@ -79,6 +93,7 @@ Scanse was a small 3 person startup attempting to democratize LiDAR: a tradition
 At a small startup, you play a role in everything! However, my main focus was the design and development of interactive software for both the sensing and visualization of complex 3D data. My accomplishments included the following:
 
 - Designed, implemented and shipped cross platform desktop application for visualizing, interpreting and interacting with realtime LiDAR data and 3D point cloud data. Primary technologies included electron and WebGL.
+- Designed and implemented a rudimentary but efficient javascript based UI component framework to update and render modified components in the DOM - before React was really a thing!
 - Implemented and maintained SDK's used to control LiDAR sensor in various programming languages.
 - Managed numerous contractors and external developers contributing to open software projects.
 - Supported and fostered active customer community.
@@ -114,6 +129,166 @@ In 2013 a friend and I founded AD/PC, a small business specializing in the desig
 
 In the summer of 2013 I worked for a wealth advising firm in the San Francisco Bay Area, called Cypress Wealth Advisors. During my time there I built client databases in Microsoft Access, handled tax returns for small oil investors and developed software to automate the firm's quarterly summary report process. The latter involved creating software in Java to parse the client database and compile information regarding individual investments before automating LaTeX to stitch together the summary reports for each of the investments relevant to a specific client. Before this, the firm was manually editing a Word Document to produce individualized summary reports which (for a few hundred clients) can take days. I also began working on a graphical interface to extend the functionality and usability of the automated summary reporting.
 
-## La Cocina Mexican Restaurant
+## La Cocina - Restaurant
 
 From 2007-2011 I was employed in various positions at La Cocina, a small Mexican restaurant in Orinda Ca. I started busing tables but moved to bar-tending and waiting which I continued for 4 years. At a small family owned restaurant, being a waiter assumed acting as floor manager. My responsibilities included opening and closing the restaurant, handling the documentation and security of money, managing other staff and even assisting in the design of a new computer system for online catering orders. I believe that every individual should work in the service industry at some point, if only to gain a healthy perspective.
+
+# Research Experience
+
+## Barbour Laboratory of Sensory Neuroscience and Neuroengineering
+
+During undergrad, I worked as a research assistant in the Barbour Laboratory of Sensory Neuroscience and Neuroengineering. My work involved the design and development of mobile applications to aid in Cognitive Neuro-therapeutics, specifically auditory training.
+
+**A description directly from the website for the Laboratory of Sensory Neuroscience and Neuroengineering:**
+
+> Our research group is fundamentally interested in how the brain encodes and processes information. The vertebrate nervous system routinely achieves feats of pattern recognition unparalleled by modern computers. The natural algorithms underlying this pattern recognition and the neuronal circuitry computing them both represent targets for research in my lab, predominantly by measuring single and bulk neuron activity in awake subjects. We are particularly interested in how complex sounds are encoded in the brain when interfering noise is present and how language is processed.
+> 
+> In related work, we also seek to be able to manipulate brain function for therapeutic purposes. Following brain injury such as a stroke, some function is lost and the brain network is disrupted. We apply principles of system theory and neuroplasticity toward developing brain-computer interfaces that can rewire brains and thus recover the lost function. We also explore how noninvasive technologies can be employed to induce therapeutic changes in the brain. One example of this is a series of smartphone-based video games we have designed to deliver listening training. These games are intended to optimize listening skills with a hearing-assist device, such as a cochlear implant or hearing aid.
+
+> Cognitive training software provides exercises whose completion strengthens certain cognitive processes. We seek to develop listening training software in the form of compelling video games playable on smartphones that naturally encourage individuals to complete their auditory training. The goal of this work is to optimize the function of hearing assist devices such as hearing aids and cochlear implants, as well as to enable individuals with a newly correct hearing deficit to learn to communicate effectively.
+
+# Education
+
+I absolutely love learning. Noteworthy coursework is outlined below.
+
+## Graduate - University of Illinois Urbana-Champaign
+
+### Compute Science
+
+- Artificial Intelligence
+- Models of Cognitive Process
+- Geometry for Artificial Intelligence
+- Applied Machine Learning
+- Computer Vision
+- Virtual Reality
+- Software Engineering
+- Embedded Systems
+- Interactive Computer Graphics
+- Computer Architecture in the Era of Custom Accelerators
+
+## Undergraduate - Washington University in St. Louis
+
+### Bio-Medical Engineering
+
+- Introduction to Biomedical Engineering
+- Biomechanics
+- Physiological Control Systems
+- Bioengineering Thermodynamics
+- Signals and Systems
+- Physics of the Heart
+- Quantitative Physiology I
+- Quantitative Physiology I Laboratory
+- Quantitative Physiology II
+- Quantitative Physiology II Laboratory
+- Biomedical Engineering Design
+- Bioelectric Phenomena
+- Transport Phenomena for Biomedical Engineering
+
+### Electrical Engineering & Robotics
+
+- Introduction to Electrical and Electronic Circuits
+- Introduction to Electrical and Electronic Circuits Laboratory
+- Engineering Electromagnetic Principles
+- Signals and Systems
+- (Control Systems)
+- Robotics Laboratory
+- Bioelectric Phenomena
+- Introduction to Computer Architecture and Design
+
+### Computer Science
+
+- Engineering and Scientific Computing
+- Engineering and Scientific Computing Laboratory
+- Computer Science I
+- Computer Science I Laboratory
+- Computer Science II 
+- Computer Science II Laboratory
+- Introduction to Computer Programming (CS-50 Open Courseware)
+- Algorithms and Data Structures
+- Rapid Prototype Development and Creative Programming
+- Introduction to Computer Architecture and Design (UC Berkeley)
+- Computer Vision
+- Videogame Programming
+
+### Math & Natural Sciences
+
+- Calculus II
+- Calculus III
+- Differential Equations
+- Engineering Mathematics
+- Engineering Probability and Statistics
+- General Physics I
+- General Physics I Laboratory
+- General Physics II
+- General Physics II Laboratory
+- General Chemistry I
+- General Chemistry I Laboratory
+- General Chemistry II
+- General Chemistry II Laboratory
+- Principles of Biology I (Bio-chem)
+- Principles of Biology I Laboratory
+- Principles of Biology II (Genetics)
+- Principles of Biology II Laboratory
+
+### Social Sciences
+
+- Microeconomics
+- Macroeconomics
+
+### Teamwork
+
+- Technical Writing
+- Engineering Ethics and Sustainability
+- Engineering Leadership and Team Building
+- Conflict Management and Problem Solving in Engineering
+- Bio-medical Senior Design
+- Advanced Animation
+
+### Humanities
+
+- Jazz Piano I
+- Jazz Piano II
+- History of Jazz (UC Berkeley)
+- Classic Roman Literature (UC Berkeley)
+
+### Animation & Game Design
+
+Advanced Animation 
+Videogame Programming (Game Design)​
+
+## Online Coursework
+
+### Programming and Technical Art
+
+**Udacity**
+
+- Self Driving Car Nano-Degree
+
+**Udemy**
+
+- Game Physics
+- Complete Unity Developer
+- Unreal Engine Developer
+- Virtual Reality Designer
+
+**Other**
+
+- Professional Game Development in C++ and Unreal Engine
+- Intro to Premiere Pro CC
+- Intro to Autodesk 3dsMax 2014
+- Intro to Audodesk Maya 2015
+- Quickstart to Animation in Maya vol:1-3
+- Intro to Maya Fur
+- Creating GameReady Ropes and Chains in Maya
+- Simulating a Flamethrower Effect in Maya
+- Creating Cartoon Vehicles in Maya
+- Rigging Tank Treads in Maya
+- Flooding a City with Bifrost
+- Simulating Large and Small Scale Liquids in Bifrost
+- Intro to UE4 Particle Systems
+- Intro to Lighting in UE4
+- Intro to AI and Navigation Systems in UE4
+- Creating a Wheeled Vehicle in UE4
+- Creating UI Elements in UE4​
+- ZBrush Hard Surface Techniques
+- CryEngine 3 Vol 1-3 An Intro and Application
