@@ -50,7 +50,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Unsupervised clustering for the organization of unlabeled data
 - Engineering of complex multi-modal feature vectors for clustering, classification and sequence related problems
 - Modeling uncertainty and calibrating networks
-- Creating interactive tooling and dashboards to visualize insights around data, training exepriments and production
+- Creating interactive tooling and dashboards to visualize insights around data, training experiments and production
 
 ### ML Ops
 
