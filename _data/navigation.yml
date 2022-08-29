@@ -7,5 +7,5 @@ main:
     url: /resume/
   - title: "About"
     url: /about/
-  - title: "Contact"
-    url: /contact/
+  - title: "ML Practioner's Guide"
+    url: /ml-practioners-guide/

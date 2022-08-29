@@ -22,4 +22,7 @@ I love generative AI, interactive 3D graphics and rapid physical prototyping.
 You can usually find me mountain biking or adventuring outdoors.
 
 **Get in touch**  
-Please feel free to connect with me on [LinkedIn](https://www.linkedin.com/in/david-young-09509210a) or via [email](mailto:david@questionablyartificial.com).
+
+I'd love to connect. Please feel free to reach out on [LinkedIn](https://www.linkedin.com/in/david-young-09509210a) or via [email](mailto:david@questionablyartificial.com).
+
+For suggesting corrections to any blogpost, please open an issue [here](https://github.com/dcyoung/dcyoung.github.io/issues/new).
