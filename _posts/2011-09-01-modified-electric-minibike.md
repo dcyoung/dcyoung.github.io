@@ -40,7 +40,6 @@ The motor mounted up as expected. Three of the four batteries would have mounted
 
 {: .text-justify}
 
-
 ## Results
 
 ​The bike would hold about 25 mph, was relatively quiet and a single charge lasted just long enough to get me to class and back. It fit the bill perfectly.

@@ -21,7 +21,7 @@ header:
 
 ## Why I like PhysX
 
-People are curious by nature, and if you give them a world constrained by physical laws they will attempt to explore the boundaries of those constraints. It is my belief that real-time simulation will rule the future of videogames and similar interactive experiences. Unscripted sandbox moments provide endless hours of entertainment unlike their un-recyclable narrative cutscene counterparts, for a world is only as immersive as it is interactive.
+People are curious by nature, and if you give them a world constrained by physical laws they will attempt to explore the boundaries of those constraints. It is my belief that real-time simulation will rule the future of video games and similar interactive experiences. Unscripted sandbox moments provide endless hours of entertainment unlike their un-recyclable narrative cutscene counterparts, for a world is only as immersive as it is interactive.
 
 Many studios have aimed to incorporate elements of the PhysX toolbox into larger narrative experiences found in AAA games. I’d like to see smaller demos that are built from the ground up exclusively to demonstrate the capabilities of tools such as APEX or FLEX. Armed with a back-end physics engine, I experimented with the early mechanics of a very simple game to highlight real-time destruction.
 

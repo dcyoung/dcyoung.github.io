@@ -28,7 +28,7 @@ I recorded data from the various sensors to yield a continuous timeseries.  I th
 
 ### Synchronize Channels
 
-Different sensors collect data at different rates, but most models will operate on dataframes whose values are synchronized. In order to create clean data, the individaul channels in the multi-channel time series data must be interpolated at an even sampling rate. This involves reindexing each sample at a desired interval and interpolate new values for each channel.
+Different sensors collect data at different rates, but most models will operate on dataframes whose values are synchronized. In order to create clean data, the individual channels in the multi-channel time series data must be interpolated at an even sampling rate. This involves reindexing each sample at a desired interval and interpolate new values for each channel.
 
 In pandas, this can be accomplished using `interpolate`
 

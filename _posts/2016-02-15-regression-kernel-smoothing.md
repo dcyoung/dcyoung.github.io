@@ -30,7 +30,7 @@ Github repo available here: [https://github.com/dcyoung/Regression-Kernel-Smooth
 - Uses kernel functions to build various linear regressions predicting the annual mean of the minimum temperature as a function of position.
 - Predicts and plots the average annual temperature at each point on a 100x100 grid spanning the weather stations.
 - Investigates a regularized kernel method using the lasso.
-- Investigates the effect of differen choices of elastic net constant (alpha)
+- Investigates the effect of different choices of elastic net constant (alpha)
 - UnRegularized Parametric Regression
 
 ​Cross Validation Code: [​https://github.com/dcyoung/Regression-Kernel-Smoothing/blob/master/src/FindOptimalScale.R](​https://github.com/dcyoung/Regression-Kernel-Smoothing/blob/master/src/FindOptimalScale.R)

@@ -1,15 +1,15 @@
 ---
-title: "Machine Learning Practioner's Guide"
-permalink: /ml-practioners-guide/
+title: "Machine Learning Practitioner's Guide"
+permalink: /ml-practitioners-guide/
 date: 2022-08-24T00:00-00:00
-excerpt: A practioner's guide to developing Machine Learning models that solve real problems.
+excerpt: A practitioner's guide to developing Machine Learning models that solve real problems.
 toc: true
 toc_sticky: true
 ---
 
-> Note: This guide is very much a WIP... currently an outline as of 2022-08-29
+> Note: As of 2022-08-29 this page is very much a WIP... currently just an outline.
 
-This is a practioner's guide to developing Machine Learning models that solve real problems. It is meant to serve as a personal cheatsheet/checklist and collection of snippets I like to follow when working on ML projects.
+This is a practitioner's guide to developing Machine Learning models that solve real problems. It focuses primarily on the processes related to deep learning models. It is meant to serve as a personal cheat-sheet/checklist and collection of snippets which I like to follow when working on ML projects.
 
 ## Know the Lifecycle
 
@@ -42,12 +42,14 @@ This is a practioner's guide to developing Machine Learning models that solve re
 ## Gather Data
 
 ### get creative sourcing data
-- what resources are avaialble?
-- search for publically available dataets in relevant domains/problems etc.
+
+- what resources are available?
+- search for publicly available datasets in relevant domains/problems etc.
 - scrape the web
 - synthetically generate data
 
 ### labeling
+
 - bootstrapping
   - unsupervised learning/clustering + manual review
   - scripting (leverage priors/metadata etc.)
@@ -56,6 +58,7 @@ This is a practioner's guide to developing Machine Learning models that solve re
     - custom tooling
 
 ### dataset organization tips
+
 - you'll likely spend more time dealing with data than with models... 
 - design for extensibility/maintenance/ease of use
 - separate datums from annotations/structure/labels etc.
@@ -72,6 +75,7 @@ This is a practioner's guide to developing Machine Learning models that solve re
 ## Prototyping a model
 
 ### finding model architectures
+
 - discovering relevant vocab/problems/datasets/industries/models etc.
 - papers
 - codebases
@@ -80,13 +84,13 @@ This is a practioner's guide to developing Machine Learning models that solve re
 ### project structure
 
 - The use of models is often blocked by a disconnect between data science and engineering. To combat this, it is best to incorporate solid software engineering practices as soon as a project moves beyond exploration or spike experiments.
-- Benefits of a modular structure 
+- Benefits of a modular structure
   - codebase navigation/interpretability/maintenance/refactoring etc.
   - easier experiments, extension/adaptation
   - promotes code/module reuse
   - combats train/serve skew by sharing as much environment/code as possible
   - collaboration
-- As a rough outline, most deep learning projects typically include the following modules 
+- As a rough outline, most deep learning projects typically include the following modules
   - IO
   - dataset handling
   - augmentation pipelines
@@ -100,19 +104,19 @@ This is a practioner's guide to developing Machine Learning models that solve re
 
 ## Training
 
-### Feasability Test
+### Feasibility Test
 
-- before more extensive testing... build confidence in the feasbility of the approach
+- before more extensive testing... build confidence in the feasibility of the approach
 - constantly on the lookout for early indicators of strong signal in the data
-- feasability tests
+- feasibility tests
   - Unsupervised approach
     - cluster data... looking for meaningful/well formed clusters
   - Use simple or naive feature embeddings for the data
-  - Overfit the desired model on single sample or small sample set... if it can't overfit a single sample, there might not be enough signal in the data
+  - Over-fit the desired model on single sample or small sample set... if it can't over-fit a single sample, there might not be enough signal in the data
 
 ### Setup for experiments
 
-- reproducability
+- reproducibility
   - containerize early...
   - share common code between serving + training
   - allow for easy migration/integration to cloud platforms or workflow/pipeline orchestration platforms when scaling up distributed training
@@ -120,7 +124,7 @@ This is a practioner's guide to developing Machine Learning models that solve re
 - train/eval pipeline
   - artifacts should have everything required to reproduce...
   - logs and metrics
-  - store model config/arugments/cli inputs etc.
+  - store model config/arguments/cli inputs etc.
   - checkpoints
   - eval visualization ... samples/cluster etc.
 
@@ -151,22 +155,28 @@ This is a practioner's guide to developing Machine Learning models that solve re
 ### Challenges
 
 - train/serve skew
-- sharing environemnt/data handling between train/serve
+- sharing environment/data handling between train/serve
 - usability... what to expose?
- 
+
 ### Model versioning & storage
+
 - ...
 
-### Optimzations
+### Optimizations
+
 - ...
 
 ## Explaining Performance to non-data scientists
 
 - ...
 
-## Setup for success w/ non-data scientists
+## Last mile
 
+- monitoring
+- drift detection + explain-ability
+- promoting use
+- setup for success w/ non-data scientists
 - vocabulary
 - absolutes vs probabilities
 - API design
-- versioning 
+- versioning

@@ -98,9 +98,7 @@ Shown below are the produced binary maps for a few quantized layers, before and 
 
 **3D Pre-Viz**
 
-With the contours above its also possible to get an early visual of the bathymetry in the form of a 3D mesh. I used THREE.js to quickly generate meshes in an interactive visual below.
-
-> EDIT: Removed as it was having problems on mobile.
+With the contours above its also possible to get an early visual of the bathymetry in the form of a 3D mesh. I used THREE.js to quickly generate meshes in an interactive visual. I have a preview (using a different model of lake tahoe) available here: [https://dcyoung.github.io/coffee-table/](https://dcyoung.github.io/coffee-table/).
 
 ## CAD Modeling
 
