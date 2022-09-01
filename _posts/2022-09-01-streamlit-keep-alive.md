@@ -7,7 +7,7 @@ categories:
   - software notes
 permalink: /post-streamlit-keep-alive/
 classes: wide
-excerpt: Automating a keep-alive probe for a deployed streamlit app. 
+excerpt: Automating a keep-alive probe for a deployed streamlit app using puppeteer and Github Actions. 
 header:
   og_image: https://docs.streamlit.io/images/spin_down.png
   teaser: https://docs.streamlit.io/images/spin_down.png
