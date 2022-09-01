@@ -20,4 +20,4 @@ Dive response is a natural mechanism of the body in response to being submerged 
 
 ## Writeup
 
-<object data="/images/qp-physical/dive-response.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/dive-response.pdf" %}
