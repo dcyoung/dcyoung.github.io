@@ -153,7 +153,7 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 
 ## Graduate - University of Illinois Urbana-Champaign
 
-### Compute Science
+### Computer Science
 
 - Artificial Intelligence
 - Models of Cognitive Process
@@ -253,7 +253,7 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 
 ### Animation & Game Design
 
-Advanced Animation 
+Advanced Animation
 Videogame Programming (Game Design)​
 
 ## Online Coursework
@@ -274,6 +274,7 @@ Videogame Programming (Game Design)​
 **Other**
 
 - Professional Game Development in C++ and Unreal Engine
+- Pro Unreal Engine Game Coding (Vehicle Physics)
 - Intro to Premiere Pro CC
 - Intro to Autodesk 3dsMax 2014
 - Intro to Audodesk Maya 2015
@@ -292,3 +293,47 @@ Videogame Programming (Game Design)​
 - Creating UI Elements in UE4​
 - ZBrush Hard Surface Techniques
 - CryEngine 3 Vol 1-3 An Intro and Application
+- Product Design in Autodesk Fusion 360
+
+## Software Development & Programming Experience
+
+Programming is a powerful skill, but it does not replace an understanding of customer need, a critical experiment, a solid product design, or a high level plan for system architecture.
+
+Before writing a line of code, I prefer to focus on communication, design, and architecture. With a strong plan, programming is often the easiest part of the puzzle.
+
+That is not to say that I haven't gotten my hands dirty coding. I estimate I have spent **`~20k hours`** programming and developing software professionally. This experience yields some strengths:
+
+- I learn very quickly and adapt to new dev environments, code bases and projects.
+- I write extremely clean, organized and well documented code that requires very little maintenance. I aim for legibility over cryptic optimizations.
+- I excel in technical documentation and communication.
+- I have a broad knowledge of many aspects of software engineering, hardware and computer science topics, and understand how they interrelate.
+
+I have worked with incredible tools and techniques ranging computer science, data science and software engineering disciplines. From a high level, I have experience with the following:
+
+- Programming
+- Computer Vision
+- Devops
+- Distributed Systems & Computing
+- Workflow orchestration
+- Systems and Computational Modeling
+- Robotics, Control Theory
+- Computer Graphics
+- Game Development
+- Networking & Concurrency
+- Algorithms
+- Data Engineering
+- Artificial Intelligence and Machine Learning
+  - Data Visualization
+  - Data Labeling/Tooling and Synthetic Creation
+  - Dimensionality Reduction
+  - Supervised Learning
+    - Deep Learning
+      - Model Development, Distributed Training, System Design etc.
+  - Unsupervised Learning
+    - Multi-modal Feature Engineering
+    - Clustering
+  - Uncertainty Modeling, Model Calibration, Explain-ability
+  - ML Ops
+  - Production Model Optimization, Inference, Management etc.
+  - Closed Loop System Design and Active Learning
+  - Self Serve Machine Learning Products
