@@ -1,5 +1,5 @@
 ---
-title: "Automated a Deployed App Keep-Alive Probe"
+title: "Automating a Keep-Alive Probe for Deployed Apps"
 date: 2022-09-01T00:00:00-00:00
 last_modified_at: 2022-09-01T00:00:00-00:00
 categories:
