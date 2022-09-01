@@ -18,7 +18,7 @@ This writeup summarizes the procedure and results of various path finding algori
 
 ## Overview of Source
 
-The following source files were written from scratch (by the sole contributor to the project David Young):
+The following source files were written from scratch:
 
 - FileReader.java - Reads the mazes from .txt files and stores them in an array with an intermediate encoding.
 - MazeState.java - Reads the intermediate array into a structure that stores the state of the maze and its associated components.
@@ -65,7 +65,7 @@ DFS | BFS | Greedy | A\*
 :------:|:-----:|:--------:|:--------:
 [![DFS](https://yt-embed.herokuapp.com/embed?v=009yM-HLO7c)](https://www.youtube.com/watch?v=009yM-HLO7c "DFS") | [![BFS](https://yt-embed.herokuapp.com/embed?v=DxiMLLm95lw)](https://www.youtube.com/watch?v=DxiMLLm95lw "BFS") | [![Greedy](https://yt-embed.herokuapp.com/embed?v=B7DiSYJTQBE)](https://www.youtube.com/watch?v=B7DiSYJTQBE "Greedy") | [![A-star](https://yt-embed.herokuapp.com/embed?v=8I7lFE4TQuw)](https://www.youtube.com/watch?v=8I7lFE4TQuw "A\*")
 
-## 1.1 Open Maze Solutions
+## Open Maze Solutions
 
 The open maze puzzles demonstrated the characteristics of each algorithm quite overtly. The depth first search was miserably inefficient. The breadth first search explored nodes at an expanding but even radius from the origin which is visible from image. Greedy search fared well once it broke free of the spiral, but it clearly attempted to move towards the goal (disregarding the wall) right off the bat. The A\* had to fill most of the spiral as it evenly spread out, but once it broke the spiral, it was as efficient as the greedy and didn't waste the same cost of exploration that breadth first search did. ​Order left to right: DFS, BFS, Greedy, A\*.
 
