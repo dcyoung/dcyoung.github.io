@@ -18,12 +18,12 @@ header:
 
 ## Final Report
 
-<object data="/images/gaze-tracking/final.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/gaze-tracking/final.pdf" %}
 
 ## Progress Report
 
-<object data="/images/gaze-tracking/progress.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/gaze-tracking/progress.pdf" %}
 
 ## Preliminary Report
 
-<object data="/images/gaze-tracking/preliminary.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/gaze-tracking/preliminary.pdf" %}

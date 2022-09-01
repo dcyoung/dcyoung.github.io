@@ -16,4 +16,4 @@ header:
 
 ## Writeup
 
-<object data="/images/qp-physical/locust-olfaction.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/locust-olfaction.pdf" %}

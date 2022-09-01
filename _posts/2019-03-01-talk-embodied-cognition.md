@@ -17,4 +17,4 @@ I threw an event called Intoxi-Talks (aka: drunk TED talks). It was a fun opport
 
 I gave a talk on on embodied cognition -- slides below.
 
-<object data="/images/talk-embodied-cognition/prez.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/talk-embodied-cognition/prez.pdf" %}

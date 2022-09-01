@@ -15,4 +15,4 @@ header:
 
 I was asked to speak to a group on the topic of AI. I had a lot of fun putting this together.
 
-<object data="/images/talk-how-neural-networks-see-the-world/prez.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/talk-how-neural-networks-see-the-world/prez.pdf" %}

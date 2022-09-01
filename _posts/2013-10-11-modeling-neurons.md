@@ -30,13 +30,13 @@ This page contains various modeling techniques for neurons, action potentials an
 
 The following write up investigates the CRRSS equations in modelling a uni and a bi-directional action potential. The first problem develops a Matlab program that will solve for a propagating action potential along a 9cm axon segment. The second problem investigates an extracellular monopole source with an anodic square pulse followed by a cathodic square pulse, varying amplitudes to generate bi-directional action potentials and generating surface plots of membrane voltage as well as a video. The third problem plots various values at the instant the two action potentials have propagated halfway to each end of the axon. The fourth problem experiments with combinations of multiple anodes and cathodes as well as wave-shapes and pulse-widths to generate unidirectional propagating action potentials along the axon.
 
-<object data="/images/qp-computational/modeling-neurons-and-action-potentials/hw4-writeup-wip.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/modeling-neurons-and-action-potentials/hw4-writeup-wip.pdf" %}
 
 ## Modeling Cardiac Action Potentials
 
 This writeup studies the movement of ions in a canine ventricular myocyte using the Hund-Rudy dynamic model. The HRd model constructs the canine ventricular epicardial action potential based on the underlying ionic processes. This experiment could provide insight because many arrhythmias are manifested in abnormalities of action potential generation at the cellular level.
 
-<object data="/images/qp-computational/modeling-neurons-and-action-potentials/clab-1-writeup-david-young.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/modeling-neurons-and-action-potentials/clab-1-writeup-david-young.pdf" %}
 
 ## Modeling Hodgkin Huxley Neuronal Model using ODE45
 
@@ -52,14 +52,14 @@ Overview of each Problem:
 
 Upon closer inspection I believe some of my dynamics may have been off. There should not be an influx of Potassium before its efflux. Also I may have flipped the signs of the ion currents somewhere as. Na rushes in so it should be negative, while K rushes out so it should be positive.
 
-<object data="/images/qp-computational/modeling-neurons-and-action-potentials/hw2-latex-wip.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/modeling-neurons-and-action-potentials/hw2-latex-wip.pdf" %}
 
-<object data="/images/qp-computational/modeling-neurons-and-action-potentials/writeup.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/modeling-neurons-and-action-potentials/writeup.pdf" %}
 
 ## Dynamical Systems Approach to Neuronal Modeling
 
-<object data="/images/qp-computational/modeling-neurons-and-action-potentials/dynamical-systems-approach-to-neuron-modelling.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/modeling-neurons-and-action-potentials/dynamical-systems-approach-to-neuron-modelling.pdf" %}
 
 ## Hodgkin Huxley Neuronal Model
 
-<object data="/images/qp-computational/modeling-neurons-and-action-potentials/hodgkin-huxley.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/modeling-neurons-and-action-potentials/hodgkin-huxley.pdf" %}

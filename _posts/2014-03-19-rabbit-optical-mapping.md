@@ -26,4 +26,4 @@ Optical mapping with voltage sensitive dyes arranged as 16-bit ints by frames, 2
 
 ## Writeup
 
-<object data="/images/qp-computational/rabbit-optical-mapping.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/rabbit-optical-mapping.pdf" %}

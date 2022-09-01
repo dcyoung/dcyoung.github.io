@@ -18,4 +18,4 @@ header:
 
 Cardiac muscle contraction differs from skeletal muscle contraction in a few behaviors essential to proper function of the heart. Additionally, not all cardiac muscle is the same. Although frog myocardium differs from mammalian myocardium in its ionic basis of activation, it is a useful starting point in studying myocardial behavior. Different control mechanisms exist to alter the rate, power of contraction and stroke volume of the heart. Using an intact frog ventricle muscle and a force transducer, this lab explores the chronotropic and inotropic effects of isoproterenol, the inhibitory effects of high extracellular potassium and the effects of increasing stimulus frequency on frog cardiac ventricular muscle.
 
-<object data="/images/qp-physical/frog-heart-muscle.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/frog-heart-muscle.pdf" %}

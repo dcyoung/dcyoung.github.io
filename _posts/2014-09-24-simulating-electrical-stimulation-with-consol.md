@@ -30,10 +30,10 @@ In the following writeup I investigate the effects of various stimulation on act
 
 {:.text-justify}
 
-<object data="/images/qp-computational/simulating-electrical-stimulation.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/simulating-electrical-stimulation.pdf" %}
 
 ## Basic electrode design and analysis
 
 ![preview](/images/qp-computational/comsol-preview.jpg){:.align-center}
 
-<object data="/images/qp-computational/simulating-electrical-stimulation-2.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/simulating-electrical-stimulation-2.pdf" %}

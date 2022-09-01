@@ -1,8 +1,11 @@
 <object data='{{ include.url }}' type='application/pdf' width="1000" height="1000">
     <p>
-        This browser does not support embedded PDFs. Please view or download the pdf directly:
+        This browser does not support embedded PDFs. To view,
         <a href="{{site.url}}{{ include.url }}" target="_blank" rel="noopener noreferrer">
-            Open PDF
+            Open the PDF directly
+        </a> or 
+        <a href="{{site.url}}{{ include.url }}" download>
+            Download the PDF
         </a>
     </p>
 </object>

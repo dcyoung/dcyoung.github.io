@@ -14,4 +14,4 @@ header:
   teaser: /images/qp-computational/renal-preview.jpg
 ---
 
-<object data="/images/qp-computational/modeling-renal-pathology.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/modeling-renal-pathology.pdf" %}

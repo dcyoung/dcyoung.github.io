@@ -13,4 +13,4 @@ header:
   teaser: /images/jenkins-plugin/0.jpg
 ---
 
-<object data="/images/jenkins-plugin/report.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/jenkins-plugin/report.pdf" %}

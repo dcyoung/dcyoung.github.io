@@ -14,4 +14,4 @@ header:
   teaser: /images/constraint-satisfaction-problems/0.jpg
 ---
 
-<object data="/images/constraint-satisfaction-problems/csp-wordpuzzles.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/constraint-satisfaction-problems/csp-wordpuzzles.pdf" %}

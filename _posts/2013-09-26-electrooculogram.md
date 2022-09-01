@@ -16,8 +16,8 @@ header:
 
 ## Electrooculogram
 
-<object data="/images/qp-physical/electrooculogram.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/electrooculogram.pdf" %}
 
 ## Westheimer Model of Oculomotor Movement
 
-<object data="/images/qp-physical/westheimer-model-of-oculomotor-movement.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/westheimer-model-of-oculomotor-movement.pdf" %}

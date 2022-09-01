@@ -15,8 +15,8 @@ header:
 
 ## Installation Guide
 
-<object data="/images/xspc-waterblock-install/xspc-waterblock-installation-guide.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/xspc-waterblock-install/xspc-waterblock-installation-guide.pdf" %}
 
 ## Review
 
-<object data="/images/xspc-waterblock-install/xspc-waterblock-review.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/xspc-waterblock-install/xspc-waterblock-review.pdf" %}

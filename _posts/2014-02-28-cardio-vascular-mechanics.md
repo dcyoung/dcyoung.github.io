@@ -21,12 +21,12 @@ Diagnosing cardiac malfunction is surprisingly simple. Pick up a copy of Dubin's
 
 These notes are a little bit of investigation (and rudimentary background information) into some alternate techniques. As well as some less relevant notes.
 
-<object data="/images/qp-computational/cardiovascular-mechanics/diagnosing-malfunction.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/cardiovascular-mechanics/diagnosing-malfunction.pdf" %}
 
 ## Mechanical Cardiac Output & Active Stress
 
-<object data="/images/qp-computational/cardiovascular-mechanics/output.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/cardiovascular-mechanics/output.pdf" %}
 
 ## Windkessel Model
 
-<object data="/images/qp-computational/cardiovascular-mechanics/vascular-mechanics.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/cardiovascular-mechanics/vascular-mechanics.pdf" %}

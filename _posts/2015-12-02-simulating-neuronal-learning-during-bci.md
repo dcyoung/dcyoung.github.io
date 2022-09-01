@@ -14,7 +14,7 @@ header:
   teaser: /images/simulating-neuronal-learning-during-bci/preview.jpg
 ---
 
-<object data="/images/simulating-neuronal-learning-during-bci/neuronal-learning.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/simulating-neuronal-learning-during-bci/neuronal-learning.pdf" %}
 
 ---
 
@@ -22,4 +22,4 @@ header:
 
 This served as my knowledge base when designing and implementing the above algorithm and its variations.
 
-<object data="/images/simulating-neuronal-learning-during-bci/jimenez-article.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/simulating-neuronal-learning-during-bci/jimenez-article.pdf" %}

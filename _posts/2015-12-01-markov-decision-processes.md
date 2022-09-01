@@ -16,4 +16,4 @@ header:
 
 This project was completed as part of a group assignment for a course at UIUC. I played a large role in the conceptualizing the problem, selecting and designing suitable equations/algorithms to implement and creating the write-up below. Abnormally however, I did not play a large role in coding the implemented solution. While the code provided works, I do not stand strongly behind its architecture, coherence or style.
 
-<object data="/images/markov-decision-processes/report.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/markov-decision-processes/report.pdf" %}

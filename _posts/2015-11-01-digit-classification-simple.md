@@ -16,8 +16,8 @@ header:
 
 ## Naive Bayes
 
-<object data="/images/digit-classification/naive-bayes.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/digit-classification/naive-bayes.pdf" %}
 
 ## Multi-class Perceptron
 
-<object data="/images/digit-classification/perceptron.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/digit-classification/perceptron.pdf" %}

@@ -16,8 +16,8 @@ header:
 
 ## Writeup
 
-<object data="/images/qp-physical/contractile-properties-of-frog-skeletal-muscle.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/contractile-properties-of-frog-skeletal-muscle.pdf" %}
 
 ## The Effects of Temperature on the Contractile Properties of Frog Skeletal Muscle
 
-<object data="/images/qp-physical/temperature-effects-on-the-contractile-properties-of-frog-skeletal-muscle.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/temperature-effects-on-the-contractile-properties-of-frog-skeletal-muscle.pdf" %}

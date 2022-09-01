@@ -14,4 +14,4 @@ header:
   teaser: /images/adversarial-search/0.jpg
 ---
 
-<object data="/images/adversarial-search/adversarial-search-wargame.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/adversarial-search/adversarial-search-wargame.pdf" %}

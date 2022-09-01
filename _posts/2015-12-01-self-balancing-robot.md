@@ -17,31 +17,31 @@ header:
 
 ## Introduction to the Pendubot, Retrieving and Filtering Signals
 
-<object data="/images/self-balancing-robot/1-intro-filter.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/self-balancing-robot/1-intro-filter.pdf" %}
 
 ## Oscillating Movement
 
-<object data="/images/self-balancing-robot/2-oscillating-movement-simple.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/self-balancing-robot/2-oscillating-movement-simple.pdf" %}
 
 ## PID Controllers
 
-<object data="/images/self-balancing-robot/3-oscillating-movement-pid.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/self-balancing-robot/3-oscillating-movement-pid.pdf" %}
 
 ## Robot Animator
 
-<object data="/images/self-balancing-robot/4-transformations-and-animations.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/self-balancing-robot/4-transformations-and-animations.pdf" %}
 
 ## Simulating Movement with Lagrangian Dynamics
 
-<object data="/images/self-balancing-robot/5-lagrangian-dynamics-theoretical-parameters.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/self-balancing-robot/5-lagrangian-dynamics-theoretical-parameters.pdf" %}
 
 ## Enhancing Simulation with the Hamiltonian
 
-<object data="/images/self-balancing-robot/6-hamiltonian-experimental-parameters.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/self-balancing-robot/6-hamiltonian-experimental-parameters.pdf" %}
 
 ## Designing a Hybrid Controller
 
-<object data="/images/self-balancing-robot/7-hybrid-controller-extra.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/self-balancing-robot/7-hybrid-controller-extra.pdf" %}
 
 ## Controlling the Robot with a Kinect Sensor
 

@@ -14,4 +14,4 @@ header:
   teaser: /images/qp-computational/ion-channels-preview.jpg
 ---
 
-<object data="/images/qp-computational/ion-channels.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-computational/ion-channels.pdf" %}

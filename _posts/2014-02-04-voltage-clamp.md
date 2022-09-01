@@ -20,4 +20,4 @@ A circuit was constructed to simulate the action of a voltage clamp. The circuit
 
 ## Writeup
 
-<object data="/images/qp-physical/voltage-clamp.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/qp-physical/voltage-clamp.pdf" %}

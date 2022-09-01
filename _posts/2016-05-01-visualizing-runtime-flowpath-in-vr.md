@@ -21,7 +21,7 @@ The following is a development blog of sorts documenting a Virtual Reality and L
 
 ## Project Proposal
 
-<object data="/images/runtime-flowpath-vr/proposal.pdf" width="1000" height="1000" type="application/pdf"></object>
+{% include pdf-embed.html url="/images/runtime-flowpath-vr/proposal.pdf" %}
 
 ## Representing and Solving Digital Logic Circuits
 
