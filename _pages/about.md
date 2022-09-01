@@ -5,7 +5,7 @@ classes: wide
 excerpt: Learn about me, my current endeavors, research interest areas, and the motive behind this personal blog.
 ---
 
-I am a systems thinker and passionate Machine Learning Engineer applying research to products. I hold multiple engineering degrees and have worked in diverse fields including Bio-medical Research, Sensor Design and Manufacture, Robotics, Automation, Cloud Software and Document Processing.
+I am a passionate Machine Learning Engineer applying research to products. I leverage systems thinking and apply technology with intent to create tooling where none exists. I hold multiple engineering degrees with experience in diverse fields including Bio-medical Research, Sensor Design and Manufacture, Robotics, Automation, Cloud Software and Document Processing.
 
 **At Work**
 
