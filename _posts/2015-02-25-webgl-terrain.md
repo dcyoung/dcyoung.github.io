@@ -15,7 +15,13 @@ header:
 
 Simple implementation of the diamond square algorithm to generate a tile of terrain.
 
-<iframe src="/images/webgl-terrain/embed.html" height="1000px" width="100%" style="border:none;"></iframe>
+<iframe
+  src="/images/webgl-terrain/embed.html"
+  width="100%"
+  style="border:none;"
+  onload="(function(obj){obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';})(this)"
+>
+</iframe>
 
 You can view the entirety of the commented source code here: [github.com/dcyoung/TerrainGenerator](https://github.com/dcyoung/TerrainGenerator)
 
