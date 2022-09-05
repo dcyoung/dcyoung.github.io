@@ -16,7 +16,7 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 As the first data scientist and ML engineer at Ripcord, I have served as both the visionary and developer for all first party ML and AI solutions. After introducing deep learning to the founding team, I spearheaded all efforts related to ML including R&D, data-science and engineering. I have identified and defined problems fit for machine learning, translated state of the art research to production systems, and deployed scalable closed loop ML solutions that have solved complex real-world challenges. These efforts in Vision and NLP have enabled the intelligent scanning, organization and extraction of information from millions of customer documents. I have presented on vision, R&D, technology and road maps to diverse audiences including the company, investors and the board.​
 
-Day to day, I foster a friendly work atmosphere that promotes passionate, curious engagement around challenging problems. I champion the pragmatic use of agile process, the introduction of automation whenever possible, and the constant application of a product mindset.
+Day to day, I foster a friendly work atmosphere that promotes passionate, curious engagement around challenging problems. I champion the pragmatic use of agile process, the appropriate introduction of automation, and the application of a product mindset.
 ​
 ### Machine Perception/Computer Vision
 
@@ -201,7 +201,7 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 - Engineering and Scientific Computing Laboratory
 - Computer Science I
 - Computer Science I Laboratory
-- Computer Science II 
+- Computer Science II
 - Computer Science II Laboratory
 - Introduction to Computer Programming (CS-50 Open Courseware)
 - Algorithms and Data Structures
