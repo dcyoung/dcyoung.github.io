@@ -24,69 +24,13 @@ Streamlit cloud allows developers to easily host streamlit applications for free
 
 To make sure the app is always primed, I automated a `keep alive` probe which opens the website and clicks on the "reset" button if visible. I leveraged [puppeteer](https://github.com/puppeteer/puppeteer) to navigate and interact with the webpage using a headless browser. Then I automated a cron-job using Github Actions.
 
-The final repository for the streamlit app looks like this:
+### Creating a Probe Script
 
-```bash
-repo/                   # The git repo deployed to streamlit cloud
-  .github/
-    workflows/
-      keep-alive.yml    # The cron job
-  probe-action/         # The keep-alive action
-    Dockerfile
-    action.yml
-    probe.js
-  app.py                # The streamlit app
-```
-
-### Schedule a cron-job with Github Actions
-
-Here is the workflow file `.github/workflows/keep-alive.yml`. Every 2 days it will check out the repo and run the probe action.
-
-```yml
-# .github/workflows/keep-alive.yml
-name: Trigger Probe of Deployed App on a CRON Schedule
-on:
-  schedule:
-    # Runs "at minute 0 past every 48 hour" (see https://crontab.guru)... ie: every 2 days
-    - cron: '0 */48 * * *'
-
-jobs:
-  probe_deployed_app:
-    runs-on: ubuntu-latest
-    name: A job to probe deployed app
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Probe Deployed App Action Step
-        uses: ./probe-action # Uses an action in the probe-action directory
-        id: probe
-```
-
-### Creating a Probe Action
-
-Now we'll setup the action itself. First, create the action metadata file which Github Actions will use to build and run the dockerfile
-
-```yml
-# probe-action/action.yml
-name: "Probe Deployed App"
-description: "Probes a deployed streamlit app."
-runs:
-  using: "docker"
-  image: "Dockerfile"
-```
-
-Next, create a very simple dockerfile from an existing puppeteer image. Its only job is to run the probe script:
-
-```docker
-# probe-action/Dockerfile
-FROM ghcr.io/puppeteer/puppeteer:17.0.0
-COPY . /home/pptruser/src
-ENTRYPOINT [ "/bin/bash", "-c", "node -e \"$(</home/pptruser/src/probe.js)\"" ]
-```
-
-Finally, create the probe script:
+First, create the probe script to poke the website and look for the relevant "wake-up" button:
 
 ```javascript
+// probe-action/probe.js
+
 const puppeteer = require('puppeteer');
 const TARGET_URL = "https://<YOUR_STREAMLIT_APP_URL>.streamlitapp.com/";
 const WAKE_UP_BUTTON_TEXT = "app back up";
@@ -111,7 +55,7 @@ const PAGE_LOAD_GRACE_PERIOD_MS = 8000;
         }
     }
 
-    checkForHibernation(page);
+    await checkForHibernation(page);
     const frames = (await page.frames());
     for (const frame of frames) {
         await checkForHibernation(frame);
@@ -119,4 +63,73 @@ const PAGE_LOAD_GRACE_PERIOD_MS = 8000;
 
     await browser.close();
 })();
+```
+
+### Dockerize
+
+Next, create a very simple dockerfile from an existing puppeteer image. Its only job is to run the probe script:
+
+```docker
+# probe-action/Dockerfile
+FROM ghcr.io/puppeteer/puppeteer:17.0.0
+COPY . /home/pptruser/src
+ENTRYPOINT [ "/bin/bash", "-c", "node -e \"$(</home/pptruser/src/probe.js)\"" ]
+```
+
+You can test it locally like so:
+
+```bash
+docker build -t probe:latest .
+docker run -it --rm probe:latest
+```
+
+### Schedule a cron-job with Github Actions
+
+Now we'll setup the github action and cron-job to run this probe routinely.
+
+The final repository for the streamlit app looks like this:
+
+```bash
+repo/                   # The git repo deployed to streamlit cloud
+  .github/
+    workflows/
+      keep-alive.yml    # The cron job
+  probe-action/         # The keep-alive action
+    Dockerfile
+    action.yml
+    probe.js
+  app.py                # The streamlit app
+```
+
+Start by creating the action metadata file which Github Actions will use to build the docker image and run the script.
+
+```yml
+# probe-action/action.yml
+name: "Probe Deployed App"
+description: "Probes a deployed streamlit app."
+runs:
+  using: "docker"
+  image: "Dockerfile"
+```
+
+Finally, create a workflow file `.github/workflows/keep-alive.yml`. Every 2 days it will check out the repo and run the probe action.
+
+```yml
+# .github/workflows/keep-alive.yml
+name: Trigger Probe of Deployed App on a CRON Schedule
+on:
+  schedule:
+    # Runs "at minute 0 past every 48 hour" (see https://crontab.guru)... ie: every 2 days
+    - cron: '0 */48 * * *'
+
+jobs:
+  probe_deployed_app:
+    runs-on: ubuntu-latest
+    name: A job to probe deployed app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Probe Deployed App Action Step
+        uses: ./probe-action # Uses an action in the probe-action directory
+        id: probe
 ```
