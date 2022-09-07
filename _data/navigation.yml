@@ -3,7 +3,9 @@ main:
     url: /archives/
   - title: "Categories"
     url: /categories/
-  - title: "Resume"
-    url: /resume/
   - title: "About"
     url: /about/
+  - title: "Resume"
+    url: /resume/
+  - title: "ML Practitioner's Guide"
+    url: /ml-practitioners-guide/

@@ -22,21 +22,9 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 
 Machine Learning has become a broad term with many meanings. I find it useful to draw the distinction between what I call `Decision Science` and `Data Products`.
 
-Decision Science
+`Decision Science` is the the application of tools and techniques in pursuit of some insight - often a business insight. This process yields an export, with results often delivered in the form of a report or dashboard. Decision science involves exploration of data or the modeling of some phenomenon in the data, which may or may not involve basic Machine Learning models (classifiers/regression) and unsupervised techniques (dimensionality reduction/clustering). Code is typically short lived, in that it will not require ongoing maintenance in a production environment. Here there is more of a focus on science, and less of a focus on engineering - unless data acquisition/handling requires significant infra.
 
-- the application of tools and techniques in pursuit of some insight - often a business insight
-- this process yields an export, with results often delivered in the form of a report or dashboard
-- often involves exploration of data or the modeling of some phenomenon in the data 
-- may involve basic Machine Learning models (classifiers/regression) and unupervised techniques (dimensionality reduction/clustering)
-- code is short lived - will not require ongoing maintenace in a production environment
-- more of a focus on science, less of a focus on engineering (unless data acquisition/handling requires significant infra)
-
-Data Products
-
-- the development of systems which leverage learning based models to automate or facilitate intelligent function in a production environment
-- this process yields a deployed system, which requires proper design and maintenance
-- systems often need to be resilient, robust and adaptive to ongoing and dynamic data
-- requires significant engineering effort
+`Data Products` on the other hand, represent the development of systems which leverage learning based models to automate or facilitate intelligent function in a production environment. The process yields a deployed system, which requires proper design and maintenance. Systems often need to be resilient, robust and adaptive to ongoing and dynamic data. Therefore, they live or die by the quality of feedback mechanisms, and requires significantly more engineering effort.
 
 > This guide focuses primarily on the genre "Data Products". While many practices are applicable across genres, those curious about "Decision Science" should look for material focused on data science and analysis.
 
@@ -194,6 +182,10 @@ Data Products
 - ...
 
 ### Optimizations
+
+- ...
+
+## QA & Feedback Mechanisms
 
 - ...
 
