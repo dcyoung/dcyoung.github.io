@@ -11,11 +11,34 @@ toc_sticky: true
 
 This is a practitioner's guide to developing Machine Learning models that solve real problems. It focuses primarily on the processes related to deep learning models. It is meant to serve as a personal cheat-sheet/checklist and collection of snippets which I like to follow when working on ML projects.
 
-## Know the Lifecycle
+## TLDR
 
-- Decision Science vs. Data Products
-- Analysis vs. Models
-- Reports vs. Deployment
+- Be observant, think through problems, reflect often and remember unique problems may require novel solutions or novel combinations of existing practices.
+- Machine Learning is about the overall system that facilitates learning. Think of models like lazy students. Teaching them to learn requires a well designed curriculum, appropriate facilities and opportunities for real world practice. Think through your overall system, and make sure it supports bootstrapping data, deploying a model and finding a route for feedback.
+- Leverage a scientific method to derisk unknowns. Machine Learning systems require exploration, and constant consideration of what is working and what isn't. When faced with unknown properties of the system, generate a hypothesis and design an experiment. To make efficient use of time and resource, scope each experiment as small as possible to answer a specific question or derisk a specific unknown.
+- Manage complexity with engineering. The systems involved get very complex and often need to adapt as you gain knowledge about the overall system. Stay agile and wrangle this complexity with solid engineering principles and design.
+
+## Data Products vs. Decision Science
+
+Machine Learning has become a broad term with many meanings. I find it useful to draw the distinction between what I call `Decision Science` and `Data Products`.
+
+Decision Science
+
+- the application of tools and techniques in pursuit of some insight - often a business insight
+- this process yields an export, with results often delivered in the form of a report or dashboard
+- often involves exploration of data or the modeling of some phenomenon in the data 
+- may involve basic Machine Learning models (classifiers/regression) and unupervised techniques (dimensionality reduction/clustering)
+- code is short lived - will not require ongoing maintenace in a production environment
+- more of a focus on science, less of a focus on engineering (unless data acquisition/handling requires significant infra)
+
+Data Products
+
+- the development of systems which leverage learning based models to automate or facilitate intelligent function in a production environment
+- this process yields a deployed system, which requires proper design and maintenance
+- systems often need to be resilient, robust and adaptive to ongoing and dynamic data
+- requires significant engineering effort
+
+> This guide focuses primarily on the genre "Data Products". While many practices are applicable across genres, those curious about "Decision Science" should look for material focused on data science and analysis.
 
 ## Dedicate time to Explore
 
@@ -52,7 +75,7 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 
 - bootstrapping
   - unsupervised learning/clustering + manual review
-  - scripting (leverage priors/metadata etc.)
+  - scripting (leverage priors/metadata/bigger models etc.)
   - get hands dirty labeling...
     - existing tooling
     - custom tooling
@@ -70,7 +93,8 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 
 - data pipeline
 - data augmentation
-- separate data code from model code... reusable data pipelines for model iteration/experimentation
+- separate data code from model code... reusable data pipelines for model iteration/experimentation/evaluation/prediction/debugging/data viz etc.
+- sanity check: visualize the input data at the point where it would enter the model... ie: the output of your pipeline AFTER any transformations or augmentations.
 
 ## Prototyping a model
 
@@ -80,6 +104,8 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 - papers
 - codebases
 - from scratch
+- tips
+  - start with smallest relevant architecture (ex. res18 not res50)
 
 ### project structure
 
@@ -112,6 +138,7 @@ This is a practitioner's guide to developing Machine Learning models that solve 
   - Unsupervised approach
     - cluster data... looking for meaningful/well formed clusters
   - Use simple or naive feature embeddings for the data
+  - If using a multi-modal model, test data modalities individually
   - Over-fit the desired model on single sample or small sample set... if it can't over-fit a single sample, there might not be enough signal in the data
 
 ### Setup for experiments
@@ -130,6 +157,7 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 
 ### Early experiments
 
+- start with smallest architecture (ex. res18 not res50)
 - early phase
   - learning rate sweep
   - generate insights...
@@ -137,10 +165,13 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 ### Determine an upper bound
 
 - fine tune hyper-parameters manually
-- fine tune hyper-parameters exhaustive
 - avoiding perfection...
 - each experiment should be intentional
 - think!! hypothesize about the connection / impact of various inputs to observed behavior... reflect and re-evaluate
+- depending on your resources and engineering talent, you can consider other approaches to hyper-parameter tuning
+  - exhaustive -> works for tiny models/hyper-parameter spaces
+  - random -> cover enough of the search space to inform further manual tuning
+  - genetic/algorithmic optimization -> when compute isn't an issue, i've had success modeling a fitness function and evolving hyperparameters
 
 ### Generalize
 
