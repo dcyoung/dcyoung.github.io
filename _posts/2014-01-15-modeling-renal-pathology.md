@@ -1,5 +1,5 @@
 ---
-title: "Imaging -Rabbit Optical Mapping"
+title: "Modeling Renal Pathology"
 date: 2014-01-15T00:00:00-00:00
 last_modified_at: 2014-01-15T00:00:00-00:00
 categories:
