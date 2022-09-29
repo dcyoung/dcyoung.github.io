@@ -70,7 +70,7 @@ Machine Learning has become a broad term with many meanings. I find it useful to
 
 ### dataset organization tips
 
-- you'll likely spend more time dealing with data than with models... 
+- you'll likely spend more time dealing with data than with models...
 - design for extensibility/maintenance/ease of use
 - separate datums from annotations/structure/labels etc.
   - you'll often iterate on annotation or data formats meaning which can be slowed down by static datasets or tight coupling
@@ -168,6 +168,24 @@ Machine Learning has become a broad term with many meanings. I find it useful to
 - uncertainty
 - calibration
 - active learning
+
+### Handling Uncertainty
+
+- in real world decision making, modeling and communicating uncertainty is often more important than accuracy
+  - handling mistakes (false positives) can be more costly than flagging anomalies and forcing intervention
+  - system design should include mechanisms for QA/intervention/fallback/decision overrides etc.
+  - unlike traditional software development - which focuses on creating a "bug free" system - in practice, ML is never bug free and it is safer to design systems that leverage uncertainty to handle bugs with appropriate mechanisms or strategies.
+- common pitfalls
+  - overemphasizing accuracy
+  - waiting until deploy time to consider and understand out of distribution data
+  - interpreting softmax scores as confidence/uncertainty
+- types of uncertainty
+  - aleatoric vs. epistemic
+- techniques for modeling uncertainty...
+  - aleatoric: modeling distribution of data (ie: probability of data taking form of prediction)
+  - epistemic: Bayesian -> modeling network uncertainty with probablistic paramters, Consensus -> modeling network uncertainty with ensembles/monte carlo dropout etc.
+- out of distribution detection
+- quick tricks...
 
 ## Model Serving
 
