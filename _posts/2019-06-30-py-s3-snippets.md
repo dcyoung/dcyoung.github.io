@@ -27,7 +27,16 @@ def is_s3_path(s3_path: str, s3_prefix: str = S3_PREFIX)->bool:
     return s3_path.startswith(s3_prefix)
 ```
 
-This makes it easy to handle arbitrary input uris be they local file paths or remote s3 paths.
+This makes it easy to handle arbitrary input uris be they local file paths or remote s3 paths. For example:
+
+```py
+def foo(uri: str):
+    if is_s3_path(uri):
+        # load the remote file... 
+    else:
+        # load the local file...
+    # ...
+```
 
 Many actions require parsing a bucket-name and or a key suffix:
 
