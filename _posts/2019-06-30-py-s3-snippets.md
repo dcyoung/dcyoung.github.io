@@ -330,9 +330,10 @@ def get_immediate_subdirs(
 
 ## Adding simple caching
 
-A very simple caching decorator based on a least-recently used cache. 
+A very simple caching decorator based on a least-recently used cache.
 ```py
 from functools import lru_cache
+from joblib import Memory
 
 DEFAULT_CACHE_DIRECTORY = os.getenv("MY_S3_DATA_CACHE_DIRECTORY", None)
 CACHE_MEMORY = (
