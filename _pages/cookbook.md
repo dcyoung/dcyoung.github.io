@@ -32,13 +32,13 @@ Machine Learning has become a broad term with many meanings. I find it useful to
 
 Models don't make decisions and they don't take actions.
 
-Generally, in data products, models are used to increase decision making power. They inform other parts of a system which actually take actions or apply business logic. A model won't update a database, email a user or rotate a steering wheel. Instead, there exists a more traditional software layer which considers the output of a model when deciding what action to take.
+Rather, models are used to increase decision making power. They inform other parts of a system which actually take actions or apply business logic. A model won't update a database, email a user or rotate a steering wheel. Instead, there exists a more traditional software layer which considers the output of a model when deciding what action to take.
 
 One interpretation is that the model is "simplifying" the complexities of raw data to better inform critical decisions or actions.
 
 Understanding this helps in the early/design phases of an ML project. Start by considering the following:
 
-- articulate the desired action or objective of the overall system
+- define and articulate a clear objective of the overall system - the desired action or outcome 
 - determine what information/advice could support making that decision
   - if it helps, think of this as a question you'd ask a hypothetical expert
   - an exaggerated exercise, but think of what magical insight would simplify your application logic. That is, what appropriate function name would you give `magical_insight` below: 
@@ -46,9 +46,9 @@ Understanding this helps in the early/design phases of an ML project. Start by c
   if magical_insight(raw_data):
     # take action
   ```
-- determine what raw data is available or could be made available
+- determine what raw data could help produce that magical insight
 
-Considering the above, think through `what feasible model could map raw data into a format that supports making the critical decision`. This is the common role of a model. If you cannot articulate this relationship for your system then you are at risk of wasting cycles gathering irrelevant data or training models with irrelevant outputs.
+After considering the above, think through `what predictive model could map raw data into a format that supports making the critical decision`. This is the common role of a model. If you cannot articulate this relationship for your system then you are at risk of wasting cycles gathering irrelevant data or training models with irrelevant outputs.
 
 ## Dedicate time to Explore
 
