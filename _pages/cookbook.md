@@ -213,16 +213,60 @@ After considering the above, think through `what predictive model could map raw 
 
 ### Challenges
 
-- train/serve skew
-- sharing environment/data handling between train/serve
-- usability... what to expose?
+- combating train/serve skew
+- incorporating data pre/post processing
+- makeing predictions intuitive and usable... what do you expose?
+- defining boundaries... where do you put business logic?
+- sharing the environment + data handling across both training and inference
+- estimating and managing load
+- scaling
+- monitoring performance
+- communicating performance (key metrics?)
+- optimizing throughput & latency
+
+### Define your inference needs
+
+Typically, low latency and high throughput come w/ added complexity - so start simple and really understand your performance needs. Start by thinking through the expected usage pattern for your inference problem.
+
+- realtime, scheduled, offline?
+- what does a client look like? (environment/service/app/programming language etc.)
+- how many clients will be making requests? how often?
+- what matters in your scenario - latency, throughput or both?
+- is the scenario batch-able
+```python
+output_a = request_model_pred(input_a)
+output_b = request_model_pred(input_b)
+```
+- is there a sequential nature to your pipeline...
+```python
+output_a = request_model_a_pred(input_data)
+output_b = request_model_b_pred(output_a)
+```
+- do you need to persist raw model outputs (logging, metrics, downstream processing etc.)
+- how frequently is the model updating?
 
 ### Model versioning & storage
 
 - ...
 
+### Tiers of Complexity
+
+- ...
+
 ### Optimizations
 
+- distributed systems
+- centralizing model inference
+- parallelization strategies
+- optimized models
+  - pruning
+  - TensorRT
+  - mixed precision
+- optimized model servers (triton/tf-serving etc.)
+  - TensorRT
+  - server side batching
+  - MKL optimized CPU variants
+  - GPU model sharing
 - ...
 
 ## QA & Feedback Mechanisms
