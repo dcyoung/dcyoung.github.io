@@ -95,9 +95,9 @@ After considering the above, think through `what predictive model could map raw 
 - you'll likely spend more time dealing with data than with models...
 - design for extensibility/maintenance/ease of use
 - separate datums from annotations/structure/labels etc.
-  - you'll often iterate on annotation or data formats meaning which can be slowed down by static datasets or tight coupling
-- treat like a database
-- build interfaces and adapters in code
+  - The format of data and annotations can change over the course of a project. It is easier to iterate if you avoid tight coupling between the datums and the annotations.
+  - treat like a database -- the relationships that define the dataset should be loadable/dynamic/queryable -- even if that is inferred from the structure of a directory on a local file system to start.
+  - build interfaces and adapters in code
 
 ### Build a working data-pipeline early
 
@@ -215,7 +215,7 @@ After considering the above, think through `what predictive model could map raw 
 
 - combating train/serve skew
 - incorporating data pre/post processing
-- makeing predictions intuitive and usable... what do you expose?
+- making predictions intuitive and usable... what do you expose?
 - defining boundaries... where do you put business logic?
 - sharing the environment + data handling across both training and inference
 - estimating and managing load
