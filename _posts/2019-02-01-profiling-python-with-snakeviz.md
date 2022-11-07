@@ -19,6 +19,22 @@ Developer time is precious. The pragmatic approach involves making an informed d
 - fixing low hanging fruit
 - moving on!
 
+In other words, we're answering the following:
+
+**What** is slow?
+
+Use a profiler to understand what is causing a slowdown or bottleneck
+
+**Why** is it slow?
+
+Try to understand why the code is slow.
+
+**How** do you fix it?
+
+How could you optimize the code, and how big of effort is this potential refactor? Is it worth it?
+
+## Profiling in Python
+
 Some languages and IDEs make this easy as the tooling encourages profiling. However python tooling lags behind. To profile python programs and prioritize refactors/ improvements, I use the following tooling:
 
 - cProfile: a profiler which comes w/ python by default
