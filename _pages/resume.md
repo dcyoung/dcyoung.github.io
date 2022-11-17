@@ -18,7 +18,8 @@ As the first data scientist and ML engineer at Ripcord, I have served as both th
 
 Day to day, I foster a friendly work atmosphere that promotes passionate, curious engagement around challenging problems. I champion the pragmatic use of agile process, the appropriate introduction of automation, and the application of a product mindset.
 ​
-### Machine Perception/Computer Vision
+
+**Machine Perception/Computer Vision**
 
 - Designed and implemented machine perception systems based on deep learning for the control of physical robots, scanning machines, and digital RPA processes.
 - Identified and defined problems fit for Machine Learning
@@ -29,7 +30,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Integrated solutions into the robotics software stack.
 - For years now these solutions have been scanning paper and generating revenue.
 
-### Natural Language Processing (NLP)
+**Natural Language Processing (NLP)**
 
 - Designed and implemented SOTA ML based solutions for complex information extraction and RPA use cases capable of handling unstructured and semi-structured documents!
 - Logical document splitting
@@ -40,7 +41,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Developed data generation and augmentation systems for localized document text data
 - Integrated creative strategies for low-shot NER including leveraging label semantics
 
-### Data Science
+**Data Science**
 
 - Staying informed on current SOTA in both academic and industrial research, for many topics related to AI, ML and Computer Vision
 - Proven ability to translate techniques and concepts from research papers to working production code  
@@ -52,13 +53,13 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Modeling uncertainty and calibrating networks
 - Creating interactive tooling and dashboards to visualize insights around data, training experiments and production
 
-### ML Ops
+**ML Ops**
 
 - Designed and implemented data engines for passive and pro-active fetching and subsequent organization of anomalous data from deployed robots
 - Designed and implemented ML Ops systems (workflow and orchestration systems for the ML lifecycle) including dataset maintenance, experiment tracking, model training and evaluation, model optimization, inference serving and deployment all based on open source technologies
 - Designed and implemented systems for highly efficient and scalable distributed training based on open source technologies
 
-### Data Engineering
+**Data Engineering**
 
 - Curated, managed and maintained dozens of datasets on the order of millions of images
 - Designed and implemented creative solutions for sourcing ground truth data
@@ -66,7 +67,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Integrated annotation tooling and oversaw process of annotating millions of images internally in collaboration with Ripcord's operations team.
 - Designed and implemented creative systems for the creation of complex synthetic data
 
-### Software Engineering
+**Software Engineering**
 
 - Familiar and practiced in Agile software engineering methodologies
 - Experience going from customer need to a roadmap of scoped projects
@@ -77,7 +78,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Hardware acceleration
 - GUI applications
 
-### DevOps
+**DevOps**
 
 - Automation wherever possible
 - CI/CD design and maintenance
@@ -105,7 +106,7 @@ At a small startup, you play a role in everything! However, my main focus was th
 - Prototyped various Neural Networks for time series classification of multi-sensor data using Tensorflow.
 - Implemented technical documentation for numerous software projects both internal and open.
 
-## NVIDIA Internship
+## NVIDIA - Software Engr Intern (Gameworks)
 
 ![nvidia](/images/logos/nvidia.png)
 
@@ -131,7 +132,9 @@ In the summer of 2013 I worked for a wealth advising firm in the San Francisco B
 
 ## La Cocina - Restaurant
 
-From 2007-2011 I was employed in various positions at La Cocina, a small Mexican restaurant in Orinda Ca. I started busing tables but moved to bar-tending and waiting which I continued for 4 years. At a small family owned restaurant, being a waiter assumed acting as floor manager. My responsibilities included opening and closing the restaurant, handling the documentation and security of money, managing other staff and even assisting in the design of a new computer system for online catering orders. I believe that every individual should work in the service industry at some point, if only to gain a healthy perspective.
+From 2007-2011 I was employed in various positions at La Cocina, a small restaurant in my hometown. At a small family owned restaurant, being a waiter also assumed acting as floor manager. My responsibilities included opening and closing the restaurant, handling the documentation and security of money, managing other staff and even assisting in the design of a new computer system for online catering orders. I believe every individual should experience working in a service industry, if only to gain a healthy perspective.
+
+---
 
 # Research Experience
 
@@ -147,13 +150,19 @@ During undergrad, I worked as a research assistant in the Barbour Laboratory of 
 
 > Cognitive training software provides exercises whose completion strengthens certain cognitive processes. We seek to develop listening training software in the form of compelling video games playable on smartphones that naturally encourage individuals to complete their auditory training. The goal of this work is to optimize the function of hearing assist devices such as hearing aids and cochlear implants, as well as to enable individuals with a newly correct hearing deficit to learn to communicate effectively.
 
-# Education
+---
 
-I absolutely love learning. Noteworthy coursework is outlined below.
+# Education
 
 ## Graduate - University of Illinois Urbana-Champaign
 
-### Computer Science
+M.S. in Computer Science w/ a focus on aritifical intelligence.
+
+GPA 3.92/4.0
+
+Relevant coursework outlined below.
+
+**Computer Science**
 
 - Artificial Intelligence
 - Models of Cognitive Process
@@ -168,7 +177,13 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 
 ## Undergraduate - Washington University in St. Louis
 
-### Bio-Medical Engineering
+B.S.E. in Bio-Medical Engineering, Electrical Engineering & Systems Engineering
+
+GPA 3.5/4.0, 3.8/4.0 last 2 years
+
+Relevant coursework outlined below.
+
+**Bio-Medical Engineering**
 
 - Introduction to Biomedical Engineering
 - Biomechanics
@@ -184,7 +199,7 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 - Bioelectric Phenomena
 - Transport Phenomena for Biomedical Engineering
 
-### Electrical Engineering & Robotics
+**Electrical Engineering & Robotics**
 
 - Introduction to Electrical and Electronic Circuits
 - Introduction to Electrical and Electronic Circuits Laboratory
@@ -195,7 +210,7 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 - Bioelectric Phenomena
 - Introduction to Computer Architecture and Design
 
-### Computer Science
+**Computer Science**
 
 - Engineering and Scientific Computing
 - Engineering and Scientific Computing Laboratory
@@ -210,7 +225,7 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 - Computer Vision
 - Videogame Programming
 
-### Math & Natural Sciences
+**Math & Natural Sciences**
 
 - Calculus II
 - Calculus III
@@ -230,12 +245,12 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 - Principles of Biology II (Genetics)
 - Principles of Biology II Laboratory
 
-### Social Sciences
+**Social Sciences**
 
 - Microeconomics
 - Macroeconomics
 
-### Teamwork
+**Teamwork**
 
 - Technical Writing
 - Engineering Ethics and Sustainability
@@ -244,21 +259,19 @@ I absolutely love learning. Noteworthy coursework is outlined below.
 - Bio-medical Senior Design
 - Advanced Animation
 
-### Humanities
+**Humanities**
 
 - Jazz Piano I
 - Jazz Piano II
 - History of Jazz (UC Berkeley)
 - Classic Roman Literature (UC Berkeley)
 
-### Animation & Game Design
+**Animation & Game Design**
 
 Advanced Animation
 Videogame Programming (Game Design)​
 
-## Online Coursework
-
-### Programming and Technical Art
+## Online Coursework - Programming + Technical Art
 
 **Udacity**
 
@@ -295,7 +308,9 @@ Videogame Programming (Game Design)​
 - CryEngine 3 Vol 1-3 An Intro and Application
 - Product Design in Autodesk Fusion 360
 
-## Software Development & Programming Experience
+---
+
+# Software Development & Programming Experience
 
 Programming is a powerful skill, but it does not replace an understanding of customer need, a critical experiment, a solid product design, or a high level plan for system architecture.
 
