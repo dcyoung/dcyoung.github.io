@@ -156,13 +156,13 @@ During undergrad, I worked as a research assistant in the Barbour Laboratory of 
 
 ## Graduate - University of Illinois Urbana-Champaign
 
-M.S. in Computer Science w/ a focus on aritifical intelligence.
+M.S. in Computer Science w/ a focus on Artificial Intelligence.
 
-GPA 3.92/4.0
+GPA 3.92/4.0 - coursework outlined below.
 
-Relevant coursework outlined below.
-
-**Computer Science**
+<details>
+	<summary><b>Computer Science</b></summary>
+	<pre>
 
 - Artificial Intelligence
 - Models of Cognitive Process
@@ -175,15 +175,18 @@ Relevant coursework outlined below.
 - Interactive Computer Graphics
 - Computer Architecture in the Era of Custom Accelerators
 
+</pre>
+</details>
+
 ## Undergraduate - Washington University in St. Louis
 
 B.S.E. in Bio-Medical Engineering, Electrical Engineering & Systems Engineering
 
-GPA 3.5/4.0, 3.8/4.0 last 2 years
+GPA 3.8/4.0 - coursework outlined below.
 
-Relevant coursework outlined below.
-
-**Bio-Medical Engineering**
+<details>
+	<summary><b>Bio-Medical Engineering</b></summary>
+	<pre>
 
 - Introduction to Biomedical Engineering
 - Biomechanics
@@ -199,7 +202,12 @@ Relevant coursework outlined below.
 - Bioelectric Phenomena
 - Transport Phenomena for Biomedical Engineering
 
-**Electrical Engineering & Robotics**
+</pre>
+</details>
+
+<details>
+	<summary><b>Electrical Engineering & Robotics</b></summary>
+	<pre>
 
 - Introduction to Electrical and Electronic Circuits
 - Introduction to Electrical and Electronic Circuits Laboratory
@@ -209,8 +217,12 @@ Relevant coursework outlined below.
 - Robotics Laboratory
 - Bioelectric Phenomena
 - Introduction to Computer Architecture and Design
+</pre>
+</details>
 
-**Computer Science**
+<details>
+	<summary><b>Computer Science</b></summary>
+	<pre>
 
 - Engineering and Scientific Computing
 - Engineering and Scientific Computing Laboratory
@@ -225,7 +237,12 @@ Relevant coursework outlined below.
 - Computer Vision
 - Videogame Programming
 
-**Math & Natural Sciences**
+</pre>
+</details>
+
+<details>
+	<summary><b>Math & Natural Sciences</b></summary>
+	<pre>
 
 - Calculus II
 - Calculus III
@@ -245,12 +262,22 @@ Relevant coursework outlined below.
 - Principles of Biology II (Genetics)
 - Principles of Biology II Laboratory
 
-**Social Sciences**
+</pre>
+</details>
+
+<details>
+	<summary><b>Social Sciences</b></summary>
+	<pre>
 
 - Microeconomics
 - Macroeconomics
 
-**Teamwork**
+</pre>
+</details>
+
+<details>
+	<summary><b>Teamwork</b></summary>
+	<pre>
 
 - Technical Writing
 - Engineering Ethics and Sustainability
@@ -259,35 +286,52 @@ Relevant coursework outlined below.
 - Bio-medical Senior Design
 - Advanced Animation
 
-**Humanities**
+</pre>
+</details>
+
+<details>
+	<summary><b>Humanities</b></summary>
+	<pre>
 
 - Jazz Piano I
 - Jazz Piano II
 - History of Jazz (UC Berkeley)
 - Classic Roman Literature (UC Berkeley)
 
-**Animation & Game Design**
+</pre>
+</details>
 
-Advanced Animation
-Videogame Programming (Game Design)​
+<details>
+	<summary><b>Animation & Game Design</b></summary>
+	<pre>
+
+- Advanced Animation
+- Videogame Programming (Game Design)​
+
+</pre>
+</details>
 
 ## Online Coursework - Programming + Technical Art
 
-**Udacity**
+<details>
+	<summary><b>Udacity</b></summary>
+	<pre>
 
 - Self Driving Car Nano-Degree
 
-**Udemy**
+</pre>
+</details>
 
+<details>
+	<summary><b>Udemy & Others</b></summary>
+	<pre>
+
+- Professional Game Development in C++ and Unreal Engine
+- Pro Unreal Engine Game Coding (Vehicle Physics)
 - Game Physics
 - Complete Unity Developer
 - Unreal Engine Developer
 - Virtual Reality Designer
-
-**Other**
-
-- Professional Game Development in C++ and Unreal Engine
-- Pro Unreal Engine Game Coding (Vehicle Physics)
 - Intro to Premiere Pro CC
 - Intro to Autodesk 3dsMax 2014
 - Intro to Audodesk Maya 2015
@@ -307,6 +351,9 @@ Videogame Programming (Game Design)​
 - ZBrush Hard Surface Techniques
 - CryEngine 3 Vol 1-3 An Intro and Application
 - Product Design in Autodesk Fusion 360
+
+</pre>
+</details>
 
 ---
 
