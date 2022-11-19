@@ -22,6 +22,8 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 
 Machine Learning has become a broad term with many meanings. I find it useful to draw the distinction between what I call `Decision Science` and `Data Products`.
 
+![0](/images/ml-guide/data-product.svg){: .align-center}
+
 `Decision Science` is the the application of tools and techniques in pursuit of some insight - often a business insight. This process yields an export, with results often delivered in the form of a report or dashboard. Decision science involves exploration of data or the modeling of some phenomenon in the data, which may or may not involve basic Machine Learning models (classifiers/regression) and unsupervised techniques (dimensionality reduction/clustering). Code is typically short lived, in that it will not require ongoing maintenance in a production environment. Here there is more of a focus on science, and less of a focus on engineering - unless data acquisition/handling requires significant infra.
 
 `Data Products` on the other hand, represent the development of systems which leverage learning based models to automate or facilitate intelligent function in a production environment. The process yields a deployed system, which requires proper design and maintenance. Systems often need to be resilient, robust and adaptive to ongoing and dynamic data. Therefore, they live or die by the quality of feedback mechanisms, and requires significantly more engineering effort.
@@ -35,6 +37,8 @@ Models don't make decisions and they don't take actions.
 Rather, models are used to increase decision making power. They inform other parts of a system which actually take actions or apply business logic. A model won't update a database, email a user or rotate a steering wheel. Instead, there exists a more traditional software layer which considers the output of a model when deciding what action to take.
 
 One interpretation is that the model is "simplifying" the complexities of raw data to better inform critical decisions or actions.
+
+![0](/images/ml-guide/simplify-data.svg){: .align-center}
 
 Understanding this helps in the early/design phases of an ML project. Start by considering the following:
 
@@ -252,6 +256,15 @@ output_b = request_model_b_pred(output_a)
 ### Tiers of Complexity
 
 - ...
+
+### Train Serve Skew
+
+- ...
+
+![0](/images/ml-guide/train-serve-skew.svg){: .align-center}
+
+
+![0](/images/ml-guide/share-data-processing.svg){: .align-center}
 
 ### Optimizations
 
