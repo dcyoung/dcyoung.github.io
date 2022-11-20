@@ -17,18 +17,35 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 - Machine Learning is about the overall system that facilitates learning. Think of models like lazy students. Teaching them to learn requires a well designed curriculum, appropriate facilities and opportunities for real world practice. Think through your overall system, and make sure it supports bootstrapping data, deploying a model and finding a route for feedback.
 - Leverage a scientific method to derisk unknowns. Machine Learning systems require exploration, and constant consideration of what is working and what isn't. When faced with unknown properties of the system, generate a hypothesis and design an experiment. To make efficient use of time and resource, scope each experiment as small as possible to answer a specific question or derisk a specific unknown.
 - Manage complexity with engineering. The systems involved get very complex and often need to adapt as you gain knowledge about the overall system. Stay agile and wrangle this complexity with solid engineering principles and design.
+- Balance the development and focus across the big 3: **Data**, **Compute** and **Algorithms/Model Architecture**.
 
 ## Data Products vs. Decision Science
 
 Machine Learning has become a broad term with many meanings. I find it useful to draw the distinction between what I call `Decision Science` and `Data Products`.
 
-![0](/images/ml-guide/data-product.svg){: .align-center}
-
 `Decision Science` is the the application of tools and techniques in pursuit of some insight - often a business insight. This process yields an export, with results often delivered in the form of a report or dashboard. Decision science involves exploration of data or the modeling of some phenomenon in the data, which may or may not involve basic Machine Learning models (classifiers/regression) and unsupervised techniques (dimensionality reduction/clustering). Code is typically short lived, in that it will not require ongoing maintenance in a production environment. Here there is more of a focus on science, and less of a focus on engineering - unless data acquisition/handling requires significant infra.
+
+![0](/images/ml-guide/decision-science.svg){: .align-center}
 
 `Data Products` on the other hand, represent the development of systems which leverage learning based models to automate or facilitate intelligent function in a production environment. The process yields a deployed system, which requires proper design and maintenance. Systems often need to be resilient, robust and adaptive to ongoing and dynamic data. Therefore, they live or die by the quality of feedback mechanisms, and requires significantly more engineering effort.
 
+![0](/images/ml-guide/data-product.svg){: .align-center}
+
 > This guide focuses primarily on the genre "Data Products". While many practices are applicable across genres, those curious about "Decision Science" should look for material focused on data science and analysis.
+
+## The Big 3
+
+The best results come from projects that balance the big 3:
+
+- Data
+- Compute
+- Algorithms/Model Architecture
+
+Each is an area warranting focused research or engineering - however, succesful systems will balance the development of all three for the best results.
+
+![0](/images/ml-guide/tiangle.svg){: .align-center}
+
+Think of these components like legs of a telescoping tripod and devote time to each in a balanced way.
 
 ## Models simplify the complexity of raw data
 
