@@ -15,9 +15,9 @@ This is a practitioner's guide to developing Machine Learning models that solve 
 
 - Be observant, think through problems, reflect often and remember unique problems may require novel solutions or novel combinations of existing practices.
 - Machine Learning is about the overall system that facilitates learning. Think of models like lazy students. Teaching them to learn requires a well designed curriculum, appropriate facilities and opportunities for real world practice. Think through your overall system, and make sure it supports bootstrapping data, deploying a model and finding a route for feedback.
+- Balance the development and focus across the big 3: `Data`, `Compute` and `Algorithms/Model Architecture`.
 - Leverage a scientific method to derisk unknowns. Machine Learning systems require exploration, and constant consideration of what is working and what isn't. When faced with unknown properties of the system, generate a hypothesis and design an experiment. To make efficient use of time and resource, scope each experiment as small as possible to answer a specific question or derisk a specific unknown.
 - Manage complexity with engineering. The systems involved get very complex and often need to adapt as you gain knowledge about the overall system. Stay agile and wrangle this complexity with solid engineering principles and design.
-- Balance the development and focus across the big 3: **Data**, **Compute** and **Algorithms/Model Architecture**.
 
 ## Data Products vs. Decision Science
 
@@ -57,29 +57,40 @@ One interpretation is that the model is "simplifying" the complexities of raw da
 
 ![0](/images/ml-guide/simplify-data.svg){: .align-center}
 
-Understanding this helps in the early/design phases of an ML project. Start by considering the following:
+> A predictive model maps raw data into a format that supports making the critical decision
 
-- define and articulate a clear objective of the overall system - the desired action or outcome 
-- determine what information/advice could support making that decision
-  - if it helps, think of this as a question you'd ask a hypothetical expert
-  - an exaggerated exercise, but think of what magical insight would simplify your application logic. That is, what appropriate function name would you give `magical_insight` below: 
+Understanding this functional role of a model helps in the early/design phases of an ML project. If you cannot clearly articulate how this applies to your system then you are at risk of wasting cycles gathering irrelevant data or training models with irrelevant outputs.
+
+## Finding Functional Boundaries for Preditive Models
+
+Assuming your data is complex enough to warrant a predictive model, you'll need to define the input/output of the model. You'll likely want to jump right to model architectures - but DON'T. The functional boundaries (IO) for your model will depend on the qualities of your data and system design. So at this stage, **pretend the model is a black box and spend time understanding your data and the objectives of the overall system.**
+
+Take a mixed apporach by breaking this process into into two activites: **system analysis** and **data exploration**.
+
+**Part 1: System Analysis**
+
+This is about understanding the overall system as a whole and identifying the constraints that will shape the boundaries of the model. Here is a rough exercise:
+
+1. Define and articulate a clear objective of the overall system - the desired action or outcome
+
+2. Determine the minimal information - data simplicity threshold - to support that objective. If it helps, think of this as a question you'd ask a hypothetical human expert. As an exaggerated exercise, think of what magical insight could simplify your application logic like so: 
   ```python
   if magical_insight(raw_data):
     # take action
   ```
-- determine what raw data could help produce that magical insight
+3. Think through what raw data could be relevant or help produce that magical insight
+4. Study your system to identify any opportuities for automated feedback loops. Are there any existing or planned parts of a system which present opportunities to collect data samples or labels in production? Model IO that is closer to the IO of existing system components will facilitate rapid boostrapping of datasets and automated model improvement.
 
-After considering the above, think through `what predictive model could map raw data into a format that supports making the critical decision`. This is the common role of a model. If you cannot articulate this relationship for your system then you are at risk of wasting cycles gathering irrelevant data or training models with irrelevant outputs.
+**Part 2: Exploration**
 
-## Dedicate time to Explore
+Part 1 stressed the importance of analyzing the overall system to identify guiding constraints for the model IO. Equally important is dedicating time to **explore your data** and better understand the domain of your problem and data. You cannot reason accurately about data you've never seen. You need to build a gut intuition about what is relevant, and how to separate signal from noise.
 
-- Gather small but representative distribution of data from domain
-- Explore the data...
-  - visualize
-  - profile
-  - ML for exploration
-    - clustering
-    - unsupervised learning
+1. First, **gather small but representative distribution of data** from the domain.
+
+2. **Explore without software**. Try to understand and poke at the data without software or tools. What does it looks like... if relevant, investigate how subject matter experts solve this without software.
+
+3. **Identify strong signal** among the features in the data. Put on a data science hat, and explore using tools. Try to find early indicators or features in the data that should lend well to training a model. Not only will this help guide model inputs later, it also builds confidence that a learning apporach will work at all... which is important early on. This phase includes `data visualization`, `data profiling`, and even ML for exploration (`clustering`, `unsupervsied learning`)
+4. Brainstorm strategies to boostrap a labeled dataset. Think through which parts of the data can be sourced, synthetically generated, augmented etc.
 
 ## Scope your project
 
