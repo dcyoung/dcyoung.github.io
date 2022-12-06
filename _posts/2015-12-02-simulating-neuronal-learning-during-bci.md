@@ -10,8 +10,8 @@ permalink: /post-simulating-neuronal-learning-during-bci/
 classes: wide
 excerpt: Modeling a population of neurons learning to control a 2 dimensional cursor.
 header:
-  og_image: /images/simulating-neuronal-learning-during-bci/preview.jpg
-  teaser: /images/simulating-neuronal-learning-during-bci/preview.jpg
+  og_image: /images/simulating-neuronal-learning-during-bci/preview.webp
+  teaser: /images/simulating-neuronal-learning-during-bci/preview.webp
 ---
 
 {% include pdf-embed.html url="/images/simulating-neuronal-learning-during-bci/neuronal-learning.pdf" %}

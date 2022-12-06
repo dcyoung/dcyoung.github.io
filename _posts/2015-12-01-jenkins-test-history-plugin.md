@@ -9,8 +9,8 @@ permalink: /post-jenkins-plugin/
 classes: wide
 excerpt: Building a jenkins plugin extension to analyze test results.
 header:
-  og_image: /images/jenkins-plugin/0.jpg
-  teaser: /images/jenkins-plugin/0.jpg
+  og_image: /images/jenkins-plugin/0.webp
+  teaser: /images/jenkins-plugin/0.webp
 ---
 
 {% include pdf-embed.html url="/images/jenkins-plugin/report.pdf" %}

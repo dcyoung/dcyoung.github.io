@@ -11,8 +11,8 @@ classes: wide
 toc: True
 excerpt: Classification for “wide” datasets, w/ more features than examples.
 header:
-  og_image: /images/logos/r.png
-  teaser: /images/logos/r.png
+  og_image: /images/logos/r.webp
+  teaser: /images/logos/r.webp
 ---
 
 ## Dataset

@@ -10,11 +10,11 @@ permalink: /post-bme-rabbit-optical/
 classes: wide
 excerpt: Computing signal characteristics of optical data to measure electrical arrhythmia in rabbits.
 header:
-  og_image: /images/qp-computational/rabbit-preview.jpg
-  teaser: /images/qp-computational/rabbit-preview.jpg
+  og_image: /images/qp-computational/rabbit-preview.webp
+  teaser: /images/qp-computational/rabbit-preview.webp
 ---
 
-![preview](/images/qp-computational/rabbit-preview.jpg){:.align-right}
+![preview](/images/qp-computational/rabbit-preview.webp){:.align-right}
 
 Using recordings from an animal model of arrhythmia, Matlab code was developed to read the data, compute various signal characteristics and finally provide measures of electrical activity of normal rhythm and arrhythmia.
 

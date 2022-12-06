@@ -10,11 +10,11 @@ permalink: /post-modified-electric-minibike/
 classes: wide
 excerpt: Building a ridiculous campus commuter from a childs toy.
 header:
-  og_image: /images/modified-electric-minibike/preview-500x300.jpg
-  teaser: /images/modified-electric-minibike/preview-500x300.jpg
+  og_image: /images/modified-electric-minibike/preview-500x300.webp
+  teaser: /images/modified-electric-minibike/preview-500x300.webp
 ---
 
-![preview](/images/modified-electric-minibike/preview-500x300.jpg){:.align-center}
+![preview](/images/modified-electric-minibike/preview-500x300.webp){:.align-center}
 
 ## Motivation
 
@@ -26,7 +26,7 @@ I picked up a broken Razor electric minibike chassis off craigslist for about $5
 
 ## Build
 
-![0](/images/modified-electric-minibike/0.jpg){: .align-right}
+![0](/images/modified-electric-minibike/0.webp){: .align-right}
 
 Being at school without a garage of tools, any serious fab work was out of the question... I would pretty much only be able to assemble an assortment of parts. So I found a motor that looked like it would mount up to the stock bracketry without modification and ordered the following:
 

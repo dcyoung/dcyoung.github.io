@@ -10,8 +10,8 @@ classes: wide
 toc: true
 excerpt: Implementing a laplacian blob detector to identify scale invariant features.
 header:
-  og_image: /images/laplacian-blob-detector/5.jpg
-  teaser: /images/laplacian-blob-detector/5.jpg
+  og_image: /images/laplacian-blob-detector/5.webp
+  teaser: /images/laplacian-blob-detector/5.webp
 ---
 
 In order to track features across scales, detected features must be invariant to affine transformations. However, many common feature detection algorithms (ex: Harris Corner Detector) are not invariant to scale.
@@ -33,27 +33,27 @@ A laplacian blob detector is one method to generate scale invariant features. Th
 The following results show blobs detected on provided images. The radius of a circle corresponds to the scale of the detected blob.
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/0.jpg">
-  <img src="/images/laplacian-blob-detector/1.jpg">
-  <img src="/images/laplacian-blob-detector/2.jpg">
+  <img src="/images/laplacian-blob-detector/0.webp">
+  <img src="/images/laplacian-blob-detector/1.webp">
+  <img src="/images/laplacian-blob-detector/2.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/3.jpg">
-  <img src="/images/laplacian-blob-detector/4.jpg">
-  <img src="/images/laplacian-blob-detector/5.jpg">
+  <img src="/images/laplacian-blob-detector/3.webp">
+  <img src="/images/laplacian-blob-detector/4.webp">
+  <img src="/images/laplacian-blob-detector/5.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/6.jpg">
-  <img src="/images/laplacian-blob-detector/7.jpg">
-  <img src="/images/laplacian-blob-detector/8.jpg">
+  <img src="/images/laplacian-blob-detector/6.webp">
+  <img src="/images/laplacian-blob-detector/7.webp">
+  <img src="/images/laplacian-blob-detector/8.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/9.jpg">
-  <img src="/images/laplacian-blob-detector/10.jpg">
-  <img src="/images/laplacian-blob-detector/11.jpg">
+  <img src="/images/laplacian-blob-detector/9.webp">
+  <img src="/images/laplacian-blob-detector/10.webp">
+  <img src="/images/laplacian-blob-detector/11.webp">
 </figure>
 
 ## Main Script
@@ -166,7 +166,7 @@ end
 
 This functions handles the creation of a scale space or pyramid of responses to a laplacian of a gaussian. It assumes the provided image is already in grayscale. Filtering can be performed in one of two ways, one of which is significantly faster. The basic idea is the same, apply the kernel with differing relative size between the kernel and the image. Conceptually this means we want to increase the kernel size and reapply it to the image to generate the different scales. But it is relatively inefficient to repeatedly filter the image with a kernel of increasing size. Instead of increasing the kernel size by a factor of k, simply down-sample the image by a factor 1/k and apply the same kernel. Of course after applying the kernel, the result the has to be up-sampled. The results are slightly different in the number of blobs detected (~2-3%) but the time to generate the scale space decreases dramatically. Here is a chart comparing the times to create scale space with and without downsampling.
 
-![table](/images/laplacian-blob-detector/12.jpg){:.align-center}
+![table](/images/laplacian-blob-detector/12.webp){:.align-center}
 
 On average, the down sampling method took 26% of the time of the no downsampling method. This performance bonus will only increase as the size of the image and filter increase. This is a very efficient implementation.
 
@@ -348,36 +348,36 @@ end
 ## More Results
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/13.jpg">
-  <img src="/images/laplacian-blob-detector/14.jpg">
-  <img src="/images/laplacian-blob-detector/15.jpg">
+  <img src="/images/laplacian-blob-detector/13.webp">
+  <img src="/images/laplacian-blob-detector/14.webp">
+  <img src="/images/laplacian-blob-detector/15.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/16.jpg">
-  <img src="/images/laplacian-blob-detector/17.jpg">
-  <img src="/images/laplacian-blob-detector/18.jpg">
+  <img src="/images/laplacian-blob-detector/16.webp">
+  <img src="/images/laplacian-blob-detector/17.webp">
+  <img src="/images/laplacian-blob-detector/18.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/19.jpg">
-  <img src="/images/laplacian-blob-detector/20.jpg">
-  <img src="/images/laplacian-blob-detector/21.jpg">
+  <img src="/images/laplacian-blob-detector/19.webp">
+  <img src="/images/laplacian-blob-detector/20.webp">
+  <img src="/images/laplacian-blob-detector/21.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/22.jpg">
-  <img src="/images/laplacian-blob-detector/23.jpg">
-  <img src="/images/laplacian-blob-detector/24.jpg">
+  <img src="/images/laplacian-blob-detector/22.webp">
+  <img src="/images/laplacian-blob-detector/23.webp">
+  <img src="/images/laplacian-blob-detector/24.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/25.jpg">
-  <img src="/images/laplacian-blob-detector/26.jpg">
+  <img src="/images/laplacian-blob-detector/25.webp">
+  <img src="/images/laplacian-blob-detector/26.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/laplacian-blob-detector/27.jpg">
-  <img src="/images/laplacian-blob-detector/28.jpg">
-  <img src="/images/laplacian-blob-detector/29.jpg">
+  <img src="/images/laplacian-blob-detector/27.webp">
+  <img src="/images/laplacian-blob-detector/28.webp">
+  <img src="/images/laplacian-blob-detector/29.webp">
 </figure>

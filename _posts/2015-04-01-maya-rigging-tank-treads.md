@@ -9,8 +9,8 @@ permalink: /post-maya-rigging-tank-treads/
 classes: wide
 excerpt: Programmatic rigging of tank treads in Maya.
 header:
-  og_image: /images/maya-rigging-tank-treads/4.jpg
-  teaser: /images/maya-rigging-tank-treads/4.jpg
+  og_image: /images/maya-rigging-tank-treads/4.webp
+  teaser: /images/maya-rigging-tank-treads/4.webp
 ---
 
 ## Version 2.0
@@ -18,20 +18,20 @@ header:
 Version 1.0 was a good exercise to get acquainted with MEL, but the project had a few bugs. So I rebuilt it from the ground up with a much more robust rig. The apparent flipping is no longer an issue and the rig is completely scale-able and controllable. The final rig allows tracks to move realistically regardless of the orientation of the model and also has fine tuning per track to account for unpredictable situations. The result was very useful in quickly animating the movement of a robot with treads in a short for my advanced animation class.
 
 <figure class="half">
-  <img src="/images/maya-rigging-tank-treads/0.jpg">
-  <img src="/images/maya-rigging-tank-treads/2.jpg">
+  <img src="/images/maya-rigging-tank-treads/0.webp">
+  <img src="/images/maya-rigging-tank-treads/2.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/maya-rigging-tank-treads/1.jpg">
-  <img src="/images/maya-rigging-tank-treads/3.jpg">
+  <img src="/images/maya-rigging-tank-treads/1.webp">
+  <img src="/images/maya-rigging-tank-treads/3.webp">
 </figure>
 
 ## Version 1.0
 
 To get acquainted with the scripting language of maya called MEL (Maya Embedded Language) I decided to tackle a small expression for a tank tread/track assembly. The idea was to have a track moveable with a single rig handle that will animate automatically when translated. It uses some extremely basic geometry to calculate the location of each tread along a curve that defines their paths. Some extra functionality like rigged clusters keep the track a little more interesting, but if I were to do it again I would add some more clusters as well as a dynamic weighted path to add effects of inertia and rebound.
 
-![v1](/images/maya-rigging-tank-treads/4.jpg){:.align-center}
+![v1](/images/maya-rigging-tank-treads/4.webp){:.align-center}
 
 ```mel
 int $numTreads = 36;

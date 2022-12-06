@@ -11,8 +11,8 @@ classes: wide
 toc: True
 excerpt: Regression of spatial data using kernel functions.
 header:
-  og_image: /images/regression-kernel-smoothing/0.jpg
-  teaser: /images/regression-kernel-smoothing/0.jpg
+  og_image: /images/regression-kernel-smoothing/0.webp
+  teaser: /images/regression-kernel-smoothing/0.webp
 ---
 
 ## Dataset
@@ -53,7 +53,7 @@ Scale | Average MSE across 8 folds
 ​Once the scale was selected, all of the stations were used as a training set to generate a model at that scale. Min temperatures for an even 100x100 grid were then predicted using this model and plotted as an image.
 
 <figure>
-<img src="/images/regression-kernel-smoothing/0.jpg">
+<img src="/images/regression-kernel-smoothing/0.webp">
 <figcaption>Plot of predicted average annual mean of the min temperature on 100 by 100 grid spanning all stations, using scale 126738.9 (avg. dist between stations).</figcaption>
 </figure>
 
@@ -64,13 +64,13 @@ Source code here: [https://github.com/dcyoung/Regression-Kernel-Smoothing/blob/m
 ​The same kernel method from the unregularized regression was regularized using the lasso, and again predictions were generated to find the mean annual min temperature at each point on the same 100x100 grid. The regularization constant was chosen using cross validation (cv.glmnet did all the work). Again, a range of 6 scales were used and here the lasso regression effectively pruned unnecessary scales with its internal cross validation and ability to cut out features. Again the predictions were plotted as an image.
 
 <figure>
-<img src="/images/regression-kernel-smoothing/1.jpg">
+<img src="/images/regression-kernel-smoothing/1.webp">
 <figcaption>Predicted avg annual mean of the min temperature on 100x100 grid spanning all stations, using all 6 scales and Lasso Regularization.</figcaption>
 </figure>
 
 ​The final number of predictors used by the model was 14. The MSE appears parabolic around the optimal number of predictors which was 14. The error grows faster as the number of predictors decreases from 14, compared to its growth rate as the number of predictors increases from 14. The log of the optimal regularization constant can be read off the graph below and is roughly 1.6.
 
-![placeholder](/images/regression-kernel-smoothing/2.jpg){:.align-center}
+![placeholder](/images/regression-kernel-smoothing/2.webp){:.align-center}
 
 ## Experimenting with different values for Elastic Net constant (alpha)
 

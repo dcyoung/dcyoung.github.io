@@ -10,8 +10,8 @@ permalink: /post-bme-ultrasound/
 classes: wide
 excerpt: Measuring and calculating properties of a frog heart using diagnostic ultrasound.
 header:
-  og_image: /images/qp-physical/ultrasound.jpg
-  teaser: /images/qp-physical/ultrasound.jpg
+  og_image: /images/qp-physical/ultrasound.webp
+  teaser: /images/qp-physical/ultrasound.webp
 ---
 
 ## Writeup

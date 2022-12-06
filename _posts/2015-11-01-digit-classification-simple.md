@@ -10,8 +10,8 @@ permalink: /post-digit-classification/
 classes: wide
 excerpt: Digit classification w/ Naive Bayes and Multi-class Perceptrons.
 header:
-  og_image: /images/digit-classification/0.jpg
-  teaser: /images/digit-classification/0.jpg
+  og_image: /images/digit-classification/0.webp
+  teaser: /images/digit-classification/0.webp
 ---
 
 ## Naive Bayes

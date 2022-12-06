@@ -10,8 +10,8 @@ classes: wide
 toc: true
 excerpt: Using Keras and convolutional neural networks to classify multi-channel time series data.
 header:
-  og_image: /images/logos/keras.png
-  teaser: /images/logos/keras.png
+  og_image: /images/logos/keras.webp
+  teaser: /images/logos/keras.webp
 ---
 
 ## Background

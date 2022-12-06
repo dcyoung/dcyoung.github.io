@@ -10,8 +10,8 @@ permalink: /post-adversarial-search/
 classes: wide
 excerpt: Solving war games w/ Adversarial Search, Minimax and Alpha-Beta Pruning.
 header:
-  og_image: /images/adversarial-search/0.jpg
-  teaser: /images/adversarial-search/0.jpg
+  og_image: /images/adversarial-search/0.webp
+  teaser: /images/adversarial-search/0.webp
 ---
 
 {% include pdf-embed.html url="/images/adversarial-search/adversarial-search-wargame.pdf" %}

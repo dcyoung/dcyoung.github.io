@@ -11,8 +11,8 @@ classes: wide
 toc: True
 excerpt: Implementing Stoachastic Gradient Descent from scratch in R.
 header:
-  og_image: /images/stoachstic-gradient-descent-in-r/0.jpg
-  teaser: /images/stoachstic-gradient-descent-in-r/0.jpg
+  og_image: /images/stoachstic-gradient-descent-in-r/0.webp
+  teaser: /images/stoachstic-gradient-descent-in-r/0.webp
 ---
 
 ## Dataset
@@ -32,12 +32,12 @@ How far should we step in the computed direction? Well we aren't positive that t
 ​An estimate of the accuracy of the best classifier on the held out (test) data was .814, the mean of 5 different runs on the algorithm. The regularization constant did not seem to greatly affect model accuracy (particularly on the test set) considering the scale at which it varied (factor of 1000).  High lambda values (.1 and 1), however, led to loss of accuracy on the validation set, because they allowed for more examples to be misclassified or fall within the margin. Whereas small lambda values could improve accuracy on the training examples but decrease the model’s ability to generalize to new data.
 
 <figure>
-<img src="/images/stoachstic-gradient-descent-in-r/0.jpg">
+<img src="/images/stoachstic-gradient-descent-in-r/0.webp">
 <figcaption>accuracy of the model on the randomly selected epoch validation set as a function of increasing step number and the regularization constant lambda</figcaption>
 </figure>
 
 <figure>
-<img src="/images/stoachstic-gradient-descent-in-r/1.jpg">
+<img src="/images/stoachstic-gradient-descent-in-r/1.webp">
 <figcaption>accuracy of the model on the overall validation set as a function of increasing step number and the regularization constant lambda</figcaption>
 </figure>
 

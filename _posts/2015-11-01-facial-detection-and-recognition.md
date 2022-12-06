@@ -10,11 +10,11 @@ classes: wide
 toc: True
 excerpt: Creating 360 panoramas from a set of images.
 header:
-  og_image: /images/facial-detection-and-recognition/0.jpg
-  teaser: /images/facial-detection-and-recognition/0.jpg
+  og_image: /images/facial-detection-and-recognition/0.webp
+  teaser: /images/facial-detection-and-recognition/0.webp
 ---
 
-![preview](/images/facial-detection-and-recognition/0.jpg){:.align-center}
+![preview](/images/facial-detection-and-recognition/0.webp){:.align-center}
 
 ## Overview + Major Design Choices
 
@@ -425,15 +425,15 @@ else{
 
 Average Face | Eigen Face 0 | Eigen Face 1 | Eigen Face 2 |Eigen Face 3 | Eigen Face 4 | Eigen Face 5 | Eigen Face 6 | Eigen Face 7 | Eigen Face 8 | Eigen Face 9
 :--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:|:--------:
-[![placeholder](/images/facial-detection-and-recognition/1.jpg){:.align-enter}](/images/facial-detection-and-recognition/1.jpg) |[![placeholder](/images/facial-detection-and-recognition/2.jpg){:.align-enter}](/images/facial-detection-and-recognition/2.jpg) |[![placeholder](/images/facial-detection-and-recognition/3.jpg){:.align-enter}](/images/facial-detection-and-recognition/3.jpg) |[![placeholder](/images/facial-detection-and-recognition/4.jpg){:.align-enter}](/images/facial-detection-and-recognition/4.jpg) |[![placeholder](/images/facial-detection-and-recognition/5.jpg){:.align-enter}](/images/facial-detection-and-recognition/5.jpg) |[![placeholder](/images/facial-detection-and-recognition/6.jpg){:.align-enter}](/images/facial-detection-and-recognition/6.jpg) |[![placeholder](/images/facial-detection-and-recognition/7.jpg){:.align-enter}](/images/facial-detection-and-recognition/7.jpg) |[![placeholder](/images/facial-detection-and-recognition/8.jpg){:.align-enter}](/images/facial-detection-and-recognition/8.jpg) |[![placeholder](/images/facial-detection-and-recognition/9.jpg){:.align-enter}](/images/facial-detection-and-recognition/9.jpg) |[![placeholder](/images/facial-detection-and-recognition/10.jpg){:.align-enter}](/images/facial-detection-and-recognition/10.jpg) |[![placeholder](/images/facial-detection-and-recognition/11.jpg){:.align-enter}](/images/facial-detection-and-recognition/11.jpg)
+[![placeholder](/images/facial-detection-and-recognition/1.webp){:.align-enter}](/images/facial-detection-and-recognition/1.webp) |[![placeholder](/images/facial-detection-and-recognition/2.webp){:.align-enter}](/images/facial-detection-and-recognition/2.webp) |[![placeholder](/images/facial-detection-and-recognition/3.webp){:.align-enter}](/images/facial-detection-and-recognition/3.webp) |[![placeholder](/images/facial-detection-and-recognition/4.webp){:.align-enter}](/images/facial-detection-and-recognition/4.webp) |[![placeholder](/images/facial-detection-and-recognition/5.webp){:.align-enter}](/images/facial-detection-and-recognition/5.webp) |[![placeholder](/images/facial-detection-and-recognition/6.webp){:.align-enter}](/images/facial-detection-and-recognition/6.webp) |[![placeholder](/images/facial-detection-and-recognition/7.webp){:.align-enter}](/images/facial-detection-and-recognition/7.webp) |[![placeholder](/images/facial-detection-and-recognition/8.webp){:.align-enter}](/images/facial-detection-and-recognition/8.webp) |[![placeholder](/images/facial-detection-and-recognition/9.webp){:.align-enter}](/images/facial-detection-and-recognition/9.webp) |[![placeholder](/images/facial-detection-and-recognition/10.webp){:.align-enter}](/images/facial-detection-and-recognition/10.webp) |[![placeholder](/images/facial-detection-and-recognition/11.webp){:.align-enter}](/images/facial-detection-and-recognition/11.webp)
 
 ### Experimenting with the Number of Eigenfaces Used
 
 The procedure above was computed for the following # of eigenfaces: 1,3,5,7,9,10,11,13,15,17,19,21,23. For each set of images a user base was computed and the program was run to recognize the photos from a reference set of faces with interesting facial expressions. The accuracy of facial recognition (to the resting face of the correct match) was computed and the results were found below. It seemed that the number of eigenfaces used dictated the accuracy up until a point where it plateaued. 15 eigenfaces seemed to be the general tipping point for this data set. I imagine that the subtle ups and downs after the plateau are due to the data set reacting one way or the other because of its small size. In general I would expect more eigen faces to produce better results, but after a certain point the marginal benefit of what another vector can convey isn't worth the processing power. Further eigenfaces won't greatly affect accuracy. I used 15 eigenfaces for the subsequent experiments. It seemed from the noted errors that certain interesting images 16, 15, 7, 4 and 2 produced the most errors. Almost all these photos were people with glasses. I suspect this is the reason for their error in detection.
 
 <figure class="half">
-    <img src="/images/facial-detection-and-recognition/12.jpg">
-    <img src="/images/facial-detection-and-recognition/13.jpg">
+    <img src="/images/facial-detection-and-recognition/12.webp">
+    <img src="/images/facial-detection-and-recognition/13.webp">
 </figure>
 
 ## Finding and Marking Faces in Group Photos
@@ -441,15 +441,15 @@ The procedure above was computed for the following # of eigenfaces: 1,3,5,7,9,10
 Almost all the group photos worked really well for finding faces. I show groups the following two groups below because they are examples of both a good and a bad match. I believe the mistake shown is due to the facial hair on the individual on the left. Scale parameters used were 0.4 to 0.55 by steps of 0.01. I also tested the findFaces on a few of my own photos, but the results were fairly unimpressive.In most of the photos there were illumination differences, chaotic backgrounds, tilted faces and all images were hi-res. The algorithm took too long to run more than a few parameter tests on each (which took a few hours alone), so it was difficult to quickly hone in on good scale values to use.
 
 <figure class="half">
-    <img src="/images/facial-detection-and-recognition/14.jpg">
-    <img src="/images/facial-detection-and-recognition/15.jpg">
+    <img src="/images/facial-detection-and-recognition/14.webp">
+    <img src="/images/facial-detection-and-recognition/15.webp">
 </figure>
 
 ## Verifying Faces
 
 I used a trial and error approach incrementing up and down from the base 60000 MSE. I tried 40000 and 75000. The error rates are shown in the figure above. I found that the default 60000 was the superior MSE value to use because it produced 0 false positives and the smallest number of false negatives. Increasing the MSE value produced equivalent false negatives, but it also increased the false positives as expected. For this reason I stick by the default 60000 being the ideal.
 
-![placeholder](/images/facial-detection-and-recognition/16.jpg){:.align-center}
+![placeholder](/images/facial-detection-and-recognition/16.webp){:.align-center}
 
 ## What worked well and what did not?
 

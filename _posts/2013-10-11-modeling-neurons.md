@@ -11,11 +11,11 @@ classes: wide
 toc: true
 excerpt: Various modeling techniques for neurons, action potentials and neuronal stimulation.
 header:
-  og_image: /images/qp-computational/modeling-neurons-and-action-potentials/preview.jpg
-  teaser: /images/qp-computational/modeling-neurons-and-action-potentials/preview.jpg
+  og_image: /images/qp-computational/modeling-neurons-and-action-potentials/preview.webp
+  teaser: /images/qp-computational/modeling-neurons-and-action-potentials/preview.webp
 ---
 
-![preview](/images/qp-computational/modeling-neurons-and-action-potentials/preview.jpg){:.align-right}
+![preview](/images/qp-computational/modeling-neurons-and-action-potentials/preview.webp){:.align-right}
 
 This page contains various modeling techniques for neurons, action potentials and neuronal stimulation. The techniques range from overly simplified to relatively intricate but still abstract the under workings to simulate the desired behavior. Other writeups exist on my site exploring these details such as modelling of ion channels themselves. The writeups in this post explore:
 

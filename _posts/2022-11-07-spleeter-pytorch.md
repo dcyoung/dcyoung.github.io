@@ -10,8 +10,8 @@ classes: wide
 toc: true
 excerpt: A from scratch pytorch implementation of Spleeter - a network to separate vocal and instrumental tracks from an input song. 
 header:
-  og_image: /images/spleeter-pytorch/architecture.jpg
-  teaser: /images/spleeter-pytorch/architecture.jpg
+  og_image: /images/spleeter-pytorch/architecture.webp
+  teaser: /images/spleeter-pytorch/architecture.webp
 ---
 
 I was curious about source separation tools and stumbled across `Spleeter` ([repo](https://github.com/deezer/spleeter), [paper](https://archives.ismir.net/ismir2019/latebreaking/000036.pdf)) - a fairly simple architecture for separating audio sources from an input song. I like to learn by building, and the official implementation was written in Tensorflow... so I rewrote it in PyTorch.
@@ -22,7 +22,7 @@ The goal of the network is to predict the vocal and instrumental components of a
 
 Each stem (audio source) is extracted by a separate UNet architecture similar to a convolutional autoencoder using strided convolutions and extra skip-connections.
 
-![placeholder](/images/spleeter-pytorch/architecture.jpg){:.align-center}
+![placeholder](/images/spleeter-pytorch/architecture.webp){:.align-center}
 
 ## PyTorch Implementation
 

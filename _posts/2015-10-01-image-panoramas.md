@@ -10,8 +10,8 @@ classes: wide
 toc: True
 excerpt: Creating 360 panoramas from a set of images.
 header:
-  og_image: /images/image-panoramas/0.jpg
-  teaser: /images/image-panoramas/0.jpg
+  og_image: /images/image-panoramas/0.webp
+  teaser: /images/image-panoramas/0.webp
 ---
 
 ## Creating Panoramas
@@ -32,11 +32,11 @@ The general process is as follows:
 
 A few different panorama's were generated and the results are shown below. The first is the result of images available in similar project packages around the web, I did not take the source images for the 1st panorama. The 2nd and 3rd panoramas are of the main entrance to Wash U, with and without me in the photos.  The 3rd and 4th panoramas are of the Kemper art museum on Wash U campus with and without my friend Robert in the photos. The alignment and corrections are working well, but this could use a more robust mechanism to account for changes in illumination between adjacent photos.
 
-[![panorama](/images/image-panoramas/0.jpg){:.align-center}](/images/image-panoramas/0.jpg)
-[![panorama](/images/image-panoramas/1.jpg){:.align-center}](/images/image-panoramas/1.jpg)
-[![panorama](/images/image-panoramas/2.jpg){:.align-center}](/images/image-panoramas/2.jpg)
-[![panorama](/images/image-panoramas/3.jpg){:.align-center}](/images/image-panoramas/3.jpg)
-[![panorama](/images/image-panoramas/4.jpg){:.align-center}](/images/image-panoramas/4.jpg)
+[![panorama](/images/image-panoramas/0.webp){:.align-center}](/images/image-panoramas/0.webp)
+[![panorama](/images/image-panoramas/1.webp){:.align-center}](/images/image-panoramas/1.webp)
+[![panorama](/images/image-panoramas/2.webp){:.align-center}](/images/image-panoramas/2.webp)
+[![panorama](/images/image-panoramas/3.webp){:.align-center}](/images/image-panoramas/3.webp)
+[![panorama](/images/image-panoramas/4.webp){:.align-center}](/images/image-panoramas/4.webp)
 
 ## Removing Radial Distortion & Warping Images to Spherical Coordinates
 

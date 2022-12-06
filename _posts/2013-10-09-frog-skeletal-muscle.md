@@ -10,8 +10,8 @@ permalink: /post-bme-frog-skeletal-muscle/
 classes: wide
 excerpt:  Studying compound action potentials by dissecting and probing a frog's sciatic nerve.
 header:
-  og_image: /images/qp-physical/contractile-properties-of-frog-skeletal-muscle.jpg
-  teaser: /images/qp-physical/contractile-properties-of-frog-skeletal-muscle.jpg
+  og_image: /images/qp-physical/contractile-properties-of-frog-skeletal-muscle.webp
+  teaser: /images/qp-physical/contractile-properties-of-frog-skeletal-muscle.webp
 ---
 
 ## Writeup

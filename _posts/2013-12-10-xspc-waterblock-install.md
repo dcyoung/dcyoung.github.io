@@ -9,8 +9,8 @@ permalink: /post-xspc-waterblock-install/
 classes: wide
 excerpt: A comprehensive installation guide and review of a GPU waterblock.
 header:
-  og_image: /images/xspc-waterblock-install/preview.jpg
-  teaser: /images/xspc-waterblock-install/preview.jpg
+  og_image: /images/xspc-waterblock-install/preview.webp
+  teaser: /images/xspc-waterblock-install/preview.webp
 ---
 
 ## Installation Guide

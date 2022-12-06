@@ -9,8 +9,8 @@ permalink: /post-webgl-animation-2d/
 classes: wide
 excerpt: Animating a dancing letter w/ WebGL
 header:
-  og_image: /images/webgl-animation/0.jpg
-  teaser: /images/webgl-animation/0.jpg
+  og_image: /images/webgl-animation/0.webp
+  teaser: /images/webgl-animation/0.webp
 ---
 
 <iframe

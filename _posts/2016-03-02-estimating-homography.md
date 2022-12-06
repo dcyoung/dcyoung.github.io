@@ -10,18 +10,18 @@ classes: wide
 toc: true
 excerpt: Implementing a robust homography estimation to register pairs of images separated either by a 2D or 3D projective transformation.
 header:
-  og_image: /images/estimating-homography/8.jpg
-  teaser: /images/estimating-homography/8.jpg
+  og_image: /images/estimating-homography/8.webp
+  teaser: /images/estimating-homography/8.webp
 ---
 
 <figure class="half">
-    <img src="/images/estimating-homography/0.jpg">
-    <img src="/images/estimating-homography/1.jpg">
+    <img src="/images/estimating-homography/0.webp">
+    <img src="/images/estimating-homography/1.webp">
     <figcaption>Input images 1 (left) and 2 (right).</figcaption>
 </figure>
 
 <figure>
-    <img src="/images/estimating-homography/8.jpg">
+    <img src="/images/estimating-homography/8.webp">
     <figcaption>Final stitched composite.</figcaption>
 </figure>
 
@@ -191,13 +191,13 @@ Here, 2 images that share the same camera center are supplied to a script which 
 - stitches the images together
 
 <figure class="half">
-    <img src="/images/estimating-homography/0.jpg">
-    <img src="/images/estimating-homography/1.jpg">
+    <img src="/images/estimating-homography/0.webp">
+    <img src="/images/estimating-homography/1.webp">
     <figcaption>Input images 1 (left) and 2 (right).</figcaption>
 </figure>
 
 <figure>
-    <img src="/images/estimating-homography/8.jpg">
+    <img src="/images/estimating-homography/8.webp">
     <figcaption>Final stitched composite.</figcaption>
 </figure>
 
@@ -286,7 +286,7 @@ img2MatchFeatPts = [match_c2, match_r2, ones(numMatches,1)];
 
 ### Detecting Feature
 
-![ref](/images/estimating-homography/3.jpg){:.align-center}
+![ref](/images/estimating-homography/3.webp){:.align-center}
 
 A harris corner detector was used to detect features.
 
@@ -357,8 +357,8 @@ end
 
 Putative matches are selected based on the matrix of pairwise descriptor distances returned by a borrowed function "dist2" also shown below.
 
-![ref](/images/estimating-homography/4.jpg){:.align-center}
-![ref](/images/estimating-homography/5.jpg){:.align-center}
+![ref](/images/estimating-homography/4.webp){:.align-center}
+![ref](/images/estimating-homography/5.webp){:.align-center}
 
 ```matlab
 function [ img1Feature_idx, img2Feature_idx ] = match_features( numMatches, featDescriptions_1, featDescriptions_2)
@@ -420,7 +420,7 @@ end
 
 Out of the 200 generated putative matches, 117 inliers were found using the estimate_homography function. The average residual provided the final estimated homography matrix was 1.1855. The image below shows just the inlier matches overlaid on both images.
 
-![ref](/images/estimating-homography/6.jpg){:.align-center}
+![ref](/images/estimating-homography/6.webp){:.align-center}
 
 ### Warping Image
 
@@ -433,13 +433,13 @@ img1Transformed = imtransform(colorImg1, homographyTransform);
 figure, imshow(img1Transformed);title('Warped image');
 ```
 
-![ref](/images/estimating-homography/7.jpg){:.align-center}
+![ref](/images/estimating-homography/7.webp){:.align-center}
 
 ### Stitching Image
 
 The final stiched composite:
 
-![ref](/images/estimating-homography/8.jpg){:.align-center}
+![ref](/images/estimating-homography/8.webp){:.align-center}
 
 A stitched composite image is generated using the transformed image and the original second image as inputs.
 
@@ -513,7 +513,7 @@ end
 
 ## Reference Implementation
 
-![ref](/images/estimating-homography/9.jpg){:.align-center}
+![ref](/images/estimating-homography/9.webp){:.align-center}
 
 The following is a short script to perform the same operations using commands built into MATLAB's image processing toolbox. The code written above was an exercise in implementing the algorithms from scratch and not necessarily the most optimized implementations. If you're looking for good results without worrying about the details, then this simple script will do the same thing.
 

@@ -10,8 +10,8 @@ permalink: /post-bme-renal-pathology/
 classes: wide
 excerpt: Modeling renal pathology using Matlab.
 header:
-  og_image: /images/qp-computational/renal-preview.jpg
-  teaser: /images/qp-computational/renal-preview.jpg
+  og_image: /images/qp-computational/renal-preview.webp
+  teaser: /images/qp-computational/renal-preview.webp
 ---
 
 {% include pdf-embed.html url="/images/qp-computational/modeling-renal-pathology.pdf" %}

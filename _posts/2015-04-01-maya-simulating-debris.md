@@ -9,11 +9,11 @@ permalink: /post-maya-simulating-debris/
 classes: wide
 excerpt: Automating/Simulating a bin of objects (teddy bears) using Mel in Maya.
 header:
-  og_image: /images/maya-simulating-debris/3.jpg
-  teaser: /images/maya-simulating-debris/3.jpg
+  og_image: /images/maya-simulating-debris/3.webp
+  teaser: /images/maya-simulating-debris/3.webp
 ---
 
-![preview](/images/maya-simulating-debris/3.jpg){:.align-center}
+![preview](/images/maya-simulating-debris/3.webp){:.align-center}
 
 In an advanced animation class I worked on an animated short that required a model of a bin of teddy bears. Placing the bears individually seemed like an arduous task, so I wrote a simple script to automate the process. Similar techniques could easily be applied when generating any heap of objects such as piles of trash. The result of simulation is generally more realistic looking than what is achievable by the average hand, or at the very least a good base to work from/tweak
 
@@ -66,17 +66,17 @@ delete ($rigidBodies);
 ```
 
 <figure> 
-  <img src="/images/maya-simulating-debris/0.jpg">
+  <img src="/images/maya-simulating-debris/0.webp">
   <figcaption>Modeling the bin</figcaption>
 </figure>
 <figure class="half">
-  <img src="/images/maya-simulating-debris/1.jpg">
-  <img src="/images/maya-simulating-debris/2.jpg">
+  <img src="/images/maya-simulating-debris/1.webp">
+  <img src="/images/maya-simulating-debris/2.webp">
   <figcaption>Prepping the scene before running the script (left) and after running the script (right).</figcaption>
 </figure>
 
 <figure class="half">
-  <img src="/images/maya-simulating-debris/3.jpg">
-  <img src="/images/maya-simulating-debris/4.jpg">
+  <img src="/images/maya-simulating-debris/3.webp">
+  <img src="/images/maya-simulating-debris/4.webp">
   <figcaption>Results after running the simulation.</figcaption>
 </figure>

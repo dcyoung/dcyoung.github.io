@@ -10,8 +10,8 @@ permalink: /post-bme-dive-response/
 classes: wide
 excerpt: Measuring and studying the natural mechanisms of the body in response to being submerged in water.
 header:
-  og_image: /images/qp-physical/dive-response.jpg
-  teaser: /images/qp-physical/dive-response.jpg
+  og_image: /images/qp-physical/dive-response.webp
+  teaser: /images/qp-physical/dive-response.webp
 ---
 
 ## Abstract

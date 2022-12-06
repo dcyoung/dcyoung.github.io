@@ -11,11 +11,11 @@ classes: wide
 toc: true
 excerpt: Real Time Tracking for Augmented Reality using OpenCV and Popular Game Engines
 header:
-  og_image: /images/fiducial-marker-tracking-for-ar/pose-estimation.jpg
-  teaser: /images/fiducial-marker-tracking-for-ar/pose-estimation.jpg
+  og_image: /images/fiducial-marker-tracking-for-ar/pose-estimation.webp
+  teaser: /images/fiducial-marker-tracking-for-ar/pose-estimation.webp
 ---
 
-![preview](/images/fiducial-marker-tracking-for-ar/pose-estimation.jpg){:.align-center}
+![preview](/images/fiducial-marker-tracking-for-ar/pose-estimation.webp){:.align-center}
 
 ## Introduction
 
@@ -57,15 +57,15 @@ Integrating OpenCV with the Unity game engine requires the use of a paid OpenCV 
 
 A fiducial marker is an artifical marker intended for tracking. The Aruco module was used to generate fiducial markers to print on card stock. Aruco markers were chosen for their easy generation and internal codification. The Aruco marker is a square marker with an inner binary matrix. See the figure below for examples of Aruco markers.
 
-![fiducial](/images/fiducial-marker-tracking-for-ar/fiducial.jpg){:.align-center}
+![fiducial](/images/fiducial-marker-tracking-for-ar/fiducial.webp){:.align-center}
 
 A black border means the marker can be detected quickly, while the binary code provides a means of verifying and more importantly identifying the marker. Marker identification is important in the Perspective N-Point problem where markers serve as tracking points and an identification yields an easy link between 2d projected points and their known 3D locations in the body frame. One marker is sufficient to estimate a pose using the 4 corners as tracking points, however a board of markers arranged in a plane yields a more robust set of tracking points. The Aruco module provides dictionaries of fiducial markers: http://docs.opencv.org/3.1.0/d5/d0b/classcv_1_1aruco_1_1Dictionary.html#gsc.tab=0 .
 
 A program was written to generate an evenly spaced 5x7 grid of Aruco markers using a predefined dictionary of markers. The grid was saved to an image file and printed onto physical paper. 
 
 <figure class="half">
-  <img src="/images/fiducial-marker-tracking-for-ar/fiducial-sheet.jpg">
-  <img src="/images/fiducial-marker-tracking-for-ar/fiducial-sheet-printed.jpg">
+  <img src="/images/fiducial-marker-tracking-for-ar/fiducial-sheet.webp">
+  <img src="/images/fiducial-marker-tracking-for-ar/fiducial-sheet-printed.webp">
   <figcaption>A 5x7 grid of Aruco markers (left), and printed version (right).</figcaption>
 </figure>
 
@@ -74,9 +74,9 @@ A program was written to generate an evenly spaced 5x7 grid of Aruco markers usi
 ​The next challenge is detecting the markers. Aruco provides helpful tools to assist in the process and an easy means of tuning the many parameters that dictate performance. However, it is important to understand whats going on in the big scheme of things. The general process can be broken into two stages: Detecting Candidates and Verifying Candidates. To detect marker candidates, an adaptive threshold is used to segment the black squares that define the Aruco marker. After segmentation, contours are extracted. Any contours that would not indicate a square, ie: that are concave, are eliminated here. To verify the candidates, each is checked for the internal codification. The program is given a dictionary of valid markers to search for, and if the checked code exists in the dictionary the marker candidate is accepted. The process of checking the internal codification involves applying a perspective transform to the candidates to yield the marker in a canonical form where the bits can be extracted via a thresholding.
 
 <figure class="third">
-  <img src="/images/fiducial-marker-tracking-for-ar/detection-0.jpg">
-  <img src="/images/fiducial-marker-tracking-for-ar/detection-1.jpg">
-  <img src="/images/fiducial-marker-tracking-for-ar/detection-2.jpg">
+  <img src="/images/fiducial-marker-tracking-for-ar/detection-0.webp">
+  <img src="/images/fiducial-marker-tracking-for-ar/detection-1.webp">
+  <img src="/images/fiducial-marker-tracking-for-ar/detection-2.webp">
   <figcaption>Candidate verification steps.</figcaption>
 </figure>
 
@@ -94,15 +94,15 @@ Estimating the marker pose relative to the camera is essentially a Perspective N
 
 ​A Perspective N-Point problem can be broken into a set of equations and solved with enough examples. Too few examples, and the Degrees of Freedom (DOF) cannot be eliminated. For example, a P2P problem corresponds to observing two features in the image and results in four constraints. Each constraint eliminates two DOFs resulting in only two remaining DOFs. If instead n = 3 (P3P) then zero DOFs remain, but isolated point solutions are still possible (ie: multiple solutions exist). One can visualize this as trying to position a triangle in a pyramid formed by rays extending from the camera center. To achieve a truly unique solution, 6 points are required... however this is not always necessary in practice. Some of the multiple solutions can be eliminated under prior knowledge, real world limitations, or poses from previous frames etc. A common implementation is iterative PNP which strongly considers the estimated pose form the previous frame.
 
-![detection](/images/fiducial-marker-tracking-for-ar/pnp.jpg){:.align-center}
+![detection](/images/fiducial-marker-tracking-for-ar/pnp.webp){:.align-center}
 
 ​OpenCV provides a PnP algorithm, in normal, RANSAC and iterative forms. Given the tracked object is an Aruco board which yields many points for robust detection, there is no need for RANSAC. If instead, natural features were being detected, then RANSAC PnP would be a much better option to remove the effects of outliers. Estimating pose with Aruco works well using just the generic PnP provided by OpenCV.
 
 The PnP algorithm requires camera intrinsics and distortion coefficients from a calibrated camera. This was my first time calibrating a camera. A program was written to calibrate the webcam using a generated Charuco board. This involved generating a Charuco board image, printing it out, and taking photos from various angles. A Charuco board is a chess pattern board with Aruco markers in the white spaces. The Charuco board was used because it is easier and arguably more robust than a chess board.
 
 <figure class="half">
-  <img src="/images/fiducial-marker-tracking-for-ar/chess-board.jpg">
-  <img src="/images/fiducial-marker-tracking-for-ar/chess-board-printed.jpg">
+  <img src="/images/fiducial-marker-tracking-for-ar/chess-board.webp">
+  <img src="/images/fiducial-marker-tracking-for-ar/chess-board-printed.webp">
 </figure>
 
 ### Estimate Pose of Camera
@@ -124,8 +124,8 @@ Ideally the video stream could be used as a background over which all geometry i
 ​Then this billboard can be locked to a fixed relative position in front of the camera. Objects located between the billboard and the camera will effectively appear to be in front of a video background, but if they drop behind the billboard they are occluded. Some custom render depth buffers or special post processing tricks could be implemented to keep the objects visible even if they move behind the billboard. Alternatively, the objects could stay at a fixed distance from the camera and their scale could change to simulate the distance changing but this option was not explored.
 
 <figure class="half">
-  <img src="/images/fiducial-marker-tracking-for-ar/background-0.jpg">
-  <img src="/images/fiducial-marker-tracking-for-ar/overlay-1.jpg">
+  <img src="/images/fiducial-marker-tracking-for-ar/background-0.webp">
+  <img src="/images/fiducial-marker-tracking-for-ar/overlay-1.webp">
 </figure>
 
 Various implementations of the dynamic textures, in game material and billboards were implemented in Unreal Engine, including a dynamic texture that was updated directly from captured frame data during image capture using OpenCV integrated in UE4. But recall that the final implementation involved using an external program to handle all tracking related tasks. Unfortunately there was an unexpected hurdle to overcome when combining the webcam billboard background with the external program: OpenCV (and also the webcam) does not support multiple programs accessing the webcam simultaneously. After a great deal of debugging and attempted fixes, no proper solution was found. Instead the final approach involved another workaround where frames (image data) are written to intermediate image files and read at runtime to update dynamic textures. Again special care was taken to avoid conflicts in read/write access.
@@ -152,7 +152,7 @@ When using the pose of the physical virtual marker relative to the camera, the v
 
 The prebuilt UE4 plugin and used to successfully integrate standard OpenCV with UE4. Testing this was accomplished by using OpenCV to create a dynamic webcam material.
 
-![detection](/images/fiducial-marker-tracking-for-ar/results.jpg){:.align-center}
+![detection](/images/fiducial-marker-tracking-for-ar/results.webp){:.align-center}
 
 ​As mentioned in the approach, manually compiled OpenCV w/ additional modules (Aruco) was attempted but did not cooperate with Unreal Engine due to conflicting name spaces and incompatible containers for garbage collection. An external program was written instead and the information was communicated to the game engine. This process was used for unity as well.
 
@@ -160,11 +160,11 @@ The prebuilt UE4 plugin and used to successfully integrate standard OpenCV with 
 
 ​The results of marker detection are shown below. The black square defining each marker is clearly outlined and the marker ID from the used dictionary is overlaid. 
 
-![detection](/images/fiducial-marker-tracking-for-ar/marker-detection.jpg){:.align-center}
+![detection](/images/fiducial-marker-tracking-for-ar/marker-detection.webp){:.align-center}
 
 ​Pose estimation of the marker relative to the camera works well, even for partially occluded boards. The image below shows this well as the board is partially blocked by a hand.
 
-![detection](/images/fiducial-marker-tracking-for-ar/pose-estimation.jpg){:.align-center}
+![detection](/images/fiducial-marker-tracking-for-ar/pose-estimation.webp){:.align-center}
 
 ### Translating to Game Engine
 
@@ -178,11 +178,11 @@ The issues resulting from gimbal lock were resolved in unity which supports quat
 
 Screen captures from that video:
 
-![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-5.jpg){:.align-center}
-![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-6.jpg){:.align-center}
-![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-7.jpg){:.align-center}
-![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-8.jpg){:.align-center}
-![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-9.jpg){:.align-center}
+![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-5.webp){:.align-center}
+![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-6.webp){:.align-center}
+![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-7.webp){:.align-center}
+![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-8.webp){:.align-center}
+![screen-grab](/images/fiducial-marker-tracking-for-ar/overlay-9.webp){:.align-center}
 
 ## Discussion and Conclusions
 

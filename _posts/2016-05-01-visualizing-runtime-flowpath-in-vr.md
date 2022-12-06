@@ -161,7 +161,7 @@ After playing around with the project in VR for a bit, I got sick of multiple pr
 
 I figured I'd spruce up the aesthetic while prototyping the mechanics. I whipped up a model in Maya for an extremely simple parts bin. The model is nothing to write home about, but it adds a little more context to the scene compared to blank trigger volumes.
 
-![bin](/images/runtime-flowpath-vr/bin.jpg)
+![bin](/images/runtime-flowpath-vr/bin.webp)
 
 ## Interaction Mode Selection
 
@@ -213,13 +213,13 @@ Lots of updates in this iteration.
 - Various bug fixes
 - New meshes for ports. A fellow classmate created these new models for a port, and they worked out fine.
 
-![ports](/images/runtime-flowpath-vr/connections.jpg){:.align-center}
+![ports](/images/runtime-flowpath-vr/connections.webp){:.align-center}
 
 - Enhanced visual cues for specifying a prospective connection. With a latent prospective connection, only the output ports are shown for selection. Once one has been selected, it is highlighted green for reference but is not interactive. All the other output ports are visually removed so the user select a valid input port. Once an input port is selected the connection is automatically completed and the user can begin specifying another connection. This keeps things very snappy for fast circuit builds. I experiemnted with a setup where the user specifies a prospective connection and then hits a button to submit it, but it seemed too cumbersome. Once you're used to the leap motion system you can really quickly prototype circuits. ​
 
 <figure class="half">
-    <img src="/images/runtime-flowpath-vr/interaction_1.jpg">
-    <img src="/images/runtime-flowpath-vr/interaction_2.jpg">
+    <img src="/images/runtime-flowpath-vr/interaction_1.webp">
+    <img src="/images/runtime-flowpath-vr/interaction_2.webp">
 </figure>
 
 - Procedural Mesh generation for connections
@@ -227,7 +227,7 @@ Lots of updates in this iteration.
 - New meshes for primitives (again a classmate created these). 
 - Simple holographic rotating icon above each node. This helps display the node type while keeping the node a more simple and compact mesh. The custom new meshes for primitives mentioned above were used for the hologram.
 
-![hologram](/images/runtime-flowpath-vr/hologram.jpg){:.align-center}
+![hologram](/images/runtime-flowpath-vr/hologram.webp){:.align-center}
 
 Here is a short video showing a simple circuit. There are still a few update bugs that need to get fleshed out and also I forgot to demonstrate the updated tubes when connected nodes are moved. I'll get another video out soon showing all this.
 

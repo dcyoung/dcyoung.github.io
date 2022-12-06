@@ -11,14 +11,14 @@ classes: wide
 excerpt: A data driven design for a custom coffee table. Build log includes laser cutting acrylic, pouring resin, and molding concrete.
 toc: true
 header:
-  og_image: /images/coffee-table/preview_500x300.jpg
-  teaser: /images/coffee-table/preview_500x300.jpg
+  og_image: /images/coffee-table/preview_500x300.webp
+  teaser: /images/coffee-table/preview_500x300.webp
 ---
 
 <figure class="third">
-  <img src="/images/coffee-table/cad/6.jpg">
-  <img src="/images/coffee-table/cad/0.jpg">
-  <img src="/images/coffee-table/concrete-demold/4.jpg">
+  <img src="/images/coffee-table/cad/6.webp">
+  <img src="/images/coffee-table/cad/0.webp">
+  <img src="/images/coffee-table/concrete-demold/4.webp">
 </figure>
 
 I've been intrigued by furniture design lately, and decided to take a stab at making a custom coffee table based on bathymetry data of the San Francisco bay. ​Build log is below!
@@ -111,15 +111,15 @@ Cad Render             |  Cad Render
 [![cad-render](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/cad/table_1.PNG)](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/cad/table_1.PNG) | [![cad-render](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/cad/table_2.PNG)](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/cad/table_2.PNG)
 [![cad-render](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/coffee_table_ROUND_2019-Oct-07_02-59-15AM-000_CustomizedView7682114309.png)](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/coffee_table_ROUND_2019-Oct-07_02-59-15AM-000_CustomizedView7682114309.png) | [![cad-render](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/coffee_table_ROUND_2019-Oct-07_02-49-29AM-000_CustomizedView18952752789.png)](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/coffee_table_ROUND_2019-Oct-07_02-49-29AM-000_CustomizedView18952752789.png)
 [![cad-render](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/59480410-cb32-4f86-8561-837246cdbf94.PNG)](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/59480410-cb32-4f86-8561-837246cdbf94.PNG) | [![cad-render](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/5d4e55b0-76c5-467a-84d2-0b978f97abbc.PNG)](https://raw.githubusercontent.com/dcyoung/coffee-table/2d3582501bbfa2441eeef6bf8d4f1268d24eb1dd/docs/images/renders/5d4e55b0-76c5-467a-84d2-0b978f97abbc.PNG)
-[![cad-render](/images/coffee-table/cad/0.jpg)](/images/coffee-table/cad/0.jpg) | [![cad-render](/images/coffee-table/cad/1.jpg)](/images/coffee-table/cad/1.jpg)
-[![cad-render](/images/coffee-table/cad/2.jpg)](/images/coffee-table/cad/2.jpg) | [![cad-render](/images/coffee-table/cad/3.jpg)](/images/coffee-table/cad/3.jpg)
+[![cad-render](/images/coffee-table/cad/0.webp)](/images/coffee-table/cad/0.webp) | [![cad-render](/images/coffee-table/cad/1.webp)](/images/coffee-table/cad/1.webp)
+[![cad-render](/images/coffee-table/cad/2.webp)](/images/coffee-table/cad/2.webp) | [![cad-render](/images/coffee-table/cad/3.webp)](/images/coffee-table/cad/3.webp)
 
 I parameterized the model to allow for easy adjustments of critical values or material properties. Fusion360 also has a programmatic API, which I leveraged to automatically generate geometry from the contour data produced by earlier scripts. This meant I could iterate on the data processing and see the final CAD results almost instantly. I've provided these scripts here: [github.com/dcyoung/coffee-table/tree/master/fusion360](https://github.com/dcyoung/coffee-table/tree/master/fusion360)
 
 <figure class="third">
-  <img src="/images/coffee-table/cad/7.jpg">
-  <img src="/images/coffee-table/cad/6.jpg">
-  <img src="/images/coffee-table/cad/12.png">
+  <img src="/images/coffee-table/cad/7.webp">
+  <img src="/images/coffee-table/cad/6.webp">
+  <img src="/images/coffee-table/cad/12.webp">
 </figure>
 
 ## Laser Cutting Acrylic
@@ -127,15 +127,15 @@ I parameterized the model to allow for easy adjustments of critical values or ma
 
 Recent travel has kept me from working on the table, but I did manage to create some templates for the laser cutting machine. To save material and cost, I "nested" (efficiently arranged) all the parts to be cut. Jumping between different programs, I was stunned to find poor support and standardization for mechanical drawing formats. A few programs even failed to detect units in a clean .dxf file, and many others preferred SVGs. I would have expected a much cleaner and more efficient workflow for something so common. Nevertheless, I was able to make all parts fit within a half sheet of acrylic, without introducing too many subdivisions. While a more efficient layout could have been achieved, it would mean splitting more pieces and working out a method for align them at mold time. I settled on a nice balance.
 
-![template](/images/coffee-table/acrylic-laser-cut/template.png)
+![template](/images/coffee-table/acrylic-laser-cut/template.webp)
 
 Laser cutting the acrylic went smoothly and the parts look beautiful!
 
-![laser-cut-parts-1](/images/coffee-table/acrylic-laser-cut/0.jpg)
+![laser-cut-parts-1](/images/coffee-table/acrylic-laser-cut/0.webp)
 
 I was sure to add some guide-holes to the templates before laser cutting which should help align the pieces.
 
-![laser-cut-parts-1](/images/coffee-table/acrylic-laser-cut/1.jpg){:.align-center}
+![laser-cut-parts-1](/images/coffee-table/acrylic-laser-cut/1.webp){:.align-center}
 
 ## Building the Concrete Mold
 
@@ -144,46 +144,46 @@ I was sure to add some guide-holes to the templates before laser cutting which s
 The next step was building the concrete mold. I started by creating an MDF box.
 
 <figure class="third">
-  <img src="/images/coffee-table/box/0.jpg">
-  <img src="/images/coffee-table/box/1.jpg">
-  <img src="/images/coffee-table/box/2.jpg">
+  <img src="/images/coffee-table/box/0.webp">
+  <img src="/images/coffee-table/box/1.webp">
+  <img src="/images/coffee-table/box/2.webp">
 </figure>
 
 I created rounded inserts for the curved corners of the table. I used a thin MDF skin and wet the back of the wood to make it more pliable.
 
 <figure class="third">
-  <img src="/images/coffee-table/box/3.jpg">
-  <img src="/images/coffee-table/box/4.jpg">
-  <img src="/images/coffee-table/box/5.jpg">
+  <img src="/images/coffee-table/box/3.webp">
+  <img src="/images/coffee-table/box/4.webp">
+  <img src="/images/coffee-table/box/5.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/coffee-table/box/6.jpg">
-  <img src="/images/coffee-table/box/7.jpg">
-  <img src="/images/coffee-table/box/8.jpg">
+  <img src="/images/coffee-table/box/6.webp">
+  <img src="/images/coffee-table/box/7.webp">
+  <img src="/images/coffee-table/box/8.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/coffee-table/box/9.jpg">
-  <img src="/images/coffee-table/box/10.jpg">
+  <img src="/images/coffee-table/box/9.webp">
+  <img src="/images/coffee-table/box/10.webp">
 </figure>
 
 The frame of the mold turned out pretty well.
 
 <figure class="half">
-  <img src="/images/coffee-table/box/11.jpg">
-  <img src="/images/coffee-table/box/12.jpg">
+  <img src="/images/coffee-table/box/11.webp">
+  <img src="/images/coffee-table/box/12.webp">
 </figure>
 
 Unfortunately, seeing the frame in person made my realize the table just seemed too large (48x42"). I decided to shorten the dimensions a bit (48x36"). Luckily this only took ~5min thanks to the previous work I'd done to parameterize the CAD model. Adjusting the physical dimensions was easy as well. I simply inserted and reinforced a new wall in the existing mold.
 
-![resized](/images/coffee-table/box/resize-0.jpg){:.align-center}
+![resized](/images/coffee-table/box/resize-0.webp){:.align-center}
 
 Once the box was complete, the acrylic layers were aligned using pins through the pre-cut alignment holes, and secured together using a tiny bit of super glue. The mold is incredibly secure, but overwhelmingly intricate. This raises concerns around the feasibility of separating the acrylic from the concrete.
 
 <figure class="half">
-  <img src="/images/coffee-table/box/resize-2.jpg">
-  <img src="/images/coffee-table/box/resize-3.jpg">
+  <img src="/images/coffee-table/box/resize-2.webp">
+  <img src="/images/coffee-table/box/resize-3.webp">
 </figure>
 
 ## Test Pour Went Poorly
@@ -196,38 +196,38 @@ The materials for the concrete pour were acquired. Moving the bags of concrete m
 - Additive (5 gallon)
 - Sealer
 
-![maerials](/images/coffee-table/concrete-test-pour/materials.jpg){:.align-center}
+![maerials](/images/coffee-table/concrete-test-pour/materials.webp){:.align-center}
 
 The intricacy of the mold raised concerns about the feasibility of separating the acrylic from the concrete. So I decided to perform a test pour by first creating a small tile with an intricate acrylic inlay. I then masked the MDF board.
 
 <figure class="third">
-  <img src="/images/coffee-table/concrete-test-pour/0.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/1.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/2.jpg">
+  <img src="/images/coffee-table/concrete-test-pour/0.webp">
+  <img src="/images/coffee-table/concrete-test-pour/1.webp">
+  <img src="/images/coffee-table/concrete-test-pour/2.webp">
 </figure>
 
 As an extra pre-caution, I added a silicon release barrier over the acrylic (aerosol application).
 
 <figure class="third">
-  <img src="/images/coffee-table/concrete-test-pour/3.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/4.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/5.jpg">
+  <img src="/images/coffee-table/concrete-test-pour/3.webp">
+  <img src="/images/coffee-table/concrete-test-pour/4.webp">
+  <img src="/images/coffee-table/concrete-test-pour/5.webp">
 </figure>
 
 I finished the mold box and poured the concrete.
 
 <figure class="third">
-  <img src="/images/coffee-table/concrete-test-pour/6.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/7.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/8.jpg">
+  <img src="/images/coffee-table/concrete-test-pour/6.webp">
+  <img src="/images/coffee-table/concrete-test-pour/7.webp">
+  <img src="/images/coffee-table/concrete-test-pour/8.webp">
 </figure>
 
 Once the concrete dried, the mold was broken apart and it was clear that the acrylic could not be separated without destroying the concrete finish.
 
 <figure class="third">
-  <img src="/images/coffee-table/concrete-test-pour/9.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/10.jpg">
-  <img src="/images/coffee-table/concrete-test-pour/11.jpg">
+  <img src="/images/coffee-table/concrete-test-pour/9.webp">
+  <img src="/images/coffee-table/concrete-test-pour/10.webp">
+  <img src="/images/coffee-table/concrete-test-pour/11.webp">
 </figure>
 
 This was incredibly disappointing, but also somewhat expected. I'm just glad to have verified before pouring the entire table. A different strategy is already in motion :)
@@ -240,25 +240,25 @@ The new plan is to make a silicone mold of the acrylic and then cast a single pi
  
 In order to make a mold, the acrylic needed to be exposed for the silicone. Two sides of the MDF box were carefully removed in case re-assembly turned out to be a viable option.
 
-![laser-cut-parts-1](/images/coffee-table/resin-mold/0.jpg){:.align-center}
+![laser-cut-parts-1](/images/coffee-table/resin-mold/0.webp){:.align-center}
 
 Considering the volume of the mold, a brush on silicone was an inexpensive approach as it saved on material cost. I ended up using a SIlicone rubber material called EZ-Brush from "Smooth On". The product is meant to create vacuum bag molds and even a thin layer yields an incredibly strong mold. The material was brushed on in 4 layers.
 
 . | Coat #1 | Coat #2 | Coat #3 | Coat #4
 :-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:
-. | [![coat](/images/coffee-table/resin-mold/1.jpg)](/images/coffee-table/resin-mold/1.jpg) | [![coat](/images/coffee-table/resin-mold/3.jpg)](/images/coffee-table/resin-mold/3.jpg) | [![coat](/images/coffee-table/resin-mold/5.jpg)](/images/coffee-table/resin-mold/5.jpg) | [![coat](/images/coffee-table/resin-mold/7.jpg)](/images/coffee-table/resin-mold/7.jpg)
-. | [![coat](/images/coffee-table/resin-mold/2.jpg)](/images/coffee-table/resin-mold/2.jpg) | [![coat](/images/coffee-table/resin-mold/4.jpg)](/images/coffee-table/resin-mold/4.jpg) | [![coat](/images/coffee-table/resin-mold/6.jpg)](/images/coffee-table/resin-mold/6.jpg) | [![coat](/images/coffee-table/resin-mold/8.jpg)](/images/coffee-table/resin-mold/8.jpg)
+. | [![coat](/images/coffee-table/resin-mold/1.webp)](/images/coffee-table/resin-mold/1.webp) | [![coat](/images/coffee-table/resin-mold/3.webp)](/images/coffee-table/resin-mold/3.webp) | [![coat](/images/coffee-table/resin-mold/5.webp)](/images/coffee-table/resin-mold/5.webp) | [![coat](/images/coffee-table/resin-mold/7.webp)](/images/coffee-table/resin-mold/7.webp)
+. | [![coat](/images/coffee-table/resin-mold/2.webp)](/images/coffee-table/resin-mold/2.webp) | [![coat](/images/coffee-table/resin-mold/4.webp)](/images/coffee-table/resin-mold/4.webp) | [![coat](/images/coffee-table/resin-mold/6.webp)](/images/coffee-table/resin-mold/6.webp) | [![coat](/images/coffee-table/resin-mold/8.webp)](/images/coffee-table/resin-mold/8.webp)
 
 Once the silicone rubber had cured, a thin layer of Smooth On's Plasti-Paste epoxy was added to created a rigid mother mold.
 
 <figure class="half">
-  <img src="/images/coffee-table/resin-mold/9.jpg">
-  <img src="/images/coffee-table/resin-mold/10.jpg">
+  <img src="/images/coffee-table/resin-mold/9.webp">
+  <img src="/images/coffee-table/resin-mold/10.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/coffee-table/resin-mold/11.jpg">
-  <img src="/images/coffee-table/resin-mold/12.jpg">
+  <img src="/images/coffee-table/resin-mold/11.webp">
+  <img src="/images/coffee-table/resin-mold/12.webp">
 </figure>
 
 Working with these products was an absolute treat. I could not be happier with the results and I am sure I'll approach future projects differently knowing complex molds are this accessible.
@@ -282,24 +282,24 @@ To start the process I leveled the mold in preparation for the pour. This requir
   - Volume: 5.00 qt
 
 <figure class="third">
-  <img src="/images/coffee-table/resin-pour/0.jpg">
-  <img src="/images/coffee-table/resin-pour/1.jpg">
-  <img src="/images/coffee-table/resin-pour/2.jpg">
+  <img src="/images/coffee-table/resin-pour/0.webp">
+  <img src="/images/coffee-table/resin-pour/1.webp">
+  <img src="/images/coffee-table/resin-pour/2.webp">
 </figure>
 <figure class="third">
-  <img src="/images/coffee-table/resin-pour/3.jpg">
-  <img src="/images/coffee-table/resin-pour/4.jpg">
-  <img src="/images/coffee-table/resin-pour/5.jpg">
+  <img src="/images/coffee-table/resin-pour/3.webp">
+  <img src="/images/coffee-table/resin-pour/4.webp">
+  <img src="/images/coffee-table/resin-pour/5.webp">
 </figure>
 <figure class="third">
-  <img src="/images/coffee-table/resin-pour/6.jpg">
-  <img src="/images/coffee-table/resin-pour/7.jpg">
-  <img src="/images/coffee-table/resin-pour/8.jpg">
+  <img src="/images/coffee-table/resin-pour/6.webp">
+  <img src="/images/coffee-table/resin-pour/7.webp">
+  <img src="/images/coffee-table/resin-pour/8.webp">
 </figure>
 <figure class="third">
-  <img src="/images/coffee-table/resin-pour/9.jpg">
-  <img src="/images/coffee-table/resin-pour/10.jpg">
-  <img src="/images/coffee-table/resin-pour/11.jpg">
+  <img src="/images/coffee-table/resin-pour/9.webp">
+  <img src="/images/coffee-table/resin-pour/10.webp">
+  <img src="/images/coffee-table/resin-pour/11.webp">
 </figure>
 
 ## A Roaring Pouring Success
@@ -311,12 +311,12 @@ I let the acrylic dry for 2 days, just to be safe. Removing the outer hard shell
 {% include video id="ECL4mKQSiyY" provider="youtube" %}
 
 <figure class="half">
-  <img src="/images/coffee-table/resin-demold/0.jpg">
-  <img src="/images/coffee-table/resin-demold/1.jpg">
+  <img src="/images/coffee-table/resin-demold/0.webp">
+  <img src="/images/coffee-table/resin-demold/1.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/resin-demold/2.jpg">
-  <img src="/images/coffee-table/resin-demold/3.jpg">
+  <img src="/images/coffee-table/resin-demold/2.webp">
+  <img src="/images/coffee-table/resin-demold/3.webp">
 </figure>
 
 ## ​Thinking "inside" Another Box - June 2020
@@ -326,31 +326,31 @@ I let the acrylic dry for 2 days, just to be safe. Removing the outer hard shell
 The original MDF box, originally built to house the laser cut acrylic, was destroyed during the intermediate mold. We created a new box for the concrete mold, custom fit to the final acrylic pour.
 
 <figure class="half">
-  <img src="/images/coffee-table/concrete-mold-box/0.jpg">
-  <img src="/images/coffee-table/concrete-mold-box/1.jpg">
+  <img src="/images/coffee-table/concrete-mold-box/0.webp">
+  <img src="/images/coffee-table/concrete-mold-box/1.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/concrete-mold-box/2.jpg">
-  <img src="/images/coffee-table/concrete-mold-box/3.jpg">
+  <img src="/images/coffee-table/concrete-mold-box/2.webp">
+  <img src="/images/coffee-table/concrete-mold-box/3.webp">
 </figure>
 
 To further simplify the actual pouring of concrete, we also constructed an internal mold that hovers an inch off the surface. This should keep the concrete nicely in the side channels without having to form it by hand.
 
 <figure class="half">
-  <img src="/images/coffee-table/concrete-mold-box/4.jpg">
-  <img src="/images/coffee-table/concrete-mold-box/5.jpg">
+  <img src="/images/coffee-table/concrete-mold-box/4.webp">
+  <img src="/images/coffee-table/concrete-mold-box/5.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/concrete-mold-box/6.jpg">
-  <img src="/images/coffee-table/concrete-mold-box/7.jpg">
+  <img src="/images/coffee-table/concrete-mold-box/6.webp">
+  <img src="/images/coffee-table/concrete-mold-box/7.webp">
 </figure>
 
 Lastly, we cut some large pieces of Styrofoam to fill larger empty spaces of the mold. This should keep the concrete pour to ~1" thick overtop the complex surface.. hopefully coming in at ~150-200lb instead of ~500lbs that would be required to submerge everything w/ concrete alone. We also cut grooves in the Styrofoam to serve as support channels for extra strength.
 
 <figure class="third">
-  <img src="/images/coffee-table/concrete-mold-box/8.jpg">
-  <img src="/images/coffee-table/concrete-mold-box/9.jpg">
-  <img src="/images/coffee-table/concrete-mold-box/10.jpg">
+  <img src="/images/coffee-table/concrete-mold-box/8.webp">
+  <img src="/images/coffee-table/concrete-mold-box/9.webp">
+  <img src="/images/coffee-table/concrete-mold-box/10.webp">
 </figure>
 
 ## Concrete Evidence of Success
@@ -360,12 +360,12 @@ Lastly, we cut some large pieces of Styrofoam to fill larger empty spaces of the
 We actually poured the concrete. It finally happened!!! The internal mold worked incredibly well!
 
 <figure class="half">
-  <img src="/images/coffee-table/concrete-casting/0.jpg">
-  <img src="/images/coffee-table/concrete-casting/3.jpg">
+  <img src="/images/coffee-table/concrete-casting/0.webp">
+  <img src="/images/coffee-table/concrete-casting/3.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/concrete-casting/2.jpg">
-  <img src="/images/coffee-table/concrete-casting/1.jpg">
+  <img src="/images/coffee-table/concrete-casting/2.webp">
+  <img src="/images/coffee-table/concrete-casting/1.webp">
 </figure>
 
 Taking the mold apart was an all hands affair. My partner Anna managed to snag a timelapse video as well. Everything went smoothly, which made the long mold making process worth it. The table still requires a bit of clean up and detail work... but overall I'm `elated` with how it turned out!
@@ -373,25 +373,25 @@ Taking the mold apart was an all hands affair. My partner Anna managed to snag a
 {% include video id="UKpTsPxPAP4" provider="youtube" %}
 
 <figure class="third">
-  <img src="/images/coffee-table/concrete-demold/0.jpg">
-  <img src="/images/coffee-table/concrete-demold/1.jpg">
-  <img src="/images/coffee-table/concrete-demold/3.jpg">
+  <img src="/images/coffee-table/concrete-demold/0.webp">
+  <img src="/images/coffee-table/concrete-demold/1.webp">
+  <img src="/images/coffee-table/concrete-demold/3.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/concrete-demold/4.jpg">
-  <img src="/images/coffee-table/concrete-demold/5.jpg">
+  <img src="/images/coffee-table/concrete-demold/4.webp">
+  <img src="/images/coffee-table/concrete-demold/5.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/concrete-demold/2.jpg">
-  <img src="/images/coffee-table/concrete-demold/6.jpg">
+  <img src="/images/coffee-table/concrete-demold/2.webp">
+  <img src="/images/coffee-table/concrete-demold/6.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/concrete-demold/7.jpg">
-  <img src="/images/coffee-table/concrete-demold/8.jpg">
+  <img src="/images/coffee-table/concrete-demold/7.webp">
+  <img src="/images/coffee-table/concrete-demold/8.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/concrete-demold/9.jpg">
-  <img src="/images/coffee-table/concrete-demold/10.jpg">
+  <img src="/images/coffee-table/concrete-demold/9.webp">
+  <img src="/images/coffee-table/concrete-demold/10.webp">
 </figure>
 
 ## Finally, a Leg Up
@@ -401,14 +401,14 @@ Taking the mold apart was an all hands affair. My partner Anna managed to snag a
 Legs were an afterthought. To mount them in a sturdy fashion, I decided to create a thick inner platform out of 7/8" ply, resting on sanded and leveled risers which were epoxy welded to the concrete. The legs themselves are then mounted to the thick plywood with hardened steel bolts and a decent set of washers/lock nuts. While I didn't like the mounting of the legs being an afterthought in the design, they're incredibly strong. The table is a ROCK and moving it has become quite an ordeal :)
 
 <figure class="third">
-  <img src="/images/coffee-table/legs/0.jpg">
-  <img src="/images/coffee-table/legs/1.jpg">
-  <img src="/images/coffee-table/legs/2.jpg">
+  <img src="/images/coffee-table/legs/0.webp">
+  <img src="/images/coffee-table/legs/1.webp">
+  <img src="/images/coffee-table/legs/2.webp">
 </figure>
 <figure class="third">
-  <img src="/images/coffee-table/legs/3.jpg">
-  <img src="/images/coffee-table/legs/4.jpg">
-  <img src="/images/coffee-table/legs/5.jpg">
+  <img src="/images/coffee-table/legs/3.webp">
+  <img src="/images/coffee-table/legs/4.webp">
+  <img src="/images/coffee-table/legs/5.webp">
 </figure>
 
 ## I Couldn't Think of a "polished" Title
@@ -418,12 +418,12 @@ Legs were an afterthought. To mount them in a sturdy fashion, I decided to creat
 Then came the sanding... and a lot of it. I used a combination of wet and dry sanding in passes spanning 120 to 3000 grit, before a polish to make the acrylic really shine. This process took the better part of a day, and by the end I couldn't unlock my smart phone as I'd sanded my finger prints off... ha!
 
 <figure class="half">
-  <img src="/images/coffee-table/sanding/0.jpg">
-  <img src="/images/coffee-table/sanding/1.jpg">
+  <img src="/images/coffee-table/sanding/0.webp">
+  <img src="/images/coffee-table/sanding/1.webp">
 </figure>
 <figure class="half">
-  <img src="/images/coffee-table/sanding/2.jpg">
-  <img src="/images/coffee-table/sanding/3.jpg">
+  <img src="/images/coffee-table/sanding/2.webp">
+  <img src="/images/coffee-table/sanding/3.webp">
 </figure>
 
 Finally, after sanding and polishing, I sealed the concrete.

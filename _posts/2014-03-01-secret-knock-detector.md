@@ -9,11 +9,11 @@ permalink: /post-secret-knock-detector/
 classes: wide
 excerpt: Tap a secret knock and a real door opens.
 header:
-  og_image: /images/secret-knock-detector/banner.jpg
-  teaser: /images/secret-knock-detector/banner.jpg
+  og_image: /images/secret-knock-detector/banner.webp
+  teaser: /images/secret-knock-detector/banner.webp
 ---
 
-![banner](/images/secret-knock-detector/banner.jpg){:.align-center}
+![banner](/images/secret-knock-detector/banner.webp){:.align-center}
 
 A few secret knock detecting Arduino projects exist around the web, meaning the basic micro-controller logic for the knock sensing function has been fleshed out. With confidence that the software end would work, I set out to build a secret knock detecting door opener that would open my door if provided a secret knock.
 
@@ -24,8 +24,8 @@ Because the Arduino handles all the analysis and control, the circuit is relativ
 Lastly, I constructed a winch from an MG955 servo (modified for continuous rotation), a custom servo winch drum and common wire for hanging picture frames.
 
 <figure class="third">
-  <img src="/images/secret-knock-detector/circuit.jpg">
-  <img src="/images/secret-knock-detector/prototype.jpg">
-  <img src="/images/secret-knock-detector/winch.jpg">
+  <img src="/images/secret-knock-detector/circuit.webp">
+  <img src="/images/secret-knock-detector/prototype.webp">
+  <img src="/images/secret-knock-detector/winch.webp">
   <figcaption>Circuit (left), arduino shield (middle), winch (right)</figcaption>
 </figure>

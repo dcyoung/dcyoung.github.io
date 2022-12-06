@@ -10,8 +10,8 @@ permalink: /post-stewart-platform-simulator/
 classes: wide
 excerpt: A 3D robot simulator built in React and THREE.js
 header:
-  og_image: /images/stewart-platform-simulator/preview.jpg
-  teaser: /images/stewart-platform-simulator/preview.jpg
+  og_image: /images/stewart-platform-simulator/preview.webp
+  teaser: /images/stewart-platform-simulator/preview.webp
 ---
 
 <figure class="half">

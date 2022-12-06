@@ -9,8 +9,8 @@ permalink: /post-cuda-weighted-vector-addition/
 classes: wide
 excerpt: Accelerating vector addition w/ NVidia CUDA framework
 header:
-  og_image: /images/cuda/preview.jpg
-  teaser: /images/cuda/preview.jpg
+  og_image: /images/cuda/preview.webp
+  teaser: /images/cuda/preview.webp
 ---
 
 High Level Overview of the code to follow (heterogeneous programming)

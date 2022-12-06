@@ -10,8 +10,8 @@ classes: wide
 toc: true
 excerpt: Estimating a fundamental matrix to triangulate and reconstruct 2D points in 3D space.
 header:
-  og_image: /images/estimating-fundamental-matrix/3.jpg
-  teaser: /images/estimating-fundamental-matrix/3.jpg
+  og_image: /images/estimating-fundamental-matrix/3.webp
+  teaser: /images/estimating-fundamental-matrix/3.webp
 ---
 
 There were a few goals here. All goals refer to matching points from two images of the same scene from different camera positions.
@@ -158,14 +158,14 @@ Library | 10.8974 | 11.8459
 Below, the images show points and segments of corresponding epipolar lines for each image set. 
 
 <figure class="half">
-    <img src="/images/estimating-fundamental-matrix/0.jpg">
-    <img src="/images/estimating-fundamental-matrix/1.jpg">
+    <img src="/images/estimating-fundamental-matrix/0.webp">
+    <img src="/images/estimating-fundamental-matrix/1.webp">
     <figcaption>Points and segments of corresponding epipolar lines. Unnormalized (left) and Normalized (right).</figcaption>
 </figure>
 
 <figure class="half">
-    <img src="/images/estimating-fundamental-matrix/2.jpg">
-    <img src="/images/estimating-fundamental-matrix/3.jpg">
+    <img src="/images/estimating-fundamental-matrix/2.webp">
+    <img src="/images/estimating-fundamental-matrix/3.webp">
     <figcaption>Points and segments of corresponding epipolar lines. Unnormalized (left) and Normalized (right).</figcaption>
 </figure>
 
@@ -263,8 +263,8 @@ Library|174|200|12.8642
 Points and segments of corresponding epipolar lines for the house and library image sets are shown below. The performance has clearly dropped without known matches, but I didn't spend a lot of time parameter tuning the call to RANSAC and the putative match generation was rather naive.
 
 <figure class="half">
-    <img src="/images/estimating-fundamental-matrix/4.jpg">
-    <img src="/images/estimating-fundamental-matrix/5.jpg">
+    <img src="/images/estimating-fundamental-matrix/4.webp">
+    <img src="/images/estimating-fundamental-matrix/5.webp">
 </figure>
 
 ## Triangulation
@@ -273,7 +273,7 @@ Points and segments of corresponding epipolar lines for the house and library im
 
 The following snippet calculates the triangulated points and the projected triangulated points onto both images planes. The latter is for the calculation of residuals. What this means is you take the triangulated 3D point (P) and project it onto the image plane of each camera again, using the camera matrix. This reprojection yields new points (p_hat) near the original ones (p). Then, the euclidean distance between the original and reprojected point is calculated in both image planes.
 
-![triangulation](/images/estimating-fundamental-matrix/6.jpg){:.align-center}
+![triangulation](/images/estimating-fundamental-matrix/6.webp){:.align-center}
 
 ```matlab
 ...
@@ -349,17 +349,17 @@ House Image 2|0.15655
 
 The triangulated points were then plotted in 3 dimensional world space. To make things easier, adopt the following notation for viewing direction. The labeled directions "Front, Side and Top Down" views are shown below.
 
-![ref](/images/estimating-fundamental-matrix/7.jpg){:.align-center}
+![ref](/images/estimating-fundamental-matrix/7.webp){:.align-center}
 
 ​And make note of the overlaid feature locations.
 
-![features](/images/estimating-fundamental-matrix/8.jpg){:.align-center}
+![features](/images/estimating-fundamental-matrix/8.webp){:.align-center}
 
 Now that the reference material is out of the way, here are two slightly different TOP DOWN views of the triangulated points and camera centers from the "house" image set. The triangulated points are shown as red dots. The first camera center is shown as a green star and the second camera center is shown as a blue star.
 
 <figure class="half">
-    <img src="/images/estimating-fundamental-matrix/9.jpg">
-    <img src="/images/estimating-fundamental-matrix/10.jpg">
+    <img src="/images/estimating-fundamental-matrix/9.webp">
+    <img src="/images/estimating-fundamental-matrix/10.webp">
 </figure>
 
 ​The large spread out set of points on the lower/left side of the plots are all coplanar features from the tablecloth to the left of the house in the original photos. See the overlaid features images above for reference. Looking at the 3D plots, you can clearly see the corner of the building as the dense "L" shape. And as expected, the position of the second camera center is further to the right (relative to the corner). Because of this, the the blue center can see more of the side view than the green camera center.
@@ -367,8 +367,8 @@ Now that the reference material is out of the way, here are two slightly differe
 Now, here are two additional views of the triangulated points and camera centers from the "house" image set. The "Front Facing" view is shown on the LEFT and the "Side Facing" view is shown on the RIGHT. The plots have been rotated to shown the ground plane of the table as a horizontal line.
 
 <figure class="half">
-    <img src="/images/estimating-fundamental-matrix/11.jpg">
-    <img src="/images/estimating-fundamental-matrix/12.jpg">
+    <img src="/images/estimating-fundamental-matrix/11.webp">
+    <img src="/images/estimating-fundamental-matrix/12.webp">
 </figure>
 
 ​The additional two views shown the front and side facing views of the house. As expected, the shape of the house can be seen from both angles. Overall, the triangulation and 3D reconstruction of the house image set turned out to be surprisingly accurate.

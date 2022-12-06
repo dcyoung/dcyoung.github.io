@@ -11,8 +11,8 @@ permalink: /post-r3f-audio-visualizer/
 classes: wide
 excerpt: A portable 3D audio visualizer built with modern web technologies including React & THREE.js 
 header:
-  og_image: /images/r3f-audio-visualizer/waveform_500x300.jpg
-  teaser: /images/r3f-audio-visualizer/waveform_500x300.jpg
+  og_image: /images/r3f-audio-visualizer/waveform_500x300.webp
+  teaser: /images/r3f-audio-visualizer/waveform_500x300.webp
 ---
 
 [![](/images/r3f-audio-visualizer/waveform.gif){:.align-center}](https://dcyoung.github.io/r3f-audio-visualizer/)

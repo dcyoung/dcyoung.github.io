@@ -88,7 +88,7 @@ Then visualize the profiling result (snakeviz will host a server you can visit i
 $ snakeviz before.cProfile
 ```
 
-![before](/images/profiling-python/before.jpg)
+![before](/images/profiling-python/before.webp)
 
 It looks like the majority of time is spent on line 6, in the list comprehension of method `add_lists`.
 

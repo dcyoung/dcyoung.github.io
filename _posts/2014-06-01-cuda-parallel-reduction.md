@@ -9,11 +9,11 @@ permalink: /post-cuda-parallel-reduction/
 classes: wide
 excerpt: Accelerating via interleaved addressing with NVidia CUDA Framework
 header:
-  og_image: /images/cuda/0.jpg
-  teaser: /images/cuda/0.jpg
+  og_image: /images/cuda/0.webp
+  teaser: /images/cuda/0.webp
 ---
 
-![preview](/images/cuda/0.jpg){:.align-center}
+![preview](/images/cuda/0.webp){:.align-center}
 
 High Level Overview of the code to follow (heterogeneous programming)
 

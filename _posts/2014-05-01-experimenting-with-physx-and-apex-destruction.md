@@ -11,11 +11,11 @@ classes: wide
 toc: true
 excerpt: A completely custom networked implementation of a card game called set.
 header:
-  og_image: /images/experimenting-with-physx-apex/3.jpg
-  teaser: /images/experimenting-with-physx-apex/3.jpg
+  og_image: /images/experimenting-with-physx-apex/3.webp
+  teaser: /images/experimenting-with-physx-apex/3.webp
 ---
 
-![example](/images/experimenting-with-physx-apex/3.jpg){:.align-center}
+![example](/images/experimenting-with-physx-apex/3.webp){:.align-center}
 
 > The experiments here were conducted using unreal engine version 4.9.2. The content should be the same for all engine versions 4.8 -> 4.9.X. I have not tested beyond that.
 
@@ -280,13 +280,13 @@ void AMyDestructibleActor::Tick(float DeltaTime)
 Controlling a swarm of chunks this way is very entertaining, and might also have real game applications. I could see this type of setup controlling swarms of bees or birds like in bio-shock infinite, or stopping and redirecting a barrage of bullets and artillery similar to scenes from X-Men.
 
 <figure class="half">
-  <img src="/images/experimenting-with-physx-apex/0.jpg">
-  <img src="/images/experimenting-with-physx-apex/1.jpg">
+  <img src="/images/experimenting-with-physx-apex/0.webp">
+  <img src="/images/experimenting-with-physx-apex/1.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/experimenting-with-physx-apex/2.jpg">
-  <img src="/images/experimenting-with-physx-apex/3.jpg">
+  <img src="/images/experimenting-with-physx-apex/2.webp">
+  <img src="/images/experimenting-with-physx-apex/3.webp">
 </figure>
 
 ### Experimenting with Other Uses:

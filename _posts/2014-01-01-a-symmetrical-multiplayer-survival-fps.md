@@ -9,7 +9,7 @@ categories:
 permalink: /post-a-symmetrical-multiplayer-survival-fps/
 classes: wide
 toc: true
-excerpt: Development and prototyping of a chaotic phsyics driven game.
+excerpt: Development and prototyping of a chaotic physics driven game.
 header:
   og_image: http://img.youtube.com/vi/5BojP7bC5UU/0.jpg
   teaser: http://img.youtube.com/vi/5BojP7bC5UU/0.jpg
@@ -27,8 +27,8 @@ The premise of this game is simple.  You have two options of play.
 Both options control characters that exist in the same world space. However while the humanoid players see a realistically rendered world with a terrifying full scale monster, the single monster player sees a grossly simplified top-down arcade style version of the same world space. The objective of the monster is to intersect his arcade sprite with the moving representations of the humanoids.  The monster has a charge up ability that permits it to break through walls. Although from the monster's perspective this activity is simplistic, from the humanoid perspective the events are far more dramatic. The maps are built to be completely destructible so that the monster may physically break through walls in a chaotic and exhilarating manner.
 
 <figure class="half">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/demo_a.png">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/demo_b.jpg">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/demo_a.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/demo_b.webp">
 </figure>
 
 ## Objectives
@@ -57,44 +57,44 @@ An exact design for the monster has not yet been selected, however the two main 
 Influence is drawn heavily from the following resources I've collected around the web including a specific model by Josh Singh (M-Rex).  I have contacted him for licensing but haven't heard back. 
 
 <figure class="third">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_7.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_2.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_6.jpg">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_7.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_2.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_6.webp">
 </figure>
 <figure class="third">
-<img src="/images/a-symmetrical-multiplayer-survival-fps/monster_1.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_3.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_4.jpg">
+<img src="/images/a-symmetrical-multiplayer-survival-fps/monster_1.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_3.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_4.webp">
 </figure>
 <figure class="half">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_5.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_0.jpg">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_5.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/monster_0.webp">
 </figure>
 
 ## Perspective Design
 
 ### First Person Humanoid
 <figure class="third">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_0.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_1.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_2.jpg">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_0.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_1.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_2.webp">
 </figure>
 <figure class="half">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_3.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_4.jpg">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_3.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/fps_4.webp">
 </figure>
 
 ### Top Down Arcade
 
 <figure class="third">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_3.png">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_1.jpg">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_2.png">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_3.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_1.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_2.webp">
 </figure>
 <figure class="third">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_0.png">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_4.png">
-  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_5.jpg">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_0.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_4.webp">
+  <img src="/images/a-symmetrical-multiplayer-survival-fps/td_5.webp">
 </figure>
 
 

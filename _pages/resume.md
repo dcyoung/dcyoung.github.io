@@ -87,7 +87,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 
 ## Scanse - Director of software
 
-![scanse](/images/logos/scanse.png)
+![scanse](/images/logos/scanse.webp)
 
 Scanse was a small 3 person startup attempting to democratize LiDAR: a traditionally expensive and complicated sensing component for autonomous robots, self driving cars, and environment capture. In two years, my colleagues and I designed, manufactured and shipped over 5000 hardware units with supporting software. Throughout the process we fostered an active community of builders, researchers, artists and hobbyists, continuously releasing additional documentation, open source projects and accessory products. While delivering our primary scanning product, we also prototyped new products for non-invasive indoor occupancy tracking.
 
@@ -108,25 +108,25 @@ At a small startup, you play a role in everything! However, my main focus was th
 
 ## NVIDIA - Software Engr Intern (Gameworks)
 
-![nvidia](/images/logos/nvidia.png)
+![nvidia](/images/logos/nvidia.webp)
 
 During the summer of 2015 I interned at Nvidia, working out of the Santa Clara office in California. Specifically I worked for the Gameworks department on integrated PhysX in Unreal Engine 4. As an intern I improved the existing implementation of a software integration in a massive working code base, generated extensive documentation, interacted with interested community members and produced a large demo project to highlight the improvements and capabilities of the integrated software.
 
 ## HTC Vive Tech Ambassador
 
-![htc](/images/logos/htc.png)
+![htc](/images/logos/htc.webp)
 
 In February of 2016 I was hired to serve as a tech ambassador for the HTC Vive campus tour during their stop at University of Illinois at Urbana Champaign. Over the course of a week, I helped setup and deliver hundreds of HTC Vive Virtual Reality Demonstrations to interested faculty and students. I delivered marketing pitches, while also providing in-depth technical information and prolonged discussion with faculty, researchers and local businesses interested in developing experiences with the HTC Vive. Discussions included applying VR to entertainment, social networks, education, research, robotics, medical technology, data visualization and architectural visualization, as well as analysis of development obstacles unique to VR content. I generated new interest from a wide variety of demographics and highlighted new and useful industry information (problems, processes, connections, workflows, products etc) for those already working with VR.
 
 ## Custom Computer Design, Overclocking and Repair
 
-![adpc](/images/logos/ad-pc.png)
+![adpc](/images/logos/ad-pc.webp)
 
 In 2013 a friend and I founded AD/PC, a small business specializing in the design and fabrication of custom Personal Computers. AD/PC catered to any computer needs, but the primary clientele were undergraduate students at Washington University looking for custom water-cooled enthusiast gaming PCs. As a small part-time business AD/PC stuck to commissioned work, rarely taking on more than one or two projects at a time. Word of mouth kept AD/PC with a steady queue of interested customers until I finished undergraduate.
 
 ## Cypress Wealth Advisors
 
-![cypress](/images/logos/cypress.jpg)
+![cypress](/images/logos/cypress.webp)
 
 In the summer of 2013 I worked for a wealth advising firm in the San Francisco Bay Area, called Cypress Wealth Advisors. During my time there I built client databases in Microsoft Access, handled tax returns for small oil investors and developed software to automate the firm's quarterly summary report process. The latter involved creating software in Java to parse the client database and compile information regarding individual investments before automating LaTeX to stitch together the summary reports for each of the investments relevant to a specific client. Before this, the firm was manually editing a Word Document to produce individualized summary reports which (for a few hundred clients) can take days. I also began working on a graphical interface to extend the functionality and usability of the automated summary reporting.
 

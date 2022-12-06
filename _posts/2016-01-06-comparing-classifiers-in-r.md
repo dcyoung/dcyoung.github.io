@@ -11,8 +11,8 @@ classes: wide
 toc: True
 excerpt: Comparing various classifier in R.
 header:
-  og_image: /images/comparing-classifiers-in-r/0.jpg
-  teaser: /images/comparing-classifiers-in-r/0.jpg
+  og_image: /images/comparing-classifiers-in-r/0.webp
+  teaser: /images/comparing-classifiers-in-r/0.webp
 ---
 
 ## Dataset
@@ -26,7 +26,7 @@ Each vector consists of a label, followed by measurements of attributes from two
 
 ​For each of the classifiers below, the training was performed on all data from “pubfig_train_50000_pairs.txt”. Where applicable and when time permitted, parameter tuning was performed using the “pubfig_kaggle_#.txt” files. The classification accuracy of the trained classifier is shown for the same training data, one example of the validation data, and the test/evaluation data. For the test accuracy, the value was reported by Kaggle as we do not have access to the ground-truth labels.
 
-![placeholder](/images/comparing-classifiers-in-r/0.jpg){:.align-center}
+![placeholder](/images/comparing-classifiers-in-r/0.webp){:.align-center}
 
 ## Implementation
 

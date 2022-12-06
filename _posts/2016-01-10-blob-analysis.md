@@ -11,8 +11,8 @@ classes: wide
 toc: True
 excerpt: Visualizing and simplifying high dimensional data.
 header:
-  og_image: /images/blob-analysis/3.jpg
-  teaser: /images/blob-analysis/3.jpg
+  og_image: /images/blob-analysis/3.webp
+  teaser: /images/blob-analysis/3.webp
 ---
 
 ## Datasets
@@ -27,7 +27,7 @@ The following code snippets were written as an exercise in visualizing high dime
 
 If there aren't too many dimensions to the data, it can be useful to generate a scatterplot matrix to quickly detect correlations between pairs of variables. A scatterplot matrix is simply a matrix of scatterplots for every pair of dimensions. For example, the iris dataset only has 4 features (dimensions). This can easily be viewed in a 16 cell matrix. From the scatterplot matrix its easy to see that each species clusters quite nicely, and different from one another. Be careful with scatterplot matrices and units. If you don't normalize the coordinates and say for example one variable is reported in km while another is given in cm... you can miss important information.
 
-![placeholder](/images/blob-analysis/0.jpg){:.align-center}
+![placeholder](/images/blob-analysis/0.webp){:.align-center}
 
 ```r
 irisdat <- read.csv("iris.data.txt",header=F);
@@ -89,11 +89,11 @@ The result is a lower dimensional space that preserves the largest variance dire
 The first two principal components of the iris data were obtained and the data was plotted on those two principal components alone. Each species is shown with a different color marker. This process was done using two different packages and plotted once for each. 
 
 <figure class="half">
-  <a href="/images/blob-analysis/1.jpg">
-  <img src="/images/blob-analysis/1.jpg">
+  <a href="/images/blob-analysis/1.webp">
+  <img src="/images/blob-analysis/1.webp">
   </a>
-  <a href="/images/blob-analysis/2.jpg">
-  <img src="/images/blob-analysis/2.jpg">
+  <a href="/images/blob-analysis/2.webp">
+  <img src="/images/blob-analysis/2.webp">
   </a>
 </figure>
 
@@ -153,7 +153,7 @@ Sometimes we aren't after directions that best describe the data, but are instea
 
 You don't have to understand how discriminative directions work to use them. Here PLS1, or Partial Least Squares One, was used to obtain two discriminative directions. The iris data was then projected on to those directions. The plot does seem to better separate the different classes as compared to the PCA plots. Data in each cluster appears closer to the cluster center, less scattered, with more separation between clusters and fewer outliers.
 
-![placeholder](/images/blob-analysis/3.jpg)
+![placeholder](/images/blob-analysis/3.webp)
 
 ```r
 ir.species.n <- as.numeric(ir.species)
@@ -172,25 +172,25 @@ plot(pls1,what="observations",col.points=ir.species.col,
 The eigenvalues of the covariance matrix were plotted in sorted order. The knee of the sorted eigenvalue plot would indicate that 3 principal components are enough to well represent the data. The first two principal components were computed, and the data was projected onto those components. A scatter plot of this two dimensional dataset was generated.
 
 <figure class="half">
-  <a href="/images/blob-analysis/4.jpg">
-  <img src="/images/blob-analysis/4.jpg">
+  <a href="/images/blob-analysis/4.webp">
+  <img src="/images/blob-analysis/4.webp">
   </a>
-  <a href="/images/blob-analysis/5.jpg">
-  <img src="/images/blob-analysis/5.jpg">
+  <a href="/images/blob-analysis/5.webp">
+  <img src="/images/blob-analysis/5.webp">
   </a>
 </figure>
 
 A stem plot was constructed for each of the first 3 principal components. This can help visualize which original components weight the principal components. The first principal component seems to be influenced/weighted by more components in total than the second and third principal components. In the second and third principal components, features 5-8, 10 and 11 seem to contribute less. 
 
 <figure class="third">
-  <a href="/images/blob-analysis/6.jpg">
-  <img src="/images/blob-analysis/6.jpg">
+  <a href="/images/blob-analysis/6.webp">
+  <img src="/images/blob-analysis/6.webp">
   </a>
-  <a href="/images/blob-analysis/7.jpg">
-  <img src="/images/blob-analysis/7.jpg">
+  <a href="/images/blob-analysis/7.webp">
+  <img src="/images/blob-analysis/7.webp">
   </a>
-  <a href="/images/blob-analysis/8.jpg">
-  <img src="/images/blob-analysis/8.jpg">
+  <a href="/images/blob-analysis/8.webp">
+  <img src="/images/blob-analysis/8.webp">
   </a>
 </figure>
 
@@ -258,11 +258,11 @@ legend(x ="topright", legend = c(1,2,3), col = c("red","blue","green"), pch=1);
 The dataset was plotted on the first three principal components, using different markers for benign and malignant cases. Then PLS1 was used to obtain three discriminative directions. The data was then projected onto those directions. The data in the PLS1 plot looks rather similar but with slightly better separation and not as much overlap.
 
 <figure class="half">
-  <a href="/images/blob-analysis/9.jpg">
-  <img src="/images/blob-analysis/9.jpg">
+  <a href="/images/blob-analysis/9.webp">
+  <img src="/images/blob-analysis/9.webp">
   </a>
-  <a href="/images/blob-analysis/10.jpg">
-  <img src="/images/blob-analysis/10.jpg">
+  <a href="/images/blob-analysis/10.webp">
+  <img src="/images/blob-analysis/10.webp">
   </a>
 </figure>
 

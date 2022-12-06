@@ -9,8 +9,8 @@ permalink: /post-webgl-terrain/
 classes: wide
 excerpt: Simple implementation of the diamond square algorithm to generate a tile of terrain.
 header:
-  og_image: /images/webgl-terrain/0.jpg
-  teaser: /images/webgl-terrain/0.jpg
+  og_image: /images/webgl-terrain/0.webp
+  teaser: /images/webgl-terrain/0.webp
 ---
 
 Simple implementation of the diamond square algorithm to generate a tile of terrain.

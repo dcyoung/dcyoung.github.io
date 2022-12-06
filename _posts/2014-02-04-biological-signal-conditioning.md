@@ -10,8 +10,8 @@ permalink: /post-bme-biological-signal-conditioning/
 classes: wide
 excerpt:  Constructing a simple analog EKG amplifier to produce clean Lead I EKG recordings with identifiable wave characteristics.
 header:
-  og_image: /images/qp-physical/biological-signal-conditioning.jpg
-  teaser: /images/qp-physical/biological-signal-conditioning.jpg
+  og_image: /images/qp-physical/biological-signal-conditioning.webp
+  teaser: /images/qp-physical/biological-signal-conditioning.webp
 ---
 
  

@@ -10,19 +10,19 @@ classes: wide
 toc: True
 excerpt: Creating 3D texture wrapped models from a single image.
 header:
-  og_image: /images/single-view-modeling/1.jpg
-  teaser: /images/single-view-modeling/1.jpg
+  og_image: /images/single-view-modeling/1.webp
+  teaser: /images/single-view-modeling/1.webp
 ---
 
 <figure class="half">
-    <img src="/images/single-view-modeling/van_0.jpg">
-    <img src="/images/single-view-modeling/hom_0.jpg">
+    <img src="/images/single-view-modeling/van_0.webp">
+    <img src="/images/single-view-modeling/hom_0.webp">
     <figcaption>Computing Vanishing Points (left) and Homography (right)</figcaption>
 </figure>
 
 <figure class="half">
-    <img src="/images/single-view-modeling/model_0.jpg">
-    <img src="/images/single-view-modeling/model_1.jpg">
+    <img src="/images/single-view-modeling/model_0.webp">
+    <img src="/images/single-view-modeling/model_1.webp">
     <figcaption>Final viewable 3D texture mapped model</figcaption>
 </figure>
 
@@ -1039,19 +1039,19 @@ I adopted the following pipeline when building 3d texture mapped models from a s
 A few pictures from this pipeline using a very simple source image are shown below.
 
 <figure class="half">
-    <img src="/images/single-view-modeling/van_0.jpg">
-    <img src="/images/single-view-modeling/hom_0.jpg">
+    <img src="/images/single-view-modeling/van_0.webp">
+    <img src="/images/single-view-modeling/hom_0.webp">
     <figcaption>Computing Vanishing Points (left) and Homography (right)</figcaption>
 </figure>
 
 <figure class="half">
-    <img src="/images/single-view-modeling/model_0.jpg">
-    <img src="/images/single-view-modeling/model_1.jpg">
+    <img src="/images/single-view-modeling/model_0.webp">
+    <img src="/images/single-view-modeling/model_1.webp">
     <figcaption>Final viewable 3D texture mapped model</figcaption>
 </figure>
 
 <figure class="half">
-    <img src="/images/single-view-modeling/van_1.jpg">
-    <img src="/images/single-view-modeling/hom_1.jpg">
+    <img src="/images/single-view-modeling/van_1.webp">
+    <img src="/images/single-view-modeling/hom_1.webp">
     <figcaption>Computing Vanishing Points (left) and Homography (right)</figcaption>
 </figure>

@@ -9,8 +9,8 @@ permalink: /post-talk-embodied-cognition/
 classes: wide
 excerpt: A presentation on embodied cognition and thinking through touch.
 header:
-  og_image: /images/talk-embodied-cognition/preview.jpg
-  teaser: /images/talk-embodied-cognition/preview.jpg
+  og_image: /images/talk-embodied-cognition/preview.webp
+  teaser: /images/talk-embodied-cognition/preview.webp
 ---
 
 I threw an event called Intoxi-Talks (aka: drunk TED talks). It was a fun opportunity for my community of friends to share presentations on topics about which they are passionate! 

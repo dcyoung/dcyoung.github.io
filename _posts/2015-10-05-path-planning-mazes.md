@@ -10,8 +10,8 @@ classes: wide
 toc: true
 excerpt: Solving mazes by implementing various path finding algorithms.
 header:
-  og_image: /images/path-planning-mazes/medium/DFS.jpg
-  teaser: /images/path-planning-mazes/medium/DFS.jpg
+  og_image: /images/path-planning-mazes/medium/DFS.webp
+  teaser: /images/path-planning-mazes/medium/DFS.webp
 ---
 
 This writeup summarizes the procedure and results of various path finding algorithms on a grid based maze. It also contains discussion of said results and attempts to provide some insight and reflection on the behavior of each algorithm. The assignment was completed for course CS440 Artificial Intelligence at University of Illinois Urbana Champaign.
@@ -34,7 +34,7 @@ The following source files were written from scratch:
 
 Mazes are provided in a specific layout via .txt files where '%' stands for walls, 'P' for the starting position, and '.' for the goal. The files are modified so the first line holds the dimensions of the maze like so:
 
-![placeholder](/images/path-planning-mazes/0.jpg){:.align-center}
+![placeholder](/images/path-planning-mazes/0.webp){:.align-center}
 
 ​The .txt file is then read into an array and from that array, a custom structure is formed to assist in the path finding by holding the state of the maze. Various search algorithms were implemented and a basic 2D graphics library was used for visual debugging and the creation of path finding animations. The implemented search algorithms include: Depth First Search, Breadth First Search, Greedy and A\*. Each of the 4 algorithms was run on 3 different mazes (MediumMaze, BigMaze and OpenMaze). After each run, two values were noted: the number of total path nodes in the final solution as well as the total number of nodes expanded during the algorithm's run time. Note that these numbers should include the effects of the start and goal nodes.
 
@@ -47,7 +47,7 @@ Mazes are provided in a specific layout via .txt files where '%' stands for wall
 
 ​The results of the 4 algorithms are shown below:
 
-![placeholder](/images/path-planning-mazes/1.jpg){:.align-center}
+![placeholder](/images/path-planning-mazes/1.webp){:.align-center}
 
 ## Medium Maze Solutions
 
@@ -96,9 +96,9 @@ A\* was run on 2 different mazes (small and big) for the following two cases:
 
 using two different heuristics (manhattan + another). For the purpose of exploration I ran the algorithm on 6 different cases of Forward and Turn Cost: (2+1, 1+2, 2+2, 2+4, 2+10, 2+15). The values were chosen to see how well the heuristics would react to the increased weight placed on turns. The following results were obtained.
 
-![placeholder](/images/path-planning-mazes/results_small.jpg){:.align-center}
+![placeholder](/images/path-planning-mazes/results_small.webp){:.align-center}
 
-![placeholder](/images/path-planning-mazes/results_big.jpg){:.align-center}
+![placeholder](/images/path-planning-mazes/results_big.webp){:.align-center}
 
 Looking at the small maze it is clear that going from (Forward Cost, Turn Cost) = (F, T) of (2,1) to (1,2) altered the final maze solution. The optimal solution is calculated according to path cost, and with the extra weight on turns, the optimal solution switched from a path of length 53 nodes to a path of length 67 nodes because the total path cost was shorter. Manhattan distance works well as a heuristic and will always provide optimal results but the efficiency can be improved upon. Considering the addition of turn cost into the heuristic demonstrates a heuristic that also guarantees optimal results but with a slight boost in efficiency especially at larger weights on turns. This is expected because it will take into consideration the effect of turns in the HCost of the node and therefore the FCost of the node used extensively in the algorithm. Since turns are impactful here, noting them in the heuristic is useful. But the results aren't as noticeable at lower turn costs because the manhattan distance simply outweighs the turn cost.
 
@@ -112,7 +112,7 @@ Lastly I tried to form a complex heuristic that I hoped would prove fruitful, bu
 
 Both the normal A\* algorithm, as well as the modified ghost avoidance algorithm were run on 3 different mazes (small, medium and big). The final path cost, number of path nodes and number of expanded nodes are shown below:
 
-![placeholder](/images/path-planning-mazes/results_ghost.jpg){:.align-center}
+![placeholder](/images/path-planning-mazes/results_ghost.webp){:.align-center}
 
 {% include image-gallery.html folder="/images/path-planning-mazes/ghost" class="col-3" %}
 

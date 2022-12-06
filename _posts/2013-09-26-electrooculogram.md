@@ -10,8 +10,8 @@ permalink: /post-bme-electrooculogram/
 classes: wide
 excerpt:  Measuring angular displacement of the eyeball by sensing changes in the orientation of the electric dipole.
 header:
-  og_image: /images/qp-physical/electrooculogram.jpg
-  teaser: /images/qp-physical/electrooculogram.jpg
+  og_image: /images/qp-physical/electrooculogram.webp
+  teaser: /images/qp-physical/electrooculogram.webp
 ---
 
 ## Electrooculogram

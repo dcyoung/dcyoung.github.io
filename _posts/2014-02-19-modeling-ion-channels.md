@@ -10,8 +10,8 @@ permalink: /post-bme-ion-channels/
 classes: wide
 excerpt: Modeling the flow and interplay of ion channels.
 header:
-  og_image: /images/qp-computational/ion-channels-preview.jpg
-  teaser: /images/qp-computational/ion-channels-preview.jpg
+  og_image: /images/qp-computational/ion-channels-preview.webp
+  teaser: /images/qp-computational/ion-channels-preview.webp
 ---
 
 {% include pdf-embed.html url="/images/qp-computational/ion-channels.pdf" %}

@@ -9,8 +9,8 @@ permalink: /post-accelerator-rich-cmps/
 classes: wide
 excerpt: A presentation and summary of a paper on architecture support for domain-specific accelerator-rich CMPS
 header:
-  og_image: /images/accelerator-rich-cmps/0.jpg
-  teaser: /images/accelerator-rich-cmps/0.jpg
+  og_image: /images/accelerator-rich-cmps/0.webp
+  teaser: /images/accelerator-rich-cmps/0.webp
 ---
 
 {% include pdf-embed.html url="/images/accelerator-rich-cmps/cong-paper-review.pdf" %}

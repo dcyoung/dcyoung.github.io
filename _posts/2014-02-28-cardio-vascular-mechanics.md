@@ -11,8 +11,8 @@ classes: wide
 toc: true
 excerpt: Modeling various cardiovascular mechanics.
 header:
-  og_image: /images/qp-computational/cardio-preview.jpg
-  teaser: /images/qp-computational/cardio-preview.jpg
+  og_image: /images/qp-computational/cardio-preview.webp
+  teaser: /images/qp-computational/cardio-preview.webp
 ---
 
 ## Notes on Diagnosing Cardiac Malfunction

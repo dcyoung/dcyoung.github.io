@@ -9,8 +9,8 @@ classes: wide
 toc: true
 excerpt: Designing a hybrid controller for a self-balancing robotic pendulum.
 header:
-  og_image: /images/self-balancing-robot/preview.jpg
-  teaser: /images/self-balancing-robot/preview.jpg
+  og_image: /images/self-balancing-robot/preview.webp
+  teaser: /images/self-balancing-robot/preview.webp
 ---
 
 {% include video id="kjRBskEKIeU" provider="youtube" %}

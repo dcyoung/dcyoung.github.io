@@ -10,8 +10,8 @@ permalink: /post-bme-signal-acquisition/
 classes: wide
 excerpt: Exploring tools and techniques in biomedical signal acquisition.
 header:
-  og_image: /images/qp-physical/biomedical-signal-acquisition.jpg
-  teaser: /images/qp-physical/biomedical-signal-acquisition.jpg
+  og_image: /images/qp-physical/biomedical-signal-acquisition.webp
+  teaser: /images/qp-physical/biomedical-signal-acquisition.webp
 ---
 
 ## Writeup

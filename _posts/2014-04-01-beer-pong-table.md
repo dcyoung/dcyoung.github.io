@@ -23,7 +23,7 @@ I've always enjoyed building things, but rarely get to share my creations. The o
 
 I designed the first table to be portable, fold-able and lightweight. Decorating the table was accomplished with black lights and fluorescent paint. But the glowing effects didn't cut it... v2.0 needed some powered electrical light sources.
 
-![v1](/images/beer-pong-table/v1.jpg){:.align-center}
+![v1](/images/beer-pong-table/v1.webp){:.align-center}
 
 ## Table v2.0
 
@@ -45,126 +45,126 @@ The new table requires a lot of electronic components. The table is to be subjec
 **Constructing the Frame Rails**
 
 <figure class="third">
-  <img src="/images/beer-pong-table/frame_rails/0.jpg">
-  <img src="/images/beer-pong-table/frame_rails/1.jpg">
-  <img src="/images/beer-pong-table/frame_rails/3.jpg">
+  <img src="/images/beer-pong-table/frame_rails/0.webp">
+  <img src="/images/beer-pong-table/frame_rails/1.webp">
+  <img src="/images/beer-pong-table/frame_rails/3.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/beer-pong-table/frame_rails/2.jpg">
-  <img src="/images/beer-pong-table/frame_rails/4.jpg">
-  <img src="/images/beer-pong-table/frame_rails/5.jpg">
+  <img src="/images/beer-pong-table/frame_rails/2.webp">
+  <img src="/images/beer-pong-table/frame_rails/4.webp">
+  <img src="/images/beer-pong-table/frame_rails/5.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/beer-pong-table/frame_rails/6.jpg">
-  <img src="/images/beer-pong-table/frame_rails/7.jpg">
-  <img src="/images/beer-pong-table/frame_rails/8.jpg">
+  <img src="/images/beer-pong-table/frame_rails/6.webp">
+  <img src="/images/beer-pong-table/frame_rails/7.webp">
+  <img src="/images/beer-pong-table/frame_rails/8.webp">
 </figure>
 
 
 **Assembling the Frame**
 
 <figure class="third">
-  <img src="/images/beer-pong-table/frame/0.jpg">
-  <img src="/images/beer-pong-table/frame/1.jpg">
-  <img src="/images/beer-pong-table/frame/2.jpg">
+  <img src="/images/beer-pong-table/frame/0.webp">
+  <img src="/images/beer-pong-table/frame/1.webp">
+  <img src="/images/beer-pong-table/frame/2.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/beer-pong-table/frame/3.jpg">
-  <img src="/images/beer-pong-table/frame/4.jpg">
-  <img src="/images/beer-pong-table/frame/5.jpg">
+  <img src="/images/beer-pong-table/frame/3.webp">
+  <img src="/images/beer-pong-table/frame/4.webp">
+  <img src="/images/beer-pong-table/frame/5.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/beer-pong-table/frame/6.jpg">
-  <img src="/images/beer-pong-table/frame/7.jpg">
+  <img src="/images/beer-pong-table/frame/6.webp">
+  <img src="/images/beer-pong-table/frame/7.webp">
 </figure>
 
 **Drawing the Outline for the LED Grid on the Upper Lid**
 
 <figure class="half">
-  <img src="/images/beer-pong-table/grid/0.jpg">
-  <img src="/images/beer-pong-table/grid/1.jpg">
+  <img src="/images/beer-pong-table/grid/0.webp">
+  <img src="/images/beer-pong-table/grid/1.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/beer-pong-table/grid/2.jpg">
-  <img src="/images/beer-pong-table/grid/3.jpg">
+  <img src="/images/beer-pong-table/grid/2.webp">
+  <img src="/images/beer-pong-table/grid/3.webp">
 </figure>
 
 **Countersinking Holes for the LED Grid on the Upper Lid**
 
 <figure class="third">
-  <img src="/images/beer-pong-table/grid/4.jpg">
-  <img src="/images/beer-pong-table/grid/5.jpg">
-  <img src="/images/beer-pong-table/grid/6.jpg">
+  <img src="/images/beer-pong-table/grid/4.webp">
+  <img src="/images/beer-pong-table/grid/5.webp">
+  <img src="/images/beer-pong-table/grid/6.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/beer-pong-table/grid/7.jpg">
-  <img src="/images/beer-pong-table/grid/8.jpg">
-  <img src="/images/beer-pong-table/grid/9.jpg">
+  <img src="/images/beer-pong-table/grid/7.webp">
+  <img src="/images/beer-pong-table/grid/8.webp">
+  <img src="/images/beer-pong-table/grid/9.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/beer-pong-table/grid/10.jpg">
-  <img src="/images/beer-pong-table/grid/11.jpg">
-  <img src="/images/beer-pong-table/grid/12.jpg">
+  <img src="/images/beer-pong-table/grid/10.webp">
+  <img src="/images/beer-pong-table/grid/11.webp">
+  <img src="/images/beer-pong-table/grid/12.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/beer-pong-table/grid/13.jpg">
-  <img src="/images/beer-pong-table/grid/14.jpg">
+  <img src="/images/beer-pong-table/grid/13.webp">
+  <img src="/images/beer-pong-table/grid/14.webp">
 </figure>
 
 **Cutting Support Rails for the Acrylic to Sit Above the Upper Lid**
 
 <figure class="half">
-  <img src="/images/beer-pong-table/supports/0.jpg">
-  <img src="/images/beer-pong-table/supports/1.jpg">
+  <img src="/images/beer-pong-table/supports/0.webp">
+  <img src="/images/beer-pong-table/supports/1.webp">
 </figure>
 
 **Drilling holes for the Connectors on the Ends of the Table**
 
 <figure class="half">
-  <img src="/images/beer-pong-table/ends/0.jpg">
-  <img src="/images/beer-pong-table/ends/1.jpg">
+  <img src="/images/beer-pong-table/ends/0.webp">
+  <img src="/images/beer-pong-table/ends/1.webp">
 </figure>
 
 <figure class="half">
-  <img src="/images/beer-pong-table/ends/2.jpg">
-  <img src="/images/beer-pong-table/ends/3.jpg">
+  <img src="/images/beer-pong-table/ends/2.webp">
+  <img src="/images/beer-pong-table/ends/3.webp">
 </figure>
 
 **Priming the Table with Spray Can Sealer/Primer**
 
 <figure class="half">
-  <img src="/images/beer-pong-table/painting/0.jpg">
-  <img src="/images/beer-pong-table/painting/1.jpg">
+  <img src="/images/beer-pong-table/painting/0.webp">
+  <img src="/images/beer-pong-table/painting/1.webp">
 </figure>
 
 **Laying Out the Electronics**
 
 <figure class="third">
-  <img src="/images/beer-pong-table/electronics/0.jpg">
-  <img src="/images/beer-pong-table/electronics/1.jpg">
-  <img src="/images/beer-pong-table/electronics/2.jpg">
+  <img src="/images/beer-pong-table/electronics/0.webp">
+  <img src="/images/beer-pong-table/electronics/1.webp">
+  <img src="/images/beer-pong-table/electronics/2.webp">
 </figure>
 
 **Assembling 20 PCBs for the Cups**
 
 <figure class="third">
-  <img src="/images/beer-pong-table/electronics/3.jpg">
-  <img src="/images/beer-pong-table/electronics/4.jpg">
-  <img src="/images/beer-pong-table/electronics/6.jpg">
+  <img src="/images/beer-pong-table/electronics/3.webp">
+  <img src="/images/beer-pong-table/electronics/4.webp">
+  <img src="/images/beer-pong-table/electronics/6.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/beer-pong-table/electronics/5.jpg">
-  <img src="/images/beer-pong-table/electronics/7.jpg">
-  <img src="/images/beer-pong-table/electronics/8.jpg">
+  <img src="/images/beer-pong-table/electronics/5.webp">
+  <img src="/images/beer-pong-table/electronics/7.webp">
+  <img src="/images/beer-pong-table/electronics/8.webp">
 </figure>
 
 **Creating the center LED Grid**
@@ -172,27 +172,27 @@ The new table requires a lot of electronic components. The table is to be subjec
 I used enamel coated wire to connect hundreds of LEDs. The wire was wrapped snuggly around the leads to connect the cathodes and anodes of rows and columns. The enamel coating was then melted away during soldering, and proper connections were tested for each lead. This took a LONG time. If I were to do it again I'd definitely figure out a way to use a few LED strips. That way they could be RGB as well.
 
 <figure class="half">
-  <img src="/images/beer-pong-table/electronics/9.jpg">
-  <img src="/images/beer-pong-table/electronics/10.jpg">
+  <img src="/images/beer-pong-table/electronics/9.webp">
+  <img src="/images/beer-pong-table/electronics/10.webp">
 </figure>
 
 **Securing the Acrylic Support Risers**
 
-![risers](/images/beer-pong-table/assembly/0.jpg){:.align-center}
+![risers](/images/beer-pong-table/assembly/0.webp){:.align-center}
 
 **Adding the Automated Ball Washers**
 
 <figure class="third">
-  <img src="/images/beer-pong-table/ball-washer/0.jpg">
-  <img src="/images/beer-pong-table/ball-washer/1.jpg">
-  <img src="/images/beer-pong-table/ball-washer/2.jpg">
+  <img src="/images/beer-pong-table/ball-washer/0.webp">
+  <img src="/images/beer-pong-table/ball-washer/1.webp">
+  <img src="/images/beer-pong-table/ball-washer/2.webp">
 </figure>
 
 **Assembling and Testing all the Electronic Components**
 
 <figure class="half">
-  <img src="/images/beer-pong-table/assembly/1.jpg">
-  <img src="/images/beer-pong-table/assembly/2.jpg">
+  <img src="/images/beer-pong-table/assembly/1.webp">
+  <img src="/images/beer-pong-table/assembly/2.webp">
 </figure>
 
 {% include video id="ulqUuxT_21k" provider="youtube" %}

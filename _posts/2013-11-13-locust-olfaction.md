@@ -10,8 +10,8 @@ permalink: /post-bme-locust-olfaction/
 classes: wide
 excerpt:  Measuring, modeling and recreating signal transduction in locust olfaction.
 header:
-  og_image: /images/qp-physical/locust-olfaction.jpg
-  teaser: /images/qp-physical/locust-olfaction.jpg
+  og_image: /images/qp-physical/locust-olfaction.webp
+  teaser: /images/qp-physical/locust-olfaction.webp
 ---
 
 ## Writeup

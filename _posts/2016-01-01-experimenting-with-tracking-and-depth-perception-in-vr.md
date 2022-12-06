@@ -10,8 +10,8 @@ permalink: /post-experimenting-with-tracking-and-depth-perception-in-vr/
 classes: wide
 excerpt: Minor experiments in VR.
 header:
-  og_image: /images/virtual-reality-depth-perception/preview.jpg
-  teaser: /images/virtual-reality-depth-perception/preview.jpg
+  og_image: /images/virtual-reality-depth-perception/preview.webp
+  teaser: /images/virtual-reality-depth-perception/preview.webp
 ---
 
 ​This experiment was meant to highlight the difference between rotation and position tracking as an element of VR experiences, as well as investigate how depth perception relies on both forms of tracking. The written code includes scripts to mirror a user's head movement (position and orientation), disable positional tracking, disable rotational tracking and reposition stimuli of various sizes to appear as similar sizes at the same depth. Although these tasks may seem trivial, the process of disabling rotational tracking in Unity using OVR can be tricky. Hopefully the included code helps a few people out there struggling to find a solution given the limitations of the OVR assets.

@@ -9,13 +9,13 @@ permalink: /post-javascript-calendar/
 classes: wide
 excerpt: A simple calendar coded in JS, Jquery, php and mySQL
 header:
-  og_image: /images/js-calendar/1.jpg
-  teaser: /images/js-calendar/1.jpg
+  og_image: /images/js-calendar/1.webp
+  teaser: /images/js-calendar/1.webp
 ---
 
 <figure class="half">
-    <img src="/images/js-calendar/0.jpg">
-    <img src="/images/js-calendar/1.jpg">
+    <img src="/images/js-calendar/0.webp">
+    <img src="/images/js-calendar/1.webp">
 </figure>
 
 This is a simple calendar coded in JS, Jquery, php and mySQL.  It has a few special features, but it is built primarily around AJAX events

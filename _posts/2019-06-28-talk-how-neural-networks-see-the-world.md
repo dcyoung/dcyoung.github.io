@@ -10,8 +10,8 @@ permalink: /post-talk-how-neural-networks-see-the-world/
 classes: wide
 excerpt: A presentation on how neural networks see the world, meant to build intuition for a broader AI discussion.
 header:
-  og_image: /images/talk-how-neural-networks-see-the-world/preview.jpg
-  teaser: /images/talk-how-neural-networks-see-the-world/preview.jpg
+  og_image: /images/talk-how-neural-networks-see-the-world/preview.webp
+  teaser: /images/talk-how-neural-networks-see-the-world/preview.webp
 ---
 
 I was asked to speak to a group on the topic of AI. I had a lot of fun putting this together.

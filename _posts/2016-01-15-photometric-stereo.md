@@ -10,13 +10,13 @@ classes: wide
 toc: true
 excerpt: Recovering surface normals and surface heights from lighting cues.
 header:
-  og_image: /images/photometric-stereo/0.jpg
-  teaser: /images/photometric-stereo/0.jpg
+  og_image: /images/photometric-stereo/0.webp
+  teaser: /images/photometric-stereo/0.webp
 ---
 
 ## Overview
 
-![preview](/images/photometric-stereo/0.jpg){:.align-right}
+![preview](/images/photometric-stereo/0.webp){:.align-right}
 
 The goal here was to implement shape from shading as described in Forsyth & Ponce 2nd Edition, in order to reconstruct albedo and shape in the form of surface height-maps. The technique was applied to images of faces.
 
@@ -113,13 +113,13 @@ Having obtained the source vectors and intensity values, the basis of the proble
 
 Assuming the response function of the camera is a linear scaling by a factor of "k", Lambert's law and a bit of regrouping terms will yield:
 
-![eq-1](/images/photometric-stereo/1.jpg){:.align-center}
+![eq-1](/images/photometric-stereo/1.webp){:.align-center}
 
 where g(x,y) refers to the normals scaled by albedo and Vj refers to the scaled light source vector.
 
 A linear system can be setup for each pixel according to this formula. This system can then be solved for the normals and alebdo. Stacking all the linear systems on top of one another in matrices will yield the following:
 
-![eq-2](/images/photometric-stereo/2.jpg){:.align-center}
+![eq-2](/images/photometric-stereo/2.webp){:.align-center}
 
 Obtaining a least-squares solution for g(x,y) is simple in Matlab. Recall that g(x,y) must be equal to N(x,y)*p(x,y) and since N(x,y) is a unit normal, the albedo p(x,y) is given by the magnitude of g(x,y).
 
@@ -240,57 +240,57 @@ The angles for each photo result were chosen to highlight any unique flaws from 
 ### YaleB01
 
 <figure class="third">
-  <img src="/images/photometric-stereo/3.jpg">
-  <img src="/images/photometric-stereo/4.jpg">
-  <img src="/images/photometric-stereo/5.jpg">
+  <img src="/images/photometric-stereo/3.webp">
+  <img src="/images/photometric-stereo/4.webp">
+  <img src="/images/photometric-stereo/5.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/photometric-stereo/6.jpg">
-  <img src="/images/photometric-stereo/7.jpg">
-  <img src="/images/photometric-stereo/8.jpg">
+  <img src="/images/photometric-stereo/6.webp">
+  <img src="/images/photometric-stereo/7.webp">
+  <img src="/images/photometric-stereo/8.webp">
 </figure>
 
 ### YaleB02
 
 <figure class="third">
-  <img src="/images/photometric-stereo/9.jpg">
-  <img src="/images/photometric-stereo/10.jpg">
-  <img src="/images/photometric-stereo/11.jpg">
+  <img src="/images/photometric-stereo/9.webp">
+  <img src="/images/photometric-stereo/10.webp">
+  <img src="/images/photometric-stereo/11.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/photometric-stereo/12.jpg">
-  <img src="/images/photometric-stereo/13.jpg">
-  <img src="/images/photometric-stereo/14.jpg">
+  <img src="/images/photometric-stereo/12.webp">
+  <img src="/images/photometric-stereo/13.webp">
+  <img src="/images/photometric-stereo/14.webp">
 </figure>
 
 ### YaleB05
 
 <figure class="third">
-  <img src="/images/photometric-stereo/15.jpg">
-  <img src="/images/photometric-stereo/16.jpg">
-  <img src="/images/photometric-stereo/17.jpg">
+  <img src="/images/photometric-stereo/15.webp">
+  <img src="/images/photometric-stereo/16.webp">
+  <img src="/images/photometric-stereo/17.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/photometric-stereo/18.jpg">
-  <img src="/images/photometric-stereo/19.jpg">
-  <img src="/images/photometric-stereo/20.jpg">
+  <img src="/images/photometric-stereo/18.webp">
+  <img src="/images/photometric-stereo/19.webp">
+  <img src="/images/photometric-stereo/20.webp">
 </figure>
 
 ### YaleB07
 
 <figure class="third">
-  <img src="/images/photometric-stereo/21.jpg">
-  <img src="/images/photometric-stereo/22.jpg">
-  <img src="/images/photometric-stereo/23.jpg">
+  <img src="/images/photometric-stereo/21.webp">
+  <img src="/images/photometric-stereo/22.webp">
+  <img src="/images/photometric-stereo/23.webp">
 </figure>
 
 <figure class="third">
-  <img src="/images/photometric-stereo/24.jpg">
-  <img src="/images/photometric-stereo/25.jpg">
-  <img src="/images/photometric-stereo/26.jpg">
+  <img src="/images/photometric-stereo/24.webp">
+  <img src="/images/photometric-stereo/25.webp">
+  <img src="/images/photometric-stereo/26.webp">
 </figure>
 
 ## Results Discussion
@@ -302,7 +302,7 @@ The angles for each photo result were chosen to highlight any unique flaws from 
 The following table shows the running time of the "get_surface.m" function which performs the integration. The values in each row of the table should all be the same, as the integration method is unchanged and the image size is constant between all faces. The row and columns are very similar in performs save for a miniature difference attributable to additional calculations for transposing the vectors for cumsum. The average is a little more than double the row or column, which makes since as it performs both and then computes their average. Lastly, the random integration method performs 100 trials each with similar cost to rows or columns integration. As expected, the duration is around 100x that of the row or column. This means performance is scaling very well, and fewer trials would lead to a shorter run time.
 
 <figure>
-<img src="/images/photometric-stereo/27.jpg">
+<img src="/images/photometric-stereo/27.webp">
 <figcaption>Duration of "get_surface.m" function with various integration methods for each face. Values in seconds.</figcaption>
 </figure>
 
@@ -330,16 +330,16 @@ Recall that the simple photometric stereo implemented here assumes the following
 Removing images that seem to violate the assumptions might help the overall performance. Six images appeared to have high specular reflection, and were removed from the dataset (originally 64 images ->  now 58 images). The results of this subset of viewpoints are shown below (subset on right, original on left). There did not appear to be any discernible differences.
 
 <figure class="half">
-<img src="/images/photometric-stereo/28.jpg">
-<img src="/images/photometric-stereo/29.jpg">
+<img src="/images/photometric-stereo/28.webp">
+<img src="/images/photometric-stereo/29.webp">
 </figure>
 
 <figure class="half">
-<img src="/images/photometric-stereo/30.jpg">
-<img src="/images/photometric-stereo/31.jpg">
+<img src="/images/photometric-stereo/30.webp">
+<img src="/images/photometric-stereo/31.webp">
 </figure>
 
 <figure class="half">
-<img src="/images/photometric-stereo/32.jpg">
-<img src="/images/photometric-stereo/33.jpg">
+<img src="/images/photometric-stereo/32.webp">
+<img src="/images/photometric-stereo/33.webp">
 </figure>

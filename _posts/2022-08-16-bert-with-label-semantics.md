@@ -10,8 +10,8 @@ classes: wide
 toc: true
 excerpt: Incorporating label semantics in a BERT model for few shot Named Entity Recognition. 
 header:
-  og_image: /images/bert-with-label-semantics/architecture.png
-  teaser: /images/bert-with-label-semantics/architecture.png
+  og_image: /images/bert-with-label-semantics/architecture.webp
+  teaser: /images/bert-with-label-semantics/architecture.webp
 ---
 
 In real world applications, labeled data is often hard to come by. This makes learning based solutions difficult. If large datasets are NOT available, you have to get creative with whatever context is available. This post demonstrates a method of incorporating the semantic "meaning" of each label as a clue/prior when training few-shot systems for Named Entity Recognition. See the original [paper](https://aclanthology.org/2022.findings-acl.155.pdf) for more details.
@@ -22,7 +22,7 @@ Most systems treat labels as arbitrary monikers. That is, models typically learn
 
 The main idea is to use a BERT model to encode not only the input text, but also the text representation of the label itself. The inputs and labels then exist in a similar embedding space where associations should be easier for the model to learn.
 
-![placeholder](/images/bert-with-label-semantics/architecture.png){:.align-center}
+![placeholder](/images/bert-with-label-semantics/architecture.webp){:.align-center}
 
 ## PyTorch/HuggingFace Implementation
 

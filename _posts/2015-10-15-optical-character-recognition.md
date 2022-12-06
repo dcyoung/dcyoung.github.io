@@ -11,19 +11,19 @@ classes: wide
 toc: true
 excerpt: Implementing an OCR system w/ OpenCV and Deep Learning.
 header:
-  og_image: /images/optical-character-recognition/1.jpg
-  teaser: /images/optical-character-recognition/1.jpg
+  og_image: /images/optical-character-recognition/1.webp
+  teaser: /images/optical-character-recognition/1.webp
 ---
 
 <figure class="third">
-  <a href="/images/optical-character-recognition/0.jpg">
-  <img src="/images/optical-character-recognition/0.jpg">
+  <a href="/images/optical-character-recognition/0.webp">
+  <img src="/images/optical-character-recognition/0.webp">
   </a>
-  <a href="/images/optical-character-recognition/1.jpg">
-  <img src="/images/optical-character-recognition/1.jpg">
+  <a href="/images/optical-character-recognition/1.webp">
+  <img src="/images/optical-character-recognition/1.webp">
   </a>
-  <a href="/images/optical-character-recognition/2.jpg">
-  <img src="/images/optical-character-recognition/2.jpg">
+  <a href="/images/optical-character-recognition/2.webp">
+  <img src="/images/optical-character-recognition/2.webp">
   </a>
 </figure>
 

@@ -11,11 +11,11 @@ classes: wide
 toc: true
 excerpt: Building a lightweight supercharged miata.
 header:
-  og_image: /images/miata/preview.jpg
-  teaser: /images/miata/preview.jpg
+  og_image: /images/miata/preview.webp
+  teaser: /images/miata/preview.webp
 ---
 
-![miata](/images/miata/preview.jpg){:.align-center}
+![miata](/images/miata/preview.webp){:.align-center}
 
 Over the years I've built cars for various purposes, and in doing so I've realized a few things...
 
@@ -33,135 +33,135 @@ I tried mounting a kirkey racing seat shell directly to the floor pan but I was 
 ## Maintenance
 
 <figure class="third">
-    <img src="/images/miata/maintenance/0.jpg">
-    <img src="/images/miata/maintenance/3.jpg">
-    <img src="/images/miata/maintenance/1.jpg">
+    <img src="/images/miata/maintenance/0.webp">
+    <img src="/images/miata/maintenance/3.webp">
+    <img src="/images/miata/maintenance/1.webp">
 </figure>
 
 <figure class="half">
-    <img src="/images/miata/maintenance/2.jpg">
-    <img src="/images/miata/maintenance/4.jpg">
+    <img src="/images/miata/maintenance/2.webp">
+    <img src="/images/miata/maintenance/4.webp">
 </figure>
 
 <figure class="half">
-    <img src="/images/miata/maintenance/5.jpg">
-    <img src="/images/miata/maintenance/6.jpg">
+    <img src="/images/miata/maintenance/5.webp">
+    <img src="/images/miata/maintenance/6.webp">
 </figure>
 
 ## Hardtop
 
 <figure class="third">
-    <img src="/images/miata/hardtop/0.jpg">
-    <img src="/images/miata/hardtop/2.jpg">
-    <img src="/images/miata/hardtop/3.jpg">
+    <img src="/images/miata/hardtop/0.webp">
+    <img src="/images/miata/hardtop/2.webp">
+    <img src="/images/miata/hardtop/3.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/hardtop/4.jpg">
-    <img src="/images/miata/hardtop/5.jpg">
-    <img src="/images/miata/hardtop/6.jpg">
+    <img src="/images/miata/hardtop/4.webp">
+    <img src="/images/miata/hardtop/5.webp">
+    <img src="/images/miata/hardtop/6.webp">
 </figure>
 
 ## Rollbar
 
 <figure class="third">
-    <img src="/images/miata/rollbar/0.jpg">
-    <img src="/images/miata/rollbar/1.jpg">
-    <img src="/images/miata/rollbar/2.jpg">
+    <img src="/images/miata/rollbar/0.webp">
+    <img src="/images/miata/rollbar/1.webp">
+    <img src="/images/miata/rollbar/2.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/rollbar/3.jpg">
-    <img src="/images/miata/rollbar/4.jpg">
-    <img src="/images/miata/rollbar/5.jpg">
+    <img src="/images/miata/rollbar/3.webp">
+    <img src="/images/miata/rollbar/4.webp">
+    <img src="/images/miata/rollbar/5.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/rollbar/6.jpg">
-    <img src="/images/miata/rollbar/7.jpg">
-    <img src="/images/miata/rollbar/9.jpg">
+    <img src="/images/miata/rollbar/6.webp">
+    <img src="/images/miata/rollbar/7.webp">
+    <img src="/images/miata/rollbar/9.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/rollbar/8.jpg">
-    <img src="/images/miata/rollbar/10.jpg">
-    <img src="/images/miata/rollbar/11.jpg">
+    <img src="/images/miata/rollbar/8.webp">
+    <img src="/images/miata/rollbar/10.webp">
+    <img src="/images/miata/rollbar/11.webp">
 </figure>
 
 ## Suspension
 
 <figure class="third">
-    <img src="/images/miata/suspension/0.jpg">
-    <img src="/images/miata/suspension/10.jpg">
-    <img src="/images/miata/suspension/11.jpg">
+    <img src="/images/miata/suspension/0.webp">
+    <img src="/images/miata/suspension/10.webp">
+    <img src="/images/miata/suspension/11.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/suspension/2.jpg">
-    <img src="/images/miata/suspension/13.jpg">
-    <img src="/images/miata/suspension/3.jpg">
+    <img src="/images/miata/suspension/2.webp">
+    <img src="/images/miata/suspension/13.webp">
+    <img src="/images/miata/suspension/3.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/suspension/4.jpg">
-    <img src="/images/miata/suspension/5.jpg">
-    <img src="/images/miata/suspension/6.jpg">
+    <img src="/images/miata/suspension/4.webp">
+    <img src="/images/miata/suspension/5.webp">
+    <img src="/images/miata/suspension/6.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/suspension/12.jpg">
-    <img src="/images/miata/suspension/15.jpg">
-    <img src="/images/miata/suspension/14.jpg">
+    <img src="/images/miata/suspension/12.webp">
+    <img src="/images/miata/suspension/15.webp">
+    <img src="/images/miata/suspension/14.webp">
 </figure>
 
 <figure class="half">
-    <img src="/images/miata/suspension/8.jpg">
-    <img src="/images/miata/suspension/9.jpg">
+    <img src="/images/miata/suspension/8.webp">
+    <img src="/images/miata/suspension/9.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/suspension/1.jpg">
-    <img src="/images/miata/suspension/7.jpg">
-    <img src="/images/miata/suspension/16.jpg">
+    <img src="/images/miata/suspension/1.webp">
+    <img src="/images/miata/suspension/7.webp">
+    <img src="/images/miata/suspension/16.webp">
 </figure>
 
 ## Supercharger
 
 <figure class="third">
-    <img src="/images/miata/supercharger/0.jpg">
-    <img src="/images/miata/supercharger/1.jpg">
-    <img src="/images/miata/supercharger/2.jpg">
+    <img src="/images/miata/supercharger/0.webp">
+    <img src="/images/miata/supercharger/1.webp">
+    <img src="/images/miata/supercharger/2.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/supercharger/3.jpg">
-    <img src="/images/miata/supercharger/4.jpg">
-    <img src="/images/miata/supercharger/5.jpg">
+    <img src="/images/miata/supercharger/3.webp">
+    <img src="/images/miata/supercharger/4.webp">
+    <img src="/images/miata/supercharger/5.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/supercharger/6.jpg">
-    <img src="/images/miata/supercharger/7.jpg">
-    <img src="/images/miata/supercharger/8.jpg">
+    <img src="/images/miata/supercharger/6.webp">
+    <img src="/images/miata/supercharger/7.webp">
+    <img src="/images/miata/supercharger/8.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/supercharger/9.jpg">
-    <img src="/images/miata/supercharger/10.jpg">
-    <img src="/images/miata/supercharger/11.jpg">
+    <img src="/images/miata/supercharger/9.webp">
+    <img src="/images/miata/supercharger/10.webp">
+    <img src="/images/miata/supercharger/11.webp">
 </figure>
 
 ## Sensors, Gauges and Engine Management
 
 <figure class="third">
-    <img src="/images/miata/sensors/0.jpg">
-    <img src="/images/miata/sensors/1.jpg">
-    <img src="/images/miata/sensors/2.jpg">
+    <img src="/images/miata/sensors/0.webp">
+    <img src="/images/miata/sensors/1.webp">
+    <img src="/images/miata/sensors/2.webp">
 </figure>
 
 <figure class="half">
-    <img src="/images/miata/sensors/3.jpg">
-    <img src="/images/miata/sensors/4.jpg">
+    <img src="/images/miata/sensors/3.webp">
+    <img src="/images/miata/sensors/4.webp">
 </figure>
 
 ## Cooling
@@ -169,31 +169,31 @@ I tried mounting a kirkey racing seat shell directly to the floor pan but I was 
 Intercooler and Radiator and custom aluminum cold air box.
 
 <figure class="third">
-    <img src="/images/miata/cooling/0.jpg">
-    <img src="/images/miata/cooling/3.jpg">
-    <img src="/images/miata/cooling/4.jpg">
+    <img src="/images/miata/cooling/0.webp">
+    <img src="/images/miata/cooling/3.webp">
+    <img src="/images/miata/cooling/4.webp">
 </figure>
 
 <figure class="half">
-    <img src="/images/miata/cooling/1.jpg">
-    <img src="/images/miata/cooling/2.jpg">
+    <img src="/images/miata/cooling/1.webp">
+    <img src="/images/miata/cooling/2.webp">
 </figure>
 
 <figure class="half">
-    <img src="/images/miata/cooling/5.jpg">
-    <img src="/images/miata/cooling/6.jpg">
+    <img src="/images/miata/cooling/5.webp">
+    <img src="/images/miata/cooling/6.webp">
 </figure>
 
 ## Clutch
 
 <figure class="half">
-    <img src="/images/miata/clutch/0.jpg">
-    <img src="/images/miata/clutch/1.jpg">
+    <img src="/images/miata/clutch/0.webp">
+    <img src="/images/miata/clutch/1.webp">
 </figure>
 
 <figure class="half">
-    <img src="/images/miata/clutch/2.jpg">
-    <img src="/images/miata/clutch/3.jpg">
+    <img src="/images/miata/clutch/2.webp">
+    <img src="/images/miata/clutch/3.webp">
 </figure>
 
 ## Custom Dual Throttle Bodies
@@ -201,53 +201,53 @@ Intercooler and Radiator and custom aluminum cold air box.
 The intercooler and associated piping would introduce air volume that acts a sort of slack in the throttle response. To compensate, my dad fabricated a set of custom bracketry to handle a second throttle body. By creating a staggered dual throttle body setup with slightly different cams, the throttle response is increased while the wide open flow rate remains the same.
 
 <figure class="third">
-    <img src="/images/miata/throttle-bodies/0.jpg">
-    <img src="/images/miata/throttle-bodies/1.jpg">
-    <img src="/images/miata/throttle-bodies/2.jpg">
+    <img src="/images/miata/throttle-bodies/0.webp">
+    <img src="/images/miata/throttle-bodies/1.webp">
+    <img src="/images/miata/throttle-bodies/2.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/throttle-bodies/3.jpg">
-    <img src="/images/miata/throttle-bodies/4.jpg">
-    <img src="/images/miata/throttle-bodies/5.jpg">
+    <img src="/images/miata/throttle-bodies/3.webp">
+    <img src="/images/miata/throttle-bodies/4.webp">
+    <img src="/images/miata/throttle-bodies/5.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/throttle-bodies/6.jpg">
-    <img src="/images/miata/throttle-bodies/7.jpg">
-    <img src="/images/miata/throttle-bodies/8.jpg">
+    <img src="/images/miata/throttle-bodies/6.webp">
+    <img src="/images/miata/throttle-bodies/7.webp">
+    <img src="/images/miata/throttle-bodies/8.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/throttle-bodies/9.jpg">
-    <img src="/images/miata/throttle-bodies/10.jpg">
-    <img src="/images/miata/throttle-bodies/11.jpg">
+    <img src="/images/miata/throttle-bodies/9.webp">
+    <img src="/images/miata/throttle-bodies/10.webp">
+    <img src="/images/miata/throttle-bodies/11.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/throttle-bodies/12.jpg">
-    <img src="/images/miata/throttle-bodies/13.jpg">
-    <img src="/images/miata/throttle-bodies/14.jpg">
+    <img src="/images/miata/throttle-bodies/12.webp">
+    <img src="/images/miata/throttle-bodies/13.webp">
+    <img src="/images/miata/throttle-bodies/14.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/throttle-bodies/15.jpg">
-    <img src="/images/miata/throttle-bodies/16.jpg">
-    <img src="/images/miata/throttle-bodies/18.jpg">
+    <img src="/images/miata/throttle-bodies/15.webp">
+    <img src="/images/miata/throttle-bodies/16.webp">
+    <img src="/images/miata/throttle-bodies/18.webp">
 </figure>
 
 <figure class="third">
-    <img src="/images/miata/throttle-bodies/19.jpg">
-    <img src="/images/miata/throttle-bodies/20.jpg">
-    <img src="/images/miata/throttle-bodies/21.jpg">
+    <img src="/images/miata/throttle-bodies/19.webp">
+    <img src="/images/miata/throttle-bodies/20.webp">
+    <img src="/images/miata/throttle-bodies/21.webp">
 </figure>
 
 ## Interior
 
-![0](/images/miata/misc/0.jpg){: .align-center}
+![0](/images/miata/misc/0.webp){: .align-center}
 
 ## Dressing the Part
 
 What convertible would be complete without a driving cap and goggles :)
 
-![0](/images/miata/misc/1.jpg){: .align-center}
+![0](/images/miata/misc/1.webp){: .align-center}

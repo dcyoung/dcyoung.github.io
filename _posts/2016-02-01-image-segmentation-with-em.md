@@ -11,8 +11,8 @@ classes: wide
 toc: True
 excerpt: Segment images using a clustering method.
 header:
-  og_image: /images/logos/r.png
-  teaser: /images/logos/r.png
+  og_image: /images/logos/r.webp
+  teaser: /images/logos/r.webp
 ---
 
 ## Overview

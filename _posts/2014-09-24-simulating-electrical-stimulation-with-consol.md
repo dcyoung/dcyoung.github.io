@@ -10,8 +10,8 @@ permalink: /post-bme-simulating-electrical-stimulation-with-consol/
 classes: wide
 excerpt: Investigating the use of finite element solvers in basic electrode design and analysis.
 header:
-  og_image: /images/qp-computational/comsol-preview.jpg
-  teaser: /images/qp-computational/comsol-preview.jpg
+  og_image: /images/qp-computational/comsol-preview.webp
+  teaser: /images/qp-computational/comsol-preview.webp
 ---
 
 
@@ -19,7 +19,7 @@ Comsol is a finite element solver and applications in various engineering proble
 
 ## Effects of Various Electrode Configurations on Activation Functions
 
-![preview](/images/qp-computational/comsol-preview-2.jpg){:.align-right}
+![preview](/images/qp-computational/comsol-preview-2.webp){:.align-right}
 
 In the following writeup I investigate the effects of various stimulation on activation functions for nearby axons.
 
@@ -34,6 +34,6 @@ In the following writeup I investigate the effects of various stimulation on act
 
 ## Basic electrode design and analysis
 
-![preview](/images/qp-computational/comsol-preview.jpg){:.align-center}
+![preview](/images/qp-computational/comsol-preview.webp){:.align-center}
 
 {% include pdf-embed.html url="/images/qp-computational/simulating-electrical-stimulation-2.pdf" %}

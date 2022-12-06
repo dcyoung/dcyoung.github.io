@@ -10,25 +10,25 @@ classes: wide
 toc: True
 excerpt: Discriminating and matching features in images.
 header:
-  og_image: /images/image-feature-detection-description-matching/0.jpg
-  teaser: /images/image-feature-detection-description-matching/0.jpg
+  og_image: /images/image-feature-detection-description-matching/0.webp
+  teaser: /images/image-feature-detection-description-matching/0.webp
 ---
 
 <figure class="half">
-  <a href="/images/image-feature-detection-description-matching/0.jpg">
-    <img src="/images/image-feature-detection-description-matching/0.jpg">
+  <a href="/images/image-feature-detection-description-matching/0.webp">
+    <img src="/images/image-feature-detection-description-matching/0.webp">
   </a>
-  <a href="/images/image-feature-detection-description-matching/1.jpg">
-    <img src="/images/image-feature-detection-description-matching/1.jpg">
+  <a href="/images/image-feature-detection-description-matching/1.webp">
+    <img src="/images/image-feature-detection-description-matching/1.webp">
   </a>
 </figure>
 
 <figure class="half">
-  <a href="/images/image-feature-detection-description-matching/2.jpg">
-    <img src="/images/image-feature-detection-description-matching/2.jpg">
+  <a href="/images/image-feature-detection-description-matching/2.webp">
+    <img src="/images/image-feature-detection-description-matching/2.webp">
   </a>
-  <a href="/images/image-feature-detection-description-matching/3.jpg">
-    <img src="/images/image-feature-detection-description-matching/3.jpg">
+  <a href="/images/image-feature-detection-description-matching/3.webp">
+    <img src="/images/image-feature-detection-description-matching/3.webp">
   </a>
 </figure>
 
@@ -242,13 +242,13 @@ void computeLocalMaxima(CFloatImage &srcImage, CByteImage &destImage)
 To demonstrate the operation of the original feature detector, two example images have been included with their resulting detected features. To discern the feature pixels, one might need to turn the brightness up on their display... as they can be hard to see.
 
 <figure class="half">
-<img src="/images/image-feature-detection-description-matching/0.jpg">
-<img src="/images/image-feature-detection-description-matching/1.jpg">
+<img src="/images/image-feature-detection-description-matching/0.webp">
+<img src="/images/image-feature-detection-description-matching/1.webp">
 </figure>
 
 <figure class="half">
-<img src="/images/image-feature-detection-description-matching/2.jpg">
-<img src="/images/image-feature-detection-description-matching/3.jpg">
+<img src="/images/image-feature-detection-description-matching/2.webp">
+<img src="/images/image-feature-detection-description-matching/3.webp">
 </figure>
 
 
@@ -589,7 +589,7 @@ My Implementation + SSD|My Implementation + Ratio|SIFT + SSD|SIFT + Ratio
 :--------:|:--------:|:--------:|:--------:
 0.782022|0.774843|0.932023|0.966663
 
-![results1](/images/image-feature-detection-description-matching/4.jpg){:.align-center}
+![results1](/images/image-feature-detection-description-matching/4.webp){:.align-center}
 
 ROC curve for the yosemite photos (AUC values in the table)
 
@@ -597,7 +597,7 @@ My Implementation + SSD|My Implementation + Ratio|SIFT + SSD|SIFT + Ratio
 :--------:|:--------:|:--------:|:--------:
 0.885658|0.890320|0.994692|0.993979
 
-![results2](/images/image-feature-detection-description-matching/5.jpg){:.align-center}
+![results2](/images/image-feature-detection-description-matching/5.webp){:.align-center}
 
 ### Performance (Average AUC)
 

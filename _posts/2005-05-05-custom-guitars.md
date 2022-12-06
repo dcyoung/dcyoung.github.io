@@ -9,8 +9,8 @@ permalink: /post-custom-guitars/
 classes: wide
 excerpt: Designing and building custom guitars.
 header:
-  og_image: /images/guitars/evh/0003.jpg
-  teaser: /images/guitars/evh/0003.jpg
+  og_image: /images/guitars/evh/0003.webp
+  teaser: /images/guitars/evh/0003.webp
 ---
 
 When I was younger, with more time on my hands, I enjoyed crafting custom guitars. This ranged from painting and modifying the instruments myself, such as the custom frankenstrat, to organizing group buys for limited edition runs like the white razorback.

@@ -10,8 +10,8 @@ permalink: /post-bme-voltage-clamp/
 classes: wide
 excerpt:  Constructing a circuit to study the behavior of a voltage clamp.
 header:
-  og_image: /images/qp-physical/voltage-clamp.jpg
-  teaser: /images/qp-physical/voltage-clamp.jpg
+  og_image: /images/qp-physical/voltage-clamp.webp
+  teaser: /images/qp-physical/voltage-clamp.webp
 ---
 
 ## Abstract
