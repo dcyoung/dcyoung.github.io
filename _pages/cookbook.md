@@ -41,7 +41,7 @@ The best results come from projects that balance the big 3:
 - Compute
 - Algorithms/Model Architecture
 
-Each is an area warranting focused research or engineering - however, succesful systems will balance the development of all three for the best results.
+Each is an area warranting focused research or engineering - however, successful systems will balance the development of all three for the best results.
 
 ![0](/images/ml-guide/tiangle.svg){: .align-center}
 
@@ -61,11 +61,11 @@ One interpretation is that the model is "simplifying" the complexities of raw da
 
 Understanding this functional role of a model helps in the early/design phases of an ML project. If you cannot clearly articulate how this applies to your system then you are at risk of wasting cycles gathering irrelevant data or training models with irrelevant outputs.
 
-## Finding Functional Boundaries for Preditive Models
+## Finding Functional Boundaries for Predictive Models
 
 Assuming your data is complex enough to warrant a predictive model, you'll need to define the input/output (IO) of the model. You'll likely want to jump right to model architectures - but DON'T. The functional boundaries for your model will depend on the qualities of your data and system design. So at this stage, **pretend the model is a black box and spend time understanding your data and the objectives of the overall system.**
 
-Take a mixed approach by breaking this process into into two activites: **system analysis** and **data exploration**.
+Take a mixed approach by breaking this process into into two activities: **system analysis** and **data exploration**.
 
 **Part 1: System Analysis**
 
@@ -75,14 +75,14 @@ This is about understanding the overall system as a whole and identifying the co
 
 2. Determine the minimal information - data simplicity threshold - to support that objective. If it helps, think of this as a question you'd ask a hypothetical human expert. As an exaggerated exercise, think of what magical insight could simplify your application logic like so:
 
-```python
-if magical_insight(raw_data):
-  # take action
-```
+    ```python
+    if magical_insight(raw_data):
+      # take action
+    ```
 
 3. Think through what raw data could be relevant or help produce that magical insight
 
-4. Study your system to identify any opportuities for automated feedback loops. Are there any existing or planned parts of a system which present opportunities to collect data samples or labels in production? Model IO that is closer to the IO of existing system components will facilitate rapid boostrapping of datasets and automated model improvement.
+4. Study your system to identify any opportunities for automated feedback loops. Are there any existing or planned parts of a system which present opportunities to collect data samples or labels in production? Model IO that is closer to the IO of existing system components will facilitate rapid bootstrapping of datasets and automated model improvement.
 
 **Part 2: Exploration**
 
@@ -92,9 +92,9 @@ Part 1 stressed the importance of analyzing the overall system to identify guidi
 
 2. **Explore without software**. Try to understand and poke at the data without software or tools. What does it looks like... if relevant, investigate how subject matter experts solve this without software.
 
-3. **Identify strong signal** among the features in the data. Put on a data science hat, and explore using tools. Try to find early indicators or features in the data that should lend well to training a model. Not only will this help guide model inputs later, it also builds confidence that a learning apporach will work at all... which is important early on. This phase includes `data visualization`, `data profiling`, and even ML for exploration (`clustering`, `unsupervsied learning`).
+3. **Identify strong signal** among the features in the data. Put on a data science hat, and explore using tools. Try to find early indicators or features in the data that should lend well to training a model. Not only will this help guide model inputs later, it also builds confidence that a learning approach will work at all... which is important early on. This phase includes `data visualization`, `data profiling`, and even ML for exploration (`clustering`, `unsupervised learning`).
 
-4. Brainstorm strategies to boostrap a labeled dataset. Think through which parts of the data can be sourced, synthetically generated, augmented etc.
+4. Brainstorm strategies to bootstrap a labeled dataset. Think through which parts of the data can be sourced, synthetically generated, augmented etc.
 
 ## Scope your project
 
@@ -125,6 +125,12 @@ Part 1 stressed the importance of analyzing the overall system to identify guidi
   - get hands dirty labeling...
     - existing tooling
     - custom tooling
+
+### Working w/ Others
+
+- Beware of the Curse of Knowledge
+- Garbage In - Garbage Out
+- Communicate the importance of quality in labeled data
 
 ### dataset organization tips
 
@@ -157,7 +163,7 @@ Part 1 stressed the importance of analyzing the overall system to identify guidi
 
 - The use of models is often blocked by a disconnect between data science and engineering. To combat this, it is best to incorporate solid software engineering practices as soon as a project moves beyond exploration or spike experiments.
 - Benefits of a modular structure
-  - codebase navigation/interpretability/maintenance/refactoring etc.
+  - codebase navigation/interpret-ability/maintenance/refactoring etc.
   - easier experiments, extension/adaptation
   - promotes code/module reuse
   - combats train/serve skew by sharing as much environment/code as possible
@@ -179,6 +185,9 @@ Part 1 stressed the importance of analyzing the overall system to identify guidi
 ### Feasibility Test
 
 - before more extensive testing... build confidence in the feasibility of the approach
+- is there a clear ground truth? Good cost functions come from comparison w/ definitive ground truth, and are undermined by ambiguity in the interpretation of data.
+- do the data/labels permit a linear representation of error? A deeper intuition will favor paradigms which permit a linear representation of error - ie: an intuitive metric communicating HOW bad a prediction is. For example, if you need to predict an angle... a cost function considering HOW similar (angular difference) the prediction is to the ground truth will likely result in stronger learning compared to a cost function which only interprets results as binary  ("correct" or "incorrect").
+- Intuition: If the data supports a clear + consistent ground truth, and task performance can be measured in a linear fashion, then you can be confident a model will learn the task.
 - constantly on the lookout for early indicators of strong signal in the data
 - feasibility tests
   - Unsupervised approach
@@ -217,7 +226,7 @@ Part 1 stressed the importance of analyzing the overall system to identify guidi
 - depending on your resources and engineering talent, you can consider other approaches to hyper-parameter tuning
   - exhaustive -> works for tiny models/hyper-parameter spaces
   - random -> cover enough of the search space to inform further manual tuning
-  - genetic/algorithmic optimization -> when compute isn't an issue, i've had success modeling a fitness function and evolving hyperparameters
+  - genetic/algorithmic optimization -> when compute isn't an issue, i've had success modeling a fitness function and evolving hyper-parameters
 
 ### Generalize
 
@@ -241,7 +250,7 @@ Part 1 stressed the importance of analyzing the overall system to identify guidi
   - aleatoric vs. epistemic
 - techniques for modeling uncertainty...
   - aleatoric: modeling distribution of data (ie: probability of data taking form of prediction)
-  - epistemic: Bayesian -> modeling network uncertainty with probablistic paramters, Consensus -> modeling network uncertainty with ensembles/monte carlo dropout etc.
+  - epistemic: Bayesian -> modeling network uncertainty with probabilistic parameters, Consensus -> modeling network uncertainty with ensembles/monte carlo dropout etc.
 - out of distribution detection
 - quick tricks...
 
@@ -269,15 +278,19 @@ Typically, low latency and high throughput come w/ added complexity - so start s
 - how many clients will be making requests? how often?
 - what matters in your scenario - latency, throughput or both?
 - is the scenario batch-able
-```python
-output_a = request_model_pred(input_a)
-output_b = request_model_pred(input_b)
-```
+
+    ```python
+    output_a = request_model_pred(input_a)
+    output_b = request_model_pred(input_b)
+    ```
+
 - is there a sequential nature to your pipeline...
-```python
-output_a = request_model_a_pred(input_data)
-output_b = request_model_b_pred(output_a)
-```
+
+    ```python
+    output_a = request_model_a_pred(input_data)
+    output_b = request_model_b_pred(output_a)
+    ```
+
 - do you need to persist raw model outputs (logging, metrics, downstream processing etc.)
 - how frequently is the model updating?
 
@@ -289,13 +302,13 @@ output_b = request_model_b_pred(output_a)
   - Training config to reproduce?
   - Dataset to reproduce?
 - Data versioning and storage
-- Experiment tracking & reproducability
+- Experiment tracking & reproducibility
 - Data pre/post processing?
 - Don't think of versioning a model... think of versioning the entire "Inference System"
 - prioritize a version control for the "inference system" as a whole, and find a way to make sure the "models" are released in lockstep with the data handling (pre/post processing) involved in the inference pipeline. In cloud or kubernetes environments, this can look like a "chart" version" (think helm or kustomize).
 - For the actual storage of models, I prefer not to add intermediate stores and instead make it easy to reference the exact "experiment or code" that produced the model.
 - For projects that aim to automate a closed loop system, traceability and programmatic references between data/training/deployment become crucial.
--  If you're in a cloud environment (or docker-compose on LFS) you can use init-containers to download model artifacts and make them available to the serving container using volumes. This simplifies the responsibilities of your model server at the cost of orchestration, allowing for arbitrary logic in the versioning and handling of models.
+- If you're in a cloud environment (or docker-compose on LFS) you can use init-containers to download model artifacts and make them available to the serving container using volumes. This simplifies the responsibilities of your model server at the cost of orchestration, allowing for arbitrary logic in the versioning and handling of models.
 
 ### Tiers of Complexity
 
@@ -306,7 +319,6 @@ output_b = request_model_b_pred(output_a)
 - ...
 
 ![0](/images/ml-guide/train-serve-skew.svg){: .align-center}
-
 
 ![0](/images/ml-guide/share-data-processing.svg){: .align-center}
 
@@ -330,8 +342,10 @@ output_b = request_model_b_pred(output_a)
 
 - ...
 
-## Explaining Performance to non-data scientists
+## Beware of the Curse of Knowledge
 
+- When you know something it is almost impossible to imagine what it is like not to know that thing.
+- Explaining Performance to non-data scientists
 - ...
 
 ## Last mile
@@ -344,3 +358,14 @@ output_b = request_model_b_pred(output_a)
 - absolutes vs probabilities
 - API design
 - versioning
+
+## Misc
+
+Things yet to find a section in this outline...
+
+- Prioritize simplicity! A bit harsh but... assume anyone who inherits your system will be mediocre - set them up for success by avoiding complexity like the plague. When you can use fewer technologies, do so. A good quote on the subject:
+
+  > “A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.”
+
+- Seek first to understand - the problems, the people, the desired outcome etc.
+- 

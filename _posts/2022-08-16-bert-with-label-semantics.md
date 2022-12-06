@@ -8,7 +8,7 @@ categories:
 permalink: /post-bert-with-label-semantics/
 classes: wide
 toc: true
-excerpt: Incorporating label semantics in a BERT model for few shot Named Entity Recongition. 
+excerpt: Incorporating label semantics in a BERT model for few shot Named Entity Recognition. 
 header:
   og_image: /images/bert-with-label-semantics/architecture.png
   teaser: /images/bert-with-label-semantics/architecture.png
