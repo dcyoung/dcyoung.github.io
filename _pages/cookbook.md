@@ -7,9 +7,9 @@ toc: true
 toc_sticky: true
 ---
 
-> Note: As of 2022-08-29 this page is very much a WIP... currently just an outline.
+> Note: As of 2022-10-29 this page is very much a `Work in Progress`... with many placeholder or outlined sections.
 
-This is a practitioner's guide to developing Machine Learning models that solve real problems. It focuses primarily on the processes related to deep learning models. It is meant to serve as a personal cheat-sheet/checklist and collection of snippets which I like to follow when working on ML projects.
+This is a practitioner's guide to developing Machine Learning models that solve real problems. It focuses primarily on the processes related to deep learning models, attempting to distil a more structured checklist approach I like to follow when working on ML projects.
 
 ## TLDR
 
@@ -65,7 +65,7 @@ Understanding this functional role of a model helps in the early/design phases o
 
 Assuming your data is complex enough to warrant a predictive model, you'll need to define the input/output (IO) of the model. You'll likely want to jump right to model architectures - but DON'T. The functional boundaries for your model will depend on the qualities of your data and system design. So at this stage, **pretend the model is a black box and spend time understanding your data and the objectives of the overall system.**
 
-Take a mixed approach by breaking this process into into two activities: **system analysis** and **data exploration**.
+Take a mixed approach by breaking this process into two activities: **system analysis** and **data exploration**.
 
 **Part 1: System Analysis**
 

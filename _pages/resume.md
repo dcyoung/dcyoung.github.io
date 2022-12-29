@@ -10,14 +10,37 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 # Work Experience
 
-## Ripcord - Senior Staff ML Engineering Lead
+## Sabbatical (Q3-4 2022)
+
+- AI Consulting and part time dev work for previous employer (Ripcord)
+- Software, AI & Startup Consulting
+- Deep dive into rapid physical prototyping
+- Design and development of Data Driven Decor Products
+- Lots of travel/learning/helping friends + family
+
+## Ripcord - Senior Staff ML Engineering Lead (2017 - Q3 2022)
 
 ![ripcord](/images/logos/ripcord.svg)
 
-As the first data scientist and ML engineer at Ripcord, I have served as both the visionary and developer for first party ML and AI solutions. After introducing deep learning to the founding team, I spearheaded efforts related to ML including R&D, data-science and engineering. I began by enabling the automated digitization of paper documents and progressed to tackling the intelligent extraction and organization of information from business documents at scale. I have identified and defined problems fit for machine learning, translated state of the art research to production systems, and deployed scalable closed loop ML solutions that have solved complex real-world challenges. These efforts in Computer Vision and NLP have enabled the intelligent scanning, organization and extraction of information from customer documents at previously unprecedented scale. I have presented on vision, R&D, technology and road maps to diverse audiences including the company, investors and the board.​
+As the first data scientist and ML engineer at Ripcord, I served as a visionary and developer for first party ML and AI solutions. After introducing deep learning to the founding team, I led technical efforts related to ML including R&D, data-science and engineering. I began by enabling the automated digitization of physical paper documents and progressed to driving the intelligent extraction and organization of information from business documents at scale. I have worked to align objectives, understand critical problems, develop novel tooling and ensure successful integration into a larger engineering effort.
+
+I have identified and defined problems fit for machine learning, translated state of the art research to production systems, and deployed scalable closed loop ML solutions that have solved complex real-world challenges. These efforts in Computer Vision and NLP have enabled the intelligent scanning, organization and extraction of information from customer documents at previously unprecedented scale. I have presented on vision, R&D, technology and road maps to diverse audiences including the company, investors and the board.​
 
 Day to day, I foster a friendly work atmosphere that promotes passionate, curious engagement around challenging problems. I champion the pragmatic use of agile process, the appropriate introduction of automation, and the application of a product mindset.
 ​
+
+A more technical breakdown of my experience is organized below. For those seeking insight into my process, you might also checkout my [ML Practitioner's Guide](https://dcyoung.github.io/ml-practitioners-guide/).  
+
+**Natural Language Processing (NLP)**
+
+- Designed and implemented state of the art ML based solutions for complex information extraction and RPA use cases capable of handling unstructured and semi-structured documents!
+- Logical document splitting
+- Document classification
+- Named entity extraction
+- Developed multi-modal transformer models incorporating text, layout and image data to significantly improve performance compared to models operating on a single modality.
+- Developed "Model In the Loop" annotation systems for real-time model assisted labeling, including strategies for active learning.
+- Developed data generation and augmentation systems for localized document text data
+- Integrated creative strategies for low-shot NER including leveraging label semantics
 
 **Machine Perception/Computer Vision**
 
@@ -30,20 +53,9 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Integrated solutions into the robotics software stack.
 - For years now these solutions have been scanning paper and generating revenue.
 
-**Natural Language Processing (NLP)**
-
-- Designed and implemented SOTA ML based solutions for complex information extraction and RPA use cases capable of handling unstructured and semi-structured documents!
-- Logical document splitting
-- Document classification
-- Named entity extraction
-- Developed multi-modal transformer models incorporating text, layout and image data to significantly improve performance compared to models operating on a single modality.
-- Developed "Model In the Loop" annotation systems for real-time model assisted labeling, including strategies for active learning.
-- Developed data generation and augmentation systems for localized document text data
-- Integrated creative strategies for low-shot NER including leveraging label semantics
-
 **Data Science**
 
-- Staying informed on current SOTA in both academic and industrial research, for many topics related to AI, ML and Computer Vision
+- Staying informed on current state of the art in academic and industrial research, for many topics related to AI, ML and Computer Vision
 - Proven ability to translate techniques and concepts from research papers to working production code  
 - State of the art neural networks for computer vision tasks including classification, object detection and instance segmentation
 - Systems for analyzing model performance, visualization and explainability
@@ -73,7 +85,9 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Experience going from customer need to a roadmap of scoped projects
 - Designed and bootstrapped countless software systems and projects
 - Contract, Data Schema and API design, development and maintenance
+- Processing Workflows  
 - Microservice and distributed system design and development
+- Advanced image processing
 - Complex optimization
 - Hardware acceleration
 - GUI applications
@@ -85,7 +99,7 @@ Day to day, I foster a friendly work atmosphere that promotes passionate, curiou
 - Complex multi-service and ML systems testing
 - Package, model and version management
 
-## Scanse - Director of software
+## Scanse - Director of software (2015-2017)
 
 ![scanse](/images/logos/scanse.webp)
 
