@@ -1,5 +1,5 @@
 ---
-title: "Audio Source Separation w/ Deep Learning "
+title: "Audio Source Separation w/ Deep Learning"
 date: 2022-11-07T00:00:00-00:00
 last_modified_at: 2022-11-07T00:00:00-00:00
 categories:
