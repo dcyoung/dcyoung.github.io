@@ -15,7 +15,7 @@ header:
   teaser: /images/r3f-audio-visualizer/waveform_500x300.webp
 ---
 
-[![](/images/r3f-audio-visualizer/waveform.gif){:.align-center}](https://dcyoung.github.io/r3f-audio-visualizer/)
+[![](https://github.com/dcyoung/r3f-audio-visualizer/raw/dev/docs/waveform.gif){:.align-center}](https://dcyoung.github.io/r3f-audio-visualizer/)
 
 While traveling for the holidays, I found myself with spare time but only a laptop on hand. So I tried re-creating a previous experiment using portable web technologies that can run on any device with a browser, including React and THREE.js. This ended up being a fun morning project.
 
