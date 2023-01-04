@@ -10,7 +10,7 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 # Work Experience
 
-## Sabbatical (Q3-4 2022)
+## Consulting (Q3-4 2022)
 
 - AI Consulting and part time dev work for previous employer (Ripcord)
 - Software, AI & Startup Consulting
