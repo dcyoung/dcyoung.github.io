@@ -10,15 +10,17 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 # Work Experience
 
-## Consulting (Q3-4 2022)
+## Machine Learning, AI & Startup Consultant (Q3-4 2022)
 
-- AI Consulting and part time dev work for previous employer (Ripcord)
-- Software, AI & Startup Consulting
+A planned six month hiatus from full time tech work, to reflect, explore and target the next opportunity w/ intent. 
+
+- AI consulting and dev work for previous employer (Ripcord)
+- Technology, software, AI & general startup consulting across a range of applications
 - Deep dive into rapid physical prototyping
-- Design and development of Data Driven Decor Products
-- Lots of travel/learning/helping friends + family
+- Design and development of data driven decor products
+- Lots of travel, independent learning and helping friends + family
 
-## Ripcord - Senior Staff ML Engineering Lead (2017 - Q3 2022)
+## Ripcord - Senior Staff ML Engineering Lead (2017 - 2022)
 
 ![ripcord](/images/logos/ripcord.svg)
 
@@ -146,7 +148,7 @@ In the summer of 2013 I worked for a wealth advising firm in the San Francisco B
 
 ## La Cocina - Restaurant
 
-From 2007-2011 I was employed in various positions at La Cocina, a small restaurant in my hometown. At a small family owned restaurant, being a waiter also assumed acting as floor manager. My responsibilities included opening and closing the restaurant, handling the documentation and security of money, managing other staff and even assisting in the design of a new computer system for online catering orders. I believe every individual should experience working in a service industry, if only to gain a healthy perspective.
+From 2007-2011 I was employed in various positions at La Cocina, a small restaurant in my hometown. Being a waiter also assumed acting as floor manager, where my responsibilities included opening and closing the restaurant, handling the documentation and security of money, managing other staff and even assisting in the design of a new computer system for online catering orders. I include this job on my resume to highlight a history of understanding service, customers and hard work.
 
 ---
 
