@@ -10,7 +10,7 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 # Work Experience
 
-## Machine Learning, AI & Startup Consultant (Q3-4 2022)
+## Machine Learning, AI & Startup Consulting (Q3-4 2022)
 
 A planned six month hiatus from full time tech work, to reflect, explore and target the next opportunity w/ intent. 
 
@@ -35,43 +35,47 @@ A more technical breakdown of my experience is organized below. For those seekin
 
 **Natural Language Processing (NLP)**
 
+By automating processing w/ Machine Learning, I enabled Ripcord to offer advanced RPA and document workflows as a white-glove service for larger customers. To expand the impact, I led the technical effort of engineering a customer focused "self-serve" product enabling users to design and implement complex document based workflows with minimal engineering involvement.
+
 - Designed and implemented state of the art ML based solutions for complex information extraction and RPA use cases capable of handling unstructured and semi-structured documents!
-- Logical document splitting
-- Document classification
-- Named entity extraction
-- Developed multi-modal transformer models incorporating text, layout and image data to significantly improve performance compared to models operating on a single modality.
-- Developed "Model In the Loop" annotation systems for real-time model assisted labeling, including strategies for active learning.
+  - Logical document splitting
+  - Document classification
+  - Named entity extraction
+- Developed multi-modal transformer models incorporating text, layout and image data to significantly improve performance compared to models operating on a single modality
+- Developed "Model In the Loop" annotation systems for real-time model assisted labeling, including strategies for active learning
 - Developed data generation and augmentation systems for localized document text data
 - Integrated creative strategies for low-shot NER including leveraging label semantics
 
 **Machine Perception/Computer Vision**
 
-- Designed and implemented machine perception systems based on deep learning for the control of physical robots, scanning machines, and digital RPA processes.
+Working in collaboration w/ Ripcord's operations team, I designed and developed holistic systems for machine perception, which enabled the robotic digitization of physical paper at factory scale, across multiple facilities globally. Once digitized, I enabled advanced image processing workflows at scale. For years now these solutions have been scanning paper and generating revenue.
+
+- Designed and implemented machine perception systems based on deep learning for the control of physical robots, scanning machines, and digital RPA processes
 - Identified and defined problems fit for Machine Learning
 - Designed and implemented appropriate strategies leveraging Machine Learning
-- Sourced and annotated data
-- Implemented and trained state of the art perception models to robustly interpret and understand paper to such a degree that a robotic arm can physically manipulate paper, remove fasteners and deal with edge cases inherent in a dynamic and uncontrolled medium.
-- Designed and implemented hybrid cloud inference solutions including hardware selection, model servers, inference model optimization and integrated client side software capable of scanning millions of sheets per day.
-- Integrated solutions into the robotics software stack.
-- For years now these solutions have been scanning paper and generating revenue.
+- Sourced and annotated data at scale
+- Implemented and trained state of the art perception models to robustly interpret and understand paper to such a degree that a robotic arm can physically manipulate paper, remove fasteners and deal with edge cases inherent in a dynamic and uncontrolled medium
+- Designed and implemented hybrid cloud inference solutions including hardware selection, model servers, inference model optimization and integrated client side software capable of scanning millions of sheets per day
+- Integrated solutions into the robotics software stack
 
 **Data Science**
 
 - Staying informed on current state of the art in academic and industrial research, for many topics related to AI, ML and Computer Vision
 - Proven ability to translate techniques and concepts from research papers to working production code  
-- State of the art neural networks for computer vision tasks including classification, object detection and instance segmentation
-- Systems for analyzing model performance, visualization and explainability
-- NLP and multi-modal models for the classification and organization of both structured and semi-structured text
-- Unsupervised clustering for the organization of unlabeled data
-- Engineering of complex multi-modal feature vectors for clustering, classification and sequence related problems
+- Implemented, trained and deployed advanced Deep Learning models (neural networks) for
+  - computer vision tasks including classification, object detection and instance segmentation
+  - NLP tasks including the classification, extraction and organization of both structured and semi-structured information
 - Modeling uncertainty and calibrating networks
-- Creating interactive tooling and dashboards to visualize insights around data, training experiments and production
+- Systems for analyzing model performance, visualization and explain-ability
+- Engineering of complex multi-modal feature vectors for clustering, classification and sequence related problems
+- Unsupervised clustering for the organization of unlabeled data
 
 **ML Ops**
 
 - Designed and implemented data engines for passive and pro-active fetching and subsequent organization of anomalous data from deployed robots
 - Designed and implemented ML Ops systems (workflow and orchestration systems for the ML lifecycle) including dataset maintenance, experiment tracking, model training and evaluation, model optimization, inference serving and deployment all based on open source technologies
 - Designed and implemented systems for highly efficient and scalable distributed training based on open source technologies
+- Implemented interactive tooling and dashboards to visualize insights around data, training experiments and production
 
 **Data Engineering**
 
@@ -84,22 +88,21 @@ A more technical breakdown of my experience is organized below. For those seekin
 **Software Engineering**
 
 - Familiar and practiced in Agile software engineering methodologies
-- Experience going from customer need to a roadmap of scoped projects
+- Experience going from customer need to a road map of scoped projects
 - Designed and bootstrapped countless software systems and projects
-- Contract, Data Schema and API design, development and maintenance
-- Processing Workflows  
-- Microservice and distributed system design and development
-- Advanced image processing
-- Complex optimization
-- Hardware acceleration
-- GUI applications
+- Designed, developed and maintained contracts, data schemas and APIs
+- Implemented Complex Processing Workflows  
+- Designed and developed microservices and distributed systems
+- Extensive experience w/ Advanced image processing
+- Prioritized and implemented hardware acceleration and other optimizations for models, algorithms, workflows and processing services
+- Designed and developed numerous GUI applications
 
 **DevOps**
 
-- Automation wherever possible
-- CI/CD design and maintenance
-- Complex multi-service and ML systems testing
-- Package, model and version management
+- Introduced automation wherever possible
+- Designed and maintained CI/CD for many projects
+- Automated complex multi-service and ML systems testing
+- Designed and implemented solutions for package, model and version management for ML systems and projects
 
 ## Scanse - Director of software (2015-2017)
 
