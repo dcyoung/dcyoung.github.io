@@ -1,11 +1,11 @@
 main:
   - title: "Posts"
     url: /archives/
-  - title: "Categories"
-    url: /categories/
   - title: "About"
     url: /about/
   - title: "Resume"
     url: /resume/
   - title: "ML Practitioner's Guide"
     url: /ml-practitioners-guide/
+  - title: "Categories"
+    url: /categories/
