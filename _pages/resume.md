@@ -112,18 +112,18 @@ Scanse was a small 3 person startup attempting to democratize LiDAR: a tradition
 
 At a small startup, you play a role in everything! However, my main focus was the design and development of interactive software for both the sensing and visualization of complex 3D data. My accomplishments included the following:
 
-- Designed, implemented and shipped cross platform desktop application for visualizing, interpreting and interacting with realtime LiDAR data and 3D point cloud data. Primary technologies included electron and WebGL.
+- Designed, implemented and shipped cross platform desktop application for visualizing, interpreting and interacting with realtime LiDAR data and 3D point cloud data. Primary technologies included electron and WebGL
 - Designed and implemented a rudimentary but efficient javascript based UI component framework to update and render modified components in the DOM - before React was really a thing!
-- Implemented and maintained SDK's used to control LiDAR sensor in various programming languages.
-- Managed numerous contractors and external developers contributing to open software projects.
-- Supported and fostered active customer community.
-- Designed and maintained an open source software project for controlling an inexpensive 3D scanner.
-- Prototyped various perception algorithms for 2D LiDAR data.
-- Drafted a provisional patent application related to AI and sensor data which was successfully filed.
-- Prototyped a distributed sensor system involving sensor fusion for occupant tracking and monitoring.
-- Designed and implemented interactive labeling tools for multi-channel time series data.
-- Prototyped various Neural Networks for time series classification of multi-sensor data using Tensorflow.
-- Implemented technical documentation for numerous software projects both internal and open.
+- Implemented and maintained SDK's used to control LiDAR sensor in various programming languages
+- Managed numerous contractors and external developers contributing to open software projects
+- Supported and fostered active customer community
+- Designed and maintained an open source software project for controlling an inexpensive 3D scanner
+- Prototyped various perception algorithms for 2D LiDAR data
+- Drafted a provisional patent application related to AI and sensor data which was successfully filed
+- Prototyped a distributed sensor system involving sensor fusion for occupant tracking and monitoring
+- Designed and implemented interactive labeling tools for multi-channel time series data
+- Prototyped various Neural Networks for time series classification of multi-sensor data using Tensorflow
+- Implemented technical documentation for numerous software projects both internal and open
 
 ## NVIDIA - Software Engr Intern (Gameworks)
 
