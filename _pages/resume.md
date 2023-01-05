@@ -332,18 +332,10 @@ GPA 3.8/4.0 - coursework outlined below.
 ## Online Coursework - Programming + Technical Art
 
 <details>
-	<summary><b>Udacity</b></summary>
+	<summary><b>Udacity, Udemy & Others</b></summary>
 	<pre>
 
 - Self Driving Car Nano-Degree
-
-</pre>
-</details>
-
-<details>
-	<summary><b>Udemy & Others</b></summary>
-	<pre>
-
 - Professional Game Development in C++ and Unreal Engine
 - Pro Unreal Engine Game Coding (Vehicle Physics)
 - Game Physics
@@ -352,8 +344,8 @@ GPA 3.8/4.0 - coursework outlined below.
 - Virtual Reality Designer
 - Intro to Premiere Pro CC
 - Intro to Autodesk 3dsMax 2014
-- Intro to Audodesk Maya 2015
-- Quickstart to Animation in Maya vol:1-3
+- Intro to Autodesk Maya 2015
+- Quick-start to Animation in Maya vol:1-3
 - Intro to Maya Fur
 - Creating GameReady Ropes and Chains in Maya
 - Simulating a Flamethrower Effect in Maya
@@ -369,6 +361,8 @@ GPA 3.8/4.0 - coursework outlined below.
 - ZBrush Hard Surface Techniques
 - CryEngine 3 Vol 1-3 An Intro and Application
 - Product Design in Autodesk Fusion 360
+- FastAI course
+- Stanford CS-231
 
 </pre>
 </details>
