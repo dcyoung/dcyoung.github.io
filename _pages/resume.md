@@ -52,7 +52,6 @@ Working in collaboration w/ Ripcord's operations team, I designed and developed 
 
 - Designed and implemented machine perception systems based on deep learning for the control of physical robots, scanning machines, and digital RPA processes
 - Identified and defined problems fit for Machine Learning
-- Designed and implemented appropriate strategies leveraging Machine Learning
 - Sourced and annotated data at scale
 - Implemented and trained state of the art perception models to robustly interpret and understand paper to such a degree that a robotic arm can physically manipulate paper, remove fasteners and deal with edge cases inherent in a dynamic and uncontrolled medium
 - Designed and implemented hybrid cloud inference solutions including hardware selection, model servers, inference model optimization and integrated client side software capable of scanning millions of sheets per day
