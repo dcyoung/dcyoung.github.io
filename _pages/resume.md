@@ -12,7 +12,7 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 ## Machine Learning, AI & Startup Consulting (Q3-4 2022)
 
-A planned six month hiatus from full time tech work, to reflect, explore and target the next opportunity w/ intent. 
+A planned hiatus from full time tech work, to reflect, explore and target the next opportunity w/ intent. 
 
 - AI consulting and dev work for previous employer (Ripcord)
 - Technology, software, AI & general startup consulting across a range of applications
