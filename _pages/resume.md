@@ -10,14 +10,11 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 # Work Experience
 
-## Machine Learning, AI & Startup Consulting (Q3-4 2022)
-
-A planned hiatus from full time tech work, to reflect, explore and target the next opportunity w/ intent. 
+## Machine Learning, AI & Startup Consulting (Q4 2022)
 
 - AI consulting and dev work for previous employer (Ripcord)
 - Technology, software, AI & general startup consulting across a range of applications
-- Deep dive into rapid physical prototyping
-- Design and development of data driven decor products
+- Rapid design, prototyping and development of data drive physical decor products
 - Lots of travel, independent learning and helping friends + family
 
 ## Ripcord - Senior Staff ML Engineering Lead (2017 - 2022)
