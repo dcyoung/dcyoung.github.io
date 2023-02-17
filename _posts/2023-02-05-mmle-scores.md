@@ -5,12 +5,12 @@ last_modified_at: 2023-02-05T00:00:00-00:00
 categories:
   - machine learning
   - ai
-permalink: /post-mmles-score/
+permalink: /post-mmle-scores/
 classes: wide
 excerpt: Detecting out of distribution samples using  
 header:
-  og_image: /images/mmles-scores/softmax.webp
-  teaser: /images/mmles-scores/softmax.webp
+  og_image: /images/mmle-scores/softmax.webp
+  teaser: /images/mmle-scores/softmax.webp
 ---
 
 Recently I worked on a project triangulating geo-coordinates of signals based on registrations in a radio network. Attempting to improve on traditional optimization based trilateration, I turned to neural networks to pick up subtle patterns in the underlying data space (ex: terrain in certain regions affects observed signal strength). This approach outperformed existing trilateration algorithms but suffered from high variance in the prediction quality. Most of the problematic predictions stemmed from samples that were not represented well in the original training data. This example highlighted a common problem in applied ML.
@@ -120,7 +120,7 @@ Here logits can be used to calculate not only `softmax scores` (traditional) but
 
 To demonstrate the use, I first generate some simple 2D data to represent ~200 "In-Distribution" classes and 1 very "Out-of-Distribution" class.
 
-![clusters](/images/mmles-scores/clusters.webp)
+![clusters](/images/mmle-scores/clusters.webp)
 *Note the difference in the axes of the OOD data*
 
 Then I train and calibrate the model (see full notebook for details), before predicting on two different sets of data:
@@ -130,25 +130,26 @@ Then I train and calibrate the model (see full notebook for details), before pre
 
 For both sets I calculate the `softmax scores` (traditional) and the `MMLE scores`.
 
-![softmax](/images/mmles-scores/softmax.webp)
+![softmax](/images/mmle-scores/softmax.webp)
 
-![softmax](/images/mmles-scores/mmles.webp)
+![softmax](/images/mmle-scores/mmles.webp)
 
 As you can see, from the exact same logits the `MMLE scores` provide a much stronger delineation of "In-Distribution" vs "Out-of-Distribution" data.
 
 To demonstrate more programmatic use, here is an example of calculating thresholds from the validation data:
 
 ```py
-mmles_score_thresholds = {
+val_scores = ... # MMLE scores for the validation samples
+mmle_score_thresholds = {
     str(p): np.percentile(val_scores, p)
     for p in [0, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 1.0]
 } # {'0': -102.35904790566515, '0.05': -101.01156283044743, '0.1': -100.71284565474099, '0.25': -100.33496655987776, '0.5': -100.13457710062065, '0.75': -100.00017678930712, '0.9': -99.95630884123959, '0.95': -99.93938238309974, '1.0': -99.92696776594504}
 ```
 
 ```py
-val_scores = ...
-ood_scores = ...
-for p, t in mmles_score_thresholds.items():
+val_scores = ... # MMLE scores for the validation samples
+ood_scores = ... # MMLE scores for the OOD samples
+for p, t in mmle_score_thresholds.items():
     ood_flagged_as_ood = ood_scores < t
     ood_flagged_as_ood_perc = 100 * ood_flagged_as_ood.sum() / ood_flagged_as_ood.shape[0]
     id_flagged_as_ood = val_scores < t
