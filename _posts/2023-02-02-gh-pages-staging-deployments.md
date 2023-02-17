@@ -1,7 +1,7 @@
 ---
 title: "Automating Free Staging Deployments for Github Pages"
-date: 2022-02-02T00:00:00-00:00
-last_modified_at: 2022-02-02T00:00:00-00:00
+date: 2023-02-02T00:00:00-00:00
+last_modified_at: 2023-02-02T00:00:00-00:00
 categories:
   - automation
   - software notes
