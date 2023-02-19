@@ -50,7 +50,7 @@ This process requires 2 new Github Action **actions**:
 - `create-git-repo`: creates a new github repository
 - `delete-git-repo`: deletes an existing github repository
 
-I used simple JS scripts to hit the Github API, and made dedicated actions for each. I'd recommend tightly controlling any actions that leverage secrets or personal access tokens, rather than using third party actions. See the [code](https://github.com/dcyoung/r3f-audio-visualizer/tree/dev/actions) for more details.
+I used simple JS scripts to hit the Github API, and made dedicated actions for each. I'd recommend tightly controlling any actions that leverage secrets or personal access tokens, rather than using third party actions. See the action repositories for more details: [ga-create-git-repo](https://github.com/dcyoung/ga-create-git-repo), [ga-delete-git-repo](https://github.com/dcyoung/ga-delete-git-repo).
 
 ## Creating Workflows
 
@@ -80,12 +80,11 @@ jobs:
   create-page-host:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Create new repository for temporary deployment
-        uses: ./actions/create-git-repo # Uses an action in a local dir
+        uses: dcyoung/ga-create-git-repo@v1.0.0
         with:
           name: ${{ env.PR_REPO_NAME }}
+          # org: dcyoung
           access-token: ${{ secrets.PAT }}
   pr-build-deploy:
     needs: create-page-host
@@ -111,7 +110,6 @@ jobs:
           npm run build -- --base=/${{ env.PR_REPO_NAME }}/
         env:
           CI: ""
-
       - name: Checkout temporary deployment target repo
         uses: actions/checkout@v2
         with:
@@ -149,10 +147,8 @@ jobs:
   delete-page-host:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
       - name: Delete repository for temporary deployment
-        uses: ./actions/delete-git-repo
+        uses: dcyoung/ga-delete-git-repo@v1.0.0
         with:
           name: dcyoung/${{ env.PR_REPO_NAME }}
           access-token: ${{ secrets.PAT }}
