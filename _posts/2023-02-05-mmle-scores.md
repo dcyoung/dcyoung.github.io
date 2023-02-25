@@ -25,7 +25,7 @@ For the triangulation problem described above, I turned to a slick solution intr
 
 The authors provide some code, but I was not able to get their implementations working. Instead I implemented the basics and created the following example to demonstrate the approach.
 
-DisMax is comprised of a replacement for the classification layer in a model and a replacement fro the cross entropy loss used to train the model. A minimal implementation below:
+DisMax is comprised of a replacement for the classification layer in a model and a replacement for the cross entropy loss used to train the model. A minimal implementation below:
 
 ```py
 class DisMaxLossFirstPart(nn.Module):
