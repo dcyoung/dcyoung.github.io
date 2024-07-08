@@ -12,6 +12,7 @@ header:
   teaser: /images/clustering-custom-distance/haversine.webp
 ---
 
+
 Recently I worked on a project triangulating geo-coordinates of signals based on registrations in a radio network. Part of the approach involved clustering observations into distinct geographic regions. The clustering algorithms used weren't anything special (nearest-neighbor, k-means), however measuring the distance between points in geo-coordinates is not as simple as measuring the distance between points in cartesian coordinates.
 
 Instead of the euclidean distance supported by most clustering algorithms, the ideal metric is [Haversine Distance](https://en.wikipedia.org/wiki/Haversine_formula) which measures the shortest path between two points traveling along the surface of a sphere. 
@@ -24,8 +25,8 @@ Here is simple numpy implementation:
 def haversine_np(
     lat_long_deg_1: npt.NDArray,
     lat_long_deg_2: npt.NDArray,
-    radius: float = 6373.0, # Radius of the earth in km
-):
+    radius: float = RADIUS_EARTH_KM,
+) -> npt.NDArray:
     """
     Calculate the great circle distance between two points on a sphere
     ie: Shortest distance between two points on the surface of a sphere
@@ -122,10 +123,8 @@ def k_means(data, k:int=50, num_iter:int=50, seed:int=42, trace: bool=False):
     np.random.seed(seed)
 
     n, d = data.shape
-    # Pre-compute cartesian coordinates for each data point
-    data_xyz_m = geo_to_cartesian_m(
-        lat_long_alt=np.stack([data[:,0], data[:,1], np.zeros((n))], axis=1)
-    )
+    data_lla = np.stack([data[:,0], data[:,1], np.zeros((n))])  # 3, n
+    
     # Initialize centroids as random selection of data points
     centroids = data[np.random.choice(n, k, replace=False)] # k, d 
     diff = np.zeros((n,k))
@@ -138,15 +137,18 @@ def k_means(data, k:int=50, num_iter:int=50, seed:int=42, trace: bool=False):
 
         # Update the centroids to be the projected centroid of the members of each cluster
         for i in range(k):
-            members_xyz_m = data_xyz_m[np.argwhere(labels==i), :]
-            if members_xyz_m.shape[0] == 0:
+            member_idxs = np.argwhere(labels==i).squeeze()
+            members = data_lla[:, member_idxs] # 3, x
+            if members.shape[-1] == 0:
                 # empty cluster... don't update
                 continue
-            centroid_xyz_m = calculate_centroids(coordinates_xyz_m=members_xyz_m[:, :], project=True)
-            centroid_lat_long = cartesian_to_geo(xyz_m=centroid_xyz_m)[:,:2]
-            centroids[i] = centroid_lat_long
-        
+            centroid = calculate_centroid_geo(lat_long_alt=members.swapaxes(0,1)) if members.ndim > 1 else members
+            centroids[i] = centroid[:2]
+        break
     return centroids
 ```
 
 ![placeholder](/images/clustering-custom-distance/kmeans.webp){:.align-center}
+
+
+> For more details see associated repository [https://github.com/dcyoung/ml-triangulation](https://github.com/dcyoung/ml-triangulation) 

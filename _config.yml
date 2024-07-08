@@ -59,9 +59,9 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "David Young"
-  avatar : "/images/site/profile_artsy.webp"
-  bio    : "systems thinker & passionate Machine Learning Engineer"
+  name: "David Young"
+  avatar: "/images/site/profile_artsy.webp"
+  bio: "systems thinker & passionate engineer"
   links:
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
@@ -106,7 +106,6 @@ defaults:
     values:
       image: true
 
-
 category_archive:
   type: liquid
   path: /categories/
@@ -125,8 +124,8 @@ repository: "dcyoung/dcyoung.github.io"
 #google_site_verification: "yourVerificationCode"
 
 social:
-  type:  Person
-  name:  David Young
+  type: Person
+  name: David Young
   links:
     - "https://www.linkedin.com/in/david-young-09509210a"
 

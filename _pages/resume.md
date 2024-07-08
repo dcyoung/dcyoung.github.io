@@ -10,6 +10,26 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 
 # Work Experience
 
+## [Nova Labs/Network BU](https://nova.xyz/) - Software Engr L5 (2024)
+
+challenging telecom with the people's network :)
+
+## [Nova Labs/1663](https://1663.io/) - Software Engr L4 (2023-2024)
+
+1663.io is a division within Nova Labs driving the adoption and development of new IoT applications running on the open-source Helium Network. 
+
+In under a year, our team built 3 products from scratch - serving over a dozen enterprise customers, including multiple fortune 500 companies. 
+
+Using low cost LoRaWAN sensors and custom software, we developed solutions for real time asset tracking, data visualization and alerting. Our customer applications involved shipment tracking, theft recovery, environmental sensor monitoring and forest fire prevention.
+
+These products were developed by an incredibly small and efficient team. I worked closely with business, product and design leads to iterate through product discovery, and champion the hands-on technical development of multiple products. In short - I designed and implemented (coded) the technology solutions.
+
+My work involved
+- Technical product discovery
+- Product scope refinement and the definition of technical requirements 
+- Holistic system and architecture design
+- Ground up development of multiple full stack web-apps including product features, complex algorithms and data visualization, multi-tenant architectures, SOC2 compliance, enterprise grade auth, deployment automation, monitoring and more
+
 ## Machine Learning, AI & Startup Consulting (Q4 2022)
 
 - AI consulting and dev work for previous employer (Ripcord)
@@ -17,7 +37,7 @@ last_modified_at: 2022-08-16T00:00:00-00:00
 - Rapid design, prototyping and development of data drive physical decor products
 - Lots of travel, independent learning and helping friends + family
 
-## Ripcord - Senior Staff ML Engineering Lead (2017 - 2022)
+## [Ripcord](https://www.ripcord.com/) - Senior Staff ML Engineering Lead (2017 - 2022)
 
 ![ripcord](/images/logos/ripcord.svg)
 
