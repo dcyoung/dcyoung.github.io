@@ -7,7 +7,7 @@ toc: true
 toc_sticky: true
 ---
 
-> Note: As of 2022-10-29 this page is very much a `Work in Progress`... with many placeholder or outlined sections.
+> Note: As of September, 2022 this page is very much a `Work in Progress`... with many placeholder or outlined sections.
 
 This is a practitioner's guide to developing Machine Learning models that solve real problems. It focuses primarily on the processes related to deep learning models, attempting to distil a more structured checklist approach I like to follow when working on ML projects.
 
