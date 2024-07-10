@@ -1,0 +1,898 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Audio Source Separation w/ Deep Learning</title>
+<meta name="description" content="A from scratch pytorch implementation of Spleeter - a network to separate vocal and instrumental tracks from an input song.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Audio Source Separation w/ Deep Learning">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-spleeter-pytorch/">
+
+
+  <meta property="og:description" content="A from scratch pytorch implementation of Spleeter - a network to separate vocal and instrumental tracks from an input song.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/spleeter-pytorch/architecture.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-11-07T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2022-11-07T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-spleeter-pytorch/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Audio Source Separation w/ Deep Learning">
+    <meta itemprop="description" content="A from scratch pytorch implementation of Spleeter - a network to separate vocal and instrumental tracks from an input song.">
+    <meta itemprop="datePublished" content="2022-11-07T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2022-11-07T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-spleeter-pytorch/" itemprop="url">Audio Source Separation w/ Deep Learning
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#architecture">Architecture</a></li><li><a href="#pytorch-implementation">PyTorch Implementation</a></li><li><a href="#results">Results</a></li></ul>
+            </nav>
+          </aside>
+        
+        <p>I was curious about source separation tools and stumbled across <code class="language-plaintext highlighter-rouge">Spleeter</code> (<a href="https://github.com/deezer/spleeter">repo</a>, <a href="https://archives.ismir.net/ismir2019/latebreaking/000036.pdf">paper</a>) - a fairly simple architecture for separating audio sources from an input song. I like to learn by building, and the official implementation was written in Tensorflow… so I rewrote it in PyTorch.</p>
+
+<h2 id="architecture">Architecture</h2>
+
+<p>The goal of the network is to predict the vocal and instrumental components of an input song provided as an audio spectrogram.</p>
+
+<p>Each stem (audio source) is extracted by a separate UNet architecture similar to a convolutional autoencoder using strided convolutions and extra skip-connections.</p>
+
+<p><img src="/images/spleeter-pytorch/architecture.webp" alt="placeholder" class="align-center" /></p>
+
+<h2 id="pytorch-implementation">PyTorch Implementation</h2>
+
+<p>To create this UNet architecture, I first define the basic blocks required to build our encoding and decoding layers.</p>
+
+<p>Encoding (aka downsampling/compression) is accomplished by passing the source through a set of encoder blocks. In the forward pass, I include the pre-activation convolutional output as we’ll need it later when creating skip connections.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EncoderBlock</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span>
+            <span class="n">num_features</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">track_running_stats</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">eps</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+            <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="n">negative_slope</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="n">down</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">conv</span><span class="p">(</span><span class="n">F</span><span class="p">.</span><span class="n">pad</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s">"constant"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">down</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">bn</span><span class="p">(</span><span class="n">down</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Decoding (aka upsampling/de-compression) is accomplished by passing the encoded result through a set of decoder blocks. The block looks very similar to the encoder blocks - except we transpose convolution.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DecoderBlock</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dropout_prob</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tconv</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span>
+            <span class="n">out_channels</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">dropout_prob</span><span class="p">)</span> <span class="k">if</span> <span class="n">dropout_prob</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">nn</span><span class="p">.</span><span class="n">Identity</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">up</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tconv</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="c1"># reverse padding
+</span>        <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+        <span class="n">up</span> <span class="o">=</span> <span class="n">up</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">l</span><span class="p">:</span><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span><span class="o">-</span><span class="n">b</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">bn</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">relu</span><span class="p">(</span><span class="n">up</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>Putting it all together into a UNet, we have:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UNet</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c1"># DownSample layers
+</span>        <span class="n">down_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">in_channels</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">encoder_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ModuleList</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">EncoderBlock</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">out_ch</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">down_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">down_set</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># UpSample layers
+</span>        <span class="n">up_set</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)]</span>
+        <span class="n">up_set</span><span class="p">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">decoder_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ModuleList</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">DecoderBlock</span><span class="p">(</span>
+                    <span class="c1"># doubled for concatenated inputs (skip connections)
+</span>                    <span class="n">in_channels</span><span class="o">=</span><span class="n">in_ch</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">in_ch</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="n">out_ch</span><span class="p">,</span>
+                    <span class="c1">#   50 % dropout... first 3 layers only
+</span>                    <span class="n">dropout_prob</span><span class="o">=</span><span class="mf">0.5</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">up_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">up_set</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># reconstruct the final mask same as the original channels
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">up_final</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dilation</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sigmoid</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">encoder_outputs_pre_act</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">for</span> <span class="n">down</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">encoder_layers</span><span class="p">:</span>
+            <span class="n">conv</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">down</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">encoder_outputs_pre_act</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">up</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">decoder_layers</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">up</span><span class="p">(</span><span class="n">encoder_outputs_pre_act</span><span class="p">.</span><span class="n">pop</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># merge skip connection
+</span>                <span class="n">x</span> <span class="o">=</span> <span class="n">up</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">concat</span><span class="p">([</span><span class="n">encoder_outputs_pre_act</span><span class="p">.</span><span class="n">pop</span><span class="p">(),</span> <span class="n">x</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">up_final</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">mask</span> <span class="o">*</span> <span class="nb">input</span>
+</code></pre></div></div>
+
+<p>I added some boilerplate to adapt the pre-trained tensorflow weights to PyTorch and borrowed some code for handling the spectrograms. I’ve uploaded the source here: <a href="https://github.com/dcyoung/pt-spleeter">https://github.com/dcyoung/pt-spleeter</a></p>
+
+<h2 id="results">Results</h2>
+
+<p>Testing the architecture, it works surprisingly well.</p>
+
+<p>Input - Song (original):</p>
+
+<audio controls="">
+    <source src="/images/spleeter-pytorch/output/over_input.wav" type="audio/mpeg" />
+    Your browser does not support the audio element.
+</audio>
+
+<p>Output - Vocals (predicted):</p>
+
+<audio controls="">
+    <source src="/images/spleeter-pytorch/output/over_vocals.wav" type="audio/mpeg" />
+    Your browser does not support the audio element.
+</audio>
+
+<p>Output - Accompaniment (predicted):</p>
+
+<audio controls="">
+    <source src="/images/spleeter-pytorch/output/over_accompaniment.wav" type="audio/mpeg" />
+    Your browser does not support the audio element.
+</audio>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2022-11-07">November 7, 2022</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Audio+Source+Separation+w%2F+Deep+Learning%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-spleeter-pytorch%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-spleeter-pytorch%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-spleeter-pytorch/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-streamlit-keep-alive/" class="pagination--pager" title="Automating a Keep-Alive Probe for Deployed Apps
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-clustering-custom-distance/" class="pagination--pager" title="Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

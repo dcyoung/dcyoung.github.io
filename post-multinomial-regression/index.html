@@ -1,0 +1,1126 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Multinomial Regression on Wide Datasets</title>
+<meta name="description" content="Classification for “wide” datasets, w/ more features than examples.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Multinomial Regression on Wide Datasets">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-multinomial-regression/">
+
+
+  <meta property="og:description" content="Classification for “wide” datasets, w/ more features than examples.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/logos/r.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-02-25T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-02-25T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-multinomial-regression/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Multinomial Regression on Wide Datasets">
+    <meta itemprop="description" content="Classification for “wide” datasets, w/ more features than examples.">
+    <meta itemprop="datePublished" content="2016-02-25T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-02-25T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-multinomial-regression/" itemprop="url">Multinomial Regression on Wide Datasets
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#dataset">Dataset</a></li><li><a href="#implementation">Implementation</a></li><li><a href="#results">Results</a></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="dataset">Dataset</h2>
+
+<p>The authors of  “Clustering Cancer Gene Expression Data: a Comparative Study”, clustered gene expression data for various cancers. Each of the 35 data sets is “wide” meaning it has more predictors than examples, and in this case many more predictors than examples (typically more than 1000 predictors and less than 100 examples). My goal was to assign a class from a subset of various medical issues. Each data set has a different number of possible classes, between 2 and 14.</p>
+
+<p>The actual data can be found here:
+<a href="http://bioinformatics.rutgers.edu/Static/Supplements/CompCancer/datasets.htm">http://bioinformatics.rutgers.edu/Static/Supplements/CompCancer/datasets.htm</a></p>
+
+<p>A more detailed description of the data can be found here:
+<a href="http://bioinformatics.rutgers.edu/Supplements/CompCancer/">http://bioinformatics.rutgers.edu/Supplements/CompCancer/</a></p>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>Github repo available here: <a href="https://github.com/dcyoung/MultinomialRegression">https://github.com/dcyoung/MultinomialRegression</a></p>
+
+<p>​First the datasets were checked for missing or non-numeric values. Only 1 dataset contained such values and they were replaced by zeros. Experimentation with further pre-processing (dimensionality reduction via PCA) did not yield better performance, but actually decreased performance. Because of this, the number of predictors was left intact and fed to the regression where the lasso would effectively prune unnecessary predictors.</p>
+
+<p>For each dataset, a multinomial regression model with the lasso was constructed and used to predict the relevant classes. At first the loss for cross-validation was left at its default type.measure of “deviance” which uses the squared-error for Gaussian models. While this was producing 100% training accuracy, the cv.glment cross validation error for the best model was not optimal. Changing the loss type.measure to “class” forced the package to use the misclassification error (only suitable for binomial or multinomial regression). Using the misclassification error for loss drastically improved the cross validation error for the best model. There were many cases where the error dropped from around 30% to less than 10%.</p>
+
+<p>Sometimes, the best model yielded a misclassification error that was only slightly better than a model which used far fewer coefficients. Depending on the application, model complexity may be more important than absolute lowest misclassification error. If that is the case, one might wish to examine a plot of misclassification rate vs. regularization constant (representing # of included coefficients) and choose by hand which model strikes the right balance between complexity and performance. For these data sets however, complexity was not greatly affecting runtime, so the model which yielded the lowest misclassification error was chosen in all cases.
+​
+More specifically, the model was chosen by selecting the regularization constant which yielded the lowest misclassification error. The number of genes used in the model is represented by the number of coefficients included in the model at that regularization constant.</p>
+
+<h2 id="results">Results</h2>
+
+<p>The results for each data set are outlined in the following table. I’ve included the chosen regularization constant, the training error and a ratio of the # of included genes/ # of classes. Lastly I included an average at the bottom. Some of the average values are relatively meaningless given the diversity of the dataset parameters, but some are noteworthy. The average CV misclassification error was around 12%, which is impressive given how wide the datasets were. This is a really powerful technique!  The average training error was around 2-3% which just confirms the model was building correctly, while the misclassification error is a better representation of its performance. The average ratio of #genes/#classes is a little over 4. Meaning on average a model required 4x as many non-zero coefficients (or predictive genes) as it had classes from which to classify. This must be taken with a large grain of salt however… as described previously, for some data sets the best model performed only slightly better than a much simpler model. Choosing a good balance of complexity to performance would yield a more representative average of # of genes/# of classes. But I thought I would include the statistic anyways, as it is interesting.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Data Base File Name:</th>
+      <th style="text-align: center"># of Classes</th>
+      <th style="text-align: center">Regularization Constant (Lambda) for best model</th>
+      <th style="text-align: center">Coefficients (# included genes)</th>
+      <th style="text-align: center">Cross Validation Misclassification Error</th>
+      <th style="text-align: center">Training Error</th>
+      <th style="text-align: center">Ratio #Genes/#Classes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">alizadeh-2000-v1_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.01916398</td>
+      <td style="text-align: center">24</td>
+      <td style="text-align: center">0.09523810</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">12.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">alizadeh-2000-v2_database.txt</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.12037204</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">0.01612903</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">1.67</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">alizadeh-2000-v3_database.txt</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.06157294</td>
+      <td style="text-align: center">11</td>
+      <td style="text-align: center">0.08064516</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">2.75</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">armstrong-2002-v1_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.08594995</td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">0.05555556</td>
+      <td style="text-align: center">0.01388889</td>
+      <td style="text-align: center">4.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">armstrong-2002-v2_database.txt</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.01195216</td>
+      <td style="text-align: center">14</td>
+      <td style="text-align: center">0.08333333</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">4.67</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">bhattacharjee-2001_database.txt</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">0.00702128</td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">0.07389163</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">2.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">bittner-2000_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.00549008</td>
+      <td style="text-align: center">20</td>
+      <td style="text-align: center">0.10526316</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">10.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">bredel-2005_database.txt</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.02097127</td>
+      <td style="text-align: center">11</td>
+      <td style="text-align: center">0.14000000</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">3.67</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">chen-2002_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.02845673</td>
+      <td style="text-align: center">18</td>
+      <td style="text-align: center">0.03910615</td>
+      <td style="text-align: center">0.01675978</td>
+      <td style="text-align: center">9.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">chowdary-2006_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.07596433</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">0.01923077</td>
+      <td style="text-align: center">0.01923077</td>
+      <td style="text-align: center">3.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">dyrskjot-2003_database.txt</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.05072785</td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">0.22500000</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">3.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">garber-2001_database.txt</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.11605594</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.15151515</td>
+      <td style="text-align: center">0.12121212</td>
+      <td style="text-align: center">1.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">golub-1999-v1_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.02017088</td>
+      <td style="text-align: center">19</td>
+      <td style="text-align: center">0.05555556</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">9.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">golub-1999-v2_database.txt</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.12477965</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">0.05555556</td>
+      <td style="text-align: center">0.04166667</td>
+      <td style="text-align: center">1.67</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">gordon-2002_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.02947920</td>
+      <td style="text-align: center">16</td>
+      <td style="text-align: center">0.02209945</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">8.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">khan-2001_database.txt</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.13232613</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">0.01204819</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">1.25</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">laiho-2007_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.11268743</td>
+      <td style="text-align: center">13</td>
+      <td style="text-align: center">0.13513514</td>
+      <td style="text-align: center">0.02702703</td>
+      <td style="text-align: center">6.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">lapointe-2004-v1_database.txt</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.08378991</td>
+      <td style="text-align: center">9</td>
+      <td style="text-align: center">0.19117647</td>
+      <td style="text-align: center">0.04411765</td>
+      <td style="text-align: center">3.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">lapointe-2004-v2_database.txt</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.02441359</td>
+      <td style="text-align: center">19</td>
+      <td style="text-align: center">0.16513762</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">4.75</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">liang-2005_database.txt</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.12153683</td>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">0.02702703</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">0.33</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">nutt-2003-v1_database.txt</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.00630569</td>
+      <td style="text-align: center">14</td>
+      <td style="text-align: center">0.34000000</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">3.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">nutt-2003-v2_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.00471073</td>
+      <td style="text-align: center">17</td>
+      <td style="text-align: center">0.17857143</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">8.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">nutt-2003-v3_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.35731114</td>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">0.27272727</td>
+      <td style="text-align: center">0.31818182</td>
+      <td style="text-align: center">1.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">pomeroy-2002-v1_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.02637890</td>
+      <td style="text-align: center">14</td>
+      <td style="text-align: center">0.05882353</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">7.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">pomeroy-2002-v2_database.txt</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">0.07076972</td>
+      <td style="text-align: center">7</td>
+      <td style="text-align: center">0.23809524</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">1.40</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">ramaswamy-2001_database.txt</td>
+      <td style="text-align: center">14</td>
+      <td style="text-align: center">0.02225367</td>
+      <td style="text-align: center">8</td>
+      <td style="text-align: center">0.30000000</td>
+      <td style="text-align: center">0.07368421</td>
+      <td style="text-align: center">0.57</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">risinger-2003_database.txt</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.06281940</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">0.14285714</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">1.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">shipp-2002-v1_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.10239171</td>
+      <td style="text-align: center">15</td>
+      <td style="text-align: center">0.16883117</td>
+      <td style="text-align: center">0.15584416</td>
+      <td style="text-align: center">7.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">singh-2002_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.09746390</td>
+      <td style="text-align: center">7</td>
+      <td style="text-align: center">0.05882353</td>
+      <td style="text-align: center">0.06862745</td>
+      <td style="text-align: center">3.50</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">su-2001_database.txt</td>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">0.02999744</td>
+      <td style="text-align: center">7</td>
+      <td style="text-align: center">0.08620690</td>
+      <td style="text-align: center">0.00574713</td>
+      <td style="text-align: center">0.70</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">tomlins-2006_database.txt</td>
+      <td style="text-align: center">5</td>
+      <td style="text-align: center">0.03332642</td>
+      <td style="text-align: center">18</td>
+      <td style="text-align: center">0.18269231</td>
+      <td style="text-align: center">0.00961539</td>
+      <td style="text-align: center">3.60</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">tomlins-2006-v2_database.txt</td>
+      <td style="text-align: center">4</td>
+      <td style="text-align: center">0.04036825</td>
+      <td style="text-align: center">12</td>
+      <td style="text-align: center">0.14130435</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">3.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">west-2001_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.06085212</td>
+      <td style="text-align: center">14</td>
+      <td style="text-align: center">0.12244898</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">7.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">yeoh-2002-v1_database.txt</td>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">0.00587707</td>
+      <td style="text-align: center">16</td>
+      <td style="text-align: center">0.00806452</td>
+      <td style="text-align: center">0.00000000</td>
+      <td style="text-align: center">8.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">yeoh-2002-v2_database.txt</td>
+      <td style="text-align: center">6</td>
+      <td style="text-align: center">0.02372582</td>
+      <td style="text-align: center">12</td>
+      <td style="text-align: center">0.12903226</td>
+      <td style="text-align: center">0.01209677</td>
+      <td style="text-align: center">2.00</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">Average:</td>
+      <td style="text-align: center">3.54</td>
+      <td style="text-align: center">0.06278383</td>
+      <td style="text-align: center">11.37</td>
+      <td style="text-align: center">0.1193</td>
+      <td style="text-align: center">0.0265</td>
+      <td style="text-align: center">4.33</td>
+    </tr>
+  </tbody>
+</table>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-02-25">February 25, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Multinomial+Regression+on+Wide+Datasets%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-multinomial-regression%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-multinomial-regression%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-multinomial-regression/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-regression-kernel-smoothing/" class="pagination--pager" title="Parametric Regression via Kernel Smoothing
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-estimating-homography/" class="pagination--pager" title="Estimating Homography w/ RANSAC
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

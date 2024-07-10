@@ -1,0 +1,976 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Machine Learning Practitioner’s Guide</title>
+<meta name="description" content="A practitioner’s guide to developing Machine Learning models that solve real problems.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Machine Learning Practitioner’s Guide">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/ml-practitioners-guide/">
+
+
+  <meta property="og:description" content="A practitioner’s guide to developing Machine Learning models that solve real problems.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2022-08-24T07:00:00+07:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/ml-practitioners-guide/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Machine Learning Practitioner’s Guide">
+    <meta itemprop="description" content="A practitioner’s guide to developing Machine Learning models that solve real problems.">
+    <meta itemprop="datePublished" content="2022-08-24T07:00:00+07:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/ml-practitioners-guide/" itemprop="url">Machine Learning Practitioner’s Guide
+</a>
+          </h1>
+          
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#tldr">TLDR</a></li><li><a href="#data-products-vs-decision-science">Data Products vs. Decision Science</a></li><li><a href="#the-big-3">The Big 3</a></li><li><a href="#models-simplify-the-complexity-of-raw-data">Models simplify the complexity of raw data</a></li><li><a href="#finding-functional-boundaries-for-predictive-models">Finding Functional Boundaries for Predictive Models</a></li><li><a href="#scope-your-project">Scope your project</a></li><li><a href="#gather-data">Gather Data</a><ul><li><a href="#get-creative-sourcing-data">get creative sourcing data</a></li><li><a href="#labeling">labeling</a></li><li><a href="#working-w-others">Working w/ Others</a></li><li><a href="#dataset-organization-tips">dataset organization tips</a></li><li><a href="#build-a-working-data-pipeline-early">Build a working data-pipeline early</a></li></ul></li><li><a href="#prototyping-a-model">Prototyping a model</a><ul><li><a href="#finding-model-architectures">finding model architectures</a></li><li><a href="#project-structure">project structure</a></li></ul></li><li><a href="#training">Training</a><ul><li><a href="#feasibility-test">Feasibility Test</a></li><li><a href="#setup-for-experiments">Setup for experiments</a></li><li><a href="#early-experiments">Early experiments</a></li><li><a href="#determine-an-upper-bound">Determine an upper bound</a></li><li><a href="#generalize">Generalize</a></li><li><a href="#handling-uncertainty">Handling Uncertainty</a></li></ul></li><li><a href="#model-serving">Model Serving</a><ul><li><a href="#challenges">Challenges</a></li><li><a href="#define-your-inference-needs">Define your inference needs</a></li><li><a href="#version-control-for-ml">Version Control for ML</a></li><li><a href="#tiers-of-complexity">Tiers of Complexity</a></li><li><a href="#train-serve-skew">Train Serve Skew</a></li><li><a href="#optimizations">Optimizations</a></li></ul></li><li><a href="#qa--feedback-mechanisms">QA &amp; Feedback Mechanisms</a></li><li><a href="#beware-of-the-curse-of-knowledge">Beware of the Curse of Knowledge</a></li><li><a href="#last-mile">Last mile</a></li><li><a href="#misc">Misc</a></li></ul>
+            </nav>
+          </aside>
+        
+        <blockquote>
+  <p>Note: As of September, 2022 this page is very much a <code class="language-plaintext highlighter-rouge">Work in Progress</code>… with many placeholder or outlined sections.</p>
+</blockquote>
+
+<p>This is a practitioner’s guide to developing Machine Learning models that solve real problems. It focuses primarily on the processes related to deep learning models, attempting to distil a more structured checklist approach I like to follow when working on ML projects.</p>
+
+<h2 id="tldr">TLDR</h2>
+
+<ul>
+  <li>Be observant, think through problems, reflect often and remember unique problems may require novel solutions or novel combinations of existing practices.</li>
+  <li>Machine Learning is about the <strong>overall system</strong> that facilitates learning. Think of models like lazy students. Teaching them to learn requires a well designed curriculum, appropriate facilities and opportunities for real world practice. Think through your overall system, and make sure it supports bootstrapping data, deploying a model and finding a route for feedback.</li>
+  <li>Balance the development and focus across the big 3: <code class="language-plaintext highlighter-rouge">Data</code>, <code class="language-plaintext highlighter-rouge">Compute</code> and <code class="language-plaintext highlighter-rouge">Algorithms/Model Architecture</code>.</li>
+  <li>Leverage a scientific method to derisk unknowns. Machine Learning systems require exploration, and constant consideration of what is working and what isn’t. When faced with unknown properties of the system, generate a hypothesis and design an experiment. To make efficient use of time and resource, scope each experiment as small as possible to answer a specific question or derisk a specific unknown.</li>
+  <li>Manage complexity with engineering. The systems involved get very complex and often need to adapt as you gain knowledge about the overall system. Stay agile and wrangle this complexity with solid engineering principles and design.</li>
+</ul>
+
+<h2 id="data-products-vs-decision-science">Data Products vs. Decision Science</h2>
+
+<p>Machine Learning has become a broad term with many meanings. I find it useful to draw the distinction between what I call <code class="language-plaintext highlighter-rouge">Decision Science</code> and <code class="language-plaintext highlighter-rouge">Data Products</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">Decision Science</code> is the the application of tools and techniques in pursuit of some insight - often a business insight. This process yields an export, with results often delivered in the form of a report or dashboard. Decision science involves exploration of data or the modeling of some phenomenon in the data, which may or may not involve basic Machine Learning models (classifiers/regression) and unsupervised techniques (dimensionality reduction/clustering). Code is typically short lived, in that it will not require ongoing maintenance in a production environment. Here there is more of a focus on science, and less of a focus on engineering - unless data acquisition/handling requires significant infra.</p>
+
+<p><img src="/images/ml-guide/decision-science.svg" alt="0" class="align-center" /></p>
+
+<p><code class="language-plaintext highlighter-rouge">Data Products</code> on the other hand, represent the development of systems which leverage learning based models to automate or facilitate intelligent function in a production environment. The process yields a deployed system, which requires proper design and maintenance. Systems often need to be resilient, robust and adaptive to ongoing and dynamic data. Therefore, they live or die by the quality of feedback mechanisms, and requires significantly more engineering effort.</p>
+
+<p><img src="/images/ml-guide/data-product.svg" alt="0" class="align-center" /></p>
+
+<blockquote>
+  <p>This guide focuses primarily on the genre “Data Products”. While many practices are applicable across genres, those curious about “Decision Science” should look for material focused on data science and analysis.</p>
+</blockquote>
+
+<h2 id="the-big-3">The Big 3</h2>
+
+<p>The best results come from projects that balance the big 3:</p>
+
+<ul>
+  <li>Data</li>
+  <li>Compute</li>
+  <li>Algorithms/Model Architecture</li>
+</ul>
+
+<p>Each is an area warranting focused research or engineering - however, successful systems will balance the development of all three for the best results.</p>
+
+<p><img src="/images/ml-guide/tiangle.svg" alt="0" class="align-center" /></p>
+
+<p>Think of these components like legs of a telescoping tripod and devote time to each in a balanced way.</p>
+
+<h2 id="models-simplify-the-complexity-of-raw-data">Models simplify the complexity of raw data</h2>
+
+<p>Models don’t make decisions and they don’t take actions.</p>
+
+<p>Rather, models are used to increase decision making power. They inform other parts of a system which actually take actions or apply business logic. A model won’t update a database, email a user or rotate a steering wheel. Instead, there exists a more traditional software layer which considers the output of a model when deciding what action to take.</p>
+
+<p>One interpretation is that the model is “simplifying” the complexities of raw data to better inform critical decisions or actions.</p>
+
+<p><img src="/images/ml-guide/simplify-data.svg" alt="0" class="align-center" /></p>
+
+<blockquote>
+  <p>A predictive model maps raw data into a format that supports making the critical decision</p>
+</blockquote>
+
+<p>Understanding this functional role of a model helps in the early/design phases of an ML project. If you cannot clearly articulate how this applies to your system then you are at risk of wasting cycles gathering irrelevant data or training models with irrelevant outputs.</p>
+
+<h2 id="finding-functional-boundaries-for-predictive-models">Finding Functional Boundaries for Predictive Models</h2>
+
+<p>Assuming your data is complex enough to warrant a predictive model, you’ll need to define the input/output (IO) of the model. You’ll likely want to jump right to model architectures - but DON’T. The functional boundaries for your model will depend on the qualities of your data and system design. So at this stage, <strong>pretend the model is a black box and spend time understanding your data and the objectives of the overall system.</strong></p>
+
+<p>Take a mixed approach by breaking this process into two activities: <strong>system analysis</strong> and <strong>data exploration</strong>.</p>
+
+<p><strong>Part 1: System Analysis</strong></p>
+
+<p>This is about understanding the overall system as a whole and identifying the constraints that will shape the boundaries of the model. Here is a rough exercise:</p>
+
+<ol>
+  <li>
+    <p>Define and articulate a clear objective of the overall system - the desired action or outcome</p>
+  </li>
+  <li>
+    <p>Determine the minimal information - data simplicity threshold - to support that objective. If it helps, think of this as a question you’d ask a hypothetical human expert. As an exaggerated exercise, think of what magical insight could simplify your application logic like so:</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="k">if</span> <span class="n">magical_insight</span><span class="p">(</span><span class="n">raw_data</span><span class="p">):</span>
+   <span class="c1"># take action
+</span></code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Think through what raw data could be relevant or help produce that magical insight</p>
+  </li>
+  <li>
+    <p>Study your system to identify any opportunities for automated feedback loops. Are there any existing or planned parts of a system which present opportunities to collect data samples or labels in production? Model IO that is closer to the IO of existing system components will facilitate rapid bootstrapping of datasets and automated model improvement.</p>
+  </li>
+</ol>
+
+<p><strong>Part 2: Exploration</strong></p>
+
+<p>Part 1 stressed the importance of analyzing the overall system to identify guiding constraints for the model IO. Equally important is dedicating time to <strong>explore your data</strong> and better understand the domain of your problem and data. You cannot reason accurately about data you’ve never seen. You need to build a gut intuition about what is relevant, and how to separate signal from noise.</p>
+
+<ol>
+  <li>
+    <p>First, <strong>gather small but representative distribution of data</strong> from the domain.</p>
+  </li>
+  <li>
+    <p><strong>Explore without software</strong>. Try to understand and poke at the data without software or tools. What does it looks like… if relevant, investigate how subject matter experts solve this without software.</p>
+  </li>
+  <li>
+    <p><strong>Identify strong signal</strong> among the features in the data. Put on a data science hat, and explore using tools. Try to find early indicators or features in the data that should lend well to training a model. Not only will this help guide model inputs later, it also builds confidence that a learning approach will work at all… which is important early on. This phase includes <code class="language-plaintext highlighter-rouge">data visualization</code>, <code class="language-plaintext highlighter-rouge">data profiling</code>, and even ML for exploration (<code class="language-plaintext highlighter-rouge">clustering</code>, <code class="language-plaintext highlighter-rouge">unsupervised learning</code>).</p>
+  </li>
+  <li>
+    <p>Brainstorm strategies to bootstrap a labeled dataset. Think through which parts of the data can be sourced, synthetically generated, augmented etc.</p>
+  </li>
+</ol>
+
+<h2 id="scope-your-project">Scope your project</h2>
+
+<ul>
+  <li>Define the problem</li>
+  <li>Does this problem really need a learning based solution?
+    <ul>
+      <li>consider easier/alternative/explicit options</li>
+    </ul>
+  </li>
+  <li>Model is part of an ecosystem
+    <ul>
+      <li>overall system design?</li>
+      <li>where does model fit</li>
+      <li>how will it be used</li>
+      <li>cascade effects etc.</li>
+      <li>consider availability of feedback/qa/validation/ground truth etc.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="gather-data">Gather Data</h2>
+
+<h3 id="get-creative-sourcing-data">get creative sourcing data</h3>
+
+<ul>
+  <li>what resources are available?</li>
+  <li>search for publicly available datasets in relevant domains/problems etc.</li>
+  <li>scrape the web</li>
+  <li>synthetically generate data</li>
+</ul>
+
+<h3 id="labeling">labeling</h3>
+
+<ul>
+  <li>bootstrapping
+    <ul>
+      <li>unsupervised learning/clustering + manual review</li>
+      <li>scripting (leverage priors/metadata/bigger models etc.)</li>
+      <li>get hands dirty labeling…
+        <ul>
+          <li>existing tooling</li>
+          <li>custom tooling</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="working-w-others">Working w/ Others</h3>
+
+<ul>
+  <li>Beware of the Curse of Knowledge</li>
+  <li>Garbage In - Garbage Out</li>
+  <li>Communicate the importance of quality in labeled data</li>
+</ul>
+
+<h3 id="dataset-organization-tips">dataset organization tips</h3>
+
+<ul>
+  <li>you’ll likely spend more time dealing with data than with models…</li>
+  <li>design for extensibility/maintenance/ease of use</li>
+  <li>separate datums from annotations/structure/labels etc.
+    <ul>
+      <li>The format of data and annotations can change over the course of a project. It is easier to iterate if you avoid tight coupling between the datums and the annotations.</li>
+      <li>treat like a database – the relationships that define the dataset should be loadable/dynamic/queryable – even if that is inferred from the structure of a directory on a local file system to start.</li>
+      <li>build interfaces and adapters in code</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="build-a-working-data-pipeline-early">Build a working data-pipeline early</h3>
+
+<ul>
+  <li>data pipeline</li>
+  <li>data augmentation</li>
+  <li>separate data code from model code… reusable data pipelines for model iteration/experimentation/evaluation/prediction/debugging/data viz etc.</li>
+  <li>sanity check: visualize the input data at the point where it would enter the model… ie: the output of your pipeline AFTER any transformations or augmentations.</li>
+</ul>
+
+<h2 id="prototyping-a-model">Prototyping a model</h2>
+
+<h3 id="finding-model-architectures">finding model architectures</h3>
+
+<ul>
+  <li>discovering relevant vocab/problems/datasets/industries/models etc.</li>
+  <li>papers</li>
+  <li>codebases</li>
+  <li>from scratch</li>
+  <li>tips
+    <ul>
+      <li>start with smallest relevant architecture (ex. res18 not res50)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="project-structure">project structure</h3>
+
+<ul>
+  <li>The use of models is often blocked by a disconnect between data science and engineering. To combat this, it is best to incorporate solid software engineering practices as soon as a project moves beyond exploration or spike experiments.</li>
+  <li>Benefits of a modular structure
+    <ul>
+      <li>codebase navigation/interpret-ability/maintenance/refactoring etc.</li>
+      <li>easier experiments, extension/adaptation</li>
+      <li>promotes code/module reuse</li>
+      <li>combats train/serve skew by sharing as much environment/code as possible</li>
+      <li>collaboration</li>
+    </ul>
+  </li>
+  <li>As a rough outline, most deep learning projects typically include the following modules
+    <ul>
+      <li>IO</li>
+      <li>dataset handling</li>
+      <li>augmentation pipelines</li>
+      <li>model configuration</li>
+      <li>model definition</li>
+      <li>training configuration</li>
+      <li>evaluation utilities</li>
+      <li>scripts…
+        <ul>
+          <li>train/eval/predict</li>
+          <li>also lots of visualization + exploratory</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="training">Training</h2>
+
+<h3 id="feasibility-test">Feasibility Test</h3>
+
+<ul>
+  <li>before more extensive testing… build confidence in the feasibility of the approach</li>
+  <li>is there a clear ground truth? Good cost functions come from comparison w/ definitive ground truth, and are undermined by ambiguity in the interpretation of data.</li>
+  <li>do the data/labels permit a linear representation of error? A deeper intuition will favor paradigms which permit a linear representation of error - ie: an intuitive metric communicating HOW bad a prediction is. For example, if you need to predict an angle… a cost function considering HOW similar (angular difference) the prediction is to the ground truth will likely result in stronger learning compared to a cost function which only interprets results as binary  (“correct” or “incorrect”).</li>
+  <li>Intuition: If the data supports a clear + consistent ground truth, and task performance can be measured in a linear fashion, then you can be confident a model will learn the task.</li>
+  <li>constantly on the lookout for early indicators of strong signal in the data</li>
+  <li>feasibility tests
+    <ul>
+      <li>Unsupervised approach
+        <ul>
+          <li>cluster data… looking for meaningful/well formed clusters</li>
+        </ul>
+      </li>
+      <li>Use simple or naive feature embeddings for the data</li>
+      <li>If using a multi-modal model, test data modalities individually</li>
+      <li>Over-fit the desired model on single sample or small sample set… if it can’t over-fit a single sample, there might not be enough signal in the data</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="setup-for-experiments">Setup for experiments</h3>
+
+<ul>
+  <li>reproducibility
+    <ul>
+      <li>containerize early…</li>
+      <li>share common code between serving + training</li>
+      <li>allow for easy migration/integration to cloud platforms or workflow/pipeline orchestration platforms when scaling up distributed training</li>
+    </ul>
+  </li>
+  <li>train/eval pipeline
+    <ul>
+      <li>artifacts should have everything required to reproduce…</li>
+      <li>logs and metrics</li>
+      <li>store model config/arguments/cli inputs etc.</li>
+      <li>checkpoints</li>
+      <li>eval visualization … samples/cluster etc.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="early-experiments">Early experiments</h3>
+
+<ul>
+  <li>start with smallest architecture (ex. res18 not res50)</li>
+  <li>early phase
+    <ul>
+      <li>learning rate sweep</li>
+      <li>generate insights…</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="determine-an-upper-bound">Determine an upper bound</h3>
+
+<ul>
+  <li>fine tune hyper-parameters manually</li>
+  <li>avoiding perfection…</li>
+  <li>each experiment should be intentional</li>
+  <li>think!! hypothesize about the connection / impact of various inputs to observed behavior… reflect and re-evaluate</li>
+  <li>depending on your resources and engineering talent, you can consider other approaches to hyper-parameter tuning
+    <ul>
+      <li>exhaustive -&gt; works for tiny models/hyper-parameter spaces</li>
+      <li>random -&gt; cover enough of the search space to inform further manual tuning</li>
+      <li>genetic/algorithmic optimization -&gt; when compute isn’t an issue, i’ve had success modeling a fitness function and evolving hyper-parameters</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="generalize">Generalize</h3>
+
+<ul>
+  <li>more data aug, generalization etc.</li>
+  <li>early stopping</li>
+  <li>uncertainty</li>
+  <li>calibration</li>
+  <li>active learning</li>
+</ul>
+
+<h3 id="handling-uncertainty">Handling Uncertainty</h3>
+
+<ul>
+  <li>in real world decision making, modeling and communicating uncertainty is often more important than accuracy
+    <ul>
+      <li>handling mistakes (false positives) can be more costly than flagging anomalies and forcing intervention</li>
+      <li>system design should include mechanisms for QA/intervention/fallback/decision overrides etc.</li>
+      <li>unlike traditional software development - which focuses on creating a “bug free” system - in practice, ML is never bug free and it is safer to design systems that leverage uncertainty to handle bugs with appropriate mechanisms or strategies.</li>
+    </ul>
+  </li>
+  <li>common pitfalls
+    <ul>
+      <li>overemphasizing accuracy</li>
+      <li>waiting until deploy time to consider and understand out of distribution data</li>
+      <li>interpreting softmax scores as confidence/uncertainty</li>
+    </ul>
+  </li>
+  <li>types of uncertainty
+    <ul>
+      <li>aleatoric vs. epistemic</li>
+    </ul>
+  </li>
+  <li>techniques for modeling uncertainty…
+    <ul>
+      <li>aleatoric: modeling distribution of data (ie: probability of data taking form of prediction)</li>
+      <li>epistemic: Bayesian -&gt; modeling network uncertainty with probabilistic parameters, Consensus -&gt; modeling network uncertainty with ensembles/monte carlo dropout etc.</li>
+    </ul>
+  </li>
+  <li>out of distribution detection</li>
+  <li>quick tricks…</li>
+</ul>
+
+<h2 id="model-serving">Model Serving</h2>
+
+<h3 id="challenges">Challenges</h3>
+
+<ul>
+  <li>combating train/serve skew</li>
+  <li>incorporating data pre/post processing</li>
+  <li>making predictions intuitive and usable… what do you expose?</li>
+  <li>defining boundaries… where do you put business logic?</li>
+  <li>sharing the environment + data handling across both training and inference</li>
+  <li>estimating and managing load</li>
+  <li>scaling</li>
+  <li>monitoring performance</li>
+  <li>communicating performance (key metrics?)</li>
+  <li>optimizing throughput &amp; latency</li>
+</ul>
+
+<h3 id="define-your-inference-needs">Define your inference needs</h3>
+
+<p>Typically, low latency and high throughput come w/ added complexity - so start simple and really understand your performance needs. Start by thinking through the expected usage pattern for your inference problem.</p>
+
+<ul>
+  <li>realtime, scheduled, offline?</li>
+  <li>what does a client look like? (environment/service/app/programming language etc.)</li>
+  <li>how many clients will be making requests? how often?</li>
+  <li>what matters in your scenario - latency, throughput or both?</li>
+  <li>
+    <p>is the scenario batch-able</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">output_a</span> <span class="o">=</span> <span class="n">request_model_pred</span><span class="p">(</span><span class="n">input_a</span><span class="p">)</span>
+  <span class="n">output_b</span> <span class="o">=</span> <span class="n">request_model_pred</span><span class="p">(</span><span class="n">input_b</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>is there a sequential nature to your pipeline…</p>
+
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="n">output_a</span> <span class="o">=</span> <span class="n">request_model_a_pred</span><span class="p">(</span><span class="n">input_data</span><span class="p">)</span>
+  <span class="n">output_b</span> <span class="o">=</span> <span class="n">request_model_b_pred</span><span class="p">(</span><span class="n">output_a</span><span class="p">)</span>
+</code></pre></div>    </div>
+  </li>
+  <li>do you need to persist raw model outputs (logging, metrics, downstream processing etc.)</li>
+  <li>how frequently is the model updating?</li>
+</ul>
+
+<h3 id="version-control-for-ml">Version Control for ML</h3>
+
+<ul>
+  <li>Model versioning and storage
+    <ul>
+      <li>Model weights</li>
+      <li>Model config</li>
+      <li>Training config to reproduce?</li>
+      <li>Dataset to reproduce?</li>
+    </ul>
+  </li>
+  <li>Data versioning and storage</li>
+  <li>Experiment tracking &amp; reproducibility</li>
+  <li>Data pre/post processing?</li>
+  <li>Don’t think of versioning a model… think of versioning the entire “Inference System”</li>
+  <li>prioritize a version control for the “inference system” as a whole, and find a way to make sure the “models” are released in lockstep with the data handling (pre/post processing) involved in the inference pipeline. In cloud or kubernetes environments, this can look like a “chart” version” (think helm or kustomize).</li>
+  <li>For the actual storage of models, I prefer not to add intermediate stores and instead make it easy to reference the exact “experiment or code” that produced the model.</li>
+  <li>For projects that aim to automate a closed loop system, traceability and programmatic references between data/training/deployment become crucial.</li>
+  <li>If you’re in a cloud environment (or docker-compose on LFS) you can use init-containers to download model artifacts and make them available to the serving container using volumes. This simplifies the responsibilities of your model server at the cost of orchestration, allowing for arbitrary logic in the versioning and handling of models.</li>
+</ul>
+
+<h3 id="tiers-of-complexity">Tiers of Complexity</h3>
+
+<ul>
+  <li>…</li>
+</ul>
+
+<h3 id="train-serve-skew">Train Serve Skew</h3>
+
+<ul>
+  <li>…</li>
+</ul>
+
+<p><img src="/images/ml-guide/train-serve-skew.svg" alt="0" class="align-center" /></p>
+
+<p><img src="/images/ml-guide/share-data-processing.svg" alt="0" class="align-center" /></p>
+
+<h3 id="optimizations">Optimizations</h3>
+
+<ul>
+  <li>distributed systems</li>
+  <li>centralizing model inference</li>
+  <li>parallelization strategies</li>
+  <li>optimized models
+    <ul>
+      <li>pruning</li>
+      <li>TensorRT</li>
+      <li>mixed precision</li>
+    </ul>
+  </li>
+  <li>optimized model servers (triton/tf-serving etc.)
+    <ul>
+      <li>TensorRT</li>
+      <li>server side batching</li>
+      <li>MKL optimized CPU variants</li>
+      <li>GPU model sharing</li>
+    </ul>
+  </li>
+  <li>…</li>
+</ul>
+
+<h2 id="qa--feedback-mechanisms">QA &amp; Feedback Mechanisms</h2>
+
+<ul>
+  <li>…</li>
+</ul>
+
+<h2 id="beware-of-the-curse-of-knowledge">Beware of the Curse of Knowledge</h2>
+
+<ul>
+  <li>When you know something it is almost impossible to imagine what it is like not to know that thing.</li>
+  <li>Explaining Performance to non-data scientists</li>
+  <li>…</li>
+</ul>
+
+<h2 id="last-mile">Last mile</h2>
+
+<ul>
+  <li>monitoring</li>
+  <li>drift detection + explain-ability</li>
+  <li>promoting use</li>
+  <li>setup for success w/ non-data scientists</li>
+  <li>vocabulary</li>
+  <li>absolutes vs probabilities</li>
+  <li>API design</li>
+  <li>versioning</li>
+</ul>
+
+<h2 id="misc">Misc</h2>
+
+<p>Things yet to find a section in this outline…</p>
+
+<ul>
+  <li>
+    <p>Prioritize simplicity! A bit harsh but… assume anyone who inherits your system will be mediocre - set them up for success by avoiding complexity like the plague. When you can use fewer technologies, do so. A good quote on the subject:</p>
+
+    <blockquote>
+      <p>“A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away.”</p>
+    </blockquote>
+  </li>
+  <li>Seek first to understand - the problems, the people, the desired outcome etc.</li>
+  <li></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2022-08-24T07:00:00+07:00">August 24, 2022</time></p>
+
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

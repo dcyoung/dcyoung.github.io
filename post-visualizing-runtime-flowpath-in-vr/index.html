@@ -1,0 +1,1034 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Visualizing Runtime Flowpath in VR</title>
+<meta name="description" content="An interactive Virtual Reality sandbox for the creation of digital logic circuits and graphical scripting">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Visualizing Runtime Flowpath in VR">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-visualizing-runtime-flowpath-in-vr/">
+
+
+  <meta property="og:description" content="An interactive Virtual Reality sandbox for the creation of digital logic circuits and graphical scripting">
+
+
+
+  <meta property="og:image" content="http://img.youtube.com/vi/s0wEFLmifPM/0.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-05-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-05-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-visualizing-runtime-flowpath-in-vr/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Visualizing Runtime Flowpath in VR">
+    <meta itemprop="description" content="An interactive Virtual Reality sandbox for the creation of digital logic circuits and graphical scripting">
+    <meta itemprop="datePublished" content="2016-05-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-05-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-visualizing-runtime-flowpath-in-vr/" itemprop="url">Visualizing Runtime Flowpath in VR
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#project-proposal">Project Proposal</a></li><li><a href="#representing-and-solving-digital-logic-circuits">Representing and Solving Digital Logic Circuits</a></li><li><a href="#getting-up-and-running-in-unity">Getting Up and Running in Unity</a></li><li><a href="#leap-motion-for-moving-primitive-objects">Leap Motion For Moving Primitive Objects</a></li><li><a href="#leap-motion-continued">Leap Motion Continued</a></li><li><a href="#tested-vr-support--event-based-interaction-locks">Tested VR Support + Event Based Interaction Locks</a></li><li><a href="#part-bin-model">Part Bin Model</a></li><li><a href="#interaction-mode-selection">Interaction Mode Selection</a></li><li><a href="#connection-mode-early-wip">Connection Mode Early WIP</a></li><li><a href="#successful-integration-of-front--backend">Successful Integration of Front + Backend</a></li><li><a href="#visualizing-connections">Visualizing Connections</a></li><li><a href="#minor-documentation-improvements">Minor Documentation Improvements</a></li></ul>
+            </nav>
+          </aside>
+        
+        
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/2rHeg_TymeE" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<p>The following is a development blog of sorts documenting a Virtual Reality and Leap Motion project built for a VR course at UIUC. The experience is an interactive Virtual Reality sandbox for the creation of digital logic circuits and graphical scripting. The goal was to visualize runtime flowpath in the context of interactive circuits formed of finite primitive elements.</p>
+
+<h2 id="project-proposal">Project Proposal</h2>
+
+<object data="/images/runtime-flowpath-vr/proposal.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/runtime-flowpath-vr/proposal.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/runtime-flowpath-vr/proposal.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="representing-and-solving-digital-logic-circuits">Representing and Solving Digital Logic Circuits</h2>
+
+<p><strong>(March 23rd, 2016)</strong></p>
+
+<p>The final project will most likely be built in Unity, which uses C#. I was away from home today with only my laptop so I drafted up some code in C# separate from the Unity engine. The idea was to construct a back-end representation for the circuit elements and their connection. A directed graph is a logical choice. To solve the directed graph I implemented a simple topological sort.</p>
+
+<p>The code for this can be viewed here: ​<a href="https://github.com/dcyoung/CircuitSolver">github.com/dcyoung/CircuitSolver</a></p>
+
+<p>The implementation of the directed graph uses adjacency lists (stored in a dictionary map) to describe edges. This is a directed graph, so only one-way mapping is required to describe the edges… but maps for both parental and child relationships are maintained to ease some other operations elsewhere in the code base. The only adjacency list necessary for the topological sort is the dependents (children).</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">&gt;</span> <span class="n">nodes</span><span class="p">;</span>
+<span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">,</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">&gt;&gt;</span> <span class="n">dependencies</span><span class="p">;</span><span class="c1">// mapping edges for dependencies</span>
+<span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">,</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">&gt;&gt;</span> <span class="n">dependents</span><span class="p">;</span>  <span class="c1">// mapping edges for dependents</span>
+</code></pre></div></div>
+
+<p>Then, the topological sort is performed using a recursive depth first search. The visited node markers are held in a map and the final sorted order is held in a stack.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">private</span> <span class="n">Stack</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">&gt;</span> <span class="n">reversePost</span><span class="p">;</span>
+<span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;</span> <span class="n">marked</span><span class="p">;</span>
+<span class="c1">// ...</span>
+<span class="cm">/**
+ * Sorts the circuit's nodes in topological order such that all dependencies of nodes preceed the node
+ */</span>
+<span class="k">public</span> <span class="n">Stack</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">&gt;</span> <span class="nf">topologicalSort</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="c1">//create a new stack to hold the final order</span>
+	<span class="n">reversePost</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">&gt;();</span>
+	<span class="c1">//reset all the marked flags to false</span>
+	<span class="n">marked</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">,</span><span class="kt">bool</span><span class="p">&gt;</span> <span class="p">();</span>
+	<span class="k">foreach</span><span class="p">(</span><span class="n">Node</span> <span class="n">n</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="n">nodes</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">marked</span><span class="p">.</span><span class="nf">Add</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+	<span class="p">}</span>
+		
+	<span class="c1">//Perform a Depth First Search (DFS) to topologically sort the directed graph</span>
+	<span class="k">foreach</span><span class="p">(</span> <span class="n">Node</span> <span class="n">n</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="n">nodes</span> <span class="p">)</span>
+	<span class="p">{</span>
+		<span class="k">if</span><span class="p">(!</span><span class="n">marked</span><span class="p">[</span><span class="n">n</span><span class="p">])</span>
+		<span class="p">{</span>
+			<span class="nf">depthFirstSearch</span> <span class="p">(</span><span class="n">n</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="n">reversePost</span><span class="p">;</span>
+<span class="p">}</span>
+	
+<span class="cm">/**
+ * Recursive Helper Function for the topological sort
+ */</span> 
+<span class="k">private</span> <span class="k">void</span> <span class="nf">depthFirstSearch</span><span class="p">(</span><span class="n">Node</span> <span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">marked</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+	<span class="k">foreach</span><span class="p">(</span><span class="n">Node</span> <span class="n">child</span> <span class="k">in</span> <span class="k">this</span><span class="p">.</span><span class="nf">getChildrenOfNode</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+	<span class="p">{</span>
+		<span class="k">if</span><span class="p">(</span> <span class="p">!</span><span class="n">marked</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="p">)</span>
+		<span class="p">{</span>
+			<span class="nf">depthFirstSearch</span> <span class="p">(</span><span class="n">child</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">reversePost</span><span class="p">.</span><span class="nf">Push</span> <span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>This topological sort can be used to solve the circuit as follows.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/**
+ * Solves the digital logic circuit by performing a topological sort
+ * on all the nodes, before determining the active state of each in 
+ * that order based off their inputs (active states of their parents).
+ */</span> 
+<span class="k">public</span> <span class="k">void</span> <span class="nf">solve</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="c1">//topologically sort the nodes so that every node comes after any dependencies</span>
+	<span class="n">Stack</span><span class="p">&lt;</span><span class="n">Node</span><span class="p">&gt;</span> <span class="n">sortedNodes</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="nf">topologicalSort</span> <span class="p">();</span>
+
+	<span class="c1">//for each node, set the active state by processing the inputs to the node (inputs are </span>
+	<span class="c1">//just the activeState of the dependencies (parent nodes)... which in turn were determined</span>
+	<span class="c1">//previously by the activeState of their parents and so on... all the way to the top where the</span>
+	<span class="c1">//source processInputs() fxn simply returns the current activeState of the source node.</span>
+	<span class="n">Node</span> <span class="n">next</span><span class="p">;</span>
+	<span class="k">while</span><span class="p">(</span> <span class="n">sortedNodes</span><span class="p">.</span><span class="n">Count</span> <span class="p">&gt;</span> <span class="m">0</span> <span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">next</span> <span class="p">=</span> <span class="n">sortedNodes</span><span class="p">.</span><span class="nf">Pop</span> <span class="p">();</span>
+		<span class="n">next</span><span class="p">.</span><span class="nf">setActiveState</span> <span class="p">(</span><span class="n">next</span><span class="p">.</span><span class="nf">processInputs</span> <span class="p">(</span><span class="k">this</span><span class="p">));</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="getting-up-and-running-in-unity">Getting Up and Running in Unity</h2>
+
+<p><strong>(March 31st, 2016)</strong></p>
+
+<p>I threw together a git repo for the project and migrated the RAW C# code into a unity project.</p>
+
+<p>The project can be obtained here: <a href="https://github.com/dcyoung/FlowPath.git">github.com/dcyoung/FlowPath.git</a></p>
+
+<p>​Right now it just performs the basic circuit test when the game starts and prints out info to the console. So the backend is working in Unity.</p>
+
+<h2 id="leap-motion-for-moving-primitive-objects">Leap Motion For Moving Primitive Objects</h2>
+
+<p><strong>(April 7th, 2016)</strong></p>
+
+<p>The new Orion SDK for the leap motion controller is miles ahead of the older SDK, but modules and example content have been slow to release. As of now, the only supported gesture is a “pinch” motion with the thumb and pointer finger. While some wonderful demos, specifically the cube demo, demonstrate the pinch motion working to great effect… I have yet to find source code or example projects for object interaction. I spent an hour or two tonight tinkering with the pinch motion demo scene and managed to whip up a quick &amp; dirty SPIKE solution for interacting with objects. I’m still new to unity, with all my background in UE4, so most of my time was spent figuring out how to deal with unity’s interface.</p>
+
+<p>The simple code: <a href="https://github.com/dcyoung/FlowPath/blob/master/FlowPath/Assets/InteractiveObjects/Scripts/ItemPickup.cs">github.com/dcyoung/FlowPath/blob/master/FlowPath/Assets/InteractiveObjects/Scripts/ItemPickup.cs</a></p>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/kmGyBRXWIaE" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<h2 id="leap-motion-continued">Leap Motion Continued</h2>
+
+<p><strong>(April 12th, 2016)</strong>
+I spent some more time messing around with the project trying to get a trigger volumes to serve as parts bins. There seems to be some
+unpredictable behavior when querying the “isPinching” variable of a LeapPinchDetector… but I managed to get a primitive instantiated on the exit of the trigger volume instead. I’m sure a better implementation would be easy if I rummaged through the PinchDetector source… but this works for now. Again, the thumb seems to be the ideal positional locator for this stuff.</p>
+
+<p>I wrote a class to handle the interaction that spawns an interact-able primitive… and because it shared enough code with the ItemPickup class from the previous update, I extracted the common elements into an ItemInteraction class that both subclasses can inherit from.</p>
+
+<p>See the source: <a href="https://github.com/dcyoung/FlowPath/tree/master/FlowPath/Assets/InteractiveObjects/Scripts">github.com/dcyoung/FlowPath/tree/master/FlowPath/Assets/InteractiveObjects/Scripts</a></p>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/f4uIxsnu8Y4" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<h2 id="tested-vr-support--event-based-interaction-locks">Tested VR Support + Event Based Interaction Locks</h2>
+
+<p><strong>(April 20th, 2016)</strong></p>
+
+<p>​I finally got the leap motion and a DK2 in one place at the same time and managed to give the project a go in VR. All I can say is WOW… it works a lot better with a headset. If leap motion ever seemed at all “gimicky”, then try it with a VR headset and see for yourself. Its surreal. Also the “Cubes” demo from the developer gallery on the Leap Motion site is brilliant in VR. I thought it was rather good when I just had the leap motion strapped to a hat, but it was an entirely different experience with the DK2. I can’t wait for my CV1 to get here so I can give it a whirl with oculus runtime v1.3.</p>
+
+<p>After playing around with the project in VR for a bit, I got sick of multiple primitives attaching to the hand simultaneously. I experimented with an “event” based notification system that alerts subscribers of newly engaged interactions and newly terminated interactions. This lets each interactive item shut itself off to the possibility of interaction until it is notified that all other interactions have concluded… ensuring 1 interaction is active at a time.</p>
+
+<h2 id="part-bin-model">Part Bin Model</h2>
+
+<p><strong>(April 23rd, 2016)</strong></p>
+
+<p>I figured I’d spruce up the aesthetic while prototyping the mechanics. I whipped up a model in Maya for an extremely simple parts bin. The model is nothing to write home about, but it adds a little more context to the scene compared to blank trigger volumes.</p>
+
+<p><img src="/images/runtime-flowpath-vr/bin.webp" alt="bin" /></p>
+
+<h2 id="interaction-mode-selection">Interaction Mode Selection</h2>
+
+<p><strong>(May 5th, 2016)</strong></p>
+
+<p>With large collision boxes and multiple types of interactions I decided to split up the interactions into categories that only work in certain modes. This will work like tools in a modeling program for example, where you must select the right mode before using a tool relevant to that category. At minimum there need to be at least 3 dedicated modes for the following:</p>
+
+<ul>
+  <li>Creating/moving primitives</li>
+  <li>Creating/editing connections</li>
+  <li>Spectating</li>
+</ul>
+
+<p>I reworked the classes a bit to make them more universal and ended up with the following: There is now a dedicated static event manager for switching modes. Mode support can be cycled.. allowing for many different kinds of modes. Alert delegates/events are sent out upon change in mode and receivers can handle things accordingly. For example I created a textUpdate component script that updates the text on the button face plate when the events fire. Similarly, a check is made in the item interaction script to ensure that the “Move” mode is enabled before letting the user spawn or move primitives. This new system is universal and easily expanded. I tested it all with leapmotion and its working.</p>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/s0wEFLmifPM" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<h2 id="connection-mode-early-wip">Connection Mode Early WIP</h2>
+
+<p><strong>(May 8th, 2016)</strong></p>
+
+<p>Few updates here:</p>
+
+<ul>
+  <li>Refactored a bit of the mode selection.</li>
+  <li>Added dynamic instructions/message display that subscribes to the various event managers. This way I can present appropriate instructions for the user based off the game state as well as provide step-by-step instructions that only progress when the user completes the steps.</li>
+  <li>Added a circuit manager to interface with the backend.</li>
+  <li>Various bug fixes.</li>
+  <li>Progress made on interactive specification of connection ports + translating front end interaction to backend updates.</li>
+</ul>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/KxBMjklltd8" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<h2 id="successful-integration-of-front--backend">Successful Integration of Front + Backend</h2>
+
+<p><strong>(May 9th, 2016)</strong></p>
+
+<p>Bunch of updates here:</p>
+
+<ul>
+  <li>Various bug fixes in the backend circuit code. Previously the code did not permit nodes to have missing parents and would error when solving a circuit. I implemented a more robust check that will also set active states properly in situations without a parent node (ex: an OR gate with only 1 active parent now appears active).</li>
+  <li>Circuit is now solved whenever an element on the front end changes in a way that might change the circuit.</li>
+  <li>Front end node representations now have a visual cue indicating if they’re active. The cue is updated using the CircuitManager event system whenever the circuit is updated… this keeps the front and back end in sync.</li>
+  <li>Added source gates to the scene and implemented a control switch to change the source value (on or off) in real time which propagates changes through the rest of the circuit.</li>
+</ul>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/NSHfKCdbMU0" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<h2 id="visualizing-connections">Visualizing Connections</h2>
+
+<p><strong>(May 11th, 2016)</strong></p>
+
+<p>Lots of updates in this iteration.</p>
+<ul>
+  <li>Various bug fixes</li>
+  <li>New meshes for ports. A fellow classmate created these new models for a port, and they worked out fine.</li>
+</ul>
+
+<p><img src="/images/runtime-flowpath-vr/connections.webp" alt="ports" class="align-center" /></p>
+
+<ul>
+  <li>Enhanced visual cues for specifying a prospective connection. With a latent prospective connection, only the output ports are shown for selection. Once one has been selected, it is highlighted green for reference but is not interactive. All the other output ports are visually removed so the user select a valid input port. Once an input port is selected the connection is automatically completed and the user can begin specifying another connection. This keeps things very snappy for fast circuit builds. I experiemnted with a setup where the user specifies a prospective connection and then hits a button to submit it, but it seemed too cumbersome. Once you’re used to the leap motion system you can really quickly prototype circuits. ​</li>
+</ul>
+
+<figure class="half">
+    <img src="/images/runtime-flowpath-vr/interaction_1.webp" />
+    <img src="/images/runtime-flowpath-vr/interaction_2.webp" />
+</figure>
+
+<ul>
+  <li>Procedural Mesh generation for connections
+    <ul>
+      <li>Uses a custom tube renderer to render a tube around a physics driven rope. The physics look great, but can spazz out in certain conditions. Right now the physics are effectively disabled. Some hacky workarounds could keep them under control, but I have a good fix in mind thats in the works.</li>
+    </ul>
+  </li>
+  <li>New meshes for primitives (again a classmate created these).</li>
+  <li>Simple holographic rotating icon above each node. This helps display the node type while keeping the node a more simple and compact mesh. The custom new meshes for primitives mentioned above were used for the hologram.</li>
+</ul>
+
+<p><img src="/images/runtime-flowpath-vr/hologram.webp" alt="hologram" class="align-center" /></p>
+
+<p>Here is a short video showing a simple circuit. There are still a few update bugs that need to get fleshed out and also I forgot to demonstrate the updated tubes when connected nodes are moved. I’ll get another video out soon showing all this.</p>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/2rHeg_TymeE" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<h2 id="minor-documentation-improvements">Minor Documentation Improvements</h2>
+
+<p><strong>(May 12th, 2016)</strong></p>
+
+<p>The code is fairly well documented or self explanatory, save for missing summaries at the top of classes. I intend to do a full sweep of everything and refactor/document. In the meantime I threw some brief summaries on the ReadMe for the git repo.
+You can see the WIP notes here: <a href="https://github.com/dcyoung/FlowPath">github.com/dcyoung/FlowPath</a></p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#3d" class="page__taxonomy-item p-category" rel="tag">3D</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#game-dev" class="page__taxonomy-item p-category" rel="tag">game dev</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#virtual-reality" class="page__taxonomy-item p-category" rel="tag">virtual reality</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-05-01">May 1, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Visualizing+Runtime+Flowpath+in+VR%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-visualizing-runtime-flowpath-in-vr%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-visualizing-runtime-flowpath-in-vr%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-visualizing-runtime-flowpath-in-vr/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-estimating-fundamental-matrix/" class="pagination--pager" title="​Estimating Fundamental Matrix ​&amp; Triangulating 3D Points
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-detect-tsc/" class="pagination--pager" title="Multi-channel Time Series Classification w/ Deep Learning
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

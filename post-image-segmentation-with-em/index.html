@@ -1,0 +1,1043 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>​Image Segmentation w/ EM Algorithm</title>
+<meta name="description" content="Segment images using a clustering method.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="​Image Segmentation w/ EM Algorithm">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-image-segmentation-with-em/">
+
+
+  <meta property="og:description" content="Segment images using a clustering method.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/logos/r.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-02-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-02-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-image-segmentation-with-em/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="​Image Segmentation w/ EM Algorithm">
+    <meta itemprop="description" content="Segment images using a clustering method.">
+    <meta itemprop="datePublished" content="2016-02-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-02-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-image-segmentation-with-em/" itemprop="url">​Image Segmentation w/ EM Algorithm
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          10 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#overview">Overview</a></li><li><a href="#em-algorithm-concept">EM Algorithm (Concept)</a></li><li><a href="#results">Results</a></li><li><a href="#exploring-variation-in-results">Exploring Variation in Results</a></li><li><a href="#implementation">Implementation</a></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="overview">Overview</h2>
+
+<p>It is possible to segment images using a clustering method, where each segment is the cluster center to which a pixel belongs. Images are represented by their r,g, and b values. In this implementation image pixels are clustered by applying an Expectation Maximization (EM) algorithm to a mixture of normal distribution model. Then the image is segmented by mapping each pixel to the cluster center with the highest value of the posterior probability for that pixel. The results of segmentation can be displayed easily as simple images, where each pixel’s color is replaced with the mean color of the closest segment. This is the same basic technique used for some image compression, as storage only involves mapping pixels to a limited set of colors (cluster centers).</p>
+
+<h2 id="em-algorithm-concept">EM Algorithm (Concept)</h2>
+
+<p>A normal distribution is capable of modelling a single blob of data points. But a single normal distribution will not produce a good model if there are multiple blobs of data points. The multivariate normal distribution is a generalization of the one-dimensional (univariate) normal distribution to higher dimensions. It is often used to describe a set of (possibly) correlated components (random variables) each of which should cluster around a mean value. With the help of affine transformation, any multivariate gaussian can be converted to have zero mean and independent components. Therefore, under the right transformations, any gaussian can be represented as the product of one-dimensional normal distributions (each with zero mean and unit standard deviation). This permits a way to simulate multivariate normal distributions. Simply simulate a standard normal distribution for each component, applying the appropriate transformations afterwards.</p>
+
+<p>Extrapolating this idea to clustering, think of the data as if it were generated in a certain way and then figure out the specifics of that process. Assume that each data item was pulled from one of multiple distinct models. For k clusters, assume there were k distinct models. Assume that a magical process determined which model to use when producing a data item in question. We know neither the models nor the origin of each data item (it’s classified cluster). This is a very common situation, applicable to many types of problems.</p>
+
+<p>A natural approach to solving this problem is to alternate between estimating classifications of data items to models, and re-estimating the models themselves. For example, K-means iteratively assigns points to clusters and then re-estimates the cluster centers. But what if the models are probabilistic or there is not a clear “distance function”. In this case an Expectation Maximization (EM) algorithm is the standard.</p>
+
+<p>At a high level, the EM algorithm works to average out what we don’t know. It alternates between averaging and re-estimating parameters with soft methods. The E step (expectation) involves creating a function for the expectation of the log-likelihood evaluated using the current parameter estimates. The M step (maximization) involves re-computing the parameters to maximize the function created in the E step (the expected log-likelihood). For the next iteration, the E step creates the log-likelihood using the newer parameter estimates and so on. The algorithm repeats until acceptable convergence.</p>
+
+<h2 id="results">Results</h2>
+
+<p>Results were generated by segmenting 5 different images to 10,20 and 50 segments. The resulting pixel to cluster mappings were stored as images after each iteration and the results were compiled into animated GIFs. Additionally, one image (polar lights) was segmented into 20 segments using 6 different random initialized values fed into the EM algorithm.</p>
+
+<p><img src="" alt="Balloons (10, 20 and 50 segments, 15 iterations)" /></p>
+
+<p><img src="" alt="Mountains (10, 20 and 50 segments, 15 iterations)" /></p>
+
+<p><img src="" alt="Nature (10, 20 and 50 segments, 15 iterations)" /></p>
+
+<p><img src="" alt="Ocean (10, 20 and 50 segments, 15 iterations)" /></p>
+
+<p><img src="" alt="Polar Lights (10, 20 and 50 segments, 15 iterations)" /></p>
+
+<h2 id="exploring-variation-in-results">Exploring Variation in Results</h2>
+
+<p>To keep everything consistent, the EM algorithm was run for a fixed 30 iterations on the polarlights image using 6 different initial conditions for “pi” and “mu”. For each of the 6 runs, the initial values for pi were randomized and then unitized so they summed to 1. The same process was used for each topic’s mu vector. It is easiest to detect origins of variation by looking at the progression of iterations in the animated gifs. Although each run converges on very similar segmentations, there are slight differences. Depending on the random initial values for pi and mu, the first assignments of pixels to segments is different for each of the 6 trials. Certain colors appear in the early iterations and then morph more towards the original image by later iterations. Obviously the center shifts to shades of green, the right blues, and the left purples. These generalities hold across runs despite the difference in initial conditions, as they are the “ground truth” assignments looking at the original image. The variance in the final images reflects the fact that the EM algorithm converges to find parameters that will obtain local maxima and likelihood of the data given the model’s parameters. (LOCAL maxima not GLOBAL maxima). Intuitively, the process will find different maximizations given different initial conditions. If one cluster is assigned a high Pi value originally, it will be relatively easier for this cluster to achieve assignments… while for a cluster that was originally assigned a low Pi value, it will struggle to achieve assignments (relatively).</p>
+
+<p><img src="" alt="Polar Lights (20 segments, 30 iterations) -- Randomized Starting Values (6 different cases)" /></p>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>All of the code was written from scratch in Matlab. It has been included in its entirety below. I’m sure that further optimizations will be apparent to those experienced with vectorizing code, but this worked well enough for my purposes. A few notes are worth mentioning…
+While conceptually the EM algorithm involves selecting parameters that maximize an entire function, the only values required for successive iterations are the weights and the parameters themselves. Instead of calculating the full equation, the weights are recalculated and the parameters are adjusted each iteration.
+Here the pi’s (probability that a given cluster was chosen for data point creation) and mu’s (mean value for each model/distribution) are initialized to values that are close to even, plus a small amount of gaussian random noise. Shown later is a snippet to initialize the pi’s and mu’s in a uniform random fashion. 
+The E step contains terms that may lead to underflow errors because of the multiplication of many tiny numbers. To avoid underflow errors, the implementation performs the E step in the log domain where  a product of k terms becomes a sum of k terms. Unfortunately the denominator of one element in the equation contains a sum of products, meaning I couldn’t decompose it into a sum of logs of individual terms. Instead I compute the logarithm of this expression for sums of products. One could use a log sum expression command to accomplish this, but I did it from scratch. I’ll try to elaborate on this below, with an example from the topic model case  (see INSERT LINK). The same logic applies to this implementation. Consider the following expression:</p>
+
+\[p\left ( \delta _{ij}=1|\theta ^{(n)},x \right )=\frac{[\prod _{k}p_{j,k}^{xk}]\pi_{j}}{\sum _{l}[\prod _{k}p_{l,k}^{xk}]\pi_{l}}\]
+
+<p>To avoid underflow, this will have to be computed in the log domain. But that denominator is a sum of products which doesn’t decompose into a sum of logs of individual terms. Instead, compute the logarithm of sums of products. For easy notation, denote:</p>
+
+\[\begin{align*}
+Y &amp;= p\left ( \delta _{ij}=1|\theta ^{(n)},x \right )\\
+A_{j} &amp;= [\prod _{k}p_{j,k}^{x_k}]\pi_{j}\\
+A_{max} &amp;= \max_{j} A_{j}
+\end{align*}\]
+
+<p>Therefore,</p>
+
+\[\log A_{j} = \log \pi_{j} + \sum_{k} x_{k}\log p_{j, k}\\
+\log A_{max} = \log\left(\max_{j}A_{j}\right) =\max_{j} \log\left(A_{j}\right)\]
+
+<p>Then, derive and calculate the logarithm of Y as:</p>
+
+\[\begin{align*}
+
+\log Y &amp;= {\log A_{j}} - {\log\left(\sum_{l} A_{l}\right)}\\
+
+&amp;={\log A_{j}} - {\log\left(\sum_{l} e^{\log A_{l}}\right)}\\
+
+&amp;={\log A_{j}} - {\log\left(e^{\log A_{max}}\sum_{l} e^{\log A_{l} - \log A_{max}}\right)}\\
+
+&amp;={\log A_{j}} - {\log e^{\log A_{max}}} - {\log\left(\sum_{l} e^{\log A_{l} - \log A_{max}}\right)}\\ 
+
+&amp;={\log A_{j}} - {\log A_{max}} - {\log\left(\sum_{l} e^{\log A_{l} - \log A_{max}}\right)}
+
+\end{align*}\]
+
+<p>Then, simply take the exponent of that to yield Y. This means that each iteration, the E step will follow the following formula:</p>
+
+<p>For every data item “i”, do:</p>
+
+<ol>
+  <li>Compute log(Aj) for every j</li>
+  <li>When performing step 1, note the biggest computed value (considering each final log(Aj) ) and remember it as log(Amax)</li>
+  <li>Because it is identical for all j, compute the following term from the final equation for logY:</li>
+</ol>
+
+\[{\log\left(\sum_{l} e^{\log A_{l} - \log A_{max}}\right)}\]
+
+<ol>
+  <li>For each cluster j, compute the logY</li>
+  <li>Exponentiate this logY ie: exp(logY) to yield w(i,j)</li>
+</ol>
+
+<p>The M step will change the values of Aj, so each E step this will be an effective computation of new weights corresponding to the assignments of data points to clusters.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">% Clear the workspace
+clear all; clc;
+
+%</span><span class="w"> </span><span class="n">Set</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">workspace</span><span class="w">
+</span><span class="n">cd</span><span class="w"> </span><span class="s1">'/directoryWithImageNamesGoHere'</span><span class="w">
+
+</span><span class="o">% Potential image names
+imgNames = {'balloons', 'mountains', 'nature', 'ocean', 'polarlights'};
+segmentCounts = [10,20,50];
+
+for imgNameCounter = 1:5
+    for segmentCountIter = 1:3
+        %</span><span class="w"> </span><span class="n">Load</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">image</span><span class="w">
+        </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">imread</span><span class="p">([</span><span class="n">imgNames</span><span class="p">{</span><span class="n">imgNameCounter</span><span class="p">},</span><span class="w"> </span><span class="s1">'.jpg'</span><span class="p">]);</span><span class="w">
+
+        </span><span class="o">%Define Parameters
+        nSegments = segmentCounts(segmentCountIter);%</span><span class="m">10</span><span class="w">   </span><span class="o">% # of color clusters
+        nPixels = size(x,1)*size(x,2);    %</span><span class="w"> </span><span class="c1"># of pixels</span><span class="w">
+        </span><span class="n">maxIterations</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span><span class="p">;</span><span class="w"> </span><span class="o">%maximum number of iterations allowed for EM algorithm.
+        nColors = 3;
+
+        %</span><span class="n">Determine</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">writing</span><span class="w"> </span><span class="n">images</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">files</span><span class="w">
+        </span><span class="n">outputPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'output/'</span><span class="p">,</span><span class="w"> </span><span class="n">num2str</span><span class="p">(</span><span class="n">nSegments</span><span class="p">),</span><span class="w"> </span><span class="s1">'_segments/'</span><span class="p">,</span><span class="w"> </span><span class="n">imgNames</span><span class="p">{</span><span class="n">imgNameCounter</span><span class="p">}</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s1">'/'</span><span class="p">];</span><span class="w">
+        </span><span class="n">imwrite</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">outputPath</span><span class="p">,</span><span class="w"> </span><span class="n">num2str</span><span class="p">(</span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="s1">'.png'</span><span class="p">]);</span><span class="w">
+
+
+        </span><span class="o">%reshape the image into a single vector of pixels for easier loops
+        pixels = reshape(x,nPixels,nColors,1);
+        pixels = double(pixels);
+
+
+        %</span><span class="w"> </span><span class="n">Initialize</span><span class="w"> </span><span class="nb">pi</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">mu</span><span class="w"> </span><span class="n">matrix</span><span class="w">
+
+        </span><span class="o">% Vector of probabilities for segments... 1 value for each segment.
+        %</span><span class="w"> </span><span class="n">Best</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">think</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="n">like</span><span class="w"> </span><span class="n">this...</span><span class="w">
+        </span><span class="o">% When the image was generated, color was determined for each pixel by selecting
+        %</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="s2">"n"</span><span class="w"> </span><span class="n">normal</span><span class="w"> </span><span class="n">distributions.</span><span class="w"> </span><span class="n">Each</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">vector</span><span class="w"> 
+        </span><span class="o">% corresponds to the probability that a given normal distribution was chosen.
+        pi = repmat(1/nSegments, nSegments, 1); 
+        %</span><span class="n">add</span><span class="w"> </span><span class="n">noise</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">initialization</span><span class="w"> </span><span class="p">(</span><span class="n">but</span><span class="w"> </span><span class="n">keep</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="n">unit</span><span class="p">)</span><span class="w">
+        </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="nb">pi</span><span class="p">)</span><span class="w">
+            </span><span class="k">if</span><span class="p">(</span><span class="n">mod</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="m">2</span><span class="p">)</span><span class="o">==</span><span class="m">1</span><span class="p">)</span><span class="w">
+                </span><span class="n">increment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">normrnd</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">.0001</span><span class="p">);</span><span class="w">
+                </span><span class="nb">pi</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">pi</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">increment</span><span class="p">;</span><span class="w">
+            </span><span class="k">else</span><span class="w">
+                </span><span class="nb">pi</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">pi</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">increment</span><span class="p">;</span><span class="w">
+            </span><span class="n">end</span><span class="w">
+        </span><span class="n">end</span><span class="w">
+
+
+        </span><span class="o">% Matrix of mean color (RGB vec)for the "n" distributions that will end up yield "n" image segments
+        mu = repmat(1/nSegments,nSegments,nColors); %</span><span class="k">for</span><span class="w"> </span><span class="n">even</span><span class="w"> </span><span class="n">start</span><span class="w">
+        </span><span class="o">%add noise to the initialization (but keep it unit)
+        for j = 1:nSegments
+            if(mod(j,2)==1)
+                increment = normrnd(0,.0001);
+            end
+            for k = 1:nColors
+                 if(mod(j,2)==1)
+                    mu(j,k) = mean(pixels(:,k)) + increment;
+                 else
+                     mu(j,k) = mean(pixels(:,k)) - increment;
+                 end
+                 if(mu(j,k) &lt; 0)
+                     mu(j,k) = 0;
+                 end
+            end
+        end
+
+
+        mu_last_iter = mu;
+        pi_last_iter = pi;
+
+        for iteration = 1:maxIterations
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            %</span><span class="w"> </span><span class="o">-----------------</span><span class="w">   </span><span class="n">E</span><span class="o">-</span><span class="n">step</span><span class="w">  </span><span class="o">--------------------</span><span class="w">
+            </span><span class="o">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span><span class="w">
+
+            </span><span class="n">display</span><span class="p">(</span><span class="s1">'E-step'</span><span class="p">);</span><span class="w">
+
+
+            </span><span class="o">% Weights that describe the likelihood that pixel "i" belongs to a color cluster "j"
+            w = repmat(1,nPixels,nSegments);  %</span><span class="w"> </span><span class="n">temporarily</span><span class="w"> </span><span class="n">reinitialize</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="n">weights</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">before</span><span class="w"> </span><span class="n">they</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">recomputed</span><span class="w">
+
+            </span><span class="o">% logarithmic form of the E step.
+            %</span><span class="w"> </span><span class="n">...</span><span class="w">  
+            </span><span class="o">% ...
+            for i = 1:nPixels
+                %</span><span class="w"> </span><span class="n">Calculate</span><span class="w"> </span><span class="n">Ajs</span><span class="w">
+                </span><span class="n">logAjVec</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">repmat</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">1</span><span class="p">,</span><span class="n">nSegments</span><span class="p">);</span><span class="w">
+                </span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nSegments</span><span class="w">
+                    </span><span class="n">logAjVec</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="nb">pi</span><span class="p">(</span><span class="n">j</span><span class="p">))</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="m">.5</span><span class="o">*</span><span class="p">((</span><span class="n">pixels</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">)</span><span class="o">-</span><span class="n">mu</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="o">:</span><span class="p">))</span><span class="o">*</span><span class="p">((</span><span class="n">pixels</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">)</span><span class="o">-</span><span class="n">mu</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="o">:</span><span class="p">)))</span><span class="s1">');
+                end
+
+                % Note the max
+                [logAmax,ind] = max(logAjVec(:)); 
+
+                % Calculate the third term from the final eqn in the above link
+                thirdTerm = 0;
+                for l = 1:nSegments
+                    thirdTerm = thirdTerm + exp(logAjVec(l)-logAmax);
+                end
+
+                % Calculate w(i,j)
+                for j = 1:nSegments
+                    logY = logAjVec(j) - logAmax - log(thirdTerm);
+                    w(i,j) = exp(logY);
+                end
+            end
+
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            % -----------------   M-step  --------------------
+            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+            display('</span><span class="n">M</span><span class="o">-</span><span class="n">step</span><span class="s1">')
+
+            %temporarily reinitialize mu and pi to 0, before they are recomputed
+            mu = repmat(0,nSegments,nColors); % mean color for each segment
+            pi = repmat(0,nSegments,1);
+
+            %new version 
+            for j = 1:nSegments
+
+                denominatorSum = 0;
+                for i = 1:nPixels
+                    mu(j,:) = mu(j,:) + pixels(i,:).*w(i,j);
+                    denominatorSum = denominatorSum + w(i,j);
+                end
+
+                % Update mu
+                mu(j,:) =  mu(j,:) ./ denominatorSum;
+
+                % Update pi
+                pi(j) = sum(w(:,j)) / nPixels;       
+            end
+
+            display(pi'</span><span class="p">)</span><span class="w">
+
+            </span><span class="n">muDiffSq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">sum</span><span class="p">((</span><span class="n">mu</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mu_last_iter</span><span class="p">)</span><span class="n">.</span><span class="o">^</span><span class="m">2</span><span class="p">));</span><span class="w">
+            </span><span class="n">piDiffSq</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nf">sum</span><span class="p">((</span><span class="nb">pi</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">pi_last_iter</span><span class="p">)</span><span class="n">.</span><span class="o">^</span><span class="m">2</span><span class="p">));</span><span class="w">
+
+            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">muDiffSq</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">.0000001</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">piDiffSq</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">.0000001</span><span class="p">)</span><span class="w">
+                </span><span class="n">disp</span><span class="p">(</span><span class="s1">'Convergence Criteria Met at Iteration:'</span><span class="p">)</span><span class="w">
+                </span><span class="n">disp</span><span class="p">(</span><span class="n">iteration</span><span class="p">)</span><span class="w">
+                </span><span class="k">break</span><span class="p">;</span><span class="w">
+            </span><span class="n">end</span><span class="w">
+
+            </span><span class="n">mu_last_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu</span><span class="p">;</span><span class="w">
+            </span><span class="n">pi_last_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">pi</span><span class="p">;</span><span class="w">
+
+
+            </span><span class="o">% Draw the segmented image using the mean of the color cluster as the 
+            %</span><span class="w"> </span><span class="n">RGB</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="n">pixels</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">cluster.</span><span class="w">
+            </span><span class="n">segpixels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pixels</span><span class="p">;</span><span class="w">
+            </span><span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w">
+            </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nPixels</span><span class="w">
+                </span><span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">find</span><span class="p">(</span><span class="n">w</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">w</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">)));</span><span class="w">
+                </span><span class="n">segpixels</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="o">:</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">mu</span><span class="p">(</span><span class="n">cluster</span><span class="p">,</span><span class="o">:</span><span class="p">));</span><span class="w">
+            </span><span class="n">end</span><span class="w">
+
+            </span><span class="n">segpixels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">segpixels</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="m">1</span><span class="p">),</span><span class="n">size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="m">2</span><span class="p">),</span><span class="n">nColors</span><span class="p">);</span><span class="w">
+            </span><span class="n">segpixels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">segpixels</span><span class="w"> </span><span class="n">.</span><span class="o">/</span><span class="m">255</span><span class="p">;</span><span class="w"> </span><span class="o">%normalize each entry to make img of type double
+            imwrite(segpixels, [outputPath, num2str(iteration), '.png']);
+
+        end
+        %</span><span class="w"> </span><span class="n">clean</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="n">workspace</span><span class="w">
+        </span><span class="n">clear</span><span class="w"> </span><span class="n">mu_last_iter</span><span class="w"> </span><span class="n">pi_last_iter</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="n">denominatorSum</span><span class="w"> </span><span class="n">logAjVec</span><span class="p">;</span><span class="w">
+        </span><span class="n">clear</span><span class="w"> </span><span class="n">logAjmax</span><span class="w"> </span><span class="n">logAmax</span><span class="w"> </span><span class="n">logY</span><span class="w"> </span><span class="n">muDiffSq</span><span class="w"> </span><span class="n">piDiffSq</span><span class="p">;</span><span class="w">
+        </span><span class="n">clear</span><span class="w"> </span><span class="n">thirdTerm</span><span class="p">;</span><span class="w">
+
+    </span><span class="n">end</span><span class="w">
+</span><span class="n">end</span><span class="w">
+</span></code></pre></div></div>
+
+<p>For the random initializations used for the exploration of variation, the following snippets were used.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">% Initialize pi vector and mu matrix to random values (unitized)
+
+%</span><span class="w"> </span><span class="n">Vector</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">probabilities</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">segments...</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">segment.</span><span class="w">
+</span><span class="o">% Best to think of it like this...
+%</span><span class="w"> </span><span class="n">When</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">generated</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">determined</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">each</span><span class="w"> </span><span class="n">pixel</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">selecting</span><span class="w">
+</span><span class="o">% a value from one of "n" normal distributions. Each value in this vector 
+%</span><span class="w"> </span><span class="n">corresponds</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">probability</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">given</span><span class="w"> </span><span class="n">normal</span><span class="w"> </span><span class="n">distribution</span><span class="w"> </span><span class="n">was</span><span class="w"> </span><span class="n">chosen.</span><span class="w">
+</span><span class="nb">pi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">(</span><span class="n">nSegments</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"> </span><span class="o">%repmat(1/nSegments, nSegments, 1); 
+pi = pi./sum(pi);
+
+%</span><span class="w"> </span><span class="n">Matrix</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">mean</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="p">(</span><span class="n">RGB</span><span class="w"> </span><span class="n">vec</span><span class="p">)</span><span class="k">for</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="s2">"n"</span><span class="w"> </span><span class="n">distributions</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="n">yield</span><span class="w"> </span><span class="s2">"n"</span><span class="w"> </span><span class="n">image</span><span class="w"> </span><span class="n">segments</span><span class="w">
+</span><span class="n">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rand</span><span class="p">(</span><span class="n">nSegments</span><span class="p">,</span><span class="n">nColors</span><span class="p">);</span><span class="o">%repmat(1/nSegments,nSegments,nColors); %</span><span class="k">for</span><span class="w"> </span><span class="n">even</span><span class="w"> </span><span class="n">start</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">nSegments</span><span class="w">
+    </span><span class="n">mu</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="o">:</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mu</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="o">:</span><span class="p">)</span><span class="n">.</span><span class="o">/</span><span class="nf">sum</span><span class="p">(</span><span class="n">mu</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="o">:</span><span class="p">));</span><span class="w">
+</span><span class="n">end</span><span class="w">
+</span></code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-02-01">February 1, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E2%80%8BImage+Segmentation+w%2F+EM+Algorithm%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-image-segmentation-with-em%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-image-segmentation-with-em%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-image-segmentation-with-em/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-photometric-stereo/" class="pagination--pager" title="​Photometric Stereo: Shape from Shading
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-regression-kernel-smoothing/" class="pagination--pager" title="Parametric Regression via Kernel Smoothing
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

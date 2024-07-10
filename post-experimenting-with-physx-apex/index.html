@@ -1,0 +1,1073 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Experimenting with PhysX and APEX Destruction</title>
+<meta name="description" content="A completely custom networked implementation of a card game called set.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Experimenting with PhysX and APEX Destruction">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-physx-apex/">
+
+
+  <meta property="og:description" content="A completely custom networked implementation of a card game called set.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/experimenting-with-physx-apex/3.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2014-05-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2014-05-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-physx-apex/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Experimenting with PhysX and APEX Destruction">
+    <meta itemprop="description" content="A completely custom networked implementation of a card game called set.">
+    <meta itemprop="datePublished" content="2014-05-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2014-05-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-physx-apex/" itemprop="url">Experimenting with PhysX and APEX Destruction
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#why-i-like-physx">Why I like PhysX</a></li><li><a href="#creating-destructible-assets">Creating Destructible Assets</a><ul><li><a href="#prior-experience">Prior Experience</a></li><li><a href="#adopted-pipeline">Adopted Pipeline</a></li></ul></li><li><a href="#using-rigid-body-physx-in-code-project">Using Rigid Body PhysX in Code Project</a><ul><li><a href="#getting-physx-working-in-a-ue4-code-project">Getting PhysX Working in a UE4 Code Project</a></li><li><a href="#manipulating-chunks-directly">Manipulating Chunks Directly</a></li></ul></li><li><a href="#basic-rigid-body-dynamics">Basic Rigid Body Dynamics</a><ul><li><a href="#applying-simple-forces-in-interesting-ways-move-chunks-by-aiming-your-gun">Applying Simple Forces in Interesting Ways (Move Chunks by Aiming your Gun)</a></li><li><a href="#experimenting-with-other-uses">Experimenting with Other Uses:</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <p><img src="/images/experimenting-with-physx-apex/3.webp" alt="example" class="align-center" /></p>
+
+<blockquote>
+  <p>The experiments here were conducted using unreal engine version 4.9.2. The content should be the same for all engine versions 4.8 -&gt; 4.9.X. I have not tested beyond that.</p>
+</blockquote>
+
+<h2 id="why-i-like-physx">Why I like PhysX</h2>
+
+<p>People are curious by nature, and if you give them a world constrained by physical laws they will attempt to explore the boundaries of those constraints. It is my belief that real-time simulation will rule the future of video games and similar interactive experiences. Unscripted sandbox moments provide endless hours of entertainment unlike their un-recyclable narrative cutscene counterparts, for a world is only as immersive as it is interactive.</p>
+
+<p>Many studios have aimed to incorporate elements of the PhysX toolbox into larger narrative experiences found in AAA games. I’d like to see smaller demos that are built from the ground up exclusively to demonstrate the capabilities of tools such as APEX or FLEX. Armed with a back-end physics engine, I experimented with the early mechanics of a very simple game to highlight real-time destruction.</p>
+
+<h2 id="creating-destructible-assets">Creating Destructible Assets</h2>
+
+<h3 id="prior-experience">Prior Experience</h3>
+
+<p>I started experimenting with destructible assets in UE4 back in June 2014. At that time, the engine (version 4.1) provided very little in the way of support for destructible assets. A single voroni fracture tool and a few checkable settings were about all that UE4 offered internally. Because of this I turned to 3rd party tools to handle the creation of the destructible assets themselves. These tools enabled interesting fracture patterns as well as complex attributes like multiple depth levels, internal support or debris. I experimented a fair bit with PhysXLab which supplied a solid amount of functionality at an easier learning curve and a much nicer price tag (free) than some more professional VFX tools. For example, splintered wood planks were easy to generate using PhysXLab. A few combinations of sinusoids could create the splintering effects along user specified axes while levels of destruction could help define subsequent splinters. However for the more complex destructible assets I enjoyed experimenting with RayFire. Rayfire is an expensive 3DsMax and Maya plugin mostly intended for VFX in film. In combination with the physics engines supplied in Autodesk’s softwares, RayFire can produce very realistic looking fracture patterns using a wealth of tools that go beyond voroni fracture. Unfortunately I was only able to experiment with the RayFire plugin on a university lab computer which I had limited access to, so PhysXLab handled most of the work by default.</p>
+
+<h3 id="adopted-pipeline">Adopted Pipeline</h3>
+
+<p>To create destructible environments, I have adopted the following pipeline:</p>
+
+<ul>
+  <li>Create 3D model of object using modelling software (my preference is Maya)</li>
+  <li>Create multi-layered fracture patterns for the meshes using RayFire plugin or PhysXLab</li>
+  <li>Import the fractured meshes into UE4 as destructible assets</li>
+  <li>Build structures/environments from instances of those destructible assets</li>
+</ul>
+
+<h2 id="using-rigid-body-physx-in-code-project">Using Rigid Body PhysX in Code Project</h2>
+
+<h3 id="getting-physx-working-in-a-ue4-code-project">Getting PhysX Working in a UE4 Code Project</h3>
+
+<p>Although UE4 has APEX handle the destruction of pre-fractured meshes by default, this doesn’t provide the designer any power to experiment with behaviors beyond the basic settings of the destructible meshes. To produce more interesting behavior, I’ve tried to get up to speed quickly with the Rigid Body Dynamics of the PhysX API, as those are arguably the most useful in prototyping destruction. The first trick was getting PhysX working in a code project. Luckily some kind people before me (Rama) documented a few of the “gotchas” that saved me a lot of time with my early experimentation. These “gotchas” include the essential include, and the modifications to Build.cs.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="err">#</span><span class="n">include</span> <span class="s">"PhysXIncludes.h"</span> <span class="c1">//Cannot forget this include!!!!</span>
+</code></pre></div></div>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">PublicDependencyModuleNames</span><span class="p">.</span><span class="nf">AddRange</span><span class="p">(</span><span class="k">new</span> <span class="kt">string</span><span class="p">[]</span> <span class="p">{</span>
+  <span class="s">"Core"</span><span class="p">,</span> <span class="s">"CoreUObject"</span><span class="p">,</span> <span class="s">"Engine"</span><span class="p">,</span> <span class="s">"InputCore"</span><span class="p">,</span> <span class="s">"PhysX"</span><span class="p">,</span> <span class="s">"APEX"</span> 
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h3 id="manipulating-chunks-directly">Manipulating Chunks Directly</h3>
+
+<p>As mentioned before, creating interesting behavior is easier when its possible to work on chunks of a destructible mesh directly. Once PhysX is accessible in a coding project, this becomes simple. The basic outline of my custom destructible meshes is shown below.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"FirstProjectTest.h"</span><span class="cp">
+#include</span> <span class="cpf">"MyStaticLibrary.h"</span><span class="cp">
+#include</span> <span class="cpf">"MyDestructibleActor.h"</span><span class="cp">
+</span><span class="c1">//~~~~~~~~~~~~~~~~~~~~~~~~</span>
+<span class="c1">//	   PhysX 			</span>
+<span class="cp">#include</span> <span class="cpf">"PhysXIncludes.h"</span><span class="c1"> </span><span class="cp">
+</span><span class="c1">//~~~~~~~~~~~~~~~~~~~~~~~~</span>
+
+<span class="n">AMyDestructibleActor</span><span class="o">::</span><span class="n">AMyDestructibleActor</span><span class="p">(</span><span class="k">const</span> <span class="n">FObjectInitializer</span><span class="o">&amp;</span> <span class="n">ObjectInitializer</span><span class="p">)</span>
+	<span class="o">:</span> <span class="n">Super</span><span class="p">(</span><span class="n">ObjectInitializer</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="c1">//have to switch ticking on for this actor</span>
+	<span class="n">PrimaryActorTick</span><span class="p">.</span><span class="n">bCanEverTick</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">//this won't tick by default</span>
+<span class="p">}</span>
+
+<span class="c1">//Tick</span>
+<span class="kt">void</span> <span class="n">AMyDestructibleActor</span><span class="o">::</span><span class="n">Tick</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">Super</span><span class="o">::</span><span class="n">Tick</span><span class="p">(</span><span class="n">DeltaTime</span><span class="p">);</span>
+
+	<span class="c1">//Draw All Centers to the screen!</span>
+<span class="cp">#if WITH_PHYSX
+</span>	<span class="c1">//UMyStaticLibrary::ScreenMsg("Got into PhysX!!!");</span>
+
+	<span class="n">PxVec3</span> <span class="n">PxTargetLoc</span> <span class="o">=</span> <span class="n">PxVec3</span><span class="p">(</span><span class="n">MainCharacter</span><span class="o">-&gt;</span><span class="n">TargetPoint</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">MainCharacter</span><span class="o">-&gt;</span><span class="n">TargetPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">MainCharacter</span><span class="o">-&gt;</span><span class="n">TargetPoint</span><span class="p">.</span><span class="n">Z</span><span class="p">);</span>
+
+	<span class="n">uint32</span> <span class="n">ChunkCount</span> <span class="o">=</span> <span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ApexDestructibleActor</span><span class="o">-&gt;</span><span class="n">getNumVisibleChunks</span><span class="p">();</span>
+	<span class="c1">//UMyStaticLibrary::ScreenMsg("Chunk count: " + FString::FromInt(ChunkCount));</span>
+	<span class="k">const</span> <span class="n">uint16</span><span class="o">*</span> <span class="n">ChunkIndices</span> <span class="o">=</span> <span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ApexDestructibleActor</span><span class="o">-&gt;</span><span class="n">getVisibleChunks</span><span class="p">();</span>
+	<span class="k">for</span> <span class="p">(</span><span class="n">uint32</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">ChunkCount</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="c1">//PActor is a chunk</span>
+		<span class="n">PxRigidDynamic</span><span class="o">*</span> <span class="n">PActor</span> <span class="o">=</span> <span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ApexDestructibleActor</span><span class="o">-&gt;</span><span class="n">getChunkPhysXActor</span><span class="p">(</span><span class="n">ChunkIndices</span><span class="p">[</span><span class="n">c</span><span class="p">]);</span>
+		<span class="n">check</span><span class="p">(</span><span class="n">PActor</span><span class="p">);</span>
+		<span class="n">PxTransform</span> <span class="n">Trans</span> <span class="o">=</span> <span class="n">PActor</span><span class="o">-&gt;</span><span class="n">getGlobalPose</span><span class="p">();</span>
+		<span class="n">PxVec3</span><span class="o">&amp;</span> <span class="n">PxLoc</span> <span class="o">=</span> <span class="n">Trans</span><span class="p">.</span><span class="n">p</span><span class="p">;</span>
+		
+		<span class="c1">//Very poor test to see if the mesh has broken apart yet.</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">IsActive</span><span class="p">()){</span>
+			<span class="n">FVector</span> <span class="n">Location</span><span class="p">(</span><span class="n">PxLoc</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">PxLoc</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">PxLoc</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+			<span class="n">DrawPoint</span><span class="p">(</span><span class="n">Location</span><span class="p">);</span>
+			<span class="n">UMyStaticLibrary</span><span class="o">::</span><span class="n">ScreenMsg</span><span class="p">(</span><span class="s">"physx loc: "</span> <span class="o">+</span> <span class="n">Location</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+
+<span class="cp">#endif // WITH_PHYSX
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="basic-rigid-body-dynamics">Basic Rigid Body Dynamics</h2>
+
+<h3 id="applying-simple-forces-in-interesting-ways-move-chunks-by-aiming-your-gun">Applying Simple Forces in Interesting Ways (Move Chunks by Aiming your Gun)</h3>
+
+<p>This simple test project involved changes to the character class as well as the custom destructible class. I setup a line-trace on the onFire() function in the character class. If the player tries to fire the gun, this line trace searches for an impact along the vector pointing out of the players gun. If it encounters any object, it will determine the location of impact and hold it in a public targetPoint variable.</p>
+
+<p>Add the target point variable to FirstProjectTestCharacter.h…</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/** Target Point. */</span>
+<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">VisibleAnywhere</span><span class="p">,</span> <span class="n">BlueprintReadOnly</span><span class="p">,</span> <span class="n">Category</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">)</span>
+	<span class="n">FVector</span> <span class="n">TargetPoint</span><span class="p">;</span>
+<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">VisibleAnywhere</span><span class="p">,</span> <span class="n">BlueprintReadOnly</span><span class="p">,</span> <span class="n">Category</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">)</span>
+	<span class="kt">bool</span> <span class="n">TargetPointSet</span><span class="p">;</span>
+</code></pre></div></div>
+<p>Add the following bit of code for a custom trace to the OnFire() method in FirstPersonTestCharacter.cpp…</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="n">AFirstProjectTestCharacter</span><span class="o">::</span><span class="n">OnFire</span><span class="p">()</span>
+<span class="p">{</span> 
+	<span class="c1">// try and fire a projectile</span>
+	<span class="p">...</span>
+	
+	<span class="c1">//Custom Trace</span>
+	<span class="n">APlayerController</span><span class="o">*</span> <span class="n">PC</span> <span class="o">=</span> <span class="n">GetWorld</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFirstPlayerController</span><span class="p">();</span>
+	<span class="k">const</span> <span class="n">FVector</span> <span class="n">Start</span> <span class="o">=</span> <span class="n">PC</span><span class="o">-&gt;</span><span class="n">GetFocalLocation</span><span class="p">();</span>
+	<span class="k">const</span> <span class="n">FVector</span> <span class="n">End</span> <span class="o">=</span> <span class="n">Start</span> <span class="o">+</span> <span class="n">PC</span><span class="o">-&gt;</span><span class="n">GetControlRotation</span><span class="p">().</span><span class="n">Vector</span><span class="p">()</span> <span class="o">*</span> <span class="mi">5000</span><span class="p">;</span>
+	<span class="n">FHitResult</span> <span class="n">HitData</span><span class="p">(</span><span class="n">ForceInit</span><span class="p">);</span>
+	<span class="c1">//If Trace Hits anything (ignore the controlled pawn)</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">UMyStaticLibrary</span><span class="o">::</span><span class="n">Trace</span><span class="p">(</span><span class="n">GetWorld</span><span class="p">(),</span> <span class="n">PC</span><span class="o">-&gt;</span><span class="n">GetPawn</span><span class="p">(),</span> <span class="n">Start</span><span class="p">,</span> <span class="n">End</span><span class="p">,</span> <span class="n">HitData</span><span class="p">,</span> <span class="n">COLLISION_WEAPON</span><span class="p">,</span> <span class="nb">false</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">HitData</span><span class="p">.</span><span class="n">GetActor</span><span class="p">())</span>
+	<span class="p">{</span>
+		<span class="n">UMyStaticLibrary</span><span class="o">::</span><span class="n">ScreenMsg</span><span class="p">(</span><span class="n">HitData</span><span class="p">.</span><span class="n">GetActor</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetName</span><span class="p">());</span>
+
+		<span class="n">TargetPoint</span> <span class="o">=</span> <span class="n">HitData</span><span class="p">.</span><span class="n">ImpactPoint</span><span class="p">;</span>
+		<span class="n">TargetPointSet</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+
+		<span class="c1">//Print out the distance from the trace start to the impact point!</span>
+		<span class="n">UMyStaticLibrary</span><span class="o">::</span><span class="n">ScreenMsg</span><span class="p">(</span><span class="s">"Distance from Trace Start to Impact: "</span> <span class="o">+</span> <span class="n">FString</span><span class="o">::</span><span class="n">SanitizeFloat</span><span class="p">(</span><span class="n">HitData</span><span class="p">.</span><span class="n">Distance</span><span class="p">));</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>In my static library class, where I hold many useful functions to be called from any class, the trace method is as follows…</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code></pre></div></div>
+
+<p>In my custom destructible class I have setup a basic tick function. If the destructible breaks apart into chunks, the chunks will be flung toward whatever location the player specifies with his/her gun. The parameters specifying the force magnitude and type (impulse or velocity change) can be specified via blueprints and even changed at run time.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// MyDestructibleActor.h ...</span>
+<span class="cp">#pragma once
+#include</span> <span class="cpf">"PhysicsEngine/DestructibleActor.h"</span><span class="cp">
+#include</span> <span class="cpf">"Engine.h"</span><span class="cp">
+#include</span> <span class="cpf">"FirstProjectTestCharacter.h"</span><span class="cp">
+#include</span> <span class="cpf">"MyDestructibleActor.generated.h"</span><span class="cp">
+</span><span class="n">UCLASS</span><span class="p">()</span>
+<span class="k">class</span> <span class="nc">AMyDestructibleActor</span> <span class="o">:</span> <span class="k">public</span> <span class="n">ADestructibleActor</span>
+<span class="p">{</span>
+	<span class="n">GENERATED_UCLASS_BODY</span><span class="p">()</span>
+
+<span class="nl">protected:</span>
+	<span class="k">virtual</span> <span class="kt">void</span> <span class="n">Tick</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">)</span> <span class="k">override</span><span class="p">;</span>
+<span class="nl">public:</span>
+	<span class="c1">//Drawing!</span>
+	<span class="n">FORCEINLINE</span> <span class="kt">void</span> <span class="n">DrawPoint</span>
+		<span class="p">(</span>
+		<span class="k">const</span> <span class="n">FVector</span><span class="o">&amp;</span> <span class="n">Loc</span><span class="p">,</span>
+		<span class="k">const</span> <span class="kt">float</span><span class="o">&amp;</span> <span class="n">Size</span> <span class="o">=</span> <span class="mi">7</span><span class="p">,</span>
+		<span class="k">const</span> <span class="n">FColor</span><span class="o">&amp;</span> <span class="n">Color</span> <span class="o">=</span> <span class="n">FColor</span><span class="o">::</span><span class="n">Red</span><span class="p">,</span>
+		<span class="k">const</span> <span class="kt">float</span> <span class="n">Duration</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span><span class="n">f</span>
+		<span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+		<span class="n">DrawDebugPoint</span><span class="p">(</span>
+			<span class="n">GetWorld</span><span class="p">(),</span>
+			<span class="n">Loc</span><span class="p">,</span>
+			<span class="n">Size</span><span class="p">,</span> <span class="c1">//thickness</span>
+			<span class="n">Color</span><span class="p">,</span>
+			<span class="nb">false</span><span class="p">,</span>
+			<span class="n">Duration</span>
+			<span class="p">);</span>
+	<span class="p">}</span>
+	
+	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">BlueprintReadWrite</span><span class="p">,</span> <span class="n">Category</span> <span class="o">=</span> <span class="s">"Force Response"</span><span class="p">)</span>
+	<span class="kt">float</span> <span class="n">ForceScale</span><span class="p">;</span>
+	<span class="n">UPROPERTY</span><span class="p">(</span><span class="n">EditAnywhere</span><span class="p">,</span> <span class="n">BlueprintReadWrite</span><span class="p">,</span> <span class="n">Category</span> <span class="o">=</span> <span class="s">"Force Response"</span><span class="p">)</span>
+	<span class="kt">bool</span> <span class="n">bUseImpulse</span><span class="p">;</span>
+
+<span class="nl">private:</span>
+	<span class="n">AFirstProjectTestCharacter</span><span class="o">*</span> <span class="n">MainCharacter</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// MyDestructibleActor.cpp</span>
+<span class="cp">#include</span> <span class="cpf">"FirstProjectTest.h"</span><span class="cp">
+#include</span> <span class="cpf">"MyStaticLibrary.h"</span><span class="cp">
+#include</span> <span class="cpf">"MyDestructibleActor.h"</span><span class="cp">
+</span><span class="c1">//~~~~~~~~~~~~~~~~~~~~~~~~</span>
+<span class="c1">//	   PhysX 			</span>
+<span class="cp">#include</span> <span class="cpf">"PhysXIncludes.h"</span><span class="c1"> </span><span class="cp">
+</span><span class="c1">//~~~~~~~~~~~~~~~~~~~~~~~~</span>
+
+<span class="n">AMyDestructibleActor</span><span class="o">::</span><span class="n">AMyDestructibleActor</span><span class="p">(</span><span class="k">const</span> <span class="n">FObjectInitializer</span><span class="o">&amp;</span> <span class="n">ObjectInitializer</span><span class="p">)</span>
+	<span class="o">:</span> <span class="n">Super</span><span class="p">(</span><span class="n">ObjectInitializer</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="c1">//have to switch ticking on for this actor</span>
+	<span class="n">PrimaryActorTick</span><span class="p">.</span><span class="n">bCanEverTick</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">//this won't tick by default</span>
+	<span class="c1">//MainCharacter = Cast(GetWorld()-&gt;GetFirstPlayerController()-&gt;GetCharacter());</span>
+	<span class="n">ForceScale</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">;</span> <span class="c1">//</span>
+	<span class="n">bUseImpulse</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">//Tick</span>
+<span class="kt">void</span> <span class="n">AMyDestructibleActor</span><span class="o">::</span><span class="n">Tick</span><span class="p">(</span><span class="kt">float</span> <span class="n">DeltaTime</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="n">Super</span><span class="o">::</span><span class="n">Tick</span><span class="p">(</span><span class="n">DeltaTime</span><span class="p">);</span>
+	<span class="c1">//~~~~~~~~~~~~</span>
+	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">UMyStaticLibrary</span><span class="o">::</span><span class="n">IsValid</span><span class="p">(</span><span class="n">MainCharacter</span><span class="p">)){</span>
+		<span class="n">MainCharacter</span> <span class="o">=</span> <span class="n">Cast</span><span class="p">(</span><span class="n">GetWorld</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetFirstPlayerController</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">GetCharacter</span><span class="p">());</span>
+	<span class="p">}</span>
+
+	<span class="c1">//Draw All Centers to the screen!</span>
+<span class="cp">#if WITH_PHYSX
+</span>	<span class="c1">//UMyStaticLibrary::ScreenMsg("Got into PhysX!!!");</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">MainCharacter</span><span class="o">-&gt;</span><span class="n">TargetPointSet</span><span class="p">){</span>
+
+		<span class="n">PxVec3</span> <span class="n">PxTargetLoc</span> <span class="o">=</span> <span class="n">PxVec3</span><span class="p">(</span><span class="n">MainCharacter</span><span class="o">-&gt;</span><span class="n">TargetPoint</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">MainCharacter</span><span class="o">-&gt;</span><span class="n">TargetPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">MainCharacter</span><span class="o">-&gt;</span><span class="n">TargetPoint</span><span class="p">.</span><span class="n">Z</span><span class="p">);</span>
+
+		<span class="n">uint32</span> <span class="n">ChunkCount</span> <span class="o">=</span> <span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ApexDestructibleActor</span><span class="o">-&gt;</span><span class="n">getNumVisibleChunks</span><span class="p">();</span>
+		<span class="c1">//UMyStaticLibrary::ScreenMsg("Chunk count: " + FString::FromInt(ChunkCount));</span>
+		<span class="k">const</span> <span class="n">uint16</span><span class="o">*</span> <span class="n">ChunkIndices</span> <span class="o">=</span> <span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ApexDestructibleActor</span><span class="o">-&gt;</span><span class="n">getVisibleChunks</span><span class="p">();</span>
+		<span class="k">for</span> <span class="p">(</span><span class="n">uint32</span> <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">ChunkCount</span><span class="p">;</span> <span class="n">c</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="c1">//PActor is a chunk</span>
+			<span class="n">PxRigidDynamic</span><span class="o">*</span> <span class="n">PActor</span> <span class="o">=</span> <span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">ApexDestructibleActor</span><span class="o">-&gt;</span><span class="n">getChunkPhysXActor</span><span class="p">(</span><span class="n">ChunkIndices</span><span class="p">[</span><span class="n">c</span><span class="p">]);</span>
+			<span class="n">check</span><span class="p">(</span><span class="n">PActor</span><span class="p">);</span>
+			<span class="n">PxTransform</span> <span class="n">Trans</span> <span class="o">=</span> <span class="n">PActor</span><span class="o">-&gt;</span><span class="n">getGlobalPose</span><span class="p">();</span>
+			<span class="n">PxVec3</span><span class="o">&amp;</span> <span class="n">PxLoc</span> <span class="o">=</span> <span class="n">Trans</span><span class="p">.</span><span class="n">p</span><span class="p">;</span>
+			
+			<span class="c1">//Very poor test to see if the mesh has broken apart yet.</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">GetDestructibleComponent</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">IsActive</span><span class="p">()){</span>
+				<span class="n">PActor</span><span class="o">-&gt;</span><span class="n">clearForce</span><span class="p">(</span><span class="n">physx</span><span class="o">::</span><span class="n">PxForceMode</span><span class="o">::</span><span class="n">eVELOCITY_CHANGE</span><span class="p">);</span>
+				<span class="n">PActor</span><span class="o">-&gt;</span><span class="n">clearForce</span><span class="p">(</span><span class="n">physx</span><span class="o">::</span><span class="n">PxForceMode</span><span class="o">::</span><span class="n">eIMPULSE</span><span class="p">);</span>
+				<span class="n">PxVec3</span> <span class="n">PxTowardTarget</span> <span class="o">=</span> <span class="n">PxVec3</span><span class="p">(</span><span class="n">PxTargetLoc</span><span class="p">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">PxLoc</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">PxTargetLoc</span><span class="p">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">PxLoc</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">PxTargetLoc</span><span class="p">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">PxLoc</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">bUseImpulse</span><span class="p">)</span>
+				<span class="p">{</span>
+					<span class="n">PActor</span><span class="o">-&gt;</span><span class="n">addForce</span><span class="p">(</span><span class="n">ForceScale</span><span class="o">*</span><span class="n">PxTowardTarget</span><span class="p">,</span> <span class="n">physx</span><span class="o">::</span><span class="n">PxForceMode</span><span class="o">::</span><span class="n">eIMPULSE</span><span class="p">);</span>
+				<span class="p">}</span>
+				<span class="k">else</span>
+				<span class="p">{</span>
+					<span class="n">PActor</span><span class="o">-&gt;</span><span class="n">addForce</span><span class="p">(</span><span class="n">ForceScale</span><span class="o">*</span><span class="n">PxTowardTarget</span><span class="p">,</span> <span class="n">physx</span><span class="o">::</span><span class="n">PxForceMode</span><span class="o">::</span><span class="n">eVELOCITY_CHANGE</span><span class="p">);</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+
+			<span class="n">FVector</span> <span class="n">Location</span><span class="p">(</span><span class="n">PxLoc</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">PxLoc</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">PxLoc</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+
+			<span class="n">DrawPoint</span><span class="p">(</span><span class="n">Location</span><span class="p">);</span>
+			<span class="c1">//UMyStaticLibrary::ScreenMsg("physx loc: " + Location.ToString());</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+<span class="cp">#endif // WITH_PHYSX
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>Controlling a swarm of chunks this way is very entertaining, and might also have real game applications. I could see this type of setup controlling swarms of bees or birds like in bio-shock infinite, or stopping and redirecting a barrage of bullets and artillery similar to scenes from X-Men.</p>
+
+<figure class="half">
+  <img src="/images/experimenting-with-physx-apex/0.webp" />
+  <img src="/images/experimenting-with-physx-apex/1.webp" />
+</figure>
+
+<figure class="half">
+  <img src="/images/experimenting-with-physx-apex/2.webp" />
+  <img src="/images/experimenting-with-physx-apex/3.webp" />
+</figure>
+
+<h3 id="experimenting-with-other-uses">Experimenting with Other Uses:</h3>
+
+<p>Since these dynamics are updated every tick, things can easily be parameterized with respect to the tick count. I’m sure there exist easy ways to do the same with global delta-time stamp from the game instance, but this worked for early experimentation. In theory, all one needs to create interesting behavior for the movement of chunks is the parametric equations for the desired movement patterns. Most movements devolve into simpler equations, combinations of sinusoids etc. The trickier part comes in tweaking the parameters used the equations to produce a natural looking effect. I found using real-world values did not equate to real-looking results.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*----------FOR AN Oscillating/BOUNCING EFFECT----------*/</span>
+<span class="n">PxVec3</span><span class="o">&amp;</span> <span class="n">oscillateVec</span> <span class="o">=</span> <span class="n">Trans</span><span class="p">.</span><span class="n">p</span><span class="p">;</span>
+<span class="n">oscillateVec</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">oscillateVec</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">oscillateVec</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">A</span><span class="o">*</span><span class="nf">sin</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="n">chunk</span><span class="o">-&gt;</span><span class="n">addForce</span><span class="p">(</span><span class="n">oscillateVec</span><span class="p">,</span> <span class="n">physx</span><span class="o">::</span><span class="n">PxForceMode</span><span class="o">::</span><span class="n">eVELOCITY_CHANGE</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*-------------For A Circular or Helix Effect:----------------
+Think Torandos and Dust-Devils, Or Trash/Leaves circling in the wind.
+these are actually the eqns for pos, and will have undesireable
+behavior when used as force or velocity vectors. Although simply
+calculating the derivatives w.r.t "tick count" should yield natural
+results, in my brief experimentation, simply tweaking different
+parameters yielded better resutls.
+*/</span>
+<span class="n">PxVec3</span><span class="o">&amp;</span> <span class="n">forceVec</span> <span class="o">=</span> <span class="n">Trans</span><span class="p">.</span><span class="n">p</span><span class="p">;</span>
+<span class="n">forceVec</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">radius</span><span class="o">*</span><span class="nf">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="n">forceVec</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">radius</span><span class="o">*</span><span class="nf">sin</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="n">forceVec</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">chunk</span><span class="o">-&gt;</span><span class="n">addForce</span><span class="p">(</span><span class="n">forceVec</span><span class="p">,</span> <span class="n">physx</span><span class="o">::</span><span class="n">PxForceMode</span><span class="o">::</span><span class="n">eVELOCITY_CHANGE</span><span class="p">);</span>
+
+<span class="c1">// or...</span>
+<span class="n">PxVec3</span><span class="o">&amp;</span> <span class="n">torqueVec</span> <span class="o">=</span> <span class="n">Trans</span><span class="p">.</span><span class="n">p</span><span class="p">;</span>
+<span class="n">torqueVec</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">torqueVec</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">torqueVec</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">chunk</span><span class="o">-&gt;</span><span class="n">addTorque</span><span class="p">(</span><span class="n">torqueVec</span><span class="p">,</span> <span class="n">physx</span><span class="o">::</span><span class="n">PxForceMode</span><span class="o">::</span><span class="n">eVELOCITY_CHANGE</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*------------Helix Effect (use velocity)----------*/</span>
+<span class="n">PxVec3</span><span class="o">&amp;</span> <span class="n">helixVelocity</span> <span class="o">=</span> <span class="n">Trans</span><span class="p">.</span><span class="n">p</span><span class="p">;</span>
+<span class="n">helixVelocity</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span> <span class="o">*</span> <span class="n">radius</span><span class="o">*</span><span class="nf">sin</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="n">helixVelocity</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">radius</span><span class="o">*</span><span class="nf">cos</span><span class="p">(</span><span class="n">w</span><span class="o">*</span><span class="n">t</span><span class="p">);</span>
+<span class="n">helixVelocity</span><span class="p">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">desiredZvelocity</span><span class="p">;</span>
+<span class="n">chunk</span><span class="o">-&gt;</span><span class="n">setAngularVelocity</span><span class="p">(</span><span class="n">scale</span><span class="o">*</span><span class="n">helixVelocity</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+<span class="c1">//unclear on how the system interprets ang. and linear vel... as neither seem natural without tweaking.</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#3d" class="page__taxonomy-item p-category" rel="tag">3D</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#game-dev" class="page__taxonomy-item p-category" rel="tag">game dev</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#unreal-engine" class="page__taxonomy-item p-category" rel="tag">unreal engine</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2014-05-01">May 1, 2014</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Experimenting+with+PhysX+and+APEX+Destruction%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-experimenting-with-physx-apex%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-experimenting-with-physx-apex%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-physx-apex/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-frog-heart-muscle/" class="pagination--pager" title="Myocardial Behavior w/ Frog Heart Muscle
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-multiplayer-networked-game-of-set/" class="pagination--pager" title="Multiplayer Networked Game of Set
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

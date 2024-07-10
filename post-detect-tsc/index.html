@@ -1,0 +1,1178 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Multi-channel Time Series Classification w/ Deep Learning</title>
+<meta name="description" content="Using Keras and convolutional neural networks to classify multi-channel time series data.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Multi-channel Time Series Classification w/ Deep Learning">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-detect-tsc/">
+
+
+  <meta property="og:description" content="Using Keras and convolutional neural networks to classify multi-channel time series data.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/logos/keras.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2017-08-05T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2017-08-05T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-detect-tsc/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Multi-channel Time Series Classification w/ Deep Learning">
+    <meta itemprop="description" content="Using Keras and convolutional neural networks to classify multi-channel time series data.">
+    <meta itemprop="datePublished" content="2017-08-05T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2017-08-05T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-detect-tsc/" itemprop="url">Multi-channel Time Series Classification w/ Deep Learning
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          7 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#background">Background</a></li><li><a href="#data">Data</a><ul><li><a href="#gather-labeled-data">Gather Labeled Data</a></li><li><a href="#synchronize-channels">Synchronize Channels</a></li><li><a href="#format-data">Format Data</a></li><li><a href="#segment-samples">Segment Samples</a></li></ul></li><li><a href="#model">Model</a></li><li><a href="#training">Training</a></li><li><a href="#serving-predictions-w-tfserving">Serving Predictions w/ TFServing</a></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="background">Background</h2>
+
+<p>I was working on a project to recognize/classify events based on data captured from a small device w/ multiple non-invasive realtime sensors (1D Lidar, PIR, IMU etc). The general category of problem here is multi-channel time series classification, often referenced as Activity Recognition.</p>
+
+<p>For a complete working example see the repository: <a href="https://github.com/detectlabs/detect-CNN-TSC">github.com/detectlabs/detect-CNN-TSC</a></p>
+
+<h2 id="data">Data</h2>
+
+<h3 id="gather-labeled-data">Gather Labeled Data</h3>
+
+<p>I recorded data from the various sensors to yield a continuous timeseries.  I then used a custom GUI application to label segments of the timeseries w/ a label corresponding to different events in the time series.</p>
+
+<h3 id="synchronize-channels">Synchronize Channels</h3>
+
+<p>Different sensors collect data at different rates, but most models will operate on dataframes whose values are synchronized. In order to create clean data, the individual channels in the multi-channel time series data must be interpolated at an even sampling rate. This involves reindexing each sample at a desired interval and interpolate new values for each channel.</p>
+
+<p>In pandas, this can be accomplished using <code class="language-plaintext highlighter-rouge">interpolate</code></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Channel readings should be interpolated
+</span><span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"ch0"</span><span class="p">,</span> <span class="s">"ch1"</span><span class="p">,</span> <span class="s">"ch2"</span><span class="p">...]:</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col_name</span><span class="p">].</span><span class="n">interpolate</span><span class="p">(</span><span class="s">"index"</span><span class="p">,</span> <span class="n">limit_direction</span><span class="o">=</span><span class="s">"both"</span><span class="p">)</span>
+<span class="c1"># pad any categorical columns (these shouldn't be interpolated)
+</span><span class="k">for</span> <span class="n">col_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s">"label"</span><span class="p">,</span> <span class="p">...]:</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">col_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">col_name</span><span class="p">].</span><span class="n">interpolate</span><span class="p">(</span><span class="s">"pad"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>See <a href="https://github.com/detectlabs/detect-CNN-TSC/blob/master/scripts/reindex.py">here</a> for a complete example.</p>
+
+<h3 id="format-data">Format Data</h3>
+
+<p>The original dataset is a labeled timeseries. It consists of around 40000 labeled measurements. The sample rate of the original data acquisition was 33ms. Each measurement/data point is 6 dimensional, comprised of 6 unique values (numbers) for each of the synchronized sensor readings. That is to say, each measurement is a row of the timeseries dataset and takes the following form:</p>
+
+<pre><code class="language-txt">&lt;label&gt;, &lt;timestamp_ms&gt;, &lt;ch0&gt;, &lt;ch1&gt;, &lt;ch2&gt;, &lt;ch3&gt;, &lt;ch4&gt;, &lt;ch5&gt;
+</code></pre>
+
+<p>For example:</p>
+
+<pre><code class="language-txt">LABEL_0, 0, 2134, 2091, -344, -344, -352, -336
+LABEL_1, 33, 2164, 2089, -344, -352, -344, -304
+LABEL_1, 66, 2103, 2074, -328, -352, -368, -344
+...
+</code></pre>
+
+<h3 id="segment-samples">Segment Samples</h3>
+
+<p>Models operate on fixed sized inputs. To train a model, we’ll need to chop up the data. The continuous timeseries is segmented into discrete “samples” each comprised of some fixed quantity of 6-D measurements. Each sample is assigned the label with the highest frequency among the measurements in the sample. Each of these segmented “samples” then serves as a single labeled training data item.</p>
+
+<p>A “sliding window” approach is used to segment the timeseries. For example, consider a window size of 40 and a stride of 2. This means each segmented “sample” is a 40 measurement long window, and these samples are generated every 2 measurements in the original timeseries. To accomplish this, a window spanning 40 measurements will slide through the original timeseries, moving 2 measurements forward each time it generates a new “sample”. Since the stride is so small, these samples overlap quite a bit. 40 measurements at a 33ms interval equates to 1.32 second samples.</p>
+
+<p>Each sample has size (40, 6) as there are 40 successive measurements, each comprised of 6 dimensions. Think of this like a 2D image.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.utils</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">mode</span>
+
+<span class="k">class</span> <span class="nc">TimeseriesGenerator</span><span class="p">(</span><span class="n">Sequence</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">,</span>
+        <span class="n">targets</span><span class="p">,</span>
+        <span class="n">length</span><span class="p">,</span>
+        <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">stride</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">start_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">end_index</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">num_classes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s">"Data and targets have to be of same length. Data length is </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">}</span><span class="s"> while target length is </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span><span class="si">}</span><span class="s">"</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">targets</span> <span class="o">=</span> <span class="n">targets</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sampling_rate</span> <span class="o">=</span> <span class="n">sampling_rate</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">stride</span> <span class="o">=</span> <span class="n">stride</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">start_index</span> <span class="o">=</span> <span class="n">start_index</span> <span class="o">+</span> <span class="n">length</span>
+        <span class="k">if</span> <span class="n">end_index</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">end_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">end_index</span> <span class="o">=</span> <span class="n">end_index</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">reverse</span> <span class="o">=</span> <span class="n">reverse</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+
+        <span class="k">if</span> <span class="n">num_classes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">num_classes</span> <span class="o">=</span> <span class="n">targets</span><span class="p">.</span><span class="nb">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">targets</span><span class="p">.</span><span class="nb">max</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">start_index</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_index</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span>
+                <span class="s">"`start_index+length=%i &gt; end_index=%i` "</span>
+                <span class="s">"is disallowed, as no part of the sequence "</span>
+                <span class="s">"would be left to be used as current step."</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">start_index</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_index</span><span class="p">)</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">end_index</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">start_index</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">batch_size</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">stride</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">batch_size</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">stride</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_empty_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">):</span>
+        <span class="n">samples_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_rows</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">length</span> <span class="o">//</span> <span class="bp">self</span><span class="p">.</span><span class="n">sampling_rate</span><span class="p">]</span>
+        <span class="n">samples_shape</span><span class="p">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="n">targets_shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">num_rows</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">length</span> <span class="o">//</span> <span class="bp">self</span><span class="p">.</span><span class="n">sampling_rate</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">(</span><span class="n">samples_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">float32</span><span class="p">),</span>
+            <span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">(</span><span class="n">targets_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">uint8</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_one_hot_encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+        <span class="n">one_hot_encoded</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">),</span> <span class="bp">self</span><span class="p">.</span><span class="n">num_classes</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">one_hot_encoded</span><span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">labels</span><span class="p">.</span><span class="n">size</span><span class="p">),</span> <span class="n">labels</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">one_hot_encoded</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">shuffle</span><span class="p">:</span>
+            <span class="n">row_indices</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">start_index</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="p">.</span><span class="n">batch_size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">start_index</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">batch_size</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">stride</span> <span class="o">*</span> <span class="n">index</span>
+            <span class="n">row_indices</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="p">.</span><span class="n">batch_size</span> <span class="o">*</span> <span class="bp">self</span><span class="p">.</span><span class="n">stride</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">end_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="p">.</span><span class="n">stride</span><span class="p">,)</span>
+        <span class="n">samples</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">_empty_batch</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">row_indices</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">row_idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row_indices</span><span class="p">):</span>
+            <span class="n">sample_indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">row_idx</span> <span class="o">-</span> <span class="bp">self</span><span class="p">.</span><span class="n">length</span><span class="p">,</span> <span class="n">row_idx</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">sampling_rate</span><span class="p">)</span>
+            <span class="n">samples</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">sample_indices</span><span class="p">]</span>
+            <span class="n">targets</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">targets</span><span class="p">[</span><span class="n">sample_indices</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">reverse</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">samples</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">...],</span> <span class="n">targets</span>
+
+        <span class="n">dominant_class_by_sample</span> <span class="o">=</span> <span class="n">mode</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">samples</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">_one_hot_encode</span><span class="p">(</span><span class="n">dominant_class_by_sample</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="model">Model</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">channel_wise_min</span><span class="p">,</span> <span class="n">channel_wise_max</span><span class="p">):</span>
+    <span class="s">""" Normalizes data to range -1:1, channel-wise. """</span>
+    <span class="n">cw_range</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">channel_wise_max</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="p">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">channel_wise_min</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="n">cw_range</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">channel_wise_min</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span>
+
+<span class="k">def</span> <span class="nf">build_model</span><span class="p">(</span>
+    <span class="n">class_names</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">channel_wise_min</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">channel_wise_max</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">serving_top_k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="s">""" Builds a CNN model for Time Series Classification adhering to the provided constraints.
+    Args:
+        class_names: the class names (order indicates prediction label)
+        architecture (str): one of ['fcn', 'cnn', 'resnet', 'inception']
+        input_shape: Shape of a single input sample [window_size, channels]
+        channel_wise_min (list&lt;float&gt;): ...
+        channel_wise_max (list&lt;float&gt;): ...
+        serving_top_k (int): ...
+    Returns:
+        a keras model
+    """</span>
+    <span class="n">num_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">class_names</span><span class="p">)</span>
+    <span class="n">model_input</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">input_shape</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">pre_process</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">normalize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">channel_wise_min</span><span class="p">,</span> <span class="n">channel_wise_max</span><span class="p">)</span>
+
+    <span class="n">pre_processed_input</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Lambda</span><span class="p">(</span><span class="n">pre_process</span><span class="p">)(</span><span class="n">model_input</span><span class="p">)</span>
+    <span class="n">model_output</span> <span class="o">=</span> <span class="n">Resnet_layers</span><span class="p">(</span><span class="n">pre_processed_input</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="n">num_classes</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">ServableModel</span><span class="p">(</span><span class="n">tf</span><span class="p">.</span><span class="n">keras</span><span class="p">.</span><span class="n">Model</span><span class="p">):</span>
+        <span class="o">@</span><span class="n">tf</span><span class="p">.</span><span class="n">function</span><span class="p">(</span><span class="n">input_signature</span><span class="o">=</span><span class="p">[</span><span class="n">tf</span><span class="p">.</span><span class="n">TensorSpec</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="bp">None</span><span class="p">,</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)])</span>
+        <span class="k">def</span> <span class="nf">serve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequences</span><span class="p">):</span>
+            <span class="c1"># Make predictions
+</span>            <span class="n">preds</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">call</span><span class="p">(</span><span class="n">sequences</span><span class="p">)</span>
+
+            <span class="c1"># Gather top k preds
+</span>            <span class="n">scores</span><span class="p">,</span> <span class="n">indices</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">nn</span><span class="p">.</span><span class="n">top_k</span><span class="p">(</span><span class="n">preds</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+            <span class="c1"># Associate class name
+</span>            <span class="n">class_names_tensor</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">constant</span><span class="p">(</span><span class="n">class_names</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">string</span><span class="p">)</span>
+            <span class="n">predicted_classes</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span><span class="n">class_names_tensor</span><span class="p">,</span> <span class="n">indices</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="p">{</span>
+                <span class="s">"classes"</span><span class="p">:</span> <span class="n">predicted_classes</span><span class="p">,</span>
+                <span class="s">"scores"</span><span class="p">:</span> <span class="n">scores</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">def</span> <span class="nf">save</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">include_optimizer</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">save_format</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">signatures</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="n">signatures</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">signatures</span> <span class="o">=</span> <span class="p">{</span><span class="n">tf</span><span class="p">.</span><span class="n">saved_model</span><span class="p">.</span><span class="n">DEFAULT_SERVING_SIGNATURE_DEF_KEY</span><span class="p">:</span> <span class="bp">self</span><span class="p">.</span><span class="n">serve</span><span class="p">}</span>
+
+            <span class="nb">super</span><span class="p">().</span><span class="n">save</span><span class="p">(</span>
+                <span class="n">filepath</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span>
+                <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+                <span class="n">include_optimizer</span><span class="o">=</span><span class="n">include_optimizer</span><span class="p">,</span>
+                <span class="n">save_format</span><span class="o">=</span><span class="n">save_format</span><span class="p">,</span>
+                <span class="n">signatures</span><span class="o">=</span><span class="n">signatures</span><span class="p">,</span>
+                <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">,</span>
+            <span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ServableModel</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">model_input</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">model_output</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+<span class="k">def</span> <span class="nf">Resnet_layers</span><span class="p">(</span><span class="n">input_tensor</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
+    <span class="n">n_feature_maps</span> <span class="o">=</span> <span class="mi">64</span>
+
+    <span class="c1"># BLOCK 1
+</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">input_tensor</span><span class="p">)</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_x</span><span class="p">)</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">conv_x</span><span class="p">)</span>
+
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">conv_x</span><span class="p">)</span>
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_y</span><span class="p">)</span>
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">conv_y</span><span class="p">)</span>
+
+    <span class="n">conv_z</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">conv_y</span><span class="p">)</span>
+    <span class="n">conv_z</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_z</span><span class="p">)</span>
+
+    <span class="c1"># expand channels for the sum
+</span>    <span class="n">shortcut_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">input_tensor</span><span class="p">)</span>
+    <span class="n">shortcut_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">shortcut_y</span><span class="p">)</span>
+
+    <span class="n">output_block_1</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">add</span><span class="p">([</span><span class="n">shortcut_y</span><span class="p">,</span> <span class="n">conv_z</span><span class="p">])</span>
+    <span class="n">output_block_1</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">output_block_1</span><span class="p">)</span>
+
+    <span class="c1"># BLOCK 2
+</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">output_block_1</span><span class="p">)</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_x</span><span class="p">)</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">conv_x</span><span class="p">)</span>
+
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">conv_x</span><span class="p">)</span>
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_y</span><span class="p">)</span>
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">conv_y</span><span class="p">)</span>
+
+    <span class="n">conv_z</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">conv_y</span><span class="p">)</span>
+    <span class="n">conv_z</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_z</span><span class="p">)</span>
+
+    <span class="c1"># expand channels for the sum
+</span>    <span class="n">shortcut_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">output_block_1</span><span class="p">)</span>
+    <span class="n">shortcut_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">shortcut_y</span><span class="p">)</span>
+
+    <span class="n">output_block_2</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">add</span><span class="p">([</span><span class="n">shortcut_y</span><span class="p">,</span> <span class="n">conv_z</span><span class="p">])</span>
+    <span class="n">output_block_2</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">output_block_2</span><span class="p">)</span>
+
+    <span class="c1"># BLOCK 3
+</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">output_block_2</span><span class="p">)</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_x</span><span class="p">)</span>
+    <span class="n">conv_x</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">conv_x</span><span class="p">)</span>
+
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">conv_x</span><span class="p">)</span>
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_y</span><span class="p">)</span>
+    <span class="n">conv_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">conv_y</span><span class="p">)</span>
+
+    <span class="n">conv_z</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Conv1D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="n">n_feature_maps</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"same"</span><span class="p">)(</span><span class="n">conv_y</span><span class="p">)</span>
+    <span class="n">conv_z</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">conv_z</span><span class="p">)</span>
+
+    <span class="c1"># no need to expand channels because they are equal
+</span>    <span class="n">shortcut_y</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">BatchNormalization</span><span class="p">()(</span><span class="n">output_block_2</span><span class="p">)</span>
+
+    <span class="n">output_block_3</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">add</span><span class="p">([</span><span class="n">shortcut_y</span><span class="p">,</span> <span class="n">conv_z</span><span class="p">])</span>
+    <span class="n">output_block_3</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">Activation</span><span class="p">(</span><span class="s">"relu"</span><span class="p">)(</span><span class="n">output_block_3</span><span class="p">)</span>
+
+    <span class="c1"># FINAL
+</span>
+    <span class="n">gap_layer</span> <span class="o">=</span> <span class="n">KL</span><span class="p">.</span><span class="n">GlobalAveragePooling1D</span><span class="p">()(</span><span class="n">output_block_3</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">KL</span><span class="p">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s">"softmax"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"x_train_out"</span><span class="p">)(</span><span class="n">gap_layer</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<h2 id="training">Training</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Read csv file
+</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">data</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># Extract class names and convert to integer labels
+</span><span class="n">df</span><span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">label_header</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">Categorical</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">label_header</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s">"LABEL_CODE"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">label_header</span><span class="p">].</span><span class="n">cat</span><span class="p">.</span><span class="n">codes</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">"LABEL_CODE"</span><span class="p">].</span><span class="n">values</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">uint8</span><span class="p">)</span>
+
+<span class="c1"># Package relevant sensor data
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">channel_headers</span><span class="p">].</span><span class="n">values</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c1"># Populate class map
+</span><span class="n">CLASS_MAP</span> <span class="o">=</span> <span class="p">{</span><span class="n">category</span><span class="p">:</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">category</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">args</span><span class="p">.</span><span class="n">label_header</span><span class="p">].</span><span class="n">cat</span><span class="p">.</span><span class="n">categories</span><span class="p">)}</span>
+
+<span class="c1"># Split the dataset (train/val)
+</span><span class="n">num_train</span> <span class="o">=</span> <span class="n">floor</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">split</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="n">data_train</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="n">num_train</span><span class="p">]</span>
+<span class="n">labels_train</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[:</span><span class="n">num_train</span><span class="p">]</span>
+<span class="n">data_val</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">num_train</span><span class="p">:]</span>
+<span class="n">labels_val</span> <span class="o">=</span> <span class="n">labels</span><span class="p">[</span><span class="n">num_train</span><span class="p">:]</span>
+
+<span class="c1"># Create a data generator
+</span><span class="n">training_data_gen</span> <span class="o">=</span> <span class="n">TimeseriesGenerator</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data_train</span><span class="p">,</span>
+    <span class="n">targets</span><span class="o">=</span><span class="n">labels_train</span><span class="p">,</span>
+    <span class="n">length</span><span class="o">=</span><span class="n">SAMPLE_LENGTH</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="o">=</span><span class="n">SAMPLING_RATE</span><span class="p">,</span>
+    <span class="n">stride</span><span class="o">=</span><span class="n">STRIDE</span><span class="p">,</span>
+    <span class="n">start_index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">end_index</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="n">shuffle</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span>
+    <span class="n">num_classes</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">CLASS_MAP</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="p">...</span>
+
+<span class="c1"># Build the model
+</span><span class="n">model</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">(</span>
+    <span class="n">class_names</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">CLASS_MAP</span><span class="p">.</span><span class="n">keys</span><span class="p">()),</span>
+    <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">SAMPLE_LENGTH</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+    <span class="n">channel_wise_min</span><span class="o">=</span><span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="p">.</span><span class="nb">min</span><span class="p">(</span><span class="n">data_train</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)],</span>
+    <span class="n">channel_wise_max</span><span class="o">=</span><span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">data_train</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)],</span>
+<span class="p">)</span>
+
+<span class="n">model</span><span class="p">.</span><span class="nb">compile</span><span class="p">(</span>
+    <span class="n">optimizer</span><span class="o">=</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">),</span>
+    <span class="n">loss</span><span class="o">=</span><span class="s">"categorical_crossentropy"</span><span class="p">,</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span>
+        <span class="s">"accuracy"</span><span class="p">,</span>
+        <span class="n">CategoricalAccuracy</span><span class="p">(),</span>
+        <span class="n">AUC</span><span class="p">(),</span>
+        <span class="n">Precision</span><span class="p">(),</span>
+        <span class="n">Recall</span><span class="p">(),</span>
+        <span class="n">TopKCategoricalAccuracy</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"top_k_2_categorical_accuracy"</span><span class="p">),</span>
+        <span class="n">TopKCategoricalAccuracy</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">"top_k_5_categorical_accuracy"</span><span class="p">),</span>
+        <span class="n">TrueNegatives</span><span class="p">(),</span>
+        <span class="n">TruePositives</span><span class="p">(),</span>
+        <span class="n">FalseNegatives</span><span class="p">(),</span>
+        <span class="n">FalsePositives</span><span class="p">(),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+
+<span class="n">steps_per_epoch</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">training_data_gen</span><span class="p">)</span> <span class="k">if</span> <span class="n">STEPS_PER_EPOCH</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">STEPS_PER_EPOCH</span>
+<span class="n">validation_steps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">validation_data_gen</span><span class="p">)</span> <span class="k">if</span> <span class="n">VALIDATION_STEPS</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">else</span> <span class="n">VALIDATION_STEPS</span>
+
+<span class="n">model</span><span class="p">.</span><span class="n">fit_generator</span><span class="p">(</span>
+    <span class="n">generator</span><span class="o">=</span><span class="n">training_data_gen</span><span class="p">,</span>
+    <span class="n">steps_per_epoch</span><span class="o">=</span><span class="n">steps_per_epoch</span><span class="p">,</span>
+    <span class="n">epochs</span><span class="o">=</span><span class="n">NUM_EPOCHS</span><span class="p">,</span>
+    <span class="n">use_multiprocessing</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+    <span class="n">validation_data</span><span class="o">=</span><span class="n">validation_data_gen</span><span class="p">,</span>
+    <span class="n">validation_steps</span><span class="o">=</span><span class="n">validation_steps</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">ReduceLROnPlateau</span><span class="p">(</span>
+            <span class="c1"># monitor="loss",
+</span>            <span class="n">monitor</span><span class="o">=</span><span class="s">"val_accuracy"</span><span class="p">,</span>
+            <span class="n">factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+            <span class="n">patience</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+            <span class="n">min_lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span> <span class="o">/</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">TensorBoard</span><span class="p">(</span><span class="n">log_dir</span><span class="o">=</span><span class="n">log_dir</span><span class="p">,</span> <span class="n">histogram_freq</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">write_graph</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">write_images</span><span class="o">=</span><span class="bp">False</span><span class="p">),</span>
+        <span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">filepath</span><span class="o">=</span><span class="n">checkpoint_prefix</span><span class="p">,</span> <span class="n">monitor</span><span class="o">=</span><span class="s">"val_loss"</span><span class="p">,</span> <span class="n">save_best_only</span><span class="o">=</span><span class="bp">True</span><span class="p">),</span>
+    <span class="p">],</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="serving-predictions-w-tfserving">Serving Predictions w/ TFServing</h2>
+
+<p>While training, the model saves off checkpoints with proper serving checkpoints. Once training is complete, you can use docker to serve predictions to remote clients.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Download the tensorflow serving docker image</span>
+docker pull tensorflow/serving
+
+<span class="c"># Location of exported servable</span>
+<span class="nv">CKPT_DIR</span><span class="o">=</span>&lt;path_to_training_ckpt_dir&gt;
+
+<span class="c"># Desired name for the served model</span>
+<span class="nv">MODEL_NAME</span><span class="o">=</span>classifier
+
+<span class="c"># Start TensorFlow Serving container</span>
+docker run <span class="nt">-it</span> <span class="se">\</span>
+    <span class="nt">--rm</span> <span class="se">\</span>
+    <span class="nt">-p</span> 8500:8500 <span class="se">\ </span> <span class="c"># GRPC endpoint</span>
+    <span class="nt">-p</span> 8501:8501 <span class="se">\ </span> <span class="c"># REST endpoint</span>
+    <span class="nt">-v</span> <span class="nv">$CKPT_DIR</span>:/models/<span class="nv">$MODEL_NAME</span>/1 <span class="se">\</span>
+    <span class="nt">-e</span> <span class="nv">MODEL_NAME</span><span class="o">=</span><span class="nv">$MODEL_NAME</span> <span class="se">\</span>
+    tensorflow/serving
+
+<span class="c"># Test endpoint</span>
+curl http://localhost:8501/v1/models/<span class="nv">$MODEL_NAME</span>
+</code></pre></div></div>
+
+<p>Once the model server is running, predictions can be querried like so:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">build_request</span><span class="p">(</span><span class="n">sample_batch</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s">"classifier"</span><span class="p">):</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">predict_pb2</span><span class="p">.</span><span class="n">PredictRequest</span><span class="p">()</span>
+    <span class="n">tp_data</span> <span class="o">=</span> <span class="n">make_tensor_proto</span><span class="p">(</span><span class="n">sample_batch</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="n">request</span><span class="p">.</span><span class="n">model_spec</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">model_name</span>
+    <span class="n">request</span><span class="p">.</span><span class="n">model_spec</span><span class="p">.</span><span class="n">signature_name</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">saved_model</span><span class="p">.</span><span class="n">DEFAULT_SERVING_SIGNATURE_DEF_KEY</span>
+    <span class="n">request</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="s">"sequences"</span><span class="p">].</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">tp_data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">request</span>
+
+<span class="c1"># Read the data
+</span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s">"serving_sample.csv"</span><span class="p">,</span> <span class="n">skipinitialspace</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c1"># Extract and pre-process sensor data
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s">"ch0"</span><span class="p">,</span> <span class="s">"ch1"</span><span class="p">,</span> <span class="s">"ch2"</span><span class="p">,</span> <span class="s">"ch3"</span><span class="p">,</span> <span class="s">"ch4"</span><span class="p">,</span> <span class="s">"ch5"</span><span class="p">]].</span><span class="n">values</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="c1"># Build a batch of samples
+</span><span class="n">sample_batch</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">args</span><span class="p">.</span><span class="n">sample_length</span><span class="p">,</span> <span class="n">data</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">args</span><span class="p">.</span><span class="n">batch_size</span><span class="p">):</span>
+    <span class="n">sample_batch</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">args</span><span class="p">.</span><span class="n">sample_length</span><span class="p">,</span> <span class="p">:]</span>
+
+<span class="c1"># Build a prediction request
+</span><span class="n">request</span> <span class="o">=</span> <span class="n">predict_pb2</span><span class="p">.</span><span class="n">PredictRequest</span><span class="p">()</span>
+<span class="n">request</span><span class="p">.</span><span class="n">model_spec</span><span class="p">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">"classifier"</span>
+<span class="n">request</span><span class="p">.</span><span class="n">model_spec</span><span class="p">.</span><span class="n">signature_name</span> <span class="o">=</span> <span class="n">tf</span><span class="p">.</span><span class="n">saved_model</span><span class="p">.</span><span class="n">DEFAULT_SERVING_SIGNATURE_DEF_KEY</span>
+<span class="n">request</span><span class="p">.</span><span class="n">inputs</span><span class="p">[</span><span class="s">"sequences"</span><span class="p">].</span><span class="n">CopyFrom</span><span class="p">(</span><span class="n">make_tensor_proto</span><span class="p">(</span><span class="n">sample_batch</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="p">.</span><span class="n">float32</span><span class="p">))</span>
+
+<span class="c1"># Predict
+</span><span class="n">channel</span> <span class="o">=</span> <span class="n">grpc</span><span class="p">.</span><span class="n">insecure_channel</span><span class="p">(</span><span class="s">"0.0.0.0:8500"</span><span class="p">)</span>
+<span class="n">stub</span> <span class="o">=</span> <span class="n">prediction_service_pb2_grpc</span><span class="p">.</span><span class="n">PredictionServiceStub</span><span class="p">(</span><span class="n">channel</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">stub</span><span class="p">.</span><span class="n">Predict</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="mf">60.0</span><span class="p">)</span>  <span class="c1"># 60 secs timeout
+</span><span class="k">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2017-08-05">August 5, 2017</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Multi-channel+Time+Series+Classification+w%2F+Deep+Learning+%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-detect-tsc%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-detect-tsc%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-detect-tsc/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-visualizing-runtime-flowpath-in-vr/" class="pagination--pager" title="Visualizing Runtime Flowpath in VR
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-python-i2c-sensor/" class="pagination--pager" title="Using hardware sensors in Python: I2C
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

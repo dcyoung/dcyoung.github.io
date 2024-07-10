@@ -1,0 +1,951 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Fiducial Marker Tracking ​for Augmented Reality</title>
+<meta name="description" content="Real Time Tracking for Augmented Reality using OpenCV and Popular Game Engines">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Fiducial Marker Tracking ​for Augmented Reality">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-fiducial-marker-tracking-for-ar/">
+
+
+  <meta property="og:description" content="Real Time Tracking for Augmented Reality using OpenCV and Popular Game Engines">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/fiducial-marker-tracking-for-ar/pose-estimation.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-04-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-04-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-fiducial-marker-tracking-for-ar/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Fiducial Marker Tracking ​for Augmented Reality">
+    <meta itemprop="description" content="Real Time Tracking for Augmented Reality using OpenCV and Popular Game Engines">
+    <meta itemprop="datePublished" content="2016-04-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-04-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-fiducial-marker-tracking-for-ar/" itemprop="url">Fiducial Marker Tracking ​for Augmented Reality
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          18 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction">Introduction</a></li><li><a href="#approach">Approach</a><ul><li><a href="#outline">Outline</a></li><li><a href="#integrate-opencv-w-modern-game-engine">Integrate OpenCV w/ Modern Game Engine</a></li><li><a href="#create-physical-fiducial-markers">Create Physical Fiducial Markers</a></li><li><a href="#detect-marker-in-each-frame-of-a-webcam-feed">Detect marker in each frame of a webcam feed</a></li><li><a href="#estimate-pose-of-marker">​Estimate pose of marker</a></li><li><a href="#estimate-pose-of-camera">Estimate Pose of Camera</a></li><li><a href="#communicate-pose-information-to-game-engine">​Communicate Pose Information to Game Engine</a></li></ul></li><li><a href="#use-video-stream-as-rendered-background-in-the-virtual-scene">​Use video stream as rendered background in the virtual scene</a><ul><li><a href="#update-virtual-objects-in-game-engine-using-pose-information">Update virtual objects in game engine using pose information</a></li><li><a href="#update-pose-of-the-virtual-camera">​Update pose of the virtual camera</a></li></ul></li><li><a href="#results">Results</a><ul><li><a href="#installing-opencv">​Installing OpenCV</a></li><li><a href="#integrating-opencv-with-ue4">​Integrating OpenCV with UE4</a></li><li><a href="#marker-detection-and-pose-estimation">Marker Detection and Pose Estimation</a></li><li><a href="#translating-to-game-engine">Translating to Game Engine</a></li></ul></li><li><a href="#discussion-and-conclusions">Discussion and Conclusions</a></li></ul>
+            </nav>
+          </aside>
+        
+        <p><img src="/images/fiducial-marker-tracking-for-ar/pose-estimation.webp" alt="preview" class="align-center" /></p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Augmented reality is a hot topic today (2016). As consumer products begin to emerge for VR &amp; AR, and as mobile devices become more powerful, various applications will follow. There are endless industry motivations for augmenting a view of the real world with virtual elements. Real time overlays for entertainment, video games, education, text translation (signs), highlighting obstacles, robot navigation and many more applications are beginning to morph from research topics into marketable products. A shared need among all augmented reality systems is the maintenance of an accurate estimation for the relationship between virtual and real worlds. More specifically the knowledge of camera pose
+should be robustly tracked.</p>
+
+<p>The goal of this project was to implement a real time tracking system for determining object or camera pose for augmented reality applications. An ideal implementation would manage to reconstruct 3D geometry from the real world. However, for real-time applications this is computationally difficult. More often markers are used (be it artificial or natural) and their movement is tracked frame to frame to
+yield information regarding the pose of the camera.</p>
+
+<p>A lot of current AR systems are trying to leverage natural features as markers. This is called Natural Feature Tracking (NFT). In NFT, point and region features are automatically or even adaptively detected for robust tracking. The benefits of NFT over artificial markers include reducing the geo-graphical limitations on tracked area, reducing the likelihood of losing visible features, and maintaining control over the selection of desirable features for various criterion. While these are meaningful benefits especially in extrapolating AR beyond a controlled environment, implementing a stable NFT system is notably more difficult than a system which uses artificial markers. The process of tracking artificial markers is commonly referred to as Fiducial Marker Tracking because it relies upon intentionally placed and easily detectable artificial features (fiducials). The position of at least 3 such fiducials in each frame can yield a viewing pose relative to the features.</p>
+
+<p>This project implements fiducial marker tracking in order to estimate the pose of an object relative to a webcam as well the pose of the  webcam relative to the fiducial marker. Tracking is limited to a single marker or rigid collection of markers known as a “board”. With the knowledge of either marker pose, or camera pose relative to an assumed fixed marker, modern game engines are used to overlay geometry on the video feed.</p>
+
+<h2 id="approach">Approach</h2>
+
+<h3 id="outline">Outline</h3>
+
+<ul>
+  <li>Integrate OpenCV with a modern game engine.</li>
+  <li>Generate physical fiducial markers.</li>
+  <li>Detect marker in each frame of a webcam feed.</li>
+  <li>Estimate pose of marker.</li>
+  <li>Estimate pose of camera.</li>
+  <li>Communicate pose information to Game Engine.</li>
+  <li>Use video stream as rendered background in the virtual scene.</li>
+  <li>Update virtual objects in game engine using pose information.</li>
+  <li>Use the estimated camera pose to control the pose of the virtual camera.</li>
+</ul>
+
+<h3 id="integrate-opencv-w-modern-game-engine">Integrate OpenCV w/ Modern Game Engine</h3>
+
+<p>There are a few popular game engines currently available. Specifically Unreal Engine 4 and Unity 5 were explored in this project. In hindsight, Unity is highly recommended for this project in particular given native support for Quaternion based transformations and easier customization of depth based rendering.</p>
+
+<p>Integrating OpenCV with Epic’s Unreal Engine 4 was attempted. The Aruco Module from the OpenCV extra contributor modules was also required for this project and thus required integration as well. There are two options for integrating OpenCV with UE4. The first option involves an OpenCV plugin for UE4 that includes pre-built binaries and performs the library linking. This is the easiest option, but does not contain any of the extra contrib modules. The plugin is available here: https://drive.google.com/file/d/0B95oaUYR7VMWN3E0aDRLaHVvMms/view. The second option is to create OpenCV static libraries (including any necessary contrib modules) and link them using the Unreal Build System. This is significantly more involved, but likely necessary for the Aruco Module. The generation of static libraries for OpenCV and the Aruco module was attempted for this project but enormous roadblocks were encountered due to conflicting namespaces between OpenCV and the libraries in UE4. Additionally some of the containers used in OpenCV and Aruco were not properly handled by the custom garbage collection system in UE4. Overall this approach proved futile.</p>
+
+<p>Integrating OpenCV with the Unity game engine requires the use of a paid OpenCV plugin, available here: https://www.assetstore.unity3d.com/en/#!/content/21088. However, this suffers from the lack of any necessary contrib modules as well. The plugin was not used for this project.</p>
+
+<p>​Because the integration of OpenCV (including the proper modules) using either engine proved cumbersome, an alternative approach was adopted. The final approach was to write an external program in raw C++ to handle all of the tracking using OpenCV and Aruco. The external program then communicates pose information to the game engine.</p>
+
+<h3 id="create-physical-fiducial-markers">Create Physical Fiducial Markers</h3>
+
+<p>A fiducial marker is an artifical marker intended for tracking. The Aruco module was used to generate fiducial markers to print on card stock. Aruco markers were chosen for their easy generation and internal codification. The Aruco marker is a square marker with an inner binary matrix. See the figure below for examples of Aruco markers.</p>
+
+<p><img src="/images/fiducial-marker-tracking-for-ar/fiducial.webp" alt="fiducial" class="align-center" /></p>
+
+<p>A black border means the marker can be detected quickly, while the binary code provides a means of verifying and more importantly identifying the marker. Marker identification is important in the Perspective N-Point problem where markers serve as tracking points and an identification yields an easy link between 2d projected points and their known 3D locations in the body frame. One marker is sufficient to estimate a pose using the 4 corners as tracking points, however a board of markers arranged in a plane yields a more robust set of tracking points. The Aruco module provides dictionaries of fiducial markers: http://docs.opencv.org/3.1.0/d5/d0b/classcv_1_1aruco_1_1Dictionary.html#gsc.tab=0 .</p>
+
+<p>A program was written to generate an evenly spaced 5x7 grid of Aruco markers using a predefined dictionary of markers. The grid was saved to an image file and printed onto physical paper.</p>
+
+<figure class="half">
+  <img src="/images/fiducial-marker-tracking-for-ar/fiducial-sheet.webp" />
+  <img src="/images/fiducial-marker-tracking-for-ar/fiducial-sheet-printed.webp" />
+  <figcaption>A 5x7 grid of Aruco markers (left), and printed version (right).</figcaption>
+</figure>
+
+<h3 id="detect-marker-in-each-frame-of-a-webcam-feed">Detect marker in each frame of a webcam feed</h3>
+
+<p>​The next challenge is detecting the markers. Aruco provides helpful tools to assist in the process and an easy means of tuning the many parameters that dictate performance. However, it is important to understand whats going on in the big scheme of things. The general process can be broken into two stages: Detecting Candidates and Verifying Candidates. To detect marker candidates, an adaptive threshold is used to segment the black squares that define the Aruco marker. After segmentation, contours are extracted. Any contours that would not indicate a square, ie: that are concave, are eliminated here. To verify the candidates, each is checked for the internal codification. The program is given a dictionary of valid markers to search for, and if the checked code exists in the dictionary the marker candidate is accepted. The process of checking the internal codification involves applying a perspective transform to the candidates to yield the marker in a canonical form where the bits can be extracted via a thresholding.</p>
+
+<figure class="third">
+  <img src="/images/fiducial-marker-tracking-for-ar/detection-0.webp" />
+  <img src="/images/fiducial-marker-tracking-for-ar/detection-1.webp" />
+  <img src="/images/fiducial-marker-tracking-for-ar/detection-2.webp" />
+  <figcaption>Candidate verification steps.</figcaption>
+</figure>
+
+<p>The images above depict the process of candidate verification. From left to right:</p>
+
+<ul>
+  <li>Detected Candidate</li>
+  <li>Apply Perspective transform to yield canonical form</li>
+  <li>Threshold to extract codification bits. ​</li>
+</ul>
+
+<p>​This process is performed each and every frame in order determine the 2D coordinates of marker corners in the frame.</p>
+
+<h3 id="estimate-pose-of-marker">​Estimate pose of marker</h3>
+
+<p>Estimating the marker pose relative to the camera is essentially a Perspective N-Point Problem. The problem is to determine a rigid body transform from identified (labeled), observed features on a rigid body knowing the coordinates of the features in the body’s frame. The “n” 3D points in the body’s frame are already known because the board was generated with a known spacing and all points are coplanar. The detected corresponding 2D projections in the image are the detected corners found previously.</p>
+
+<p>​A Perspective N-Point problem can be broken into a set of equations and solved with enough examples. Too few examples, and the Degrees of Freedom (DOF) cannot be eliminated. For example, a P2P problem corresponds to observing two features in the image and results in four constraints. Each constraint eliminates two DOFs resulting in only two remaining DOFs. If instead n = 3 (P3P) then zero DOFs remain, but isolated point solutions are still possible (ie: multiple solutions exist). One can visualize this as trying to position a triangle in a pyramid formed by rays extending from the camera center. To achieve a truly unique solution, 6 points are required… however this is not always necessary in practice. Some of the multiple solutions can be eliminated under prior knowledge, real world limitations, or poses from previous frames etc. A common implementation is iterative PNP which strongly considers the estimated pose form the previous frame.</p>
+
+<p><img src="/images/fiducial-marker-tracking-for-ar/pnp.webp" alt="detection" class="align-center" /></p>
+
+<p>​OpenCV provides a PnP algorithm, in normal, RANSAC and iterative forms. Given the tracked object is an Aruco board which yields many points for robust detection, there is no need for RANSAC. If instead, natural features were being detected, then RANSAC PnP would be a much better option to remove the effects of outliers. Estimating pose with Aruco works well using just the generic PnP provided by OpenCV.</p>
+
+<p>The PnP algorithm requires camera intrinsics and distortion coefficients from a calibrated camera. This was my first time calibrating a camera. A program was written to calibrate the webcam using a generated Charuco board. This involved generating a Charuco board image, printing it out, and taking photos from various angles. A Charuco board is a chess pattern board with Aruco markers in the white spaces. The Charuco board was used because it is easier and arguably more robust than a chess board.</p>
+
+<figure class="half">
+  <img src="/images/fiducial-marker-tracking-for-ar/chess-board.webp" />
+  <img src="/images/fiducial-marker-tracking-for-ar/chess-board-printed.webp" />
+</figure>
+
+<h3 id="estimate-pose-of-camera">Estimate Pose of Camera</h3>
+
+<p>The estimation of pose using Aruco and OpenCV PnP will yield an estimated pose of the marker with respect to the camera. For some applications, the pose of camera in the world frame is desired. This can be obtained by assuming the marker is stationary and back-solving to get pose of camera relative to the marker.</p>
+
+<p>In reality this proves rather difficult as the various programs use different orientation encoding and different coordinate systems (mixed left and right handed), none of which are well defined. The first approach was to convert the orientation of the marker from the custom encoded axis angle (magnitude stores angle) used by OpenCV and Aruco to a normal rotation matrix. This function helps: http://docs.opencv.org/3.1.0/d9/d0c/group__calib3d.html#ga61585db663d9da06b68e70cfbf6a1eac. Then the rotation matrix is inverted and used to rotate the translation component of the marker’s pose relative to the camera. The product is negated to yield the translation of the camera relative to the marker. Together the inverted rotation and the new translation are stored in a new transformation matrix to describe the pose of the camera relative to the marker.</p>
+
+<h3 id="communicate-pose-information-to-game-engine">​Communicate Pose Information to Game Engine</h3>
+
+<p>Recall that the final approach involved an external program for all tracking related tasks. The pose information must still be communicated to the Game Engine. After a great deal of experimentation with TCP (Client + Server setup) networking was put aside in favor of a functional intermediate file writer. The external program writes the pose to a temporary file which is parsed in the game engine of choice. Careful consideration was given to conflicting files reads/writes and file size. Files never contain more than a few frames of data before being overwritten, to avoid long parse times. Additionally the pose information is kept short. Transformation matrices for camera pose are flattened into vectors dropping the last row for a total of 12 values per pose. For marker pose, an axis angle representation is used where the axis is a 3 element vector and the angle is encoded as the magnitude of that axis. In both cases, a custom parser translates all the pose information into a useful format for the game engine. This involves a lot of jockeying with coordinate systems to yield functional results. Again, given the poorly documented nature of the various coordinate systems and orientation formats, occasionally a straight focused math approach is less productive than a bit of trial and error.</p>
+
+<p>​In the case of Unreal Engine 4, the engine does not fully support quaternion based orientations nor does it expose transformation matrix functionality to the user. Remarkably, the very modern engine forces a programmer to go through hurdles to use anything but Euler Angle based orientation formats. While this may be fine for FPS style videogames, anything involving elaborate movement in 6DOF suffers terribly. After days of debugging and multiple solutions involving reauthoring a fair portion of engine code, implementing quaternion libraries and transformation matrix formats in UE4, the engine was dropped in favor of Unity for its native support of Quaternion based orientations.</p>
+
+<h2 id="use-video-stream-as-rendered-background-in-the-virtual-scene">​Use video stream as rendered background in the virtual scene</h2>
+
+<p>Ideally the video stream could be used as a background over which all geometry is rendered. Unfortunately this is not easily achieved in Unreal. Perhaps easier implementations exist in Unity. However, Unreal provides a means for creating dynamic materials that can be applied to billboards, along with a means of updating the textures used in the material. This method is helpful: https://docs.unrealengine.com/latest/INT/API/Runtime/Engine/Engine/UTexture2D/UpdateTextureRegions/index.html. The billboard can use a dynamic material, and the texture for that material can be updated with the frame data from the webcam video source (read frame by frame via OpenCV integrated in Unreal).</p>
+
+<p>​Then this billboard can be locked to a fixed relative position in front of the camera. Objects located between the billboard and the camera will effectively appear to be in front of a video background, but if they drop behind the billboard they are occluded. Some custom render depth buffers or special post processing tricks could be implemented to keep the objects visible even if they move behind the billboard. Alternatively, the objects could stay at a fixed distance from the camera and their scale could change to simulate the distance changing but this option was not explored.</p>
+
+<figure class="half">
+  <img src="/images/fiducial-marker-tracking-for-ar/background-0.webp" />
+  <img src="/images/fiducial-marker-tracking-for-ar/overlay-1.webp" />
+</figure>
+
+<p>Various implementations of the dynamic textures, in game material and billboards were implemented in Unreal Engine, including a dynamic texture that was updated directly from captured frame data during image capture using OpenCV integrated in UE4. But recall that the final implementation involved using an external program to handle all tracking related tasks. Unfortunately there was an unexpected hurdle to overcome when combining the webcam billboard background with the external program: OpenCV (and also the webcam) does not support multiple programs accessing the webcam simultaneously. After a great deal of debugging and attempted fixes, no proper solution was found. Instead the final approach involved another workaround where frames (image data) are written to intermediate image files and read at runtime to update dynamic textures. Again special care was taken to avoid conflicts in read/write access.</p>
+
+<p>​A similar setup was implemented in Unity. A billboard was generated and fixed in front of the camera. At runtime the dynmaic texture is updated from intermediate image files stored by the external program which captures frames.</p>
+
+<h3 id="update-virtual-objects-in-game-engine-using-pose-information">Update virtual objects in game engine using pose information</h3>
+
+<p>When using the pose of the physical virtual marker relative to the camera, the virtual object should be position relatives to the virtual camera. The custom parsers written for each game engine extract the pose information. They then augment the pose information according to the different coordinate systems used in each engine. Here the left-right hand coordinate system conversions and coordinate system orientations are taken into consideration. The pose of the virtual objects are then updated with each new updated webcam frame (these come less frequently than rendered frames). The pose of the virtual object is interpolated between its current orientation and the parsed pose. This keeps movement smooth. The end result is a pairing between the virtual object pose and the physical marker pose. The object appears to sit atop the marker in the image even when it is moved.</p>
+
+<p>​While unity uses a quaternion based system to encode orientations of virtual objects, Unreal uses an archaic system defined by euler angles. The engine does not fully support quaternion based orientations nor does it expose transformation matrix functionality to the user. As mentioned previously, a great dela of time was invested into attempted solutions involving reauthoring a fair portion of engine code, and implementing quaternion libraries and transformation matrix formats in UE4. However the internal updates of transformations was too deep into the engine code to eliminate completely and the resulting projects all ended in some form of gimbal lock. Unreal was dropped in favor of Unity for its native support of Quaternion based orientations, and the gimbal lock issues were eliminated.</p>
+
+<h3 id="update-pose-of-the-virtual-camera">​Update pose of the virtual camera</h3>
+
+<p>​For some applications, it is desirable to have the virtual camera move to match the estimated pose of the physical camera relative to the physical marker. The estimation of camera world pose was covered previously, and updating it is as simple as leaving the virtual subject/object at the world center and updating the virtual camera pose to match the estimated camera pose. All considerations from the previous section regarding pose/orientation formats apply here.</p>
+
+<h2 id="results">Results</h2>
+
+<h3 id="installing-opencv">​Installing OpenCV</h3>
+
+<p>​After a great deal of trial and error, OpenCV was compiled from source and test projects were built with OpenCV using Visual Studio 2015 Community. The contributor modules were also compiled including the Aruco module and a few demo projects from the module were successfully built to verify that things are working. The entire process took an astonishing amount of time… ~10 hours debugging faulty installations and compilations.</p>
+
+<h3 id="integrating-opencv-with-ue4">​Integrating OpenCV with UE4</h3>
+
+<p>The prebuilt UE4 plugin and used to successfully integrate standard OpenCV with UE4. Testing this was accomplished by using OpenCV to create a dynamic webcam material.</p>
+
+<p><img src="/images/fiducial-marker-tracking-for-ar/results.webp" alt="detection" class="align-center" /></p>
+
+<p>​As mentioned in the approach, manually compiled OpenCV w/ additional modules (Aruco) was attempted but did not cooperate with Unreal Engine due to conflicting name spaces and incompatible containers for garbage collection. An external program was written instead and the information was communicated to the game engine. This process was used for unity as well.</p>
+
+<h3 id="marker-detection-and-pose-estimation">Marker Detection and Pose Estimation</h3>
+
+<p>​The results of marker detection are shown below. The black square defining each marker is clearly outlined and the marker ID from the used dictionary is overlaid.</p>
+
+<p><img src="/images/fiducial-marker-tracking-for-ar/marker-detection.webp" alt="detection" class="align-center" /></p>
+
+<p>​Pose estimation of the marker relative to the camera works well, even for partially occluded boards. The image below shows this well as the board is partially blocked by a hand.</p>
+
+<p><img src="/images/fiducial-marker-tracking-for-ar/pose-estimation.webp" alt="detection" class="align-center" /></p>
+
+<h3 id="translating-to-game-engine">Translating to Game Engine</h3>
+
+<p>The intermediate file writers and file parsers were a success for both the pose information and the frame image data. While this required significantly more code, and is cumbersome of setup and launch, the results are nearly identical to those achievable by an internal OpenCV integration.</p>
+
+<p>​As mentioned previously, a great deal of effort was expended attempting to solve gimbal lock issues inherent to Unreal Engine’s orientation formats. The pose estimation worked well until orientation were reached that produced gimbal lock. Avoiding these orientations intentionally resulted in better behavior, but when moving the camera by hand it was difficult to maintain precise control of the orientation.</p>
+
+<p>The issues resulting from gimbal lock were resolved in unity which supports quaternion based orientations. A video of the realtime results:</p>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/tVhQsJbxS2k" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<p>Screen captures from that video:</p>
+
+<p><img src="/images/fiducial-marker-tracking-for-ar/overlay-5.webp" alt="screen-grab" class="align-center" />
+<img src="/images/fiducial-marker-tracking-for-ar/overlay-6.webp" alt="screen-grab" class="align-center" />
+<img src="/images/fiducial-marker-tracking-for-ar/overlay-7.webp" alt="screen-grab" class="align-center" />
+<img src="/images/fiducial-marker-tracking-for-ar/overlay-8.webp" alt="screen-grab" class="align-center" />
+<img src="/images/fiducial-marker-tracking-for-ar/overlay-9.webp" alt="screen-grab" class="align-center" /></p>
+
+<h2 id="discussion-and-conclusions">Discussion and Conclusions</h2>
+
+<p>In the end the project yielded working results, but not without an unreasonable amount of jockeying. It seemed that every implemented solution to an encountered obstacle resulted in the exposure of a new complication that rendered the implemented solution irrelevant. The project may have been overwhelmingly frustrating and unexpectedly time intensive for the meager results it produced, but a great deal of learning occurred in the process.</p>
+
+<p>I am now confident in using an industry standard toolset (OpenCV), including building it from source and prototyping applications. I’ve learned a great deal about detecting markers and about designing markers for robust detection. I’ve learned how to calibrate a camera. I’ve learned a great deal about the Perspective N-Point problem which is incredibly important to the tracking problems in a field that is very interesting to me (Virtual Reality). SideNote: Many popular virtual reality headsets are visually tracked using infrared LEDs identified by their strobe pattern or frequency. I have also learned a great deal about transformation geometry representations and manipulations including quaternion and rotation matrix encoding as well as stacked reference frames. Not quite as relevant to the computer vision field, I’ve also learned quite a bit about two different popular game engines.</p>
+
+<p>Overall the results in Ue4 proved less than ideal due to seemingly unavoidable gimbal lock. The results from Unity were much cleaner. It is clear that when dealing with poses that make full use of their 6DOF, a more robust encoding is necessary for orientation. Quaternion or axis angle representations work well here.</p>
+
+<p>Although it was functional, I was not happy with the implemented solutions for communicating pose information and frame image data. Ideally the systems would be self contained without the need for an external application, or at the very least information would be communicated more elegantly with a networked solution. I was disappointed I could not get either to work.</p>
+
+<p>The better results from Unity also show a small amount of error in the position of the virtual object even when its orientation is accurately updated. I believe the reason for this is that the estimated translation is based off the real-world spacing of the board image used for the marker. The image was generated with an intended spacing in mind and this was noted and provided as input to the implemented tracking program. However, when printing the image on paper I used a print setting to fit the image to the page rather than leave it unscaled. The result was a slight difference in actual spacing. A more accurately printed board should alleviate those issues.</p>
+
+<p>If I were to extend the project further, I’d like to implement some form of natural feature tracking with a RANSAC version of the PNP algorithm.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#augmented-reality" class="page__taxonomy-item p-category" rel="tag">augmented reality</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#game-dev" class="page__taxonomy-item p-category" rel="tag">game dev</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-04-01">April 1, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Fiducial+Marker+Tracking+%E2%80%8Bfor+Augmented+Reality%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-fiducial-marker-tracking-for-ar%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-fiducial-marker-tracking-for-ar%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-fiducial-marker-tracking-for-ar/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-estimating-homography/" class="pagination--pager" title="Estimating Homography w/ RANSAC
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-estimating-fundamental-matrix/" class="pagination--pager" title="​Estimating Fundamental Matrix ​&amp; Triangulating 3D Points
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

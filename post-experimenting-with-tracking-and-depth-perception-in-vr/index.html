@@ -1,0 +1,1090 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Experimenting with Tracking &amp; Depth Perception in VR</title>
+<meta name="description" content="Minor experiments in VR.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Experimenting with Tracking &amp; Depth Perception in VR">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-tracking-and-depth-perception-in-vr/">
+
+
+  <meta property="og:description" content="Minor experiments in VR.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/virtual-reality-depth-perception/preview.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-01-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-01-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-tracking-and-depth-perception-in-vr/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Experimenting with Tracking &amp; Depth Perception in VR">
+    <meta itemprop="description" content="Minor experiments in VR.">
+    <meta itemprop="datePublished" content="2016-01-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-01-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-tracking-and-depth-perception-in-vr/" itemprop="url">Experimenting with Tracking &amp; Depth Perception in VR
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>​This experiment was meant to highlight the difference between rotation and position tracking as an element of VR experiences, as well as investigate how depth perception relies on both forms of tracking. The written code includes scripts to mirror a user’s head movement (position and orientation), disable positional tracking, disable rotational tracking and reposition stimuli of various sizes to appear as similar sizes at the same depth. Although these tasks may seem trivial, the process of disabling rotational tracking in Unity using OVR can be tricky. Hopefully the included code helps a few people out there struggling to find a solution given the limitations of the OVR assets.</p>
+
+<h2 id="vr-mirror">VR Mirror</h2>
+
+<p>This simple script creates a Virtual Reality Mirror of sorts. It considers the tracked position and orientation of the head mounted display and then manipulates a game object’s rotation and position to match or mirror the pose. The difference between mirroring and matching is whether the object is facing the camera. If the object is matching movements, then if you bring your face closer to the screen, the object moves further away from the screen. If the object is mirroring movements, then bringing your face closer to the screen will move the object closer to the screen as well.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">VRMirror</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">CameraFlipper</span> <span class="n">cameraFlipper</span><span class="p">;</span>
+    <span class="k">public</span> <span class="n">GameObject</span> <span class="n">copyCat</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Vector3</span> <span class="n">copyCatStartingPosition</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Transform</span> <span class="n">eyeCenter</span><span class="p">;</span>
+
+    <span class="c1">// Use this for initialization</span>
+    <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">eyeCenter</span> <span class="p">=</span> <span class="n">transform</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="s">"TrackingSpace/CenterEyeAnchor"</span><span class="p">);</span>
+        <span class="n">copyCatStartingPosition</span> <span class="p">=</span> <span class="n">copyCat</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Update is called once per frame</span>
+    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">cameraFlipper</span><span class="p">.</span><span class="nf">getShouldMirror</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="cm">/**
+            * Make the cube mirror your movements (positional and
+            * rotational). This means that the cube is facing the camera (and as a result, the user should
+            * see the cube’s face). In this case, if you bring your face close to the screen, the cube moves
+            * closer to the screen as well. Imagine looking into a mirror to get an intuition of this.
+            */</span>
+            <span class="c1">//NOTE: </span>
+            <span class="c1">//This implementation has the copy cat mirror the player's movement but does this mirroring in its own frame (relative to its starting position)</span>
+            <span class="c1">//The offset of the player's movement is equal to the position of the eyeCenter relative to the OVRCameraRig</span>
+            <span class="c1">//Similarly, the copycat logs its starting position for reference later, as its relative origin for mirrored movement. </span>
+            <span class="c1">//Doing things this way enables versaitility later, in case one wishes to have many copycat objects in different locations, mirroring the same target.</span>
+            <span class="n">OVRPose</span> <span class="n">mirroredPose</span> <span class="p">=</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="nf">ToOVRPose</span><span class="p">();</span>
+            <span class="n">mirroredPose</span><span class="p">.</span><span class="n">orientation</span> <span class="p">*=</span> <span class="n">Quaternion</span><span class="p">.</span><span class="nf">Euler</span><span class="p">(</span><span class="m">0.0f</span><span class="p">,</span> <span class="m">180.0f</span><span class="p">,</span> <span class="m">0.0f</span><span class="p">);</span>
+            <span class="n">mirroredPose</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">w</span> <span class="p">*=</span> <span class="p">-</span><span class="m">1.0f</span><span class="p">;</span>
+            <span class="n">mirroredPose</span><span class="p">.</span><span class="n">orientation</span><span class="p">.</span><span class="n">z</span> <span class="p">*=</span> <span class="p">-</span><span class="m">1.0f</span><span class="p">;</span>
+
+            <span class="n">mirroredPose</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="p">*=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+            <span class="n">mirroredPose</span><span class="p">.</span><span class="n">position</span> <span class="p">+=</span> <span class="n">copyCatStartingPosition</span><span class="p">;</span>
+            <span class="n">copyCat</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="nf">FromOVRPose</span><span class="p">(</span><span class="n">mirroredPose</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="cm">/**
+            * Make the cube match your movements. This includes
+            * positional and rotational movements . Furthermore, note that this also means that the cube
+            * should be looking in the same direction the camera is (and as result, the user should see the
+            * back of the cube’s head). For example, if you bring your face closer to the screen, the cube
+            * moves further away from the screen.
+            */</span>
+            <span class="n">OVRPose</span> <span class="n">newPose</span> <span class="p">=</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="nf">ToOVRPose</span><span class="p">();</span>
+            <span class="n">newPose</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">newPose</span><span class="p">.</span><span class="n">position</span> <span class="p">+</span> <span class="n">copyCatStartingPosition</span><span class="p">;</span>
+            <span class="n">copyCat</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="nf">FromOVRPose</span><span class="p">(</span><span class="n">newPose</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="disabling-position-and-rotation-tracking">Disabling Position and Rotation Tracking</h2>
+
+<p>The following script provides a means of disabling or rather toggling the position and or rotation tracking of the head mounted display. Being able to selectively toggle the two forms of tracking helps demonstrate how much they contribute to the VR experience.</p>
+
+<p>Although disabling tracking is generally a bad idea, there do exist reasons for a developer to want the build in tracking disabled. Perhaps a developer wants to implement their own form of tracking, or simply prefers to have the executive choice to do so. Ideally the development tools available would have simple toggles for these forms of tracking that would cut the tracking process off at the base to save performance. Unfortunately no such toggle exists for rotational tracking when using the OVR assets for the Unity Game Engine. I had to get a little creative with the solution. What I wound up with was a glorified “hack” that counteracted/cancelled the rotation after it was applied. If anyone has a better solution let me know!</p>
+
+<p>Direct transformations cannot be applied the center eye anchors within the tracking space. I’m not sure why, but I assume it has to do with late updates or order of execution internally. Instead the solution involved rotating the parent space (tracking space) such that the updated rotation was effectively cancelled.​</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ToggleTracking</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="n">Transform</span> <span class="n">eyeCenter</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Transform</span> <span class="n">trackingSpace</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">bool</span> <span class="n">bUseRotationalTracking</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">bool</span> <span class="n">bUsePositionalTracking</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="n">Vector3</span> <span class="n">lastKnownHMDPosition</span><span class="p">;</span>
+
+    <span class="k">private</span> <span class="n">Quaternion</span> <span class="n">lockedHMD_GlobalOrientation</span><span class="p">;</span> <span class="c1">//used for checking accuracy</span>
+    <span class="k">private</span> <span class="n">Quaternion</span> <span class="n">lastKnownHMD_GlobalOrientation</span><span class="p">;</span>
+
+    <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">eyeCenter</span> <span class="p">=</span> <span class="n">transform</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="s">"TrackingSpace/CenterEyeAnchor"</span><span class="p">);</span>
+        <span class="n">trackingSpace</span> <span class="p">=</span> <span class="n">transform</span><span class="p">.</span><span class="nf">Find</span><span class="p">(</span><span class="s">"TrackingSpace"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Update is called once per frame</span>
+    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">checkForInput</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">LateUpdate</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">bUsePositionalTracking</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nf">counteractTranslation</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">bUseRotationalTracking</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nf">counteractRotation</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">checkForInput</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//Pressing the R key should toggle rotation tracking on and off.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="s">"r"</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">bUseRotationalTracking</span> <span class="p">=</span> <span class="p">!</span><span class="n">bUseRotationalTracking</span><span class="p">;</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Toggling rotation tracking to "</span> <span class="p">+</span> <span class="n">bUseRotationalTracking</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">bUseRotationalTracking</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">lastKnownHMD_GlobalOrientation</span> <span class="p">=</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">rotation</span><span class="p">;</span>
+                <span class="n">lockedHMD_GlobalOrientation</span> <span class="p">=</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">rotation</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">//Pressing the P key should toggle position tracking on and off.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="s">"p"</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="n">bUsePositionalTracking</span> <span class="p">=</span> <span class="p">!</span><span class="n">bUsePositionalTracking</span><span class="p">;</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"Toggling positional tracking to "</span> <span class="p">+</span> <span class="n">bUsePositionalTracking</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">bUsePositionalTracking</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">lastKnownHMDPosition</span> <span class="p">=</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">;</span> <span class="c1">// ToOVRPose().position;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//counteracts any positional changes </span>
+    <span class="k">void</span> <span class="nf">counteractTranslation</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Vector3</span> <span class="n">currentHMDPosition</span> <span class="p">=</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">;</span>
+        <span class="n">Vector3</span> <span class="n">deltaPosition</span> <span class="p">=</span> <span class="n">currentHMDPosition</span> <span class="p">-</span> <span class="n">lastKnownHMDPosition</span><span class="p">;</span>
+        <span class="n">trackingSpace</span><span class="p">.</span><span class="n">position</span> <span class="p">-=</span> <span class="n">deltaPosition</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//counteracts any additional tracked rotation of the headset by rotating its parent tracking space to negate the tracked rotation</span>
+    <span class="k">void</span> <span class="nf">counteractRotation</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Quaternion</span> <span class="n">HMD_deltaRotation</span> <span class="p">=</span> <span class="n">lastKnownHMD_GlobalOrientation</span> <span class="p">*</span> <span class="n">Quaternion</span><span class="p">.</span><span class="nf">Inverse</span><span class="p">(</span><span class="n">eyeCenter</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">rotation</span><span class="p">);</span>
+        <span class="n">trackingSpace</span><span class="p">.</span><span class="n">rotation</span> <span class="p">=</span> <span class="n">HMD_deltaRotation</span> <span class="p">*</span> <span class="n">trackingSpace</span><span class="p">.</span><span class="n">rotation</span><span class="p">;</span>
+        <span class="n">lastKnownHMD_GlobalOrientation</span> <span class="p">=</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="n">rotation</span><span class="p">;</span>
+
+        <span class="c1">//checkAccuracy();</span>
+    <span class="p">}</span>
+
+    <span class="c1">//Checks the accuracy of the counteracted rotation... </span>
+    <span class="c1">//Cmpares the current global orientation of the Center Eye Anchor to the global orientation at the time of disabling tracking</span>
+    <span class="k">void</span> <span class="nf">checkAccuracy</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Vector3</span> <span class="n">diff</span> <span class="p">=</span> <span class="n">lockedHMD_GlobalOrientation</span><span class="p">.</span><span class="n">eulerAngles</span> <span class="p">-</span> <span class="n">eyeCenter</span><span class="p">.</span><span class="n">rotation</span><span class="p">.</span><span class="n">eulerAngles</span><span class="p">;</span>
+        <span class="kt">float</span> <span class="n">thresh</span> <span class="p">=</span> <span class="m">0.01f</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Mathf</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">x</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">thresh</span> <span class="p">||</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">y</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">thresh</span> <span class="p">||</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Abs</span><span class="p">(</span><span class="n">diff</span><span class="p">.</span><span class="n">z</span><span class="p">)</span> <span class="p">&gt;</span> <span class="n">thresh</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">""</span> <span class="p">+</span> <span class="n">diff</span><span class="p">.</span><span class="n">x</span> <span class="p">+</span> <span class="s">", "</span> <span class="p">+</span> <span class="n">diff</span><span class="p">.</span><span class="n">y</span> <span class="p">+</span> <span class="s">", "</span> <span class="p">+</span> <span class="n">diff</span><span class="p">.</span><span class="n">z</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="depth-perception-and-relative-size">Depth Perception and Relative Size</h2>
+
+<p>This script rearranges game objects so that they appear to be of equal size when viewed. Additionally a small sequence demonstrates the effect by randomly assigning an order to the objects and displaying them one by one.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">GenerateStimuli</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="n">GameObject</span><span class="p">[]</span> <span class="n">stimulusObjs</span><span class="p">;</span> <span class="c1">//specify the objects in the inspector for use in the stimulus loop</span>
+    <span class="k">public</span> <span class="n">GameObject</span> <span class="n">targetEye</span><span class="p">;</span> <span class="c1">//the reference point that will be used to determine how stimuli should be rearranged </span>
+    <span class="k">private</span> <span class="kt">bool</span> <span class="n">bSeqInProgress</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span> <span class="c1">//true for the duration of the displayed stimulus sequence</span>
+
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">desiredAngularDiameterInDeg</span><span class="p">;</span> <span class="c1">//will determine the apparent size of all the stimuli</span>
+    <span class="k">public</span> <span class="kt">float</span> <span class="n">spacingAngleDegrees</span><span class="p">;</span> <span class="c1">//will determine the apparent spacing of the stimuli</span>
+
+    <span class="c1">// Update is called once per frame</span>
+    <span class="k">void</span> <span class="nf">Update</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">checkForInput</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">void</span> <span class="nf">checkForInput</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//Pressing the S key should activate the main sequence, only if any previously activated sequences are finished</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">Input</span><span class="p">.</span><span class="nf">GetKeyDown</span><span class="p">(</span><span class="s">"s"</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="s">"received request to run main sequence"</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">bSeqInProgress</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//run the main sequence</span>
+                <span class="nf">mainSequence</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="nf">print</span><span class="p">(</span><span class="s">"Main sequence already running"</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//The main sequence I'll be using as an example</span>
+    <span class="k">void</span> <span class="nf">mainSequence</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"initiating main sequence"</span><span class="p">);</span>
+        <span class="n">bSeqInProgress</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="nf">setAllStimuliActive</span><span class="p">(</span><span class="n">stimulusObjs</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+        <span class="nf">randomizeStimOrder</span><span class="p">(</span><span class="n">stimulusObjs</span><span class="p">);</span>
+        <span class="n">Vector3</span><span class="p">[]</span> <span class="n">positionAssignments</span> <span class="p">=</span> <span class="nf">determinePositions</span><span class="p">(</span><span class="n">stimulusObjs</span><span class="p">,</span> <span class="n">targetEye</span><span class="p">,</span> <span class="n">desiredAngularDiameterInDeg</span><span class="p">,</span> <span class="n">spacingAngleDegrees</span><span class="p">);</span>
+        <span class="nf">assignPositions</span><span class="p">(</span><span class="n">stimulusObjs</span><span class="p">,</span> <span class="n">positionAssignments</span><span class="p">);</span>
+        <span class="nf">StartCoroutine</span><span class="p">(</span><span class="nf">showStimuli</span><span class="p">(</span><span class="n">stimulusObjs</span><span class="p">));</span>
+
+    <span class="p">}</span>
+
+    <span class="c1">//Activates all stimulus in a target array</span>
+    <span class="k">void</span> <span class="nf">setAllStimuliActive</span><span class="p">(</span><span class="n">GameObject</span><span class="p">[]</span> <span class="n">objs</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">bStimActive</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">GameObject</span> <span class="n">stimulusObj</span> <span class="k">in</span> <span class="n">objs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">stimulusObj</span><span class="p">.</span><span class="nf">SetActive</span><span class="p">(</span><span class="n">bStimActive</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//Randomize the order of stimuli in an array of stimulus objects</span>
+    <span class="k">void</span> <span class="nf">randomizeStimOrder</span><span class="p">(</span><span class="n">GameObject</span><span class="p">[]</span> <span class="n">objs</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nf">ShuffleArray</span><span class="p">(</span><span class="n">objs</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//converts an angle from degrees to radians</span>
+    <span class="kt">float</span> <span class="nf">degToRad</span><span class="p">(</span><span class="kt">float</span> <span class="n">deg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">deg</span> <span class="p">*</span> <span class="n">Mathf</span><span class="p">.</span><span class="n">PI</span> <span class="p">/</span> <span class="m">180.0f</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//returns the distance an object with "actualDiameter" must be from the view point to yield the desired angular diameter</span>
+    <span class="kt">float</span> <span class="nf">distFromAngDiam</span><span class="p">(</span><span class="kt">float</span> <span class="n">angularDiameter</span><span class="p">,</span> <span class="kt">float</span> <span class="n">actualDiameter</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">bAngDiamProvidedInRadians</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">float</span> <span class="n">distance</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">bAngDiamProvidedInRadians</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">distance</span> <span class="p">=</span> <span class="m">0.5f</span> <span class="p">*</span> <span class="n">actualDiameter</span> <span class="p">/</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Sin</span><span class="p">(</span><span class="m">0.5f</span> <span class="p">*</span> <span class="n">angularDiameter</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">distance</span> <span class="p">=</span> <span class="m">0.5f</span> <span class="p">*</span> <span class="n">actualDiameter</span> <span class="p">/</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Sin</span><span class="p">(</span><span class="m">0.5f</span> <span class="p">*</span> <span class="nf">degToRad</span><span class="p">(</span><span class="n">angularDiameter</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">distance</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//determines the positions of stimulus objects in array such that they appear to be the same diameter and appear spaced apart by the same angle</span>
+    <span class="n">Vector3</span><span class="p">[]</span> <span class="nf">determinePositions</span><span class="p">(</span><span class="n">GameObject</span><span class="p">[]</span> <span class="n">objs</span><span class="p">,</span> <span class="n">GameObject</span> <span class="n">eye</span><span class="p">,</span> <span class="kt">float</span> <span class="n">angularDiameter</span><span class="p">,</span> <span class="kt">float</span> <span class="n">spacingAngle</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Vector3</span><span class="p">[]</span> <span class="n">determinedPositions</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Vector3</span><span class="p">[</span><span class="n">objs</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+
+        <span class="kt">float</span> <span class="n">fixedHeight</span> <span class="p">=</span> <span class="n">eye</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">y</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">objs</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+        <span class="p">{</span>
+            <span class="n">Vector3</span> <span class="n">calculatedPos</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Vector3</span><span class="p">();</span>
+            <span class="n">calculatedPos</span><span class="p">.</span><span class="n">y</span> <span class="p">=</span> <span class="n">fixedHeight</span><span class="p">;</span> <span class="c1">//the y position of each stimulus center is fixed at the eye height</span>
+
+            <span class="c1">//retrieve the actual diameter of the stimulus sphere</span>
+            <span class="kt">float</span> <span class="n">actualDiameter</span> <span class="p">=</span> <span class="m">2</span> <span class="p">*</span> <span class="n">objs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">GetComponent</span><span class="p">&lt;</span><span class="n">SphereCollider</span><span class="p">&gt;().</span><span class="n">radius</span> <span class="p">*</span> <span class="n">objs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">transform</span><span class="p">.</span><span class="n">lossyScale</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+
+            <span class="c1">//determine the distance from the eye at which the diameter appears to be the desired angular diameter</span>
+            <span class="kt">float</span> <span class="n">distance</span> <span class="p">=</span> <span class="nf">distFromAngDiam</span><span class="p">(</span><span class="n">angularDiameter</span><span class="p">,</span> <span class="n">actualDiameter</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+
+            <span class="c1">//determine the x and z offsets (opposite and adjacent sides of right triangle) that are necessary to produce that distance</span>
+
+            <span class="c1">//this is derived from the right triangle, solving for an opposite side length given an angle and a hypotenuse</span>
+            <span class="kt">float</span> <span class="n">xOffsetUnitForGivenDist</span> <span class="p">=</span> <span class="n">distance</span> <span class="p">*</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Sin</span><span class="p">(</span><span class="nf">degToRad</span><span class="p">(</span><span class="n">spacingAngle</span><span class="p">));</span>
+            <span class="c1">//the x offset will be a multiple of the desied spacing... as the center object will be offset by 0, and the left by +x and right by -x</span>
+            <span class="kt">float</span> <span class="n">xOffset</span> <span class="p">=</span> <span class="p">(</span><span class="n">Mathf</span><span class="p">.</span><span class="nf">Floor</span><span class="p">(</span><span class="n">objs</span><span class="p">.</span><span class="n">Length</span> <span class="p">/</span> <span class="m">2</span><span class="p">)</span> <span class="p">-</span> <span class="n">i</span><span class="p">)</span> <span class="p">*</span> <span class="n">xOffsetUnitForGivenDist</span><span class="p">;</span>
+            <span class="n">calculatedPos</span><span class="p">.</span><span class="n">x</span> <span class="p">=</span> <span class="n">eye</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">x</span> <span class="p">+</span> <span class="n">xOffset</span><span class="p">;</span>
+
+
+            <span class="c1">//the z offset will be the adjacent side of a right triangle now that we know the hypotenuse and the opposite side length</span>
+            <span class="kt">float</span> <span class="n">zOffset</span> <span class="p">=</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Sqrt</span><span class="p">(</span><span class="n">Mathf</span><span class="p">.</span><span class="nf">Pow</span><span class="p">(</span><span class="n">distance</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span> <span class="p">+</span> <span class="n">Mathf</span><span class="p">.</span><span class="nf">Pow</span><span class="p">(</span><span class="n">xOffset</span><span class="p">,</span> <span class="m">2</span><span class="p">));</span> <span class="c1">//triangle side length</span>
+            <span class="n">calculatedPos</span><span class="p">.</span><span class="n">z</span> <span class="p">=</span> <span class="n">eye</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">z</span> <span class="p">-</span> <span class="n">zOffset</span><span class="p">;</span>
+
+            <span class="n">determinedPositions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">calculatedPos</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">determinedPositions</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//assigns pre-determined positions to an array of objects</span>
+    <span class="k">void</span> <span class="nf">assignPositions</span><span class="p">(</span><span class="n">GameObject</span><span class="p">[]</span> <span class="n">objs</span><span class="p">,</span> <span class="n">Vector3</span><span class="p">[]</span> <span class="n">assignments</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">objs</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+        <span class="p">{</span>
+            <span class="n">objs</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span> <span class="p">=</span> <span class="n">assignments</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">//shows all the stimulus objects from an array of stimulus objects</span>
+    <span class="n">IEnumerator</span> <span class="nf">showStimuli</span><span class="p">(</span><span class="n">GameObject</span><span class="p">[]</span> <span class="n">objs</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//for each stimulus going left -&gt; right, wait 3 seconds between each display</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="n">GameObject</span> <span class="n">obj</span> <span class="k">in</span> <span class="n">objs</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">yield</span> <span class="k">return</span> <span class="k">new</span> <span class="nf">WaitForSeconds</span><span class="p">(</span><span class="m">3.0f</span><span class="p">);</span>
+            <span class="n">obj</span><span class="p">.</span><span class="nf">SetActive</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="n">bSeqInProgress</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="nf">print</span><span class="p">(</span><span class="s">"main sequence complete"</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">//shuffles an array, useful for randomizing </span>
+    <span class="k">public</span> <span class="k">static</span> <span class="k">void</span> <span class="n">ShuffleArray</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">T</span><span class="p">[]</span> <span class="n">array</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="n">array</span><span class="p">.</span><span class="n">Length</span> <span class="p">-</span> <span class="m">1</span><span class="p">;</span> <span class="n">i</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span><span class="p">--)</span>
+        <span class="p">{</span>
+            <span class="kt">int</span> <span class="n">randIndex</span> <span class="p">=</span> <span class="n">Random</span><span class="p">.</span><span class="nf">Range</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+            <span class="n">T</span> <span class="n">tmp</span> <span class="p">=</span> <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">=</span> <span class="n">array</span><span class="p">[</span><span class="n">randIndex</span><span class="p">];</span>
+            <span class="n">array</span><span class="p">[</span><span class="n">randIndex</span><span class="p">]</span> <span class="p">=</span> <span class="n">tmp</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#3d" class="page__taxonomy-item p-category" rel="tag">3D</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#game-dev" class="page__taxonomy-item p-category" rel="tag">game dev</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#virtual-reality" class="page__taxonomy-item p-category" rel="tag">virtual reality</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-01-01">January 1, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Experimenting+with+Tracking+%26+Depth+Perception+in+VR%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-experimenting-with-tracking-and-depth-perception-in-vr%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-experimenting-with-tracking-and-depth-perception-in-vr%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-experimenting-with-tracking-and-depth-perception-in-vr/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-destiny-montages/" class="pagination--pager" title="Destiny: Editing Gameplay Montages
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-naive-bayes-classifiers-in-r/" class="pagination--pager" title="Naive Bayes Classifier in R
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

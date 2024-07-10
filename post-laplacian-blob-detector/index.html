@@ -1,0 +1,1124 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Laplacian Blob Detector</title>
+<meta name="description" content="Implementing a laplacian blob detector to identify scale invariant features.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Laplacian Blob Detector">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-laplacian-blob-detector/">
+
+
+  <meta property="og:description" content="Implementing a laplacian blob detector to identify scale invariant features.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/laplacian-blob-detector/5.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-01-02T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-01-02T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-laplacian-blob-detector/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Laplacian Blob Detector">
+    <meta itemprop="description" content="Implementing a laplacian blob detector to identify scale invariant features.">
+    <meta itemprop="datePublished" content="2016-01-02T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-01-02T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-laplacian-blob-detector/" itemprop="url">Laplacian Blob Detector
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          9 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#algorithm-outline">Algorithm Outline</a></li><li><a href="#results">Results</a></li><li><a href="#main-script">Main Script</a></li><li><a href="#blob-detector">Blob Detector</a></li><li><a href="#generate-a-scale-space">Generate a Scale Space</a></li><li><a href="#two-dimensional-non-maximum-suppression">Two Dimensional Non-Maximum Suppression</a></li><li><a href="#three-dimensional-non-maximum-suppression">Three Dimensional Non-Maximum Suppression</a></li><li><a href="#retrieving-positions-and-characteristic-scales-of-blobs">Retrieving Positions and Characteristic Scales of Blobs</a></li><li><a href="#more-results">More Results</a></li></ul>
+            </nav>
+          </aside>
+        
+        <p>In order to track features across scales, detected features must be invariant to affine transformations. However, many common feature detection algorithms (ex: Harris Corner Detector) are not invariant to scale.</p>
+
+<p>A laplacian blob detector is one method to generate scale invariant features. The basic idea is to convolve an image with a “blob filter” at various scales and identify extrema of filter response in the resulting scale space.</p>
+
+<h2 id="algorithm-outline">Algorithm Outline</h2>
+
+<ol>
+  <li>Generate a Laplacian of Gaussian filter</li>
+  <li>Iteratively construct a Laplacian scale space
+    <ol>
+      <li>Filter the image with a scale-normalized Laplacian at current scale</li>
+      <li>Store the square of the Laplacian response for the current scale</li>
+      <li>Increase the scale by a factor k</li>
+    </ol>
+  </li>
+  <li>Perform a 3 dimensional non-maximum suppression in scale space</li>
+  <li>Display markers for the detected blobs as circles at their characteristic scales</li>
+</ol>
+
+<h2 id="results">Results</h2>
+
+<p>The following results show blobs detected on provided images. The radius of a circle corresponds to the scale of the detected blob.</p>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/0.webp" />
+  <img src="/images/laplacian-blob-detector/1.webp" />
+  <img src="/images/laplacian-blob-detector/2.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/3.webp" />
+  <img src="/images/laplacian-blob-detector/4.webp" />
+  <img src="/images/laplacian-blob-detector/5.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/6.webp" />
+  <img src="/images/laplacian-blob-detector/7.webp" />
+  <img src="/images/laplacian-blob-detector/8.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/9.webp" />
+  <img src="/images/laplacian-blob-detector/10.webp" />
+  <img src="/images/laplacian-blob-detector/11.webp" />
+</figure>
+
+<h2 id="main-script">Main Script</h2>
+
+<p>This main script provides an example of how to use the written code, as well as some starting parameters. For the important parameters… Sigma was set at 2 (a nice split between 1-3). Later on the kernel size is defined in such a way to guarantee an odd value. The scale multiplier was set at sqrt(sqrt(2)), a number high enough above 1.0 that scales are separated but not so high as to grow too fast. The commented out code under the scale multiplier instantiation shows how the values were printed for each scale during tuning. What I was looking for was a nice spacing such that smaller scaled images would be sampled more often to account for the more rapid shifts from pixel to pixel as compared to sampling the larger scale images less often due to the less rapid changes from pixel to pixel. If the scale multiplier isn’t chosen carefully, and the the kernel size is large relative to the image the resulting scale space will have a few images that are too similar. Lastly, the threshold was tuned to yield a pleasing number of blobs. This was a design choice given the viewed output.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%info for user....</span>
+<span class="nb">clear</span> <span class="nb">all</span><span class="p">;</span>
+<span class="nb">clc</span><span class="p">;</span>
+
+<span class="c1">%%%%%%%%%%%%</span>
+<span class="c1">% Pick image</span>
+<span class="c1">%%%%%%%%%%%%</span>
+<span class="c1">%'einstein.jpg'; %'butterfly.jpg'; %'fishes.jpg'; %'sunflowers.jpg';</span>
+<span class="n">imgFilename</span> <span class="o">=</span> <span class="s1">'butterfly.jpg'</span><span class="p">;</span>
+<span class="n">targetImg</span> <span class="o">=</span> <span class="nb">imread</span><span class="p">(</span><span class="n">imgFilename</span><span class="p">);</span>
+
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Convert image to gray scale</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="c1">%img_GrayScale = rgb2gray(targetImg);</span>
+<span class="n">img_GrayScale</span> <span class="o">=</span> <span class="nb">mean</span><span class="p">(</span><span class="nb">double</span><span class="p">(</span><span class="n">targetImg</span><span class="p">),</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="p">/</span><span class="nb">max</span><span class="p">(</span><span class="nb">double</span><span class="p">(</span><span class="n">targetImg</span><span class="p">(:)));</span>
+
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Define parameters for desired implementation</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="n">numScales</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">scaleMultiplier</span> <span class="o">=</span> <span class="nb">sqrt</span><span class="p">(</span><span class="nb">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span> <span class="c1">%scale multiplication constant  </span>
+<span class="c1">%for i = 2:numScales</span>
+<span class="c1">%    1/(scaleMultiplier^(i-1))</span>
+<span class="c1">%end</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="mf">0.015</span><span class="p">;</span> <span class="c1">%for the double image which is all 0-&gt;1</span>
+
+<span class="c1">%%%%%%%%%%%%%%</span>
+<span class="c1">% Detect blobs</span>
+<span class="c1">%%%%%%%%%%%%%%</span>
+<span class="c1">%scaleSpace_3D_NMS = detectBlobs( img_GrayScale, numScales, sigma, false, scaleMultiplier, threshold );</span>
+<span class="n">scaleSpace_3D_NMS</span> <span class="o">=</span> <span class="n">detectBlobs</span><span class="p">(</span> <span class="n">img_GrayScale</span><span class="p">,</span> <span class="n">numScales</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">scaleMultiplier</span><span class="p">,</span> <span class="n">threshold</span> <span class="p">);</span><span class="c1">%speedup</span>
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Display resulting circles at their characteristic scales</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="n">radiiByScale</span> <span class="o">=</span> <span class="n">calcRadiiByScale</span><span class="p">(</span><span class="n">numScales</span><span class="p">,</span> <span class="n">scaleMultiplier</span><span class="p">,</span> <span class="n">sigma</span><span class="p">);</span>
+
+<span class="n">blobMarkers</span> <span class="o">=</span> <span class="n">retrieveBlobMarkers</span><span class="p">(</span><span class="n">scaleSpace_3D_NMS</span><span class="p">,</span> <span class="n">radiiByScale</span><span class="p">);</span> 
+
+<span class="n">xPos</span> <span class="o">=</span> <span class="n">blobMarkers</span><span class="p">(:,</span><span class="mi">1</span><span class="p">);</span> <span class="c1">%col positions</span>
+<span class="n">yPos</span> <span class="o">=</span> <span class="n">blobMarkers</span><span class="p">(:,</span><span class="mi">2</span><span class="p">);</span> <span class="c1">%row positions</span>
+<span class="n">radii</span> <span class="o">=</span> <span class="n">blobMarkers</span><span class="p">(:,</span><span class="mi">3</span><span class="p">);</span> <span class="c1">%radii</span>
+
+<span class="c1">%show_all_circles(targetImg, xPos, yPos, radii, 'r', .5); %overlay on original img</span>
+<span class="n">show_all_circles</span><span class="p">(</span><span class="n">img_GrayScale</span><span class="p">,</span> <span class="n">xPos</span><span class="p">,</span> <span class="n">yPos</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="s1">'r'</span><span class="p">,</span> <span class="o">.</span><span class="mi">5</span><span class="p">);</span> <span class="c1">%overlay on gray img</span>
+</code></pre></div></div>
+
+<h2 id="blob-detector">Blob Detector</h2>
+
+<p>This is the main blob detector. It follows the main algorithm outlined previously. Specific sections of the algorithm were delegated to sub functions.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">scaleSpace_3D_NMS</span> <span class="p">]</span> <span class="o">=</span> <span class="n">detectBlobs</span><span class="p">(</span> <span class="n">img_GrayScale</span><span class="p">,</span> <span class="n">numScales</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">bShouldDownsample</span><span class="p">,</span> <span class="n">scaleMultiplier</span><span class="p">,</span> <span class="n">threshold</span> <span class="p">)</span>
+<span class="c1">%DETECTBLOBS Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+
+<span class="c1">% Define Parameters</span>
+<span class="p">[</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">img_GrayScale</span><span class="p">);</span> 
+<span class="n">imgSize</span> <span class="o">=</span> <span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">];</span>
+
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Convolve img w/ scale-normalized Laplcaian at several scales</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="c1">% Generate the various scales by applying the filter</span>
+<span class="nb">display</span><span class="p">(</span><span class="s1">'Generating Scale Space'</span><span class="p">);</span> <span class="nb">tic</span><span class="p">;</span>
+<span class="n">scaleSpace</span> <span class="o">=</span> <span class="n">generateScaleSpace</span><span class="p">(</span><span class="n">img_GrayScale</span><span class="p">,</span> <span class="n">numScales</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">scaleMultiplier</span><span class="p">,</span> <span class="n">bShouldDownsample</span><span class="p">);</span>
+<span class="nb">display</span><span class="p">(</span><span class="s1">'Finished generating scale space'</span><span class="p">);</span> <span class="nb">toc</span><span class="p">;</span>
+
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% 2D Non Max Suprresion for Each Individiaul Scale</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">%first do nonmaximum suppression in each 2D slice separately</span>
+<span class="n">scaleSpace_2D_NMS</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">numScales</span><span class="p">);</span>
+<span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numScales</span>
+    <span class="n">scaleSpace_2D_NMS</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">nms_2D</span><span class="p">(</span><span class="n">scaleSpace</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">end</span>
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% 3D Non Max Suppression Between Neighboring Scales</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="n">scaleSpace_3D_NMS</span> <span class="o">=</span> <span class="n">nms_3D</span><span class="p">(</span><span class="n">scaleSpace_2D_NMS</span><span class="p">,</span> <span class="n">scaleSpace</span><span class="p">,</span> <span class="n">numScales</span><span class="p">);</span>
+
+<span class="c1">%%%%%%%%%%%</span>
+<span class="c1">% Threshold</span>
+<span class="c1">%%%%%%%%%%%</span>
+
+<span class="n">threshBinaryFlag</span> <span class="o">=</span> <span class="n">scaleSpace_3D_NMS</span> <span class="o">&gt;</span> <span class="n">threshold</span><span class="p">;</span>
+<span class="n">scaleSpace_3D_NMS</span> <span class="o">=</span> <span class="n">scaleSpace_3D_NMS</span> <span class="o">.*</span> <span class="n">threshBinaryFlag</span><span class="p">;</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="generate-a-scale-space">Generate a Scale Space</h2>
+
+<p>This functions handles the creation of a scale space or pyramid of responses to a laplacian of a gaussian. It assumes the provided image is already in grayscale. Filtering can be performed in one of two ways, one of which is significantly faster. The basic idea is the same, apply the kernel with differing relative size between the kernel and the image. Conceptually this means we want to increase the kernel size and reapply it to the image to generate the different scales. But it is relatively inefficient to repeatedly filter the image with a kernel of increasing size. Instead of increasing the kernel size by a factor of k, simply down-sample the image by a factor 1/k and apply the same kernel. Of course after applying the kernel, the result the has to be up-sampled. The results are slightly different in the number of blobs detected (~2-3%) but the time to generate the scale space decreases dramatically. Here is a chart comparing the times to create scale space with and without downsampling.</p>
+
+<p><img src="/images/laplacian-blob-detector/12.webp" alt="table" class="align-center" /></p>
+
+<p>On average, the down sampling method took 26% of the time of the no downsampling method. This performance bonus will only increase as the size of the image and filter increase. This is a very efficient implementation.</p>
+
+<p>​Other minor notes include the use of an odd kernel size in order to avoid shifting artifacts and bi-cubic interpolation to keep spatial resolution up at the cost of a little bit of time performance.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">scaleSpace</span> <span class="p">]</span> <span class="o">=</span> <span class="n">generateScaleSpace</span><span class="p">(</span> <span class="n">img_GrayScale</span><span class="p">,</span> <span class="n">numScales</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">scaleMultiplier</span><span class="p">,</span> <span class="n">bShouldDownsample</span> <span class="p">)</span>
+<span class="c1">%GENERATESCALESPACE Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">img_GrayScale</span><span class="p">);</span>
+    <span class="n">scaleSpace</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">numScales</span><span class="p">);</span> <span class="c1">% structure to hold the scale space </span>
+
+    <span class="c1">%Applying the kernel filter is all about relative size (between the </span>
+    <span class="c1">%kernel and the image). Conceptually we want to increase the kernel</span>
+    <span class="c1">%size and reapply it to the image to generate the different scales.</span>
+    <span class="c1">%But it is relatively inefficient to repeatedly filter the image with  </span>
+    <span class="c1">%a kernel of increasing size. Instead of increasing the kernel size by </span>
+    <span class="c1">%a factor of k, simply downsample the image by a factor 1/k and apply</span>
+    <span class="c1">%the same kernel. Of course after applying the kernel, the result the</span>
+    <span class="c1">%result has to be upsampled.</span>
+
+    <span class="k">if</span> <span class="n">bShouldDownsample</span>
+        <span class="c1">% Process will be... don't change filter size, but downsize the image </span>
+        <span class="c1">%by 1/k, filter with same kernel, and then rescale/upsize back</span>
+
+        <span class="c1">%-------- Generate just 1 normalized filter (min size 1x1)-------------</span>
+        <span class="c1">%(borrowed mostly from "http://slazebni.cs.illinois.edu/spring16/harris.m")</span>
+        <span class="n">kernelSize</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">fix</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">sigma</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>  <span class="c1">%+1 to guarantee odd filter size</span>
+        <span class="c1">% Create a Laplacian of Gaussian kernel ('log')</span>
+        <span class="n">LoGKernel</span> <span class="o">=</span> <span class="n">fspecial</span><span class="p">(</span> <span class="s1">'log'</span><span class="p">,</span> <span class="n">kernelSize</span><span class="p">,</span> <span class="n">sigma</span> <span class="p">);</span>
+        <span class="c1">% Nomrmalize the kernel </span>
+        <span class="n">LoGKernel</span> <span class="o">=</span> <span class="n">sigma</span><span class="o">.^</span><span class="mi">2</span> <span class="o">*</span> <span class="n">LoGKernel</span><span class="p">;</span>
+
+        <span class="n">reUpscaledImg</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">);</span>
+        <span class="n">downsizedImg</span> <span class="o">=</span> <span class="n">img_GrayScale</span><span class="p">;</span>
+
+
+        <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numScales</span>
+            <span class="c1">% Downsize the image by 1/k... use bicubic instead of bilinear to</span>
+            <span class="c1">% keep spatial resolution. Here k is the scaleMultiplicationConstant</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">==</span><span class="mi">1</span>
+                <span class="n">downsizedImg</span> <span class="o">=</span> <span class="n">img_GrayScale</span><span class="p">;</span>
+            <span class="k">else</span>
+                <span class="n">downsizedImg</span> <span class="o">=</span> <span class="nb">imresize</span><span class="p">(</span><span class="n">img_GrayScale</span><span class="p">,</span> <span class="mi">1</span><span class="p">/(</span><span class="n">scaleMultiplier</span><span class="o">^</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">)),</span> <span class="s1">'bicubic'</span><span class="p">);</span>
+            <span class="k">end</span>
+            <span class="c1">% Filter the image to generate a response to the laplacian of</span>
+            <span class="c1">% gaussian </span>
+            <span class="n">filteredImage</span> <span class="o">=</span> <span class="n">imfilter</span><span class="p">(</span><span class="n">downsizedImg</span><span class="p">,</span> <span class="n">LoGKernel</span><span class="p">,</span><span class="s1">'same'</span><span class="p">,</span> <span class="s1">'replicate'</span><span class="p">);</span>
+            <span class="c1">%Save square of Laplacian response for current level of scale space</span>
+            <span class="n">filteredImage</span> <span class="o">=</span> <span class="n">filteredImage</span> <span class="o">.^</span> <span class="mi">2</span><span class="p">;</span>
+
+            <span class="c1">% Upscale the filter response</span>
+            <span class="n">reUpscaledImg</span> <span class="o">=</span> <span class="nb">imresize</span><span class="p">(</span><span class="n">filteredImage</span><span class="p">,</span> <span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">],</span> <span class="s1">'bicubic'</span><span class="p">);</span>
+            <span class="c1">% Store it at the appropriate level in the scale space</span>
+            <span class="n">scaleSpace</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">reUpscaledImg</span><span class="p">;</span>
+        <span class="k">end</span>
+    <span class="k">else</span>
+        <span class="c1">%increase the kernel size and reapply it to the image </span>
+        <span class="c1">%to generate the different scales.</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numScales</span>
+            <span class="c1">%--Calculate a new sigma, and regenerate the kernel for each scale</span>
+            <span class="n">scaledSigma</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">scaleMultiplier</span><span class="o">^</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+            <span class="n">kernelSize</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">fix</span><span class="p">(</span><span class="mi">6</span><span class="o">*</span><span class="n">scaledSigma</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>  <span class="c1">%+1 to guarantee odd filter size</span>
+            <span class="c1">% Create a Laplacian of Gaussian kernel ('log')</span>
+            <span class="n">LoGKernel</span> <span class="o">=</span> <span class="n">fspecial</span><span class="p">(</span> <span class="s1">'log'</span><span class="p">,</span> <span class="n">kernelSize</span><span class="p">,</span> <span class="n">scaledSigma</span> <span class="p">);</span>
+            <span class="c1">% Nomrmalize the kernel </span>
+            <span class="n">LoGKernel</span> <span class="o">=</span> <span class="n">scaledSigma</span><span class="o">.^</span><span class="mi">2</span> <span class="o">*</span> <span class="n">LoGKernel</span><span class="p">;</span>      
+
+            <span class="c1">% Filter the image to generate a response to the laplacian of</span>
+            <span class="c1">% gaussian </span>
+            <span class="n">filteredImage</span> <span class="o">=</span> <span class="n">imfilter</span><span class="p">(</span><span class="n">img_GrayScale</span><span class="p">,</span> <span class="n">LoGKernel</span><span class="p">,</span><span class="s1">'same'</span><span class="p">,</span> <span class="s1">'replicate'</span><span class="p">);</span>
+            <span class="c1">% Save square of Laplacian response for current level of scale space</span>
+            <span class="n">filteredImage</span> <span class="o">=</span> <span class="n">filteredImage</span> <span class="o">.^</span> <span class="mi">2</span><span class="p">;</span>
+
+            <span class="c1">% Store it at the appropriate level in the scale space</span>
+            <span class="n">scaleSpace</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">filteredImage</span><span class="p">;</span>     
+        <span class="k">end</span>
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="two-dimensional-non-maximum-suppression">Two Dimensional Non-Maximum Suppression</h2>
+
+<p>To perform nonmaximum suppression in scale space, its easiest to first do nonmaximum suppression in each 2D slice separately. The following code performs a 2 dimensional non-maximum suppression. It makes use of the ordfilt2 Matlab function for most of the busy work.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">img_2D_NMS</span> <span class="p">]</span> <span class="o">=</span> <span class="n">nms_2D</span><span class="p">(</span> <span class="n">img</span><span class="p">,</span> <span class="n">radius</span> <span class="p">)</span>
+<span class="c1">% Extract local maxima </span>
+<span class="c1">%   Detailed explanation goes here</span>
+    <span class="n">neighborhoodSize</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">radius</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span> <span class="c1">%size of mask</span>
+    <span class="n">domain</span> <span class="o">=</span> <span class="nb">ones</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+
+    <span class="n">img_2D_NMS</span> <span class="o">=</span> <span class="n">ordfilt2</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">neighborhoodSize</span><span class="o">^</span><span class="mi">2</span><span class="p">,</span> <span class="n">domain</span><span class="p">);</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="three-dimensional-non-maximum-suppression">Three Dimensional Non-Maximum Suppression</h2>
+
+<p>After each slice has been non-max suppressed, a 3D non-max suppression can be performed in the entire scale space. This is best done by comparing a neighborhood of slices (in this case 3) and keeping only the local max between neighboring slices. In this way there can still be multiple local maxima at a given pixel location if they are separated by at least 1 scale. This would manifest as nested circles in the final output markers.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">scaleSpace_3D_NMS</span> <span class="p">]</span> <span class="o">=</span> <span class="n">nms_3D</span><span class="p">(</span> <span class="n">scaleSpace_2D_NMS</span><span class="p">,</span> <span class="n">originalScaleSpace</span><span class="p">,</span> <span class="n">numScales</span> <span class="p">)</span>
+<span class="c1">%NMS_3D Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here\</span>
+
+<span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">scaleSpace_2D_NMS</span><span class="p">(:,:,</span><span class="mi">1</span><span class="p">));</span>
+<span class="n">maxVals_InNeighboringScaleSpace</span> <span class="o">=</span> <span class="n">scaleSpace_2D_NMS</span><span class="p">;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numScales</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">lowerScale</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+        <span class="n">upperScale</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">elseif</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numScales</span>
+        <span class="n">lowerScale</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">upperScale</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">;</span>
+    <span class="k">else</span>
+        <span class="n">lowerScale</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+        <span class="n">upperScale</span> <span class="o">=</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">end</span>
+    <span class="c1">%each row and column holds the maximum value at that row and col from </span>
+    <span class="c1">%the neighboring scale space... </span>
+    <span class="c1">%ie: the maximum of the value at pix x,y in the scale space above, </span>
+    <span class="c1">%current and below... so neighboring scales will end up with the same</span>
+    <span class="c1">%values at many row and col positions... this is an intermediate calc</span>
+    <span class="n">maxVals_InNeighboringScaleSpace</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">maxVals_InNeighboringScaleSpace</span><span class="p">(:,:,</span><span class="n">lowerScale</span><span class="p">:</span><span class="n">upperScale</span><span class="p">),[],</span><span class="mi">3</span><span class="p">);</span>
+<span class="k">end</span>
+
+<span class="c1">%mark every location where the max value is the actualy value from that</span>
+<span class="c1">%scale with a 1, and a 0 otherwise. (Binary flag)</span>
+<span class="n">originalValMarkers</span> <span class="o">=</span> <span class="n">maxVals_InNeighboringScaleSpace</span> <span class="o">==</span> <span class="n">originalScaleSpace</span><span class="p">;</span>
+<span class="c1">%only keep the max vals that were actually from those locations</span>
+<span class="n">scaleSpace_3D_NMS</span> <span class="o">=</span> <span class="n">maxVals_InNeighboringScaleSpace</span> <span class="o">.*</span> <span class="n">originalValMarkers</span><span class="p">;</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="retrieving-positions-and-characteristic-scales-of-blobs">Retrieving Positions and Characteristic Scales of Blobs</h2>
+
+<p>Here the marker positions and radii are determined so that they may be overlaid on top of the original image. The ‘find’ function is used to extract final nozero values (corresponding to detected regions).</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">radiiByScale</span> <span class="p">]</span> <span class="o">=</span> <span class="n">calcRadiiByScale</span><span class="p">(</span> <span class="n">numScales</span><span class="p">,</span> <span class="n">scaleMultiplier</span><span class="p">,</span> <span class="n">sigma</span> <span class="p">)</span>
+<span class="c1">%CALCRADIIBYSCALE Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="n">radiiByScale</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">numScales</span><span class="p">);</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numScales</span>
+        <span class="n">radiiByScale</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span>  <span class="nb">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">scaleMultiplier</span><span class="o">^</span><span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span> 
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">blobMarkers</span> <span class="p">]</span> <span class="o">=</span> <span class="n">retrieveBlobMarkers</span><span class="p">(</span> <span class="n">scaleSpace</span><span class="p">,</span> <span class="n">radiiByScale</span>  <span class="p">)</span>
+<span class="c1">%RETRIEVEBLOBMARKERS Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">numScales</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">scaleSpace</span><span class="p">);</span>
+    <span class="n">blobMarkers</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numScales</span>
+        <span class="c1">%find indices in the scale slice where the pixel value != 0</span>
+        <span class="c1">%(assumes prior thresholding)</span>
+        <span class="p">[</span><span class="n">newMarkerRows</span><span class="p">,</span> <span class="n">newMarkerCols</span><span class="p">]</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">scaleSpace</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">));</span>
+        
+        <span class="c1">%create a 3xNumMarkers matrix where row 1 = x pos, row 2 = y pos,</span>
+        <span class="c1">%row 3 = radius</span>
+        <span class="n">newMarkers</span> <span class="o">=</span> <span class="p">[</span><span class="n">newMarkerCols</span><span class="s1">'; newMarkerRows'</span><span class="p">];</span>
+        <span class="n">newMarkers</span><span class="p">(</span><span class="mi">3</span><span class="p">,:)</span> <span class="o">=</span> <span class="n">radiiByScale</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
+        
+        <span class="c1">%append the calculated positions/radius for this slice to the</span>
+        <span class="c1">%entire collection (transpose of course)</span>
+        <span class="n">blobMarkers</span> <span class="o">=</span> <span class="p">[</span><span class="n">blobMarkers</span><span class="p">;</span> <span class="n">newMarkers</span><span class="o">'</span><span class="p">];</span>        
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="more-results">More Results</h2>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/13.webp" />
+  <img src="/images/laplacian-blob-detector/14.webp" />
+  <img src="/images/laplacian-blob-detector/15.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/16.webp" />
+  <img src="/images/laplacian-blob-detector/17.webp" />
+  <img src="/images/laplacian-blob-detector/18.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/19.webp" />
+  <img src="/images/laplacian-blob-detector/20.webp" />
+  <img src="/images/laplacian-blob-detector/21.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/22.webp" />
+  <img src="/images/laplacian-blob-detector/23.webp" />
+  <img src="/images/laplacian-blob-detector/24.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/25.webp" />
+  <img src="/images/laplacian-blob-detector/26.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/laplacian-blob-detector/27.webp" />
+  <img src="/images/laplacian-blob-detector/28.webp" />
+  <img src="/images/laplacian-blob-detector/29.webp" />
+</figure>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#computer-vision" class="page__taxonomy-item p-category" rel="tag">computer vision</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-01-02">January 2, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Laplacian+Blob+Detector%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-laplacian-blob-detector%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-laplacian-blob-detector%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-laplacian-blob-detector/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-naive-bayes-classifiers-in-r/" class="pagination--pager" title="Naive Bayes Classifier in R
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-stochastic-gradient-descent-in-r/" class="pagination--pager" title="​Stochastic Gradient Descent + ​SVM Classifier in R
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

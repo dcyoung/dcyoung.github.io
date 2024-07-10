@@ -1,0 +1,1050 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Visualizing High Dimensional Data: Blob Analysis + PCA</title>
+<meta name="description" content="Visualizing and simplifying high dimensional data.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Visualizing High Dimensional Data: Blob Analysis + PCA">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-blob-analysis/">
+
+
+  <meta property="og:description" content="Visualizing and simplifying high dimensional data.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/blob-analysis/3.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-01-10T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-01-10T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-blob-analysis/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Visualizing High Dimensional Data: Blob Analysis + PCA">
+    <meta itemprop="description" content="Visualizing and simplifying high dimensional data.">
+    <meta itemprop="datePublished" content="2016-01-10T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-01-10T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-blob-analysis/" itemprop="url">Visualizing High Dimensional Data: Blob Analysis + PCA
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          10 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#datasets">Datasets</a></li><li><a href="#scatterplot-matrices">Scatterplot Matrices</a></li><li><a href="#blob-analysis-and-transforms-for-high-dimensional-data">Blob Analysis and Transforms for High Dimensional Data</a></li><li><a href="#pca">PCA</a></li><li><a href="#implementing-pca">Implementing PCA</a></li><li><a href="#discriminative-directions">Discriminative Directions</a></li><li><a href="#just-a-few-discriminative-directions-with-pls1">Just a few Discriminative Directions with PLS1</a></li><li><a href="#visualizing-the-wine-dataset">Visualizing the Wine Dataset</a></li><li><a href="#visualizing-the-breast-cancer-diagnostic-dataset">Visualizing the Breast Cancer Diagnostic Dataset</a></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="datasets">Datasets</h2>
+
+<p>The following code snippets were written as an exercise in visualizing high dimensional data. The datasets used are fairly standard/well known datasets.</p>
+
+<ul>
+  <li>The iris dataset hosted by UC Irvine machine learning data repository at <a href="https://archive.ics.uci.edu/ml/datasets/Iris">https://archive.ics.uci.edu/ml/datasets/Iris</a></li>
+  <li>The wine dataset hosted by UC Irvine machine learning data repository at <a href="https://archive.ics.uci.edu/ml/datasets/Wine">https://archive.ics.uci.edu/ml/datasets/Wine</a></li>
+  <li>The breast cancer diagnostic dataset hosted by UC Irvine machine learning data repository at http://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)</li>
+</ul>
+
+<h2 id="scatterplot-matrices">Scatterplot Matrices</h2>
+
+<p>If there aren’t too many dimensions to the data, it can be useful to generate a scatterplot matrix to quickly detect correlations between pairs of variables. A scatterplot matrix is simply a matrix of scatterplots for every pair of dimensions. For example, the iris dataset only has 4 features (dimensions). This can easily be viewed in a 16 cell matrix. From the scatterplot matrix its easy to see that each species clusters quite nicely, and different from one another. Be careful with scatterplot matrices and units. If you don’t normalize the coordinates and say for example one variable is reported in km while another is given in cm… you can miss important information.</p>
+
+<p><img src="/images/blob-analysis/0.webp" alt="placeholder" class="align-center" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">irisdat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"iris.data.txt"</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+ 
+</span><span class="c1">#get numeric columns only</span><span class="w">
+</span><span class="n">numiris</span><span class="o">=</span><span class="n">irisdat</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">)]</span><span class="w">
+</span><span class="n">iris.lab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">irisdat</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">5</span><span class="p">)]</span><span class="w">
+ 
+</span><span class="c1">#open new eps file</span><span class="w">
+</span><span class="n">postscript</span><span class="p">(</span><span class="s2">"irisscatterplot.eps"</span><span class="p">)</span><span class="w">
+ 
+</span><span class="n">speciesnames</span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'setosa'</span><span class="p">,</span><span class="s1">'versicolor'</span><span class="p">,</span><span class="s1">'virginica'</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#point type for each type of flower</span><span class="w">
+</span><span class="n">pchr</span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">)</span><span class="w">
+</span><span class="c1">#colors for plot</span><span class="w">
+</span><span class="n">colr</span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'red'</span><span class="p">,</span><span class="s1">'green'</span><span class="p">,</span><span class="s1">'blue'</span><span class="p">,</span><span class="s1">'yellow'</span><span class="p">,</span><span class="s1">'orange'</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#create a dataframe with factor column "species", three rows 1 to 3</span><span class="w">
+</span><span class="n">ss</span><span class="o">&lt;-</span><span class="w"> </span><span class="n">expand.grid</span><span class="p">(</span><span class="n">species</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="m">3</span><span class="p">)</span><span class="w">
+ 
+ 
+</span><span class="n">parset</span><span class="o">&lt;-</span><span class="w"> </span><span class="n">with</span><span class="p">(</span><span class="n">ss</span><span class="p">,</span><span class="n">simpleTheme</span><span class="p">(</span><span class="n">pch</span><span class="o">=</span><span class="n">pchr</span><span class="p">[</span><span class="n">species</span><span class="p">],</span><span class="w">
+                            </span><span class="n">col</span><span class="o">=</span><span class="n">colr</span><span class="p">[</span><span class="n">species</span><span class="p">]))</span><span class="w">
+ 
+</span><span class="n">splom</span><span class="p">(</span><span class="n">irisdat</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">4</span><span class="p">)],</span><span class="n">groups</span><span class="o">=</span><span class="n">irisdat</span><span class="o">$</span><span class="n">V5</span><span class="p">,</span><span class="w">
+      </span><span class="n">par.settings</span><span class="o">=</span><span class="n">parset</span><span class="p">,</span><span class="w">
+      </span><span class="n">varnames</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s1">'Sepal\nLength'</span><span class="p">,</span><span class="s1">'Sepal\nWidth'</span><span class="p">,</span><span class="w">
+                  </span><span class="s1">'Petal\nLength'</span><span class="p">,</span><span class="s1">'Petal\nWidth'</span><span class="p">),</span><span class="w">
+      </span><span class="n">key</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">speciesnames</span><span class="p">),</span><span class="w">
+               </span><span class="n">points</span><span class="o">=</span><span class="nf">list</span><span class="p">(</span><span class="n">pch</span><span class="o">=</span><span class="n">pchr</span><span class="p">),</span><span class="n">columns</span><span class="o">=</span><span class="m">3</span><span class="p">))</span><span class="w">
+</span><span class="n">dev.off</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="blob-analysis-and-transforms-for-high-dimensional-data">Blob Analysis and Transforms for High Dimensional Data</h2>
+
+<p>In general, mean and covariance help form a good description of data that resides in a “blob”, because together they yield a coordinate system useful when interpreting the blob. If data forms multiple blobs, the mean and covariance are less helpful. Luckily, a lot of datasets are basically single blobs… and so long as the appropriate coordinate transformations are applied, a blob can be easily interpreted.</p>
+
+<p>Necessary coordinate transformations often involve mean shifting a blob so that it resides around the origin where the mean will be 0. Shifting a blob like this won’t change scatterplots in a meaningful way, apart from changing the axes values. Rotating a blob however, can cause large changes.  If vertical and horizontal components of the data are correlated, then the blob lies somewhat diagonally. If this is the case, then the blob can be rotated so that there is no correlation between these components (such that the axes of the blob align with coordinate axes). Mathematically, this is a rotation which diagonalizes the covariance matrix. At this point, the components don’t translate to variables directly, instead they are linear combinations of the original components. But the new components are special… there is no correlation between any pair of new components.</p>
+
+<p>Any blob can then be reduced to a “standard blob” by simply stretching/scaling such that all variances are one. This is called “Whitening the data”.</p>
+
+<h2 id="pca">PCA</h2>
+
+<p>High dimensional datasets can prove difficult to work with, especially if its unclear which variables are important. However, often a high dimensional dataset is really just a lower dimensional dataset masquerading as a high dimensional dataset. Sometimes only a few variables of the many included in the data are responsible for much if any meaningful variation.  It would be nice if we could hone in on those variables straight away.</p>
+
+<p>First remember that the data could be transformed, and use that to define a coordinate system within the blob whose origin is the data’s mean and whose coordinate axes are given by eigenvectors of the covariance matrix. Then, in this “blob coordinate system” look for variations in the data. Perhaps the data is stretched along certain blob axes. The data may look “cigar” shaped in this blob coordinates, such that there is large variation along one axes and not much along the other. This would indicate that the blob component with less variation is somewhat irrelevant compared to the blob component with high variation. One could set all the values for the irrelevant component to 0 and effectively reduce the dimensionality of the data without greatly affecting the position of data in blob coordinates. Ie: turn the 2D cigar into a 1D line. Obviously this is harder to conceptualize in higher dimensions, but the same principle applies.</p>
+
+<p>In blob coordinates however, we run the risk of lost meaning for units. For example, if one original component was a weight and yet another was a length, then a linear combination of those that yielded a new component is difficult to interpret. Ie: distinct meaning and scale of data items is not easily preserved in blob coordinates. The solution? Suppress irrelevant variations in blob coordinates but return to the original coordinates for interpretation. So, instead of dealing in blob coordinates indefinitely, do the following:</p>
+
+<ul>
+  <li>Transform data into blob coordinates</li>
+  <li>Compute lower dimensional representation in blob coordinates (remove unnecessary dimensions by zeroing values of data points along components with low variation)</li>
+  <li>Transform the new representation into the original coordinate system</li>
+</ul>
+
+<p>The result is a lower dimensional space that preserves the largest variance directions of the original data.</p>
+
+<h2 id="implementing-pca">Implementing PCA</h2>
+
+<p>The first two principal components of the iris data were obtained and the data was plotted on those two principal components alone. Each species is shown with a different color marker. This process was done using two different packages and plotted once for each.</p>
+
+<figure class="half">
+  <a href="/images/blob-analysis/1.webp">
+  <img src="/images/blob-analysis/1.webp" />
+  </a>
+  <a href="/images/blob-analysis/2.webp">
+  <img src="/images/blob-analysis/2.webp" />
+  </a>
+</figure>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#use a package to handle the projection of the data </span><span class="w">
+</span><span class="c1">#onto the first two principal components</span><span class="w">
+</span><span class="n">iris.pc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">scale</span><span class="p">(</span><span class="n">numiris</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="n">scores</span><span class="o">=</span><span class="nb">T</span><span class="p">)</span><span class="w">
+</span><span class="c1">#plot(iris.pc)</span><span class="w">
+</span><span class="c1">#screeplot(iris.pc,type="lines")</span><span class="w">
+ 
+</span><span class="c1">#M = iris.pc$loading[,1:2]  #first two principal components</span><span class="w">
+</span><span class="c1">#t(M) %*% M   #check, make sure this equals the identity (2x2) matrix</span><span class="w">
+ 
+</span><span class="c1">#plot the data projected onto the first two principal components</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">iris.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">iris.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="n">pch</span><span class="o">=</span><span class="s2">"."</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#create the same plot as above, but color the points by their class</span><span class="w">
+</span><span class="c1">#use wine.lab to decide the color for each of the 178 exs</span><span class="w">
+</span><span class="n">DF</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">projDataPC1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">projDataPC2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iris.lab</span><span class="p">);</span><span class="w">
+</span><span class="n">attach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w"> 
+</span><span class="n">plot</span><span class="p">(</span><span class="n">projDataPC1</span><span class="p">,</span><span class="w"> </span><span class="n">projDataPC2</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"green"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">)[</span><span class="n">label</span><span class="p">],</span><span class="w"> </span><span class="n">xlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Principal Component 1"</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Principal Component 2"</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Data Projection onto First 2 PCs"</span><span class="p">);</span><span class="w"> 
+</span><span class="n">detach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="s2">"topright"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'setosa'</span><span class="p">,</span><span class="s1">'virginica'</span><span class="p">,</span><span class="s1">'versicolor'</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">,</span><span class="s2">"green"</span><span class="p">),</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">1</span><span class="p">);</span><span class="w">
+ 
+</span><span class="c1">#ALTERNATE Package method... (accomplishes the same thing) </span><span class="w">
+</span><span class="n">log.ir</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="n">numiris</span><span class="p">)</span><span class="w"> </span><span class="c1">#not necessary but can be helpful</span><span class="w">
+</span><span class="n">ir.species</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">irisdat</span><span class="p">[,</span><span class="w"> </span><span class="m">5</span><span class="p">]</span><span class="w">
+ 
+</span><span class="c1">#conduct pca on the z-score (mean center and scale each vector to unit variance)</span><span class="w">
+</span><span class="n">ir.pca</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prcomp</span><span class="p">(</span><span class="n">numiris</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">scale.</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span><span class="c1">#can also take the log transform and take the z-score of that</span><span class="w">
+</span><span class="n">logir.pca</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prcomp</span><span class="p">(</span><span class="n">log.ir</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">scale.</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w"> 
+ 
+</span><span class="n">predict</span><span class="p">(</span><span class="n">ir.pca</span><span class="p">,</span><span class="w"> </span><span class="n">newdata</span><span class="o">=</span><span class="n">numiris</span><span class="p">)</span><span class="w">
+ 
+</span><span class="n">library</span><span class="p">(</span><span class="n">devtools</span><span class="p">)</span><span class="w">
+</span><span class="c1">#install_github("vqv/ggbiplot")</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggbiplot</span><span class="p">)</span><span class="w">
+ 
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">ggbiplot</span><span class="p">(</span><span class="n">ir.pca</span><span class="p">,</span><span class="w"> </span><span class="n">obs.scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">var.scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> 
+              </span><span class="n">groups</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ir.species</span><span class="p">,</span><span class="w"> </span><span class="n">ellipse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> 
+              </span><span class="n">circle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">scale_color_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">''</span><span class="p">)</span><span class="w">
+</span><span class="n">g</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">g</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'horizontal'</span><span class="p">,</span><span class="w"> 
+               </span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'top'</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="discriminative-directions">Discriminative Directions</h2>
+
+<p>The curse of dimension is such that as the number of dimensions increases, the majority of the data can lie quite far away from the mean. This is extremely unintuitive as we tend to intuit that most data lies in the volume and not on the surface. Forgetting this curse and following intuition can get one into trouble with PCA however. With high dimensional data it can be very difficult to obtain a covariance matrix… a matrix which PCA relies heavily upon.</p>
+
+<p>It is, however, possible to form principal components without the covariance matrix. SVD (Singular Value Decomposition) can yield all the principal components, and NIPALS (Non-linear Iterative Partial Least Squares) is a faster iterative process useful in recovering the first few principal components when not all components are needed. But both these options are still working with principal components, or directions that best describe the dataset.</p>
+
+<p>Sometimes we aren’t after directions that best describe the data, but are instead interested in directions which highlight the differences between classes. My knowledge here breaks down pretty fast, but… Assuming we know the classes or labels, we can choose projections of the features and labels to a shared space (with lower dimension) such that the projections in this space are strongly correlated. I’m pretty rusty on Lagrange multipliers.. so I’ll skip the math here… but the idea is that the new directions maximize the covariance of interest and are orthogonal to the original directions. These projections should separate blobs of data that have different labels.</p>
+
+<h2 id="just-a-few-discriminative-directions-with-pls1">Just a few Discriminative Directions with PLS1</h2>
+
+<p>You don’t have to understand how discriminative directions work to use them. Here PLS1, or Partial Least Squares One, was used to obtain two discriminative directions. The iris data was then projected on to those directions. The plot does seem to better separate the different classes as compared to the PCA plots. Data in each cluster appears closer to the cluster center, less scattered, with more separation between clusters and fewer outliers.</p>
+
+<p><img src="/images/blob-analysis/3.webp" alt="placeholder" /></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ir.species.n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">ir.species</span><span class="p">)</span><span class="w">
+</span><span class="n">ir.species.col</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">colr</span><span class="p">[</span><span class="n">ir.species.n</span><span class="p">]</span><span class="w">
+ 
+</span><span class="n">pls1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plsreg1</span><span class="p">(</span><span class="n">numiris</span><span class="p">,</span><span class="n">ir.species.n</span><span class="p">)</span><span class="w">
+</span><span class="c1">#The data is scaled to standardized values (mean=0, variance=1).</span><span class="w">
+ 
+</span><span class="n">plot</span><span class="p">(</span><span class="n">pls1</span><span class="p">,</span><span class="n">what</span><span class="o">=</span><span class="s2">"observations"</span><span class="p">,</span><span class="n">col.points</span><span class="o">=</span><span class="n">ir.species.col</span><span class="p">,</span><span class="w">
+     </span><span class="n">main</span><span class="o">=</span><span class="s2">"Iris Data Projected onto\nFirst Two Discriminative Directions"</span><span class="p">,</span><span class="w">
+     </span><span class="n">ylab</span><span class="o">=</span><span class="s2">"Second Discriminative Direction"</span><span class="p">,</span><span class="w"> </span><span class="n">xlab</span><span class="o">=</span><span class="s2">"First Discriminative Direction"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="visualizing-the-wine-dataset">Visualizing the Wine Dataset</h2>
+
+<p>The eigenvalues of the covariance matrix were plotted in sorted order. The knee of the sorted eigenvalue plot would indicate that 3 principal components are enough to well represent the data. The first two principal components were computed, and the data was projected onto those components. A scatter plot of this two dimensional dataset was generated.</p>
+
+<figure class="half">
+  <a href="/images/blob-analysis/4.webp">
+  <img src="/images/blob-analysis/4.webp" />
+  </a>
+  <a href="/images/blob-analysis/5.webp">
+  <img src="/images/blob-analysis/5.webp" />
+  </a>
+</figure>
+
+<p>A stem plot was constructed for each of the first 3 principal components. This can help visualize which original components weight the principal components. The first principal component seems to be influenced/weighted by more components in total than the second and third principal components. In the second and third principal components, features 5-8, 10 and 11 seem to contribute less.</p>
+
+<figure class="third">
+  <a href="/images/blob-analysis/6.webp">
+  <img src="/images/blob-analysis/6.webp" />
+  </a>
+  <a href="/images/blob-analysis/7.webp">
+  <img src="/images/blob-analysis/7.webp" />
+  </a>
+  <a href="/images/blob-analysis/8.webp">
+  <img src="/images/blob-analysis/8.webp" />
+  </a>
+</figure>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wine.df</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"wine.data"</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+ 
+</span><span class="n">wine.lab</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">wine.df</span><span class="p">[,</span><span class="m">1</span><span class="p">];</span><span class="w"> </span><span class="c1">#labels/classes</span><span class="w">
+</span><span class="n">wine.feat</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">wine.df</span><span class="p">[,</span><span class="m">-1</span><span class="p">];</span><span class="w"> </span><span class="c1">#features</span><span class="w">
+ 
+</span><span class="n">wine.pca</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">prcomp</span><span class="p">(</span><span class="n">wine.feat</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w"> </span><span class="n">scale.</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+ 
+</span><span class="n">plot</span><span class="p">((</span><span class="n">wine.pca</span><span class="o">$</span><span class="n">sdev</span><span class="p">)</span><span class="o">^</span><span class="m">2</span><span class="p">,</span><span class="n">type</span><span class="o">=</span><span class="s2">"b"</span><span class="p">,</span><span class="n">main</span><span class="o">=</span><span class="s2">"Sorted Eigenvalues of Principle Components\nfor Wine Dataset"</span><span class="p">,</span><span class="w">
+     </span><span class="n">xlab</span><span class="o">=</span><span class="s2">"Index of Principle Component"</span><span class="p">,</span><span class="n">ylab</span><span class="o">=</span><span class="s2">"Eigenvalue"</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#matlab style stem plot, code adapted from:</span><span class="w">
+</span><span class="c1">#http://www.r-bloggers.com/matlab-style-stem-plot-with-r/</span><span class="w">
+</span><span class="n">stem</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">pch</span><span class="o">=</span><span class="m">16</span><span class="p">,</span><span class="n">linecol</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="n">clinecol</span><span class="o">=</span><span class="m">1</span><span class="p">,</span><span class="n">...</span><span class="p">){</span><span class="w">
+  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nf">missing</span><span class="p">(</span><span class="n">y</span><span class="p">)){</span><span class="w">
+    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w">
+    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">}</span><span class="w">
+  </span><span class="c1">#plot(x,y,pch=pch,ylim=c(-.5,.5),xlab="Feature",ylab="Weight",main="Feature Weights on First Principle Component",...)</span><span class="w">
+  </span><span class="c1">#plot(x,y,pch=pch,ylim=c(-.4,.8),xlab="Feature",ylab="Weight",main="Feature Weights on Second Principle Component",...)</span><span class="w">
+  </span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">pch</span><span class="o">=</span><span class="n">pch</span><span class="p">,</span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-.4</span><span class="p">,</span><span class="m">.8</span><span class="p">),</span><span class="n">xlab</span><span class="o">=</span><span class="s2">"Feature"</span><span class="p">,</span><span class="n">ylab</span><span class="o">=</span><span class="s2">"Weight"</span><span class="p">,</span><span class="n">main</span><span class="o">=</span><span class="s2">"Feature Weights on Third Principle Component"</span><span class="p">,</span><span class="n">...</span><span class="p">)</span><span class="w">
+  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)){</span><span class="w">
+    </span><span class="n">lines</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span><span class="n">col</span><span class="o">=</span><span class="n">linecol</span><span class="p">)</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+  </span><span class="n">lines</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="m">-2</span><span class="p">,</span><span class="n">x</span><span class="p">[</span><span class="nf">length</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span><span class="m">+2</span><span class="p">),</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">),</span><span class="n">col</span><span class="o">=</span><span class="n">clinecol</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+ 
+</span><span class="c1">#stem(wine.pca$rotation[,1])</span><span class="w">
+</span><span class="c1">#text(x=1:length(wine.pca$rotation[,1]),y=wine.pca$rotation[,1]+.05,labels=names(wine))</span><span class="w">
+ 
+</span><span class="c1">#stem(wine.pca$rotation[,2])</span><span class="w">
+</span><span class="c1">#text(x=1:length(wine.pca$rotation[,2]),y=wine.pca$rotation[,2]+.1,labels=names(wine))</span><span class="w">
+ 
+</span><span class="n">stem</span><span class="p">(</span><span class="n">wine.pca</span><span class="o">$</span><span class="n">rotation</span><span class="p">[,</span><span class="m">3</span><span class="p">])</span><span class="w">
+</span><span class="n">text</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="m">1</span><span class="o">:</span><span class="nf">length</span><span class="p">(</span><span class="n">wine.pca</span><span class="o">$</span><span class="n">rotation</span><span class="p">[,</span><span class="m">3</span><span class="p">]),</span><span class="n">y</span><span class="o">=</span><span class="n">wine.pca</span><span class="o">$</span><span class="n">rotation</span><span class="p">[,</span><span class="m">3</span><span class="p">]</span><span class="m">+.1</span><span class="p">,</span><span class="n">labels</span><span class="o">=</span><span class="nf">names</span><span class="p">(</span><span class="n">wine</span><span class="p">))</span><span class="w">
+ 
+ 
+</span><span class="c1">#retrieve the first 2 principal components</span><span class="w">
+</span><span class="n">firstTwoPCs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">wine.pca</span><span class="o">$</span><span class="n">rotation</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">];</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="n">pch</span><span class="o">=</span><span class="s2">"."</span><span class="p">);</span><span class="w">
+ 
+</span><span class="c1">#use a package to handle the projection of the data onto the first two principal components</span><span class="w">
+</span><span class="n">pc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">scale</span><span class="p">(</span><span class="n">wine.feat</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="n">scores</span><span class="o">=</span><span class="nb">T</span><span class="p">)</span><span class="w">
+</span><span class="n">screeplot</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span><span class="n">type</span><span class="o">=</span><span class="s2">"lines"</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#M = pc$loading[,1:2]  #first two principal components</span><span class="w">
+</span><span class="c1">#t(M) %*% M   #check, make sure this equals the identity (2x2) matrix</span><span class="w">
+ 
+</span><span class="c1">#plot the data projected onto the first two principal components</span><span class="w">
+</span><span class="n">plot</span><span class="p">(</span><span class="n">pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="n">pch</span><span class="o">=</span><span class="s2">"."</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#create the same plot as above, but color the points by their class</span><span class="w">
+</span><span class="c1">#use wine.lab to decide the color for each of the 178 exs</span><span class="w">
+</span><span class="n">DF</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">projDataPC1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">projDataPC2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wine.lab</span><span class="p">);</span><span class="w">
+</span><span class="n">attach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w"> 
+</span><span class="n">plot</span><span class="p">(</span><span class="n">projDataPC1</span><span class="p">,</span><span class="w"> </span><span class="n">projDataPC2</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">,</span><span class="s2">"green"</span><span class="p">)[</span><span class="n">label</span><span class="p">],</span><span class="w"> </span><span class="n">xlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Principal Component 1"</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Principal Component 2"</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Data Projection onto First 2 PCs"</span><span class="p">);</span><span class="w"> 
+</span><span class="n">detach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w">
+</span><span class="n">legend</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="s2">"topright"</span><span class="p">,</span><span class="w"> </span><span class="n">legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">),</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">,</span><span class="s2">"green"</span><span class="p">),</span><span class="w"> </span><span class="n">pch</span><span class="o">=</span><span class="m">1</span><span class="p">);</span><span class="w">
+</span></code></pre></div></div>
+
+<h2 id="visualizing-the-breast-cancer-diagnostic-dataset">Visualizing the Breast Cancer Diagnostic Dataset</h2>
+
+<p>The dataset was plotted on the first three principal components, using different markers for benign and malignant cases. Then PLS1 was used to obtain three discriminative directions. The data was then projected onto those directions. The data in the PLS1 plot looks rather similar but with slightly better separation and not as much overlap.</p>
+
+<figure class="half">
+  <a href="/images/blob-analysis/9.webp">
+  <img src="/images/blob-analysis/9.webp" />
+  </a>
+  <a href="/images/blob-analysis/10.webp">
+  <img src="/images/blob-analysis/10.webp" />
+  </a>
+</figure>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wdbc.data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"wdbc.data"</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+</span><span class="n">wdbc.id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">)];</span><span class="w">
+</span><span class="n">wdbc.class</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">)]</span><span class="w">
+</span><span class="n">wdbc.feat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.data</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">wdbc.data</span><span class="p">))]</span><span class="w">
+ 
+</span><span class="c1">#use a package to handle the projection of the data onto the first two principal components</span><span class="w">
+</span><span class="n">wdbc.pc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">princomp</span><span class="p">(</span><span class="n">scale</span><span class="p">(</span><span class="n">wdbc.feat</span><span class="p">,</span><span class="w"> </span><span class="n">center</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">),</span><span class="n">scores</span><span class="o">=</span><span class="nb">T</span><span class="p">)</span><span class="w">
+</span><span class="c1">#screeplot(wdbc.pc,type="lines")</span><span class="w">
+ 
+</span><span class="c1">#M = wdbc.pc$loading[,1:2]  #first two principal components</span><span class="w">
+</span><span class="c1">#t(M) %*% M   #check, make sure this equals the identity (2x2) matrix</span><span class="w">
+ 
+</span><span class="c1">#plot the data projected onto the first three principal components</span><span class="w">
+</span><span class="c1">#install.packages("rgl")</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">rgl</span><span class="p">)</span><span class="w">
+</span><span class="n">plot3d</span><span class="p">(</span><span class="n">wdbc.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="n">wdbc.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">wdbc.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">3</span><span class="p">])</span><span class="w">
+ 
+</span><span class="c1">#create the same plot as above, but color the points by their class</span><span class="w">
+</span><span class="c1">#use wdbc.lab to decide the color for each of the exs</span><span class="w">
+</span><span class="n">DF</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">projDataPC1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="n">projDataPC2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="n">projDataPC3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.pc</span><span class="o">$</span><span class="n">scores</span><span class="p">[,</span><span class="m">3</span><span class="p">],</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.class</span><span class="p">);</span><span class="w">
+ 
+</span><span class="n">attach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w">
+</span><span class="n">plot3d</span><span class="p">(</span><span class="n">projDataPC1</span><span class="p">,</span><span class="w"> </span><span class="n">projDataPC2</span><span class="p">,</span><span class="w"> </span><span class="n">projDataPC3</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">)[</span><span class="n">label</span><span class="p">],</span><span class="w"> </span><span class="n">xlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Principal Component 1"</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Principal Component 2"</span><span class="p">,</span><span class="w"> </span><span class="n">zlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Principal Component 3"</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Data Projection onto First 3 PCs"</span><span class="p">);</span><span class="w"> 
+</span><span class="n">detach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w">
+ 
+</span><span class="n">library</span><span class="p">(</span><span class="s1">'plsdepot'</span><span class="p">)</span><span class="w">
+</span><span class="n">wdbc.class.n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">wdbc.class</span><span class="p">)</span><span class="w">
+</span><span class="n">colr</span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'red'</span><span class="p">,</span><span class="s1">'green'</span><span class="p">,</span><span class="s1">'blue'</span><span class="p">,</span><span class="s1">'yellow'</span><span class="p">,</span><span class="s1">'orange'</span><span class="p">)</span><span class="w">
+</span><span class="n">wdbc.class.col</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">colr</span><span class="p">[</span><span class="n">wdbc.class.n</span><span class="p">]</span><span class="w">
+ 
+</span><span class="n">pls1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">plsreg1</span><span class="p">(</span><span class="n">wdbc.feat</span><span class="p">,</span><span class="n">wdbc.class.n</span><span class="p">,</span><span class="w"> </span><span class="n">comps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#we have 3 directions, so plot the projections along all 3</span><span class="w">
+</span><span class="n">DF</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data.frame</span><span class="p">(</span><span class="n">projDataDir1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pls1</span><span class="o">$</span><span class="n">x.scores</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">)],</span><span class="w"> </span><span class="n">projDataDir2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pls1</span><span class="o">$</span><span class="n">x.scores</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="p">)],</span><span class="n">projDataDir3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pls1</span><span class="o">$</span><span class="n">x.scores</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="p">)],</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">wdbc.class</span><span class="p">);</span><span class="w">
+</span><span class="n">attach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w">
+</span><span class="n">plot3d</span><span class="p">(</span><span class="n">projDataDir1</span><span class="p">,</span><span class="w"> </span><span class="n">projDataDir2</span><span class="p">,</span><span class="w"> </span><span class="n">projDataDir3</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s2">"red"</span><span class="p">,</span><span class="s2">"blue"</span><span class="p">)[</span><span class="n">label</span><span class="p">],</span><span class="w"> </span><span class="n">xlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Discriminative Dir 1"</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Discriminative Dir 2"</span><span class="p">,</span><span class="w"> </span><span class="n">zlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Discriminative Dir 3"</span><span class="p">,</span><span class="w"> </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Data Projection onto First 3 Discriminative Directions"</span><span class="p">);</span><span class="w"> 
+</span><span class="n">detach</span><span class="p">(</span><span class="n">DF</span><span class="p">);</span><span class="w">
+</span></code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-01-10">January 10, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Visualizing+High+Dimensional+Data%3A+Blob+Analysis+%2B+PCA%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-blob-analysis%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-blob-analysis%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-blob-analysis/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-comparing-classifiers-in-r/" class="pagination--pager" title="Comparing Classifiers in R
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-photometric-stereo/" class="pagination--pager" title="​Photometric Stereo: Shape from Shading
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

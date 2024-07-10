@@ -1,0 +1,1224 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Facial Detection &amp; Recognition</title>
+<meta name="description" content="Creating 360 panoramas from a set of images.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Facial Detection &amp; Recognition">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-facial-detection-and-recognition/">
+
+
+  <meta property="og:description" content="Creating 360 panoramas from a set of images.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/facial-detection-and-recognition/0.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2015-11-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2015-11-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-facial-detection-and-recognition/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Facial Detection &amp; Recognition">
+    <meta itemprop="description" content="Creating 360 panoramas from a set of images.">
+    <meta itemprop="datePublished" content="2015-11-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2015-11-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-facial-detection-and-recognition/" itemprop="url">Facial Detection &amp; Recognition
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#overview--major-design-choices">Overview + Major Design Choices</a></li><li><a href="#using-pca-to-generate-eigenfaces-from-set-of-user-faces">Using PCA to generate Eigenfaces from set of User Faces</a></li><li><a href="#projecting-faces">Projecting Faces</a></li><li><a href="#construct-face">Construct Face</a></li><li><a href="#face-detection">​Face Detection</a></li><li><a href="#face-verification">Face Verification</a></li><li><a href="#face-recognition">Face Recognition</a></li><li><a href="#finding-faces">Finding Faces</a></li><li><a href="#testing-recognition-with-reference-images">Testing Recognition with Reference Images</a><ul><li><a href="#computing-10-eigenfaces-from-cropped-neutral-face-students">Computing 10 eigenfaces from cropped neutral face students</a></li><li><a href="#experimenting-with-the-number-of-eigenfaces-used">Experimenting with the Number of Eigenfaces Used</a></li></ul></li><li><a href="#finding-and-marking-faces-in-group-photos">Finding and Marking Faces in Group Photos</a></li><li><a href="#verifying-faces">Verifying Faces</a></li><li><a href="#what-worked-well-and-what-did-not">What worked well and what did not?</a></li></ul>
+            </nav>
+          </aside>
+        
+        <p><img src="/images/facial-detection-and-recognition/0.webp" alt="preview" class="align-center" /></p>
+
+<h2 id="overview--major-design-choices">Overview + Major Design Choices</h2>
+
+<p>Data points can exist as coordinates in space of infinite dimensions. Faces however, as varied as they may be, tend to congregate in a similar subspace of that infinitely dimensional space. By defining that subspace as a hyperplane spanned by k vectors (an idea easier to grasp when reducing 3 dimensions to 2, but equally valid for larger dimension quantities), then a point on the hyperplane can be represented using only k coefficients. The general process is as described below:</p>
+
+<ul>
+  <li>Take a representative sample of data points and find the subspace with the desired dimensionality that best fits the sample data.</li>
+  <li>With that stored subspace, one can easily check if a new point is a valid data point by projecting it onto the subspace and measuring the error difference between the point and its projection.</li>
+  <li>Represent each face image as a vector of pixel values. To do this, train the face recognition algorithm with some input faces, then crop and scale the desired face image and normalize its intensity before recognizing it with a trained algorithm.</li>
+</ul>
+
+<h2 id="using-pca-to-generate-eigenfaces-from-set-of-user-faces">Using PCA to generate Eigenfaces from set of User Faces</h2>
+
+<p>The following method contents calculate the average face and then use the difference from that average face to determine the eigen values and vectors of an A matrix. The vectors are sorted and the best are placed in result.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// size the results vector</span>
+<span class="n">results</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="p">);</span>
+<span class="n">results</span><span class="p">.</span><span class="n">setHeight</span><span class="p">(</span><span class="n">height</span><span class="p">);</span>
+<span class="n">results</span><span class="p">.</span><span class="n">setWidth</span><span class="p">(</span><span class="n">width</span><span class="p">);</span>
+
+
+<span class="cm">/***************BEGIN PARAMETERS****************/</span>
+
+<span class="c1">//Vector Size</span>
+<span class="kt">int</span> <span class="n">vector_size</span> <span class="o">=</span> <span class="n">height</span><span class="o">*</span><span class="n">width</span><span class="p">;</span>
+<span class="c1">//Average Face </span>
+<span class="n">Face</span> <span class="n">avgFace</span> <span class="o">=</span> <span class="n">Face</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+<span class="c1">// Compute number of images in the database</span>
+<span class="kt">int</span> <span class="n">numImages</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getSize</span><span class="p">();</span>
+<span class="c1">//Difference from the average face</span>
+<span class="n">Face</span> <span class="n">diffFromAvg</span> <span class="o">=</span> <span class="n">Face</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+
+<span class="cm">/*Holds the A Matrix*/</span>
+<span class="kt">double</span><span class="o">**</span> <span class="n">A_Matrix</span> <span class="o">=</span> <span class="n">Jacobi</span><span class="o">::</span><span class="n">matrix</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">);</span>
+<span class="cm">/* Holds the Eigen Values*/</span>
+<span class="kt">double</span><span class="o">*</span> <span class="n">eigenvec</span> <span class="o">=</span> <span class="n">Jacobi</span><span class="o">::</span><span class="n">vector</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">);</span>
+<span class="cm">/* Holds the Eigen Vectors*/</span>
+<span class="kt">double</span><span class="o">**</span> <span class="n">eigmatrix</span> <span class="o">=</span> <span class="n">Jacobi</span><span class="o">::</span><span class="n">matrix</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">);</span>
+<span class="cm">/*Number of Rotations*/</span>
+<span class="kt">int</span><span class="o">*</span> <span class="n">nrot</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">int</span><span class="p">();</span>
+<span class="cm">/*Will hold the result of successive dot product calls*/</span>
+<span class="n">Array</span> <span class="n">dP_Result</span><span class="p">;</span>
+<span class="n">dP_Result</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">vector_size</span><span class="p">);</span>
+<span class="cm">/*Will hold the ordered eigen vectr indices*/</span>
+<span class="n">Array</span> <span class="n">orderedEigenVecs</span><span class="p">;</span>
+<span class="cm">/**************END PARAMETERS****************/</span>
+
+
+
+<span class="c1">//First actually calculate the average face</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">eigIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">eigIndex</span> <span class="o">&lt;</span> <span class="n">numImages</span><span class="p">;</span> <span class="n">eigIndex</span><span class="o">++</span><span class="p">){</span>
+			<span class="n">avgFace</span><span class="p">.</span><span class="n">pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+=</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)[</span><span class="n">eigIndex</span><span class="p">].</span><span class="n">pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span> 
+
+<span class="c1">//Noramlize the average face</span>
+<span class="n">avgFace</span> <span class="o">/=</span> <span class="n">numImages</span><span class="p">;</span>
+<span class="n">results</span><span class="p">.</span><span class="n">setAverage</span><span class="p">(</span><span class="n">avgFace</span><span class="p">);</span>
+
+
+<span class="cm">/*Calculate the Eigen Vectors*/</span>
+
+<span class="cm">/*Set all the matrices and vectors to 0*/</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="n">vector_size</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="n">vector_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+		<span class="n">A_Matrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+		<span class="n">eigmatrix</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="n">eigenvec</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="cm">/*Compute A and A*AT*/</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numImages</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+	<span class="c1">// Subtract this image from the average fface and store in the difference</span>
+	<span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)[</span><span class="n">i</span><span class="p">].</span><span class="n">sub</span><span class="p">(</span><span class="n">avgFace</span><span class="p">,</span> <span class="n">diffFromAvg</span><span class="p">);</span>
+	
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">){</span>
+			<span class="n">dP_Result</span><span class="p">[</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">width</span><span class="p">]</span> <span class="o">=</span> <span class="n">diffFromAvg</span><span class="p">.</span><span class="n">pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="cm">/* Compute A*AT */</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">vector_size</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">vector_size</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">){</span>
+			<span class="n">A_Matrix</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dP_Result</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">dP_Result</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="cm">/*Calculate Eigen Vectors of the A Matrix*/</span>
+<span class="n">Jacobi</span><span class="o">::</span><span class="n">jacobi</span><span class="p">(</span><span class="n">A_Matrix</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">,</span> <span class="n">eigenvec</span><span class="p">,</span> <span class="n">eigmatrix</span><span class="p">,</span> <span class="n">nrot</span><span class="p">);</span>
+
+<span class="c1">//Sort the EigenVectors </span>
+<span class="n">sortEigenvalues</span><span class="p">(</span><span class="n">eigenvec</span><span class="p">,</span> <span class="n">orderedEigenVecs</span><span class="p">);</span>
+<span class="c1">//Place the best n results in results</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">rCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">rCount</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">rCount</span><span class="o">++</span><span class="p">){</span>
+	<span class="kt">int</span> <span class="n">eigVecIndex</span> <span class="o">=</span> <span class="n">orderedEigenVecs</span><span class="p">[</span><span class="n">rCount</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">width</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">height</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">){</span>
+			<span class="n">results</span><span class="p">[</span><span class="n">rCount</span><span class="p">].</span><span class="n">pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">eigmatrix</span><span class="p">[</span><span class="n">x</span><span class="o">+</span> <span class="n">y</span><span class="o">*</span><span class="n">width</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="n">eigVecIndex</span><span class="p">];</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cm">/* Free any used Allocated Space */</span>
+<span class="n">Jacobi</span><span class="o">::</span><span class="n">free_matrix</span><span class="p">(</span><span class="n">A_Matrix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">);</span>
+<span class="n">Jacobi</span><span class="o">::</span><span class="n">free_matrix</span><span class="p">(</span><span class="n">eigmatrix</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">);</span>
+<span class="n">Jacobi</span><span class="o">::</span><span class="n">free_vector</span><span class="p">(</span><span class="n">eigenvec</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vector_size</span><span class="p">);</span>	
+</code></pre></div></div>
+
+<h2 id="projecting-faces">Projecting Faces</h2>
+
+<p>This method is simple, it calculates the difference between the average face and the current face and then uses the dotproduct to calcualte the projection.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//u will hold the difference between the avgFace(mu) and the current face</span>
+<span class="n">Face</span> <span class="n">u</span> <span class="o">=</span> <span class="n">Face</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+<span class="c1">//actually compute the difference u by subtracting the avg from the face</span>
+<span class="n">face</span><span class="p">.</span><span class="n">sub</span><span class="p">(</span><span class="n">average_face</span><span class="p">,</span> <span class="n">u</span><span class="p">);</span>
+
+<span class="c1">//projection is just a dotproduct</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">getSize</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+	<span class="n">coefficients</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span><span class="p">.</span><span class="n">dot</span><span class="p">((</span><span class="o">*</span><span class="k">this</span><span class="p">)[</span><span class="n">i</span><span class="p">]);</span>
+<span class="p">}</span>	
+</code></pre></div></div>
+
+<h2 id="construct-face">Construct Face</h2>
+
+<p>This method accumulates the construct.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="n">coefficients</span><span class="p">.</span><span class="n">getSize</span><span class="p">();</span>
+<span class="n">Face</span> <span class="n">accumulator</span> <span class="o">=</span> <span class="n">average_face</span><span class="p">;</span>
+<span class="n">Face</span> <span class="n">placeHolder</span> <span class="o">=</span> <span class="n">Face</span><span class="p">((</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">average_face</span><span class="p">.</span><span class="n">getWidth</span><span class="p">(),</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">average_face</span><span class="p">.</span><span class="n">getHeight</span><span class="p">());</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+	<span class="n">placeHolder</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">)[</span><span class="n">i</span><span class="p">];</span>
+	<span class="n">placeHolder</span> <span class="o">*=</span> <span class="n">coefficients</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+	<span class="n">accumulator</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">placeHolder</span><span class="p">,</span> <span class="n">accumulator</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">accumulator</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h2 id="face-detection">​Face Detection</h2>
+
+<p>isFace determines the coefficients of an input face, then compares the construct from those coefficients to see if the constructed face is a valid face by a permittable mse score.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//create a new vector to hold the coefficients</span>
+<span class="n">Vector</span> <span class="n">coefficients</span><span class="p">;</span>
+
+<span class="c1">//then project the face to determine the coefficients</span>
+<span class="n">projectFace</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">);</span>
+
+<span class="c1">//create  blank test face to receive a constructed face from the coeffcicients</span>
+<span class="n">Face</span> <span class="n">testFace</span><span class="p">;</span>
+<span class="c1">//then construct the face</span>
+<span class="n">constructFace</span><span class="p">(</span><span class="n">coefficients</span><span class="p">,</span> <span class="n">testFace</span><span class="p">);</span>
+
+<span class="c1">//store the the mean square error between face and testFace in "mse"</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">face</span><span class="p">.</span><span class="n">mse</span><span class="p">(</span><span class="n">testFace</span><span class="p">);</span>
+
+<span class="c1">//return a boolean of whether or not the mse was less than threshold, to indicate if "face" is indeed a face</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">mse</span> <span class="o">&lt;=</span> <span class="n">max_reconstructed_mse</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+	<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="face-verification">Face Verification</h2>
+
+<p>Time can be saved during face verification by comparing the coefficients directly instead of constructing a new face. Otherwise it is very similar to the previous method.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*Alternatively, could have done the following to avoid a construction*/</span>
+
+<span class="n">Vector</span> <span class="n">coefficients</span><span class="p">;</span>
+<span class="n">projectFace</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">);</span>
+<span class="n">mse</span> <span class="o">=</span> <span class="n">user_coefficients</span><span class="p">.</span><span class="n">mse</span><span class="p">(</span><span class="n">coefficients</span><span class="p">);</span>
+
+<span class="cm">/*return a boolean of whether or not the mse was less than threshold, this
+indicates if the given face acceptably matched a construction of the users face */</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">mse</span> <span class="o">&lt;</span> <span class="n">max_coefficients_mse</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+	<span class="k">return</span> <span class="nb">false</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="face-recognition">Face Recognition</h2>
+
+<p>Recognize face simply goes through the list of users and determines the quality of the match for each, then sorts it.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Get the coefficients for this face in eigenface space</span>
+<span class="n">Vector</span> <span class="n">coefficients</span><span class="p">;</span>
+<span class="n">projectFace</span><span class="p">(</span><span class="n">face</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">);</span>
+
+<span class="c1">//iterate through users and set the mse for each</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">users</span><span class="p">.</span><span class="n">getSize</span><span class="p">();</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+	<span class="n">users</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">setMse</span><span class="p">(</span><span class="n">users</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">mse</span><span class="p">(</span><span class="n">coefficients</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="c1">//then sort the list "users"</span>
+<span class="n">users</span><span class="p">.</span><span class="n">sort</span><span class="p">();</span>
+</code></pre></div></div>
+
+<h2 id="finding-faces">Finding Faces</h2>
+
+<p>This method finds the best n faces that don’t overlap eachother. It iterates through the pixels different rescaled versions of the image to determine if a face exists. It keeps a running list of the found faces and replaces them when it finds better versions of the same face at a different scale or a different pixel start location. Then depending on input arguments, the method crops or outlines the faces.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* things needed later*/</span>
+<span class="n">Image</span> <span class="n">scaledImg</span><span class="p">;</span> <span class="c1">//will hold the scaled versions of the image</span>
+
+<span class="n">Vector</span> <span class="n">coefficients</span><span class="p">;</span>
+<span class="n">coefficients</span><span class="p">.</span><span class="n">resize</span><span class="p">((</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getSize</span><span class="p">());</span>
+<span class="kt">double</span> <span class="n">face_threshold</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="n">Face</span> <span class="n">tempFace</span><span class="p">;</span>
+<span class="n">Face</span> <span class="n">tempFaceBlank</span><span class="p">;</span>
+
+<span class="kt">double</span> <span class="n">curr_mse</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">facesSeen</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="n">faceBoxHalfHeight</span> <span class="o">=</span> <span class="mi">15</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">faceBoxHalfWidth</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+
+
+<span class="cm">/*
+eigfaces.h has a FacePosition structure that will be useful, it takes the following...
+int x,y
+double scale
+double error
+*/</span>
+<span class="n">FacePosition</span> <span class="n">fpos</span><span class="p">;</span>
+<span class="n">fpos</span><span class="p">.</span><span class="n">error</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span> <span class="c1">//make sure that if something is a face it will replace the dummy 1st item put in this list.</span>
+
+<span class="c1">//create a list of face positions, and place the first undefined one in it.</span>
+<span class="n">std</span><span class="o">::</span><span class="n">list</span> <span class="n">fpos_list</span><span class="p">;</span>
+<span class="n">fpos_list</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">fpos</span><span class="p">);</span>
+
+<span class="c1">//can i set these once out here, or do they change... i don't believe they do.</span>
+<span class="kt">int</span> <span class="n">img_w</span> <span class="o">=</span> <span class="n">img</span><span class="p">.</span><span class="n">getWidth</span><span class="p">();</span>
+<span class="kt">int</span> <span class="n">img_h</span> <span class="o">=</span> <span class="n">img</span><span class="p">.</span><span class="n">getHeight</span><span class="p">();</span>
+<span class="kt">int</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">;</span>
+
+
+<span class="kt">double</span> <span class="n">curr_scale</span><span class="p">;</span>
+<span class="cm">/* keep track of the current scale being used and start it at the min_scale*/</span>
+<span class="k">for</span> <span class="p">(</span><span class="n">curr_scale</span> <span class="o">=</span> <span class="n">min_scale</span><span class="p">;</span> <span class="n">curr_scale</span> <span class="o">&lt;=</span> <span class="n">max_scale</span><span class="p">;</span> <span class="n">curr_scale</span> <span class="o">+=</span> <span class="n">step</span><span class="p">){</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s">"Changing scale to %f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">curr_scale</span><span class="p">);</span>
+
+
+	<span class="c1">// Determine the dimensions of the scaled image based off the current scale</span>
+	<span class="n">w</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">img_w</span><span class="o">*</span><span class="n">curr_scale</span><span class="p">);</span>
+	<span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="n">img_h</span><span class="o">*</span><span class="n">curr_scale</span><span class="p">);</span>
+	<span class="c1">//then effectively scale the image</span>
+	<span class="n">scaledImg</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+	<span class="n">img</span><span class="p">.</span><span class="n">resample</span><span class="p">(</span><span class="n">scaledImg</span><span class="p">);</span>
+
+	<span class="c1">//for every pixel in the image, see if a face begins there</span>
+	<span class="c1">// discouint pixels that are within half a facebox width or height of the edges</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">faceBoxHalfWidth</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">w</span> <span class="o">-</span> <span class="n">faceBoxHalfWidth</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">faceBoxHalfHeight</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">-</span> <span class="n">faceBoxHalfHeight</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">){</span>
+
+			<span class="c1">//set temp face to match the right size</span>
+			<span class="n">tempFace</span><span class="p">.</span><span class="n">resize</span><span class="p">((</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getWidth</span><span class="p">(),</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getHeight</span><span class="p">());</span>
+			<span class="c1">//set temp face to be a normalized grayscale image</span>
+			<span class="n">tempFace</span><span class="p">.</span><span class="n">subimage</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getWidth</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getHeight</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">scaledImg</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+
+			<span class="c1">//calculate the mse of this first loose pass, storing it in curr_mse</span>
+			<span class="kt">bool</span> <span class="n">firstTestPositive</span> <span class="o">=</span> <span class="n">isFace</span><span class="p">(</span><span class="n">tempFace</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="n">curr_mse</span><span class="p">);</span>
+
+			<span class="c1">//if the mse was acceptable, then check it further</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">firstTestPositive</span><span class="p">){</span>
+				<span class="n">fpos</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+				<span class="n">fpos</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+				<span class="n">fpos</span><span class="p">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">curr_scale</span><span class="p">;</span>
+				<span class="n">fpos</span><span class="p">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">curr_mse</span><span class="p">;</span>
+
+				<span class="cm">/*check if the current face at fpos has already been found*/</span>
+
+				<span class="c1">//define some parameters to help in the check</span>
+				<span class="kt">double</span> <span class="n">x_tooClose</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getWidth</span><span class="p">()</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">;</span>
+				<span class="kt">double</span> <span class="n">y_tooClose</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">getHeight</span><span class="p">()</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">;</span>
+				<span class="kt">double</span> <span class="n">unscaled_x_curr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">fpos</span><span class="p">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">fpos</span><span class="p">.</span><span class="n">scale</span><span class="p">;</span>
+				<span class="kt">double</span> <span class="n">unscaled_y_curr</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)</span> <span class="mf">1.0</span><span class="o">*</span><span class="n">fpos</span><span class="p">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">fpos</span><span class="p">.</span><span class="n">scale</span><span class="p">;</span>
+				<span class="kt">double</span> <span class="n">unscaled_x_compare</span><span class="p">,</span> <span class="n">unscaled_y_compare</span><span class="p">,</span> <span class="n">diff_x</span><span class="p">,</span> <span class="n">diff_y</span><span class="p">;</span>
+
+				<span class="kt">bool</span> <span class="n">foundOverlap</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+				<span class="c1">//iterate through the list of known face positions</span>
+
+
+				<span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iterator</span><span class="p">;</span>
+				<span class="k">for</span> <span class="p">(</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iterator</span> <span class="o">!=</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">iterator</span><span class="p">)</span> <span class="p">{</span>
+					<span class="c1">//define more parameters</span>
+					<span class="n">unscaled_x_compare</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">;</span>
+					<span class="n">unscaled_y_compare</span> <span class="o">=</span> <span class="p">(</span><span class="kt">double</span><span class="p">)(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">;</span>
+					<span class="n">diff_x</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">unscaled_x_compare</span> <span class="o">-</span> <span class="n">unscaled_x_curr</span><span class="p">);</span>
+					<span class="n">diff_y</span> <span class="o">=</span> <span class="n">abs</span><span class="p">(</span><span class="n">unscaled_y_compare</span> <span class="o">-</span> <span class="n">unscaled_y_curr</span><span class="p">);</span>
+
+					<span class="c1">//check that the current face in question isn't too close to an existing find in the list</span>
+					<span class="k">if</span> <span class="p">(</span><span class="n">diff_x</span> <span class="o">&lt;</span> <span class="n">x_tooClose</span> <span class="o">&amp;&amp;</span> <span class="n">diff_y</span> <span class="o">&lt;</span> <span class="n">y_tooClose</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">x</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">){</span>
+						<span class="cm">/*The images are too close together...
+						1. assume the images represent the same face
+						2. check to see which image has the better error value (mse)
+						3. discard the worse image, and keep the better one*/</span>
+
+						<span class="cm">/*Case 1: newly found image is the better one, so replace the image in the list and resort the list*/</span>
+						<span class="k">if</span> <span class="p">((</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">error</span> <span class="o">&gt;=</span> <span class="n">fpos</span><span class="p">.</span><span class="n">error</span><span class="p">){</span>
+
+							<span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">)</span> <span class="o">=</span> <span class="n">fpos</span><span class="p">;</span>
+							<span class="n">fpos_list</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">myComparatorFunction</span><span class="p">);</span>
+							<span class="n">printf</span><span class="p">(</span><span class="s">"Replacing Face with better version.</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+						<span class="p">}</span>
+						<span class="n">foundOverlap</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+						<span class="k">break</span><span class="p">;</span>
+					<span class="p">}</span>
+				<span class="p">}</span>
+
+				<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">foundOverlap</span><span class="p">){</span>
+					<span class="n">fpos_list</span><span class="p">.</span><span class="n">push_front</span><span class="p">(</span><span class="n">fpos</span><span class="p">);</span>
+					<span class="n">fpos_list</span><span class="p">.</span><span class="n">sort</span><span class="p">(</span><span class="n">myComparatorFunction</span><span class="p">);</span>
+					<span class="n">printf</span><span class="p">(</span><span class="s">"Found a new face... added it to the list and resorted</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+					<span class="k">break</span><span class="p">;</span> <span class="c1">//FIXME: should this break be here?</span>
+				<span class="p">}</span>
+
+			<span class="p">}</span><span class="c1">//end of the firstTestPositive case</span>
+		
+		<span class="p">}</span>
+	<span class="p">}</span><span class="c1">//end of the loop through every pixel in the image</span>
+
+
+<span class="p">}</span><span class="c1">//end of the scale changes loop</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s">"Finished finding faces. Total of %i faces found.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iterator</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">fpos_list</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
+	<span class="k">for</span> <span class="p">(</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iterator</span> <span class="o">!=</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">iterator</span><span class="p">)</span> <span class="p">{</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"face(%d,%d), mse=%f</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">),</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">),</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">error</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+
+
+<span class="k">if</span> <span class="p">(</span><span class="n">crop</span> <span class="o">==</span> <span class="nb">true</span><span class="p">){</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">fpos_list</span><span class="p">.</span><span class="n">empty</span><span class="p">()){</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"no faces found to crop in the image</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">else</span><span class="p">{</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"entering crop phase</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+		<span class="n">FacePosition</span> <span class="n">f</span> <span class="o">=</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">front</span><span class="p">();</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"f.x is %i, f.y is %i, and f.scale is %f </span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">scale</span><span class="p">);</span>
+		<span class="kt">int</span> <span class="n">x_min_unscaled</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">f</span><span class="p">.</span><span class="n">x</span> <span class="o">/</span> <span class="n">f</span><span class="p">.</span><span class="n">scale</span><span class="p">;</span> <span class="c1">//xmin (left side of the image)</span>
+		<span class="kt">int</span> <span class="n">y_min_unscaled</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">f</span><span class="p">.</span><span class="n">y</span> <span class="o">/</span> <span class="n">f</span><span class="p">.</span><span class="n">scale</span><span class="p">;</span> <span class="c1">//ymin </span>
+		<span class="c1">//use the average face to get the max width of a cropped face, add it to f.x to get right side</span>
+		<span class="kt">int</span> <span class="n">x_max</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">f</span><span class="p">.</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">average_face</span><span class="p">.</span><span class="n">getWidth</span><span class="p">();</span> 
+		<span class="kt">int</span> <span class="n">x_max_unscaled</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">x_max</span> <span class="o">/</span> <span class="n">f</span><span class="p">.</span><span class="n">scale</span><span class="p">;</span>
+		<span class="c1">//use the average face to get the max height of a cropped face</span>
+		<span class="kt">int</span> <span class="n">y_max</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">f</span><span class="p">.</span><span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">average_face</span><span class="p">.</span><span class="n">getHeight</span><span class="p">();</span> 
+		<span class="kt">int</span> <span class="n">y_max_unscaled</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">y_max</span> <span class="o">/</span> <span class="n">f</span><span class="p">.</span><span class="n">scale</span><span class="p">;</span>
+		<span class="n">printf</span><span class="p">(</span><span class="s">"the corners are at: %i, %i, %i, %i"</span><span class="p">,</span> <span class="n">x_min_unscaled</span><span class="p">,</span> <span class="n">y_min_unscaled</span><span class="p">,</span> <span class="n">x_max_unscaled</span><span class="p">,</span> <span class="n">y_max_unscaled</span><span class="p">);</span>
+
+		<span class="n">img</span><span class="p">.</span><span class="n">crop</span><span class="p">(</span><span class="n">x_min_unscaled</span><span class="p">,</span> <span class="n">y_min_unscaled</span><span class="p">,</span> <span class="n">x_max_unscaled</span><span class="p">,</span> <span class="n">y_max_unscaled</span><span class="p">,</span> <span class="n">result</span><span class="p">);</span>
+	<span class="p">}</span>
+
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+	<span class="n">printf</span><span class="p">(</span><span class="s">"entering mark phase</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+	<span class="c1">//replicate the entire image but with green lines around the faces</span>
+	<span class="n">result</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img</span><span class="p">.</span><span class="n">getWidth</span><span class="p">(),</span> <span class="n">img</span><span class="p">.</span><span class="n">getHeight</span><span class="p">(),</span> <span class="n">img</span><span class="p">.</span><span class="n">getColors</span><span class="p">());</span>
+	<span class="n">img</span><span class="p">.</span><span class="n">resample</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+	<span class="kt">int</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">;</span>
+
+	<span class="c1">//only want to outline the first n faces, so keep track of how many have been outlined</span>
+	<span class="kt">int</span> <span class="n">drawCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="c1">//get the position of every face in the list using iterator</span>
+	<span class="n">std</span><span class="o">::</span><span class="n">list</span><span class="o">::</span><span class="n">iterator</span> <span class="n">iterator</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="n">iterator</span> <span class="o">=</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iterator</span> <span class="o">!=</span> <span class="n">fpos_list</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="o">++</span><span class="n">iterator</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">drawCount</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">){</span>
+			<span class="k">break</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="n">drawCount</span><span class="o">++</span><span class="p">;</span>
+		<span class="c1">//calculate the corners of the box around the face held at position in Iterator</span>
+		<span class="n">x0</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">;</span>
+		<span class="n">x1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">x</span> <span class="o">+</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">average_face</span><span class="p">.</span><span class="n">getWidth</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">;</span>
+		<span class="n">y0</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">;</span>
+		<span class="n">y1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)((</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">y</span> <span class="o">+</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">).</span><span class="n">average_face</span><span class="p">.</span><span class="n">getHeight</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">).</span><span class="n">scale</span><span class="p">;</span>
+
+		<span class="c1">//draw lines around the face</span>
+		<span class="n">result</span><span class="p">.</span><span class="n">line</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+		<span class="n">result</span><span class="p">.</span><span class="n">line</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+		<span class="n">result</span><span class="p">.</span><span class="n">line</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+		<span class="n">result</span><span class="p">.</span><span class="n">line</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="testing-recognition-with-reference-images">Testing Recognition with Reference Images</h2>
+
+<h3 id="computing-10-eigenfaces-from-cropped-neutral-face-students">Computing 10 eigenfaces from cropped neutral face students</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Average Face</th>
+      <th style="text-align: center">Eigen Face 0</th>
+      <th style="text-align: center">Eigen Face 1</th>
+      <th style="text-align: center">Eigen Face 2</th>
+      <th style="text-align: center">Eigen Face 3</th>
+      <th style="text-align: center">Eigen Face 4</th>
+      <th style="text-align: center">Eigen Face 5</th>
+      <th style="text-align: center">Eigen Face 6</th>
+      <th style="text-align: center">Eigen Face 7</th>
+      <th style="text-align: center">Eigen Face 8</th>
+      <th style="text-align: center">Eigen Face 9</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/1.webp"><img src="/images/facial-detection-and-recognition/1.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/2.webp"><img src="/images/facial-detection-and-recognition/2.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/3.webp"><img src="/images/facial-detection-and-recognition/3.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/4.webp"><img src="/images/facial-detection-and-recognition/4.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/5.webp"><img src="/images/facial-detection-and-recognition/5.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/6.webp"><img src="/images/facial-detection-and-recognition/6.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/7.webp"><img src="/images/facial-detection-and-recognition/7.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/8.webp"><img src="/images/facial-detection-and-recognition/8.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/9.webp"><img src="/images/facial-detection-and-recognition/9.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/10.webp"><img src="/images/facial-detection-and-recognition/10.webp" alt="placeholder" class="align-enter" /></a></td>
+      <td style="text-align: center"><a href="/images/facial-detection-and-recognition/11.webp"><img src="/images/facial-detection-and-recognition/11.webp" alt="placeholder" class="align-enter" /></a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="experimenting-with-the-number-of-eigenfaces-used">Experimenting with the Number of Eigenfaces Used</h3>
+
+<p>The procedure above was computed for the following # of eigenfaces: 1,3,5,7,9,10,11,13,15,17,19,21,23. For each set of images a user base was computed and the program was run to recognize the photos from a reference set of faces with interesting facial expressions. The accuracy of facial recognition (to the resting face of the correct match) was computed and the results were found below. It seemed that the number of eigenfaces used dictated the accuracy up until a point where it plateaued. 15 eigenfaces seemed to be the general tipping point for this data set. I imagine that the subtle ups and downs after the plateau are due to the data set reacting one way or the other because of its small size. In general I would expect more eigen faces to produce better results, but after a certain point the marginal benefit of what another vector can convey isn’t worth the processing power. Further eigenfaces won’t greatly affect accuracy. I used 15 eigenfaces for the subsequent experiments. It seemed from the noted errors that certain interesting images 16, 15, 7, 4 and 2 produced the most errors. Almost all these photos were people with glasses. I suspect this is the reason for their error in detection.</p>
+
+<figure class="half">
+    <img src="/images/facial-detection-and-recognition/12.webp" />
+    <img src="/images/facial-detection-and-recognition/13.webp" />
+</figure>
+
+<h2 id="finding-and-marking-faces-in-group-photos">Finding and Marking Faces in Group Photos</h2>
+
+<p>Almost all the group photos worked really well for finding faces. I show groups the following two groups below because they are examples of both a good and a bad match. I believe the mistake shown is due to the facial hair on the individual on the left. Scale parameters used were 0.4 to 0.55 by steps of 0.01. I also tested the findFaces on a few of my own photos, but the results were fairly unimpressive.In most of the photos there were illumination differences, chaotic backgrounds, tilted faces and all images were hi-res. The algorithm took too long to run more than a few parameter tests on each (which took a few hours alone), so it was difficult to quickly hone in on good scale values to use.</p>
+
+<figure class="half">
+    <img src="/images/facial-detection-and-recognition/14.webp" />
+    <img src="/images/facial-detection-and-recognition/15.webp" />
+</figure>
+
+<h2 id="verifying-faces">Verifying Faces</h2>
+
+<p>I used a trial and error approach incrementing up and down from the base 60000 MSE. I tried 40000 and 75000. The error rates are shown in the figure above. I found that the default 60000 was the superior MSE value to use because it produced 0 false positives and the smallest number of false negatives. Increasing the MSE value produced equivalent false negatives, but it also increased the false positives as expected. For this reason I stick by the default 60000 being the ideal.</p>
+
+<p><img src="/images/facial-detection-and-recognition/16.webp" alt="placeholder" class="align-center" /></p>
+
+<h2 id="what-worked-well-and-what-did-not">What worked well and what did not?</h2>
+
+<p>Finding faces worked very well for shaved faced males on a plain background. It did not work as well for the interesting faced female photos, nor individuals with facial hair. I suspect that including some skin detection or color dependence in the algorithm may have helped. Using the find faces function on my non-reference group photos yielded unfavorable results. I suspect that this was because of the poor photos i chose to use as tests, but also because of the lack of any skin recognition in my algorithm. I think my algorithm was fairly limited to the trained data set.</p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#computer-vision" class="page__taxonomy-item p-category" rel="tag">computer vision</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2015-11-01">November 1, 2015</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Facial+Detection+%26+Recognition%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-facial-detection-and-recognition%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-facial-detection-and-recognition%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-facial-detection-and-recognition/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-digit-classification/" class="pagination--pager" title="Digit Classification
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-markov-decision-processes/" class="pagination--pager" title="Markov Decision Processes &amp; Reinforcement Q-Learning
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,872 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Modeling Neurons &amp; Action Potentials</title>
+<meta name="description" content="Various modeling techniques for neurons, action potentials and neuronal stimulation.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Modeling Neurons &amp; Action Potentials">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-bme-modeling-neurons/">
+
+
+  <meta property="og:description" content="Various modeling techniques for neurons, action potentials and neuronal stimulation.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/qp-computational/modeling-neurons-and-action-potentials/preview.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2013-10-11T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2013-10-11T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-bme-modeling-neurons/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Modeling Neurons &amp; Action Potentials">
+    <meta itemprop="description" content="Various modeling techniques for neurons, action potentials and neuronal stimulation.">
+    <meta itemprop="datePublished" content="2013-10-11T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2013-10-11T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-bme-modeling-neurons/" itemprop="url">Modeling Neurons &amp; Action Potentials
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#modelling-both-a-uni-directional-and-a-bi-directional-action-potential">Modelling both a Uni-Directional and a Bi-Directional Action Potential</a></li><li><a href="#modeling-cardiac-action-potentials">Modeling Cardiac Action Potentials</a></li><li><a href="#modeling-hodgkin-huxley-neuronal-model-using-ode45">Modeling Hodgkin Huxley Neuronal Model using ODE45</a></li><li><a href="#dynamical-systems-approach-to-neuronal-modeling">Dynamical Systems Approach to Neuronal Modeling</a></li><li><a href="#hodgkin-huxley-neuronal-model">Hodgkin Huxley Neuronal Model</a></li></ul>
+            </nav>
+          </aside>
+        
+        <p><img src="/images/qp-computational/modeling-neurons-and-action-potentials/preview.webp" alt="preview" class="align-right" /></p>
+
+<p>This page contains various modeling techniques for neurons, action potentials and neuronal stimulation. The techniques range from overly simplified to relatively intricate but still abstract the under workings to simulate the desired behavior. Other writeups exist on my site exploring these details such as modelling of ion channels themselves. The writeups in this post explore:</p>
+
+<ul class="text-justify">
+  <li>Modelling both a Uni-Directional and a Bi-Directional Action Potential</li>
+  <li>Modelling Cardiac Action Potentials</li>
+  <li>Modelling Hodgkin and Huxley Neuronal Model using ODE45</li>
+  <li>Dynamical Systems Approach to Neuronal Modelling</li>
+  <li>Basic Hodgkin Huxley Neuronal Model</li>
+</ul>
+
+<h2 id="modelling-both-a-uni-directional-and-a-bi-directional-action-potential">Modelling both a Uni-Directional and a Bi-Directional Action Potential</h2>
+
+<p>The following write up investigates the CRRSS equations in modelling a uni and a bi-directional action potential. The first problem develops a Matlab program that will solve for a propagating action potential along a 9cm axon segment. The second problem investigates an extracellular monopole source with an anodic square pulse followed by a cathodic square pulse, varying amplitudes to generate bi-directional action potentials and generating surface plots of membrane voltage as well as a video. The third problem plots various values at the instant the two action potentials have propagated halfway to each end of the axon. The fourth problem experiments with combinations of multiple anodes and cathodes as well as wave-shapes and pulse-widths to generate unidirectional propagating action potentials along the axon.</p>
+
+<object data="/images/qp-computational/modeling-neurons-and-action-potentials/hw4-writeup-wip.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/hw4-writeup-wip.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/hw4-writeup-wip.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="modeling-cardiac-action-potentials">Modeling Cardiac Action Potentials</h2>
+
+<p>This writeup studies the movement of ions in a canine ventricular myocyte using the Hund-Rudy dynamic model. The HRd model constructs the canine ventricular epicardial action potential based on the underlying ionic processes. This experiment could provide insight because many arrhythmias are manifested in abnormalities of action potential generation at the cellular level.</p>
+
+<object data="/images/qp-computational/modeling-neurons-and-action-potentials/clab-1-writeup-david-young.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/clab-1-writeup-david-young.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/clab-1-writeup-david-young.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="modeling-hodgkin-huxley-neuronal-model-using-ode45">Modeling Hodgkin Huxley Neuronal Model using ODE45</h2>
+
+<p>This writeup explores the use of ODE45 in modelling the Hodgkin-Huxley equations.</p>
+
+<p>Overview of each Problem:</p>
+
+<ol>
+  <li>Develops a Matlab program that will solve for membrane voltage for a given stimulus. This involves solving a system of four, coupled first order differential equations. ODE45 is used to integrate the model.</li>
+  <li>Assuming the resting membrane potential is -65 mV, problem 2 integrates the model until steady state membrane potential is reached (no stimulus is applied). This steady-state value of membrane voltage is then used as the new resting membrane potential and the process is repeated until the initial estimate of membrane potential matches the integrated solution. Then plots are generated of the voltage time course of the first and last model integration.</li>
+  <li>Using a depolarizing square pulse with duration of 0.35 ms, the magnitude of the pulse was increased until an action potential was initiated. Various plots for a typical action potential were then generated.</li>
+  <li>This problem explores how soon after an action potential can another action potential be initiated by the same depolarizing square pulse, as well as by much stronger pulse of triple the magnitude.</li>
+  <li>Use a stimulus in a hyperpolizing way, increasing the duration of the stimulus until an anode break initiation.</li>
+</ol>
+
+<p>Upon closer inspection I believe some of my dynamics may have been off. There should not be an influx of Potassium before its efflux. Also I may have flipped the signs of the ion currents somewhere as. Na rushes in so it should be negative, while K rushes out so it should be positive.</p>
+
+<object data="/images/qp-computational/modeling-neurons-and-action-potentials/hw2-latex-wip.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/hw2-latex-wip.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/hw2-latex-wip.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<object data="/images/qp-computational/modeling-neurons-and-action-potentials/writeup.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/writeup.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/writeup.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="dynamical-systems-approach-to-neuronal-modeling">Dynamical Systems Approach to Neuronal Modeling</h2>
+
+<object data="/images/qp-computational/modeling-neurons-and-action-potentials/dynamical-systems-approach-to-neuron-modelling.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/dynamical-systems-approach-to-neuron-modelling.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/dynamical-systems-approach-to-neuron-modelling.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="hodgkin-huxley-neuronal-model">Hodgkin Huxley Neuronal Model</h2>
+
+<object data="/images/qp-computational/modeling-neurons-and-action-potentials/hodgkin-huxley.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/hodgkin-huxley.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/qp-computational/modeling-neurons-and-action-potentials/hodgkin-huxley.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#biomedical-engineering" class="page__taxonomy-item p-category" rel="tag">biomedical engineering</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#quantitative-physiology" class="page__taxonomy-item p-category" rel="tag">quantitative physiology</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2013-10-11">October 11, 2013</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Modeling+Neurons+%26+Action+Potentials%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-bme-modeling-neurons%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-bme-modeling-neurons%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-bme-modeling-neurons/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-bme-frog-skeletal-muscle/" class="pagination--pager" title="Compound Action Potentials in Frog Sciatic Nerve
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-bme-3d-printed-frog-muscle-holder/" class="pagination--pager" title="3D Printed Frog Muscle Holder
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

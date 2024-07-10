@@ -1,0 +1,1036 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Comparing Classifiers in R</title>
+<meta name="description" content="Comparing various classifier in R.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Comparing Classifiers in R">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-comparing-classifiers-in-r/">
+
+
+  <meta property="og:description" content="Comparing various classifier in R.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/comparing-classifiers-in-r/0.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-01-06T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-01-06T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-comparing-classifiers-in-r/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Comparing Classifiers in R">
+    <meta itemprop="description" content="Comparing various classifier in R.">
+    <meta itemprop="datePublished" content="2016-01-06T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-01-06T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-comparing-classifiers-in-r/" itemprop="url">Comparing Classifiers in R
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#dataset">Dataset</a></li><li><a href="#results">Results</a></li><li><a href="#implementation">Implementation</a><ul><li><a href="#basic-setup">Basic Setup</a></li><li><a href="#pre-process-features">Pre-Process Features</a></li><li><a href="#defining-data-partitions">Defining Data Partitions</a></li><li><a href="#linear-svm">Linear SVM</a></li><li><a href="#naive-bayes">Naive Bayes</a></li><li><a href="#random-forests">Random Forests</a></li><li><a href="#approximate-nearest-neighbors">Approximate Nearest Neighbors</a></li><li><a href="#radial-basis-function-svm">​Radial basis function SVM</a></li><li><a href="#other-variants">Other Variants</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="dataset">Dataset</h2>
+
+<p>The following writeup compares various classifiers trying to match faces. The training dataset to do with matching faces can be found here:
+<a href="https://courses.engr.illinois.edu/cs498df3/data/pubfig_dev_50000_pairs.txt​">https://courses.engr.illinois.edu/cs498df3/data/pubfig_dev_50000_pairs.txt​</a>
+​
+Each vector consists of a label, followed by measurements of attributes from two faces as produced by some complex vision program. The label indicates if the faces belong to the same class (ie: same person), while the rest of the vector consists of (attribute values for face 1) (attribute values for face 2). The dataset is large (around 100Mb). Various classifiers were trained on this dataset and accuracy was reported on an unknown evaluation set via an online Kaggle competition.</p>
+
+<h2 id="results">Results</h2>
+
+<p>​For each of the classifiers below, the training was performed on all data from “pubfig_train_50000<em>pairs.txt”. Where applicable and when time permitted, parameter tuning was performed using the “pubfig_kaggle</em>#.txt” files. The classification accuracy of the trained classifier is shown for the same training data, one example of the validation data, and the test/evaluation data. For the test accuracy, the value was reported by Kaggle as we do not have access to the ground-truth labels.</p>
+
+<p><img src="/images/comparing-classifiers-in-r/0.webp" alt="placeholder" class="align-center" /></p>
+
+<h2 id="implementation">Implementation</h2>
+
+<h3 id="basic-setup">Basic Setup</h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#------------------------------------- SETUP WORK --------------------------------------</span><span class="w">
+</span><span class="c1">#clear the workspace and console</span><span class="w">
+</span><span class="n">rm</span><span class="p">(</span><span class="n">list</span><span class="o">=</span><span class="n">ls</span><span class="p">())</span><span class="w">
+</span><span class="n">cat</span><span class="p">(</span><span class="s2">"\014"</span><span class="p">)</span><span class="w"> </span><span class="c1">#code to send ctrl+L to the console and therefore clear the screen</span><span class="w">
+ 
+</span><span class="c1">#install packages as necessary:</span><span class="w">
+</span><span class="c1">#install.packages("RANN");</span><span class="w">
+</span><span class="c1">#install.packages("cluster")</span><span class="w">
+</span><span class="c1">#install.packages("stats")</span><span class="w">
+ 
+</span><span class="c1">#import libraries</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">klaR</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">caret</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">stringr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">randomForest</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">svmlight</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">RANN</span><span class="p">)</span><span class="w"> </span><span class="c1">#for finding approximate nearest neighbor</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#----------------------------------------Setup the workspace--------------------------------</span><span class="w">
+</span><span class="n">setwd</span><span class="p">(</span><span class="s1">'~/WorkingDirectoryNameGoesHere'</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="pre-process-features">Pre-Process Features</h3>
+
+<p>The key to an initial performance jump was the pre-processing of features. Each example was made up of two feature vectors, which were replaced by the difference between the two feature vectors (i.e. the scaled Euclidian distance between the two feature vectors in high dimensional space).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">###-------------------------------TRAINING DATA---------------------------------------------</span><span class="w">
+</span><span class="c1">#retrieve all the data (each row is 147 items long: 1 label followed by 2x73 feature vectors)</span><span class="w">
+</span><span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_dev_50000_pairs_no_header.txt'</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s1">'\t'</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+ 
+</span><span class="c1">#grab the labels</span><span class="w">
+</span><span class="n">labels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="p">[,</span><span class="m">1</span><span class="p">];</span><span class="w">
+</span><span class="c1">#grab the features (2x 73 features vectors)</span><span class="w">
+</span><span class="n">features</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="n">nrow</span><span class="o">=</span><span class="n">nrow</span><span class="p">(</span><span class="n">data</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="p">(</span><span class="n">ncol</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="m">-1</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">);</span><span class="w">
+</span><span class="c1">#features &lt;- data[,-1]; #accuracy: .53</span><span class="w">
+ 
+</span><span class="c1">#pre-process the features to yield a single 73 item feature vector that is the scaled euclidian distance between each respective feature</span><span class="w">
+</span><span class="c1">#feature set 1:</span><span class="w">
+</span><span class="n">features</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">as.matrix</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="m">2</span><span class="o">:</span><span class="m">74</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">data</span><span class="p">[,</span><span class="m">75</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">data</span><span class="p">)])));</span><span class="w"> </span><span class="c1">#accuracy: 0.7684</span><span class="w">
+ 
+</span><span class="c1">#feature set 2: feature set 1 + squared values of feature set 1</span><span class="w">
+</span><span class="c1">#features &lt;- scale(abs(as.matrix(data[,2:74]) - as.matrix(data[,75:ncol(data)]))); #accuracy: 0.7684</span><span class="w">
+</span><span class="c1">#features &lt;- cbind(features,features^2);</span><span class="w">
+</span><span class="c1">#sum(features[,74] == features[,1]^2) #checked</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="defining-data-partitions">Defining Data Partitions</h3>
+
+<p>During the initial prototyping of various classifiers, a smaller subset of data was used (~20% -50% of the training dataset). This subset was split into training and testing portions for the various training procedures. Surprisingly, the results from these smaller training sets were better than the final results using the entire training set and the validation sets for testing. For example over 80% accuracy was obtained using an SVM on a smaller training portion split into training and test sets, but 80% accuracy could not be reached with any SVM when training on all the data.  This may be due to human bias in selectively reporting our results to ourselves.  Prototyping on these smaller sets was necessary however, as re-training a classifier such as the RBF SVM on the entire data set for each of many gamma values would have taken a long time.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">###-------------------------------Validation data-------------------------------------------</span><span class="w">
+</span><span class="n">val_featureData_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_kaggle_1.txt'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">'\t'</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+</span><span class="n">val_featureData_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_kaggle_2.txt'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">'\t'</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+</span><span class="n">val_featureData_3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_kaggle_3.txt'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">'\t'</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+</span><span class="n">val_labelsData_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_kaggle_1_solution.txt'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">","</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+</span><span class="n">val_labelsData_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_kaggle_2_solution.txt'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">","</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+</span><span class="n">val_labelsData_3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_kaggle_3_solution.txt'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s2">","</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+ 
+</span><span class="c1">#grab the labels</span><span class="w">
+</span><span class="n">val_labels_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">val_labelsData_1</span><span class="p">[,</span><span class="m">2</span><span class="p">];</span><span class="w">
+</span><span class="n">val_labels_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">val_labelsData_2</span><span class="p">[,</span><span class="m">2</span><span class="p">];</span><span class="w">
+</span><span class="n">val_labels_3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">val_labelsData_3</span><span class="p">[,</span><span class="m">2</span><span class="p">];</span><span class="w">
+ 
+</span><span class="n">val_features_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="n">nrow</span><span class="o">=</span><span class="n">nrow</span><span class="p">(</span><span class="n">val_featureData_1</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="n">ncol</span><span class="p">(</span><span class="n">val_featureData_1</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">);</span><span class="w">
+</span><span class="n">val_features_1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">as.matrix</span><span class="p">(</span><span class="n">val_featureData_1</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">73</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">val_featureData_1</span><span class="p">[,</span><span class="m">74</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">val_featureData_1</span><span class="p">)])));</span><span class="w">
+ 
+</span><span class="n">val_features_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="n">nrow</span><span class="o">=</span><span class="n">nrow</span><span class="p">(</span><span class="n">val_featureData_2</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="n">ncol</span><span class="p">(</span><span class="n">val_featureData_2</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">);</span><span class="w">
+</span><span class="n">val_features_2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">as.matrix</span><span class="p">(</span><span class="n">val_featureData_2</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">73</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">val_featureData_2</span><span class="p">[,</span><span class="m">74</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">val_featureData_2</span><span class="p">)])));</span><span class="w">
+ 
+</span><span class="n">val_features_3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="n">nrow</span><span class="o">=</span><span class="n">nrow</span><span class="p">(</span><span class="n">val_featureData_3</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="n">ncol</span><span class="p">(</span><span class="n">val_featureData_3</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">);</span><span class="w">
+</span><span class="n">val_features_3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">as.matrix</span><span class="p">(</span><span class="n">val_featureData_3</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">73</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">val_featureData_3</span><span class="p">[,</span><span class="m">74</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">val_featureData_3</span><span class="p">)])));</span><span class="w">
+ 
+ 
+ 
+</span><span class="c1">###-------------------------------Evaluation/Testing DATA ----------------------------------</span><span class="w">
+</span><span class="n">eval_featureData</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s1">'pubfig_kaggle_eval.txt'</span><span class="p">,</span><span class="w"> </span><span class="n">sep</span><span class="o">=</span><span class="s1">'\t'</span><span class="p">,</span><span class="w"> </span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">);</span><span class="w">
+</span><span class="n">eval_features</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">matrix</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="n">nrow</span><span class="o">=</span><span class="n">nrow</span><span class="p">(</span><span class="n">eval_featureData</span><span class="p">),</span><span class="n">ncol</span><span class="o">=</span><span class="n">ncol</span><span class="p">(</span><span class="n">eval_featureData</span><span class="p">)</span><span class="o">/</span><span class="m">2</span><span class="p">);</span><span class="w">
+</span><span class="n">eval_features</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">scale</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">as.matrix</span><span class="p">(</span><span class="n">eval_featureData</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">73</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">eval_featureData</span><span class="p">[,</span><span class="m">74</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">eval_featureData</span><span class="p">)])));</span><span class="w">
+ 
+ 
+ 
+</span><span class="c1">#-------------------------split up the data for testing and training------------------------------</span><span class="w">
+ 
+</span><span class="c1">###IF USING THE VALIDATION DATA...</span><span class="w">
+</span><span class="n">trainingLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">labels</span><span class="p">;</span><span class="w">
+</span><span class="n">trainingFeatures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">features</span><span class="p">;</span><span class="w">
+</span><span class="n">testLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">val_labels_1</span><span class="p">;</span><span class="w"> </span><span class="c1">#val_labels_1; val_labels_2; val_labels_3</span><span class="w">
+</span><span class="n">testFeatures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">eval_features</span><span class="p">;</span><span class="w"> </span><span class="c1">#val_features_1; val_features_2; val_features_3;</span><span class="w">
+ 
+</span><span class="c1">###IF ONLY USING THE TRAINING DATA... need to split it up into test and train portions</span><span class="w">
+</span><span class="c1">#there is too much data for rapid iteration, use this to scale down how big the initial pool is during prototyping</span><span class="w">
+</span><span class="n">useDataIndices</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">createDataPartition</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="m">.5</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">);</span><span class="w"> 
+</span><span class="n">testDataIndices</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">createDataPartition</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">useDataIndices</span><span class="p">],</span><span class="w"> </span><span class="n">p</span><span class="o">=</span><span class="m">.2</span><span class="p">,</span><span class="w"> </span><span class="n">list</span><span class="o">=</span><span class="kc">FALSE</span><span class="p">);</span><span class="w">
+</span><span class="n">trainingLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">labels</span><span class="p">[</span><span class="n">useDataIndices</span><span class="p">];</span><span class="w"> </span><span class="n">trainingLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">trainingLabels</span><span class="p">[</span><span class="o">-</span><span class="n">testDataIndices</span><span class="p">];</span><span class="w">
+</span><span class="n">testLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">labels</span><span class="p">[</span><span class="n">useDataIndices</span><span class="p">];</span><span class="w"> </span><span class="n">testLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">testLabels</span><span class="p">[</span><span class="n">testDataIndices</span><span class="p">];</span><span class="w">
+</span><span class="n">trainingFeatures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">features</span><span class="p">[</span><span class="n">useDataIndices</span><span class="p">,];</span><span class="w"> </span><span class="n">trainingFeatures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">trainingFeatures</span><span class="p">[</span><span class="o">-</span><span class="n">testDataIndices</span><span class="p">,];</span><span class="w">
+</span><span class="n">testFeatures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">features</span><span class="p">[</span><span class="n">useDataIndices</span><span class="p">,];</span><span class="w"> </span><span class="n">testFeatures</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">testFeatures</span><span class="p">[</span><span class="n">testDataIndices</span><span class="p">,];</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="linear-svm">Linear SVM</h3>
+
+<p>​A linear SVM worked surprisingly well given that the data intuitively seems to extend radially out from an ideal 0 distance. It was not expected that a linear SVM would do so well.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#run an SVM</span><span class="w">
+</span><span class="n">svm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">svmlight</span><span class="p">(</span><span class="n">trainingFeatures</span><span class="p">,</span><span class="n">trainingLabels</span><span class="p">,</span><span class="n">pathsvm</span><span class="o">=</span><span class="s1">'Path to svm goes here'</span><span class="p">)</span><span class="w">
+</span><span class="n">predictedLabels</span><span class="o">&lt;-</span><span class="n">predict</span><span class="p">(</span><span class="n">svm</span><span class="p">,</span><span class="w"> </span><span class="n">testFeatures</span><span class="p">)</span><span class="w"> 
+</span><span class="n">foo</span><span class="o">&lt;-</span><span class="n">predictedLabels</span><span class="o">$</span><span class="n">class</span><span class="w"> </span><span class="c1">#"foo" = class labels (1 or 0) for each item in test set</span><span class="w">
+</span><span class="c1">#get classification accuracy:</span><span class="w">
+</span><span class="n">accuracy</span><span class="o">&lt;-</span><span class="nf">sum</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)</span><span class="o">+</span><span class="nf">sum</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)))</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="naive-bayes">Naive Bayes</h3>
+
+<p>The naïve bayes classifier took a long time to train, but performed adequately. It did have the lowest final accuracy.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#run Naive Bayes</span><span class="w">
+</span><span class="n">model</span><span class="o">&lt;-</span><span class="n">train</span><span class="p">(</span><span class="n">trainingFeatures</span><span class="p">,</span><span class="w"> </span><span class="n">as.factor</span><span class="p">(</span><span class="n">trainingLabels</span><span class="p">),</span><span class="w"> </span><span class="s1">'nb'</span><span class="p">,</span><span class="w"> </span><span class="n">trControl</span><span class="o">=</span><span class="n">trainControl</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">'cv'</span><span class="p">,</span><span class="w"> </span><span class="n">number</span><span class="o">=</span><span class="m">10</span><span class="p">))</span><span class="w">
+</span><span class="n">teclasses</span><span class="o">&lt;-</span><span class="n">predict</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">newdata</span><span class="o">=</span><span class="n">testFeatures</span><span class="p">)</span><span class="w">
+</span><span class="n">cm</span><span class="o">&lt;-</span><span class="n">confusionMatrix</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">teclasses</span><span class="p">,</span><span class="w"> </span><span class="n">testLabels</span><span class="p">)</span><span class="w">
+</span><span class="n">accuracy</span><span class="o">&lt;-</span><span class="n">cm</span><span class="o">$</span><span class="n">overall</span><span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="random-forests">Random Forests</h3>
+
+<p>The random forest classifier took a long time to train, but performed well. It was nearly as accurate as the SVMs, with a training time somewhere in between the linear SVM and the RBF SVM.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#run Random Forest, </span><span class="w">
+</span><span class="n">faceforest.allvals</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">randomForest</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">trainingFeatures</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">trainingLabels</span><span class="p">,</span><span class="w">
+                                   </span><span class="n">xtest</span><span class="o">=</span><span class="n">testFeatures</span><span class="p">,</span><span class="n">ytest</span><span class="o">=</span><span class="n">testLabels</span><span class="p">);</span><span class="w">
+ 
+</span><span class="n">faceforest.allvals</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">randomForest</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">trainingFeatures</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">trainingLabels</span><span class="p">,</span><span class="w">
+                                   </span><span class="n">xtest</span><span class="o">=</span><span class="n">testFeatures</span><span class="p">);</span><span class="w">
+</span><span class="n">predictedLabels</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">faceforest.allvals</span><span class="o">$</span><span class="n">test</span><span class="o">$</span><span class="n">predicted</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">.5</span><span class="w">
+</span><span class="n">predictedLabels</span><span class="p">[</span><span class="n">predictedLabels</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w">
+</span><span class="n">predictedLabels</span><span class="p">[</span><span class="o">!</span><span class="n">predictedLabels</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w">
+</span><span class="n">foo</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">predictedLabels</span><span class="p">;</span><span class="w">
+</span><span class="n">accuracy</span><span class="o">&lt;-</span><span class="nf">sum</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)</span><span class="o">+</span><span class="nf">sum</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)))</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="approximate-nearest-neighbors">Approximate Nearest Neighbors</h3>
+
+<p>The classification strategy using nearest neighbors (comparison of labels from the lookup table) was guaranteed to yield 100% accuracy. The question was whether an approximate nearest neighbor package could yield nearly the same performance as a nearest neighbor package. The results would indicate yes. The training accuracy and the testing accuracy were both 100%. This would indicate the correct nearest neighbor was being accurately selected via the approximate algorithm, and significantly faster.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#######################</span><span class="w">
+</span><span class="c1">#Part 2: Approximate Nearest Neighbors</span><span class="w">
+</span><span class="c1">#######################</span><span class="w">
+</span><span class="c1"># -have a reference dictionary of people (names) and many images of that person's face represented as attribute vectors</span><span class="w">
+</span><span class="c1"># -want to determine if two feature vectors represent face images of the same person... </span><span class="w">
+</span><span class="c1"># -will use the reference dictionary as a lookup table, and simply find the nearest neighbor </span><span class="w">
+</span><span class="c1">#   (in this case exact same feature vector) from the dictionary for both of the example's </span><span class="w">
+</span><span class="c1">#   feature vectors. Compare the labels (names) of each found neighbor and see if they're the same name.</span><span class="w">
+</span><span class="c1"># -expect 100% accuracy here with a nearest neighbors classifier, but how close can we get to 100% with an </span><span class="w">
+</span><span class="c1">#   approximate nearest neighbors package? Answer: basically 100%. </span><span class="w">
+</span><span class="c1"># - Purpose: to demonstrate that approximate nearest neighbors can work just about the same as nearest neighbors</span><span class="w">
+ 
+</span><span class="c1">#retrieve the reference dictionary of names and associated face images</span><span class="w">
+</span><span class="n">namedata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s2">"pubfig_attributes.txt"</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s2">"\t"</span><span class="p">);</span><span class="w">
+</span><span class="n">namedata.att</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">namedata</span><span class="p">[,</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">)];</span><span class="w">
+ 
+</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="m">10000</span><span class="p">;</span><span class="w">
+</span><span class="n">face1.nn</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nn2</span><span class="p">(</span><span class="n">namedata.att</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="m">2</span><span class="o">:</span><span class="m">74</span><span class="p">],</span><span class="n">k</span><span class="o">=</span><span class="m">1</span><span class="p">);</span><span class="w">
+</span><span class="n">face2.nn</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nn2</span><span class="p">(</span><span class="n">namedata.att</span><span class="p">,</span><span class="n">data</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="m">75</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">data</span><span class="p">)],</span><span class="n">k</span><span class="o">=</span><span class="m">1</span><span class="p">);</span><span class="w">
+ 
+</span><span class="n">predicted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">namedata</span><span class="p">[</span><span class="n">face1.nn</span><span class="o">$</span><span class="n">nn.idx</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">namedata</span><span class="p">[</span><span class="n">face2.nn</span><span class="o">$</span><span class="n">nn.idx</span><span class="p">,</span><span class="m">1</span><span class="p">];</span><span class="w"> </span><span class="c1">#creates a boolean vector</span><span class="w">
+</span><span class="n">predicted</span><span class="p">[</span><span class="n">predicted</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">#turn that boolean vector into 0's and 1's</span><span class="w">
+</span><span class="n">accuracy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">predicted</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">predicted</span><span class="p">);</span><span class="w">
+</span><span class="n">print</span><span class="p">(</span><span class="n">accuracy</span><span class="p">)</span><span class="w">
+ 
+ 
+</span><span class="c1">#using the evaluation data...</span><span class="w">
+ 
+</span><span class="c1">#retrieve the reference dictionary of names and associated face images</span><span class="w">
+</span><span class="n">namedata</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.table</span><span class="p">(</span><span class="s2">"pubfig_attributes.txt"</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="nb">F</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s2">"\t"</span><span class="p">);</span><span class="w">
+</span><span class="n">namedata.att</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">namedata</span><span class="p">[,</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">)];</span><span class="w">
+ 
+</span><span class="n">face1.nn</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nn2</span><span class="p">(</span><span class="n">namedata.att</span><span class="p">,</span><span class="w"> </span><span class="n">eval_featureData</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">73</span><span class="p">],</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="m">1</span><span class="p">);</span><span class="w">
+</span><span class="n">face2.nn</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nn2</span><span class="p">(</span><span class="n">namedata.att</span><span class="p">,</span><span class="w"> </span><span class="n">eval_featureData</span><span class="p">[,</span><span class="m">74</span><span class="o">:</span><span class="n">ncol</span><span class="p">(</span><span class="n">eval_featureData</span><span class="p">)],</span><span class="w"> </span><span class="n">k</span><span class="o">=</span><span class="m">1</span><span class="p">);</span><span class="w">
+ 
+</span><span class="n">predicted</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">namedata</span><span class="p">[</span><span class="n">face1.nn</span><span class="o">$</span><span class="n">nn.idx</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">namedata</span><span class="p">[</span><span class="n">face2.nn</span><span class="o">$</span><span class="n">nn.idx</span><span class="p">,</span><span class="m">1</span><span class="p">];</span><span class="w"> </span><span class="c1">#creates a boolean vector</span><span class="w">
+</span><span class="n">predicted</span><span class="p">[</span><span class="n">predicted</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">#turn that boolean vector into 0's and 1's</span><span class="w">
+ 
+</span><span class="n">accuracy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="n">n</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">predicted</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">length</span><span class="p">(</span><span class="n">predicted</span><span class="p">);</span><span class="w">
+</span></code></pre></div></div>
+
+<h3 id="radial-basis-function-svm">​Radial basis function SVM</h3>
+
+<p>​A linear SVM worked surprisingly well given that the data intuitively seems to extend radially out from an ideal 0 distance. It was not expected that a linear SVM would do so well. Instead it was predicted that an SVM using a radial-basis-function (RBF) would perform better, which it did.  An RBF SVM is capable of choosing a non-linear decision boundary by mapping to a higher dimension feature space. But, although the RBF SVM yielded the highest accuracy, the performance gain was minimal and at the cost of significantly longer training time. Both versions of the SVM were tried a second time with appended features equal to the square of the pre-processed feature vector. This did not improve performance, and the results were not generated for the entire dataset so they are absent. Most likely these additional features were not as beneficial given the initial pre-processing.</p>
+
+<p>Most likely the RBF SVM worked well because the data was appropriately pre-processed and the RBF SVM somewhat subsumes both the linear and polynomial variants of an SVM classifier. Unfortunately the slightly better performance is not likely worth the much longer training time required by the RBF SVM.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#run a radial basis kernal SVM (in theory, should subsume both linear or polynomial)</span><span class="w">
+</span><span class="n">svm</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">svmlight</span><span class="p">(</span><span class="n">trainingFeatures</span><span class="p">,</span><span class="n">trainingLabels</span><span class="p">,</span><span class="w"> </span><span class="n">svm.options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"-t 2 -g .03"</span><span class="p">,</span><span class="w"> </span><span class="n">pathsvm</span><span class="o">=</span><span class="s1">'Path to svm goes here'</span><span class="p">)</span><span class="w">
+</span><span class="n">predictedLabels</span><span class="o">&lt;-</span><span class="n">predict</span><span class="p">(</span><span class="n">svm</span><span class="p">,</span><span class="w"> </span><span class="n">testFeatures</span><span class="p">)</span><span class="w"> 
+</span><span class="n">foo</span><span class="o">&lt;-</span><span class="n">predictedLabels</span><span class="o">$</span><span class="n">class</span><span class="w"> </span><span class="c1">#"foo" = class labels (1 or 0) for each item in test set</span><span class="w">
+</span><span class="c1">#get classification accuracy:</span><span class="w">
+</span><span class="n">accuracy</span><span class="o">&lt;-</span><span class="nf">sum</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)</span><span class="o">+</span><span class="nf">sum</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">foo</span><span class="o">==</span><span class="n">testLabels</span><span class="p">)))</span><span class="w"> 
+</span></code></pre></div></div>
+
+<h3 id="other-variants">Other Variants</h3>
+
+<p>Lastly, there was an attempt to implement a classifier defined by a K-Means Clustering with a corresponding SVM for each cluster. But the performance here was right on par with the other SVMs. A voting system didn’t help much, and soft/fuzzy clustering packages did not seem to cooperate for this classifier. Neither approach yielded better performance than the RBF SVM.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#######################</span><span class="w">
+</span><span class="c1">#Other Variant: K Means Clustering + SVMLight</span><span class="w">
+</span><span class="c1">#######################</span><span class="w">
+</span><span class="c1"># Training:</span><span class="w">
+</span><span class="c1">#   -run kmeans clustering on the training data to create k clusters</span><span class="w">
+</span><span class="c1">#   -for each cluster</span><span class="w">
+</span><span class="c1">#     -train a separate svm classifier using the training data in that cluster</span><span class="w">
+</span><span class="c1">#</span><span class="w">
+</span><span class="c1"># Classify a test example:</span><span class="w">
+</span><span class="c1">#   -determine which cluster is closest to the example point</span><span class="w">
+</span><span class="c1">#   -use the svm from that chosen cluster to classify the example point</span><span class="w">
+ 
+</span><span class="c1">#accuracy at k = 5, 50% of dataset used, 20% test 80% train was 0.7614</span><span class="w">
+ 
+ 
+</span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w">  </span><span class="c1">#number of clusters to use... recall that there are only two classes</span><span class="w">
+</span><span class="n">kmeans.train.output</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">kmeans</span><span class="p">(</span><span class="n">trainingFeatures</span><span class="p">,</span><span class="n">centers</span><span class="o">=</span><span class="n">k</span><span class="p">);</span><span class="w"> 
+ 
+</span><span class="c1">#the trainingLabels are provided as 0 and 1, but the svm wants them to map to -1 and 1... so convert 0's to -1</span><span class="w">
+</span><span class="n">trainingLabels</span><span class="p">[</span><span class="n">trainingLabels</span><span class="o">==</span><span class="m">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">;</span><span class="w">
+</span><span class="n">testLabels</span><span class="p">[</span><span class="n">testLabels</span><span class="o">==</span><span class="m">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">;</span><span class="w">
+ 
+</span><span class="c1">#train an SVM for each cluster</span><span class="w">
+</span><span class="n">svm_list</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">list</span><span class="p">();</span><span class="w">
+</span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">){</span><span class="w">
+  </span><span class="n">svm_list</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span><span class="o">&lt;-</span><span class="n">svmlight</span><span class="p">(</span><span class="n">trainingFeatures</span><span class="p">[</span><span class="n">kmeans.train.output</span><span class="o">$</span><span class="n">cluster</span><span class="o">==</span><span class="n">i</span><span class="p">,],</span><span class="w"> </span><span class="n">trainingLabels</span><span class="p">[</span><span class="n">kmeans.train.output</span><span class="o">$</span><span class="n">cluster</span><span class="o">==</span><span class="n">i</span><span class="p">],</span><span class="w"> </span><span class="n">pathsvm</span><span class="o">=</span><span class="s1">'Path to svm goes here'</span><span class="p">)</span><span class="w">
+</span><span class="p">}</span><span class="w">
+ 
+</span><span class="c1">#select the nearest cluster center for each test example</span><span class="w">
+</span><span class="n">nearest_cluster_center</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">nn2</span><span class="p">(</span><span class="n">kmeans.train.output</span><span class="o">$</span><span class="n">centers</span><span class="p">,</span><span class="n">testFeatures</span><span class="p">,</span><span class="n">k</span><span class="o">=</span><span class="m">1</span><span class="p">);</span><span class="w">
+ 
+ 
+</span><span class="c1">#create a structure to hold the predicted labels of any example near each SVM</span><span class="w">
+</span><span class="n">predictedLabelsList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vector</span><span class="p">(</span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"list"</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="p">);</span><span class="w">
+</span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">){</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">nearest_cluster_center</span><span class="o">$</span><span class="n">nn.idx</span><span class="o">==</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">){</span><span class="w">
+    </span><span class="n">predictedLabelsList</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">predict</span><span class="p">(</span><span class="n">svm_list</span><span class="p">[[</span><span class="n">i</span><span class="p">]],</span><span class="w"> </span><span class="n">testFeatures</span><span class="p">[</span><span class="n">nearest_cluster_center</span><span class="o">$</span><span class="n">nn.idx</span><span class="o">==</span><span class="n">i</span><span class="p">,])</span><span class="w"> 
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+ 
+</span><span class="c1">#predict the label of the test examples using the svm associated with the nearest cluster to that test example</span><span class="w">
+</span><span class="n">predictedLabels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">rep</span><span class="p">(</span><span class="kc">NA</span><span class="p">,</span><span class="n">nrow</span><span class="p">(</span><span class="n">testFeatures</span><span class="p">));</span><span class="w">
+</span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="o">:</span><span class="n">k</span><span class="p">){</span><span class="w">
+  </span><span class="k">if</span><span class="p">(</span><span class="nf">sum</span><span class="p">(</span><span class="n">nearest_cluster_center</span><span class="o">$</span><span class="n">nn.idx</span><span class="o">==</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="o">!</span><span class="nf">is.null</span><span class="p">(</span><span class="n">predictedLabelsList</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span><span class="o">$</span><span class="n">class</span><span class="p">)){</span><span class="w">
+    </span><span class="n">predictedLabels</span><span class="p">[</span><span class="n">nearest_cluster_center</span><span class="o">$</span><span class="n">nn.idx</span><span class="o">==</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">predictedLabelsList</span><span class="p">[[</span><span class="n">i</span><span class="p">]]</span><span class="o">$</span><span class="n">class</span><span class="p">);</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+ 
+</span><span class="n">predictedLabels</span><span class="p">[</span><span class="n">predictedLabels</span><span class="o">==</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">;</span><span class="w">
+</span><span class="n">predictedLabels</span><span class="p">[</span><span class="n">predictedLabels</span><span class="o">==</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w">
+ 
+</span><span class="n">accuracy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">predictedLabels</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">testLabels</span><span class="p">)</span><span class="o">/</span><span class="nf">length</span><span class="p">(</span><span class="n">predictedLabels</span><span class="p">);</span><span class="w">
+</span><span class="n">print</span><span class="p">(</span><span class="n">accuracy</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-01-06">January 6, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Comparing+Classifiers+in+R%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-comparing-classifiers-in-r%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-comparing-classifiers-in-r%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-comparing-classifiers-in-r/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-stochastic-gradient-descent-in-r/" class="pagination--pager" title="​Stochastic Gradient Descent + ​SVM Classifier in R
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-blob-analysis/" class="pagination--pager" title="Visualizing High Dimensional Data: Blob Analysis + PCA
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

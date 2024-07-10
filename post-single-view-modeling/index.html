@@ -1,0 +1,1795 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Single View Modeling</title>
+<meta name="description" content="Creating 3D texture wrapped models from a single image.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Single View Modeling">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-single-view-modeling/">
+
+
+  <meta property="og:description" content="Creating 3D texture wrapped models from a single image.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/single-view-modeling/1.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2015-10-25T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2015-10-25T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-single-view-modeling/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Single View Modeling">
+    <meta itemprop="description" content="Creating 3D texture wrapped models from a single image.">
+    <meta itemprop="datePublished" content="2015-10-25T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2015-10-25T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-single-view-modeling/" itemprop="url">Single View Modeling
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          25 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#overview--major-design-choices">Overview + Major Design Choices</a></li><li><a href="#calculating-vanishing-points">Calculating Vanishing Points</a></li><li><a href="#choosing-reference-points">Choosing Reference Points</a><ul><li><a href="#computing-homography">Computing Homography</a></li><li><a href="#converting-to-plane-coordinates">Converting to Plane Coordinates</a></li></ul></li><li><a href="#compute-3d-positions">Compute 3D Positions</a><ul><li><a href="#samexy">SameXY()</a></li><li><a href="#samezplane">SameZPlane()</a></li><li><a href="#solving-for-opposite-corners">Solving for Opposite Corners</a></li><li><a href="#solve-for-opposite-face">Solve for Opposite Face</a></li><li><a href="#finding-3d-positions-of-box-corners">Finding 3D positions of Box Corners</a></li><li><a href="#computing-camera-position-and-projection-matrix">Computing Camera Position and Projection Matrix</a></li></ul></li><li><a href="#testing">Testing</a><ul><li><a href="#how-i-built-models">How I built models</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <figure class="half">
+    <img src="/images/single-view-modeling/van_0.webp" />
+    <img src="/images/single-view-modeling/hom_0.webp" />
+    <figcaption>Computing Vanishing Points (left) and Homography (right)</figcaption>
+</figure>
+
+<figure class="half">
+    <img src="/images/single-view-modeling/model_0.webp" />
+    <img src="/images/single-view-modeling/model_1.webp" />
+    <figcaption>Final viewable 3D texture mapped model</figcaption>
+</figure>
+
+<h2 id="overview--major-design-choices">Overview + Major Design Choices</h2>
+
+<p>The main end goal of this project was to create 3D texture-mapped models from a single image using the single view modeling method. The basic steps I used are as follows:</p>
+
+<ul>
+  <li>Image acquisition</li>
+  <li>Calculate vanishing points</li>
+  <li>Manually choose reference points</li>
+  <li>Compute 3D coordinates of several points in the scene</li>
+  <li>Define polygons based on these points</li>
+  <li>Compute texture maps for the polygons and output them to files</li>
+  <li>Create a 3D texture-mapped VRML model</li>
+</ul>
+
+<h2 id="calculating-vanishing-points">Calculating Vanishing Points</h2>
+
+<p>In perspective photos (non-orthographic viewports) parallel lines will intersect at what are called vanishing points. These vanishing points can be determined by finding the intersection of 2 or more lines. For the sake of precision I will conduct it on a minimum of 3. 9 lines will be drawn on the photo (3 lines along the x axis, 3 along the y and 3 along the z axis respectively). Then this method will calculate the vanishing points in each direction from the best fit intersection between the lines.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//		This method find the best fit intersection point.</span>
+<span class="c1">//		lines: the list of 3 or more lines to be intersected</span>
+<span class="c1">//</span>
+<span class="n">SVMPoint</span> <span class="nf">BestFitIntersect</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">list</span> <span class="o">&amp;</span><span class="n">lines</span><span class="p">,</span> <span class="kt">int</span> <span class="n">imgWidth</span><span class="p">,</span> <span class="kt">int</span> <span class="n">imgHeight</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="c1">// check</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">lines</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="p">{</span>
+	  <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">"Not enough lines to compute the best fit."</span><span class="p">);</span>
+	  <span class="n">abort</span><span class="p">();</span>
+	<span class="p">}</span>
+
+  <span class="n">SVMPoint</span> <span class="n">bestfit</span><span class="p">;</span>
+  <span class="c1">//iter is the pointer to the current line</span>
+  <span class="n">list</span><span class="o">::</span><span class="n">const_iterator</span> <span class="n">iter</span><span class="p">;</span>
+
+  <span class="c1">// To accumulate stuff</span>
+  <span class="k">typedef</span> <span class="n">Matrix</span> <span class="n">Matrix3</span><span class="p">;</span>
+
+  <span class="kt">int</span> <span class="n">numLines</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">lines</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+  <span class="n">Matrix3</span> <span class="n">A</span> <span class="o">=</span> <span class="n">Matrix3</span><span class="o">::</span><span class="n">Zero</span><span class="p">(</span><span class="n">numLines</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+
+  <span class="c1">// Transformation for numerical stability</span>
+  
+	<span class="c1">//variables for use later:</span>
+	<span class="kt">int</span> <span class="n">vec_and_line_number</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">//will be used to keep track of which line is currently in question</span>
+	<span class="kt">double</span> <span class="n">e1_w</span><span class="p">,</span> <span class="n">e1_u</span><span class="p">,</span> <span class="n">e1_v</span><span class="p">,</span> <span class="n">e2_w</span><span class="p">,</span> <span class="n">e2_u</span><span class="p">,</span> <span class="n">e2_v</span><span class="p">;</span>  <span class="c1">//end points 2D homogeneous coordinates</span>
+	<span class="kt">double</span> <span class="n">a_i</span><span class="p">,</span> <span class="n">b_i</span><span class="p">,</span> <span class="n">c_i</span><span class="p">;</span>
+
+	<span class="kt">double</span> <span class="n">eigenValue</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+	<span class="kt">double</span> <span class="n">error_tol</span> <span class="o">=</span> <span class="mf">1e-10</span><span class="p">;</span>
+	
+
+	<span class="cm">/* for each line with end points e1 and e2 compute a homogenous coordinate vector representing the line
+	as the cross product of its two endpointsie:		a row of A is (a_i, b_i, c_i) = e1  X  e2*/</span>
+	<span class="k">for</span> <span class="p">(</span><span class="n">iter</span> <span class="o">=</span> <span class="n">lines</span><span class="p">.</span><span class="n">begin</span><span class="p">();</span> <span class="n">iter</span> <span class="o">!=</span> <span class="n">lines</span><span class="p">.</span><span class="n">end</span><span class="p">();</span> <span class="n">iter</span><span class="o">++</span><span class="p">){</span>
+		<span class="c1">//check that we don't have bad faulty pointers</span>
+		<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt1</span> <span class="o">||</span> <span class="o">!</span><span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt2</span><span class="p">){</span>
+			<span class="n">printf</span><span class="p">(</span><span class="s">"ERROR: bad pointer  in BestFitIntersection</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+			<span class="n">fl_message</span><span class="p">(</span><span class="s">"ERROR: bad pointer in BestFitIntersection</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+			<span class="k">return</span> <span class="n">bestfit</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="c1">//grab the 2D homogeneous coordinates in the image plane of both endpoints</span>
+		<span class="n">e1_w</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt1</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
+		<span class="n">e1_u</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt1</span><span class="o">-&gt;</span><span class="n">u</span><span class="p">;</span>
+		<span class="n">e1_v</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt1</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">;</span>
+		<span class="n">e2_w</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt2</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
+		<span class="n">e2_u</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt2</span><span class="o">-&gt;</span><span class="n">u</span><span class="p">;</span>
+		<span class="n">e2_v</span> <span class="o">=</span> <span class="n">iter</span><span class="o">-&gt;</span><span class="n">pnt2</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">;</span>
+
+		<span class="c1">//calculate the 3 components of the cross product resultant vector</span>
+		<span class="n">a_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">e1_v</span><span class="o">*</span><span class="n">e2_w</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">e1_w</span><span class="o">*</span><span class="n">e2_v</span><span class="p">);</span>
+		<span class="n">b_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">e1_w</span><span class="o">*</span><span class="n">e2_u</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">e1_u</span> <span class="o">-</span> <span class="n">e2_w</span><span class="p">);</span>
+		<span class="n">c_i</span> <span class="o">=</span> <span class="p">(</span><span class="n">e1_u</span><span class="o">*</span><span class="n">e2_v</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">e1_v</span><span class="o">*</span><span class="n">e2_u</span><span class="p">);</span>
+		
+		<span class="c1">//place them into the A matrix where a row is homogeneous coordinate vector</span>
+		<span class="n">A</span><span class="p">(</span><span class="n">vec_and_line_number</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">a_i</span><span class="p">;</span>
+		<span class="n">A</span><span class="p">(</span><span class="n">vec_and_line_number</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">b_i</span><span class="p">;</span>
+		<span class="n">A</span><span class="p">(</span><span class="n">vec_and_line_number</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">c_i</span><span class="p">;</span>
+
+		<span class="c1">//increment the line/vector count</span>
+		<span class="n">vec_and_line_number</span><span class="o">++</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="c1">//SKIPPING THE SECOND MATRIX M BECAUSE I DON'T KNOW HOW TO DO THE JACOBI STUFF</span>
+	<span class="c1">//GOING DIRECTLY TO EIGENVAL/VECTOR OF A</span>
+
+
+	<span class="c1">//find the eigenvector of matrix A associated with the smallest eigenvalue of matrix A</span>
+	<span class="n">MinEig</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">eigenValue</span><span class="p">,</span> <span class="n">eigenVector</span><span class="p">);</span>
+	
+	<span class="c1">//2D homogeneous coordinate w in image plane</span>
+	<span class="kt">double</span> <span class="n">w</span> <span class="o">=</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+	<span class="c1">//check to see if w is 0...w=0 indicates the point is at infinity. </span>
+	<span class="c1">//to account for minute variations just check that the abs(w) is less than some tiny tolerance which </span>
+	<span class="c1">// would make w approximately 0 </span>
+	<span class="k">if</span> <span class="p">(</span> <span class="n">abs</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">error_tol</span><span class="p">){</span> <span class="c1">//(w ~= 0)</span>
+		<span class="n">bestfit</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span> 
+		<span class="n">bestfit</span><span class="p">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span> 
+		<span class="n">bestfit</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">else</span><span class="p">{</span> <span class="c1">//(w!=0)</span>
+		<span class="n">bestfit</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+		<span class="n">bestfit</span><span class="p">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">eigenVector</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+		<span class="n">bestfit</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="p">}</span>
+
+ <span class="k">return</span> <span class="n">bestfit</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="choosing-reference-points">Choosing Reference Points</h2>
+
+<h3 id="computing-homography">Computing Homography</h3>
+
+<p>This will compute the homogrophy of a plane specified by points a user places in the image. The idea is to estimate a homography H that maps each texture coordinate (u_i,v_i) [where u_i and v_i are between 0 and 1] to image coordinate p_i = (x_i, y_i). Normally h is the eigenvector of the 9x9 semi-positive-definite matrix whose eigenvalue is the smallest. But here it will be the eigenvector of the 2n*9 matrix where n is the number of points on the plane. I commented this method heavily so the logic should be clear.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//	Computes the homography H from the plane specified by "points" to the image plane, and its inverse Hinv.</span>
+<span class="c1">//	The coordinate system is only converted to the plane for polygon patches where texture mapping is necessary.</span>
+<span class="c1">//  ie: not the reference plane</span>
+<span class="kt">void</span> <span class="nf">ComputeHomography</span><span class="p">(</span><span class="n">CTransform3x3</span> <span class="o">&amp;</span><span class="n">H</span><span class="p">,</span> <span class="n">CTransform3x3</span> <span class="o">&amp;</span><span class="n">Hinv</span><span class="p">,</span> <span class="k">const</span> <span class="n">vector</span> <span class="o">&amp;</span><span class="n">points</span><span class="p">,</span> <span class="n">vector</span> <span class="o">&amp;</span><span class="n">basisPts</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">isRefPlane</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+  <span class="kt">int</span> <span class="n">numPoints</span> <span class="o">=</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span> <span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+  <span class="n">assert</span><span class="p">(</span> <span class="n">numPoints</span> <span class="o">&gt;=</span> <span class="mi">4</span> <span class="p">);</span>
+
+  <span class="n">basisPts</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">isRefPlane</span><span class="p">)</span> <span class="c1">// reference plane</span>
+	<span class="p">{</span>
+	  <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numPoints</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+		  <span class="n">Vec3d</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">X</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Y</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">W</span><span class="p">);</span> <span class="c1">// was Z, not W</span>
+		  <span class="n">basisPts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">tmp</span><span class="p">);</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+  <span class="k">else</span> <span class="c1">// arbitrary polygon</span>
+	<span class="p">{</span>
+	  <span class="kt">double</span> <span class="n">uScale</span><span class="p">,</span> <span class="n">vScale</span><span class="p">;</span> <span class="c1">// unused in this function</span>
+	  <span class="n">ConvertToPlaneCoordinate</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">basisPts</span><span class="p">,</span> <span class="n">uScale</span><span class="p">,</span> <span class="n">vScale</span><span class="p">);</span>
+	<span class="p">}</span>
+
+  <span class="c1">// A: 2n x 9 matrix where n is the number of points on the plane</span>
+  <span class="kt">int</span> <span class="n">numRows</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">numPoints</span><span class="p">;</span>
+  <span class="k">const</span> <span class="kt">int</span> <span class="n">numCols</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+
+  <span class="k">typedef</span> <span class="n">Matrix</span> <span class="n">MatrixType</span><span class="p">;</span>
+  <span class="n">MatrixType</span> <span class="n">A</span> <span class="o">=</span> <span class="n">MatrixType</span><span class="o">::</span><span class="n">Zero</span><span class="p">(</span><span class="n">numRows</span><span class="p">,</span> <span class="n">numCols</span><span class="p">);</span>
+
+
+<span class="cm">/*---------------IDEA---------------------------
+Want to estimate a homography H that maps each texture coordinate (u_i,v_i) 
+[where u_i and v_i are between 0 and 1] to image coordinate p_i = (x_i, y_i)
+
+h is normally the eigenvector of the 9x9 semi-positive-definite matrix 
+whose eigenvalue is the smallest. But here it will be the eigenvector of the 2n*9 matrix 
+where n is the number of points on the plane.  In order to determine h (the eigenvector) 
+associated with the smallest eigenvalue of this matrix, we must first populate this A matrix 
+
+			
+In single_view_modeling, the following matrix eqn  
+			
+								A*h = 0
+where A is a 2nx9 matrix, and h is a 9x1 vector.
+When expanded, this eqn becomes...
+
+		
+	(	x1	y1	1	0	0	0	-x1'x1	-x1'y1	-x1')	(h00)	=	(0)
+	(	0	0	0	x1	y1	1	-y1'x1	-y1'y1	-y1')	(h01)		(0)
+							.				(h02)		.
+							.				(h10)		.
+							.				(h11)		.
+	(	xn	yn	1	0	0	0	-xn'xn	-xn'yn	-xn')	(h12)		(0)
+	(	0	0	0	xn	yn	1	-yn'xn	-yn'yn	-yn')	(h20)		(0)
+											(h21)
+											(h22)
+
+*/</span>
+			
+<span class="c1">//Just need to populate A according to the matrix above... where the 1...n is denoted by i</span>
+<span class="kt">int</span> <span class="n">even_row</span><span class="p">,</span> <span class="n">odd_row</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">xn</span><span class="p">,</span> <span class="n">yn</span><span class="p">,</span> <span class="n">xn_prime</span><span class="p">,</span> <span class="n">yn_prime</span><span class="p">;</span>
+			
+<span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numPoints</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+	<span class="n">even_row</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">;</span>
+	<span class="n">odd_row</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+	<span class="n">xn</span> <span class="o">=</span> <span class="n">basisPts</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">];</span>
+	<span class="n">yn</span> <span class="o">=</span> <span class="n">basisPts</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">];</span>
+	<span class="n">xn_prime</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">u</span><span class="p">;</span>
+	<span class="n">yn_prime</span> <span class="o">=</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">v</span><span class="p">;</span>
+
+	<span class="c1">//populate even rows of A ie: rows 0,2,4..2n</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">xn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">yn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">xn_prime</span> <span class="o">*</span> <span class="n">xn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">xn_prime</span> <span class="o">*</span> <span class="n">yn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">even_row</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">xn_prime</span><span class="p">;</span>
+
+	<span class="c1">//populate the odd rows of A, ie: rows 1,3,5...2n-1</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">xn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="o">=</span> <span class="n">yn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">yn_prime</span> <span class="o">*</span> <span class="n">xn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">yn_prime</span> <span class="o">*</span> <span class="n">yn</span><span class="p">;</span>
+	<span class="n">A</span><span class="p">(</span><span class="n">odd_row</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="o">=</span> <span class="o">-</span><span class="n">yn_prime</span><span class="p">;</span>
+
+<span class="p">}</span>
+
+ <span class="kt">double</span> <span class="n">eval</span><span class="p">,</span> <span class="n">h</span><span class="p">[</span><span class="mi">9</span><span class="p">];</span>
+ <span class="n">MinEig</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">eval</span><span class="p">,</span> <span class="n">h</span><span class="p">);</span>
+
+ <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+ <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+ <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+
+ <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+ <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+ <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">5</span><span class="p">];</span>
+
+ <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+ <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">7</span><span class="p">];</span>
+ <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+
+ <span class="c1">// compute inverse of H</span>
+ <span class="k">if</span> <span class="p">(</span><span class="n">H</span><span class="p">.</span><span class="n">Determinant</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+   <span class="n">fl_alert</span><span class="p">(</span><span class="s">"Computed homography matrix is uninvertible </span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+ <span class="k">else</span>
+   <span class="n">Hinv</span> <span class="o">=</span> <span class="n">H</span><span class="p">.</span><span class="n">Inverse</span><span class="p">();</span>
+
+ <span class="kt">int</span> <span class="n">ii</span><span class="p">;</span>
+ <span class="n">printf</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">H=[</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+ <span class="k">for</span> <span class="p">(</span><span class="n">ii</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">ii</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span> <span class="n">ii</span><span class="o">++</span><span class="p">)</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">"%e</span><span class="se">\t</span><span class="s">%e</span><span class="se">\t</span><span class="s">%e;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">H</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+ <span class="n">printf</span><span class="p">(</span><span class="s">"]</span><span class="se">\n</span><span class="s">Hinv=[</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+
+ <span class="k">for</span> <span class="p">(</span><span class="n">ii</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">ii</span><span class="o">&lt;</span><span class="mi">3</span><span class="p">;</span> <span class="n">ii</span><span class="o">++</span><span class="p">)</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">"%e</span><span class="se">\t</span><span class="s">%e</span><span class="se">\t</span><span class="s">%e;</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">Hinv</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">Hinv</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">Hinv</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="n">Hinv</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+
+ <span class="n">printf</span><span class="p">(</span><span class="s">"]</span><span class="se">\n\n</span><span class="s">"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="converting-to-plane-coordinates">Converting to Plane Coordinates</h3>
+
+<p>This method takes a plane defined by user specified points, and converts the coordinates into a coordinate plane of the user’s choice. I commented this method heavily to outline my logic.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//		Given a plane defined by points, converts their coordinates into</span>
+<span class="c1">//		a plane coordinate of the user's choice.</span>
+<span class="c1">//</span>
+<span class="kt">void</span> <span class="nf">ConvertToPlaneCoordinate</span><span class="p">(</span><span class="k">const</span> <span class="n">vector</span><span class="o">&amp;</span> <span class="n">points</span><span class="p">,</span> <span class="n">vector</span><span class="o">&amp;</span> <span class="n">basisPts</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">uScale</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">vScale</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">numPoints</span> <span class="o">=</span> <span class="n">points</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+					
+	<span class="c1">//Parameters for use later (in order of their appearance:</span>
+	<span class="n">Vec4d</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">e_x</span><span class="p">,</span> <span class="n">e_y</span><span class="p">,</span> <span class="n">test_q</span><span class="p">,</span> <span class="n">test_e_y</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">vec_from_r_to_q</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">best_running_dp</span> <span class="o">=</span> <span class="mf">1.00</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">dot_product_test</span><span class="p">,</span> <span class="n">intermediate_dp</span><span class="p">;</span>
+
+	<span class="c1">//Let p,q and r be 3 points in R^3. If they are not colinear, they define a unique plane.</span>
+	<span class="n">p</span> <span class="o">=</span> <span class="n">Vec4d</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">X</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Y</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">Z</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">W</span><span class="p">);</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="n">Vec4d</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">X</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Y</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">Z</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">W</span><span class="p">);</span> 
+
+	<span class="c1">//want to define a coordinate system in this unique plane defined by p,q and r</span>
+	<span class="c1">//r will be the origin of this coordinate system</span>
+
+	<span class="c1">//create a base vector for the x axis of the unique plane</span>
+	<span class="c1">//to do this, simply normalize a vector that extends from r</span>
+	<span class="n">e_x</span> <span class="o">=</span> <span class="n">p</span><span class="o">-</span><span class="n">r</span><span class="p">;</span>
+	<span class="n">e_x</span><span class="p">.</span><span class="n">normalize</span><span class="p">();</span> 
+
+	<span class="cm">/*next find the ideal q to use. The ideal q will be at such a location that e_x and e_y are orthogonal. 
+	To solve for this point, the dotproduct of e_x and e_y should be as close to 0 as possilbe, 
+	indicating they are orthogonal (90 degrees apart).*/</span>
+
+	<span class="cm">/*iterate through each point and test out that point as q... remember which point yielded the the 
+	smallest cosine (indicating most orthogonal axis set)*/</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numPoints</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+		<span class="n">test_q</span> <span class="o">=</span> <span class="n">Vec4d</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">X</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Y</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Z</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">W</span><span class="p">);</span>
+		<span class="n">test_e_y</span> <span class="o">=</span> <span class="n">test_q</span> <span class="o">-</span> <span class="n">r</span><span class="p">;</span>
+		<span class="n">test_e_y</span><span class="p">.</span><span class="n">normalize</span><span class="p">();</span>
+		
+		<span class="c1">// Compute the </span>
+		<span class="n">dot_product_test</span> <span class="o">=</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">test_e_y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">test_e_y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">test_e_y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">test_e_y</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+		<span class="c1">//check if the tested q created a more orthogonal set of axis e_x and e_y, if so remember it</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">dot_product_test</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">abs</span><span class="p">(</span><span class="n">best_running_dp</span><span class="p">)){</span>
+			<span class="n">best_running_dp</span> <span class="o">=</span> <span class="n">dot_product_test</span><span class="p">;</span>
+			<span class="n">q</span> <span class="o">=</span> <span class="n">test_q</span><span class="p">;</span>
+			<span class="n">e_y</span> <span class="o">=</span> <span class="n">test_e_y</span><span class="p">;</span>
+			<span class="n">vec_from_r_to_q</span> <span class="o">=</span> <span class="n">test_q</span> <span class="o">-</span> <span class="n">r</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c1">//decompose q-r into two components, one parallel to e_x and one othogonal to e_x</span>
+	<span class="c1">//the parallel component is s = e_x</span>
+	<span class="c1">//the orthogonal component is t = (q-r)-s</span>
+	<span class="c1">//where &lt;.,.&gt; is the dot product of two vector</span>
+
+	<span class="n">intermediate_dp</span> <span class="o">=</span> <span class="p">(</span><span class="n">vec_from_r_to_q</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_q</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_q</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_q</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+	<span class="n">s</span> <span class="o">=</span> <span class="n">Vec4d</span><span class="p">(</span><span class="n">e_x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>  
+	<span class="c1">//think i could just do this... s *= intermediate_dp;</span>
+	<span class="c1">//but i'm not sure if the operator was overriden properly to do so.... </span>
+	<span class="c1">//in the meantime, a longhang works just as well.</span>
+	<span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">intermediate_dp</span><span class="p">;</span>
+	<span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">intermediate_dp</span><span class="p">;</span>
+	<span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">intermediate_dp</span><span class="p">;</span>
+	<span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">intermediate_dp</span><span class="p">;</span>
+	<span class="n">e_y</span> <span class="o">=</span> <span class="n">vec_from_r_to_q</span> <span class="o">-</span> <span class="n">s</span><span class="p">;</span>
+	<span class="n">e_y</span><span class="p">.</span><span class="n">normalize</span><span class="p">();</span>  <span class="c1">//t</span>
+
+
+	<span class="cm">/*
+	At this point, e_x and e_y have been calculated. They are the axis set for this new unique plane.
+	Now, for any point "a" in the unique plane, its two dimensional coordinate in the plane
+	w.r.t. e_x and e_y is....  ( &lt; a-r , e_x &gt;, &lt; a-r , e_y &gt; )					
+
+	Iterating through each point in the set of points, calculating its 2D coordinate in the plane, and
+	keeping track of the maximum and minimum values will permit the normalization of each 2D coordinate
+	by the difference between the min and max. This will yield a 2D coordinate (u_i,v_i) for each point
+	p_i, where u_i and v_i are between [0,1]. Such normalized coordinates can be used as texture coordinates.
+	*/</span>
+	<span class="kt">double</span> <span class="n">u_min</span><span class="p">,</span> <span class="n">u_max</span><span class="p">,</span> <span class="n">v_min</span><span class="p">,</span> <span class="n">v_max</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">;</span>
+	<span class="n">Vec4d</span> <span class="n">pt_a</span><span class="p">,</span> <span class="n">vec_from_r_to_a</span><span class="p">;</span>
+	<span class="n">Vec3d</span> <span class="n">uv_Coordinate</span><span class="p">;</span>
+
+
+	<span class="n">u_min</span> <span class="o">=</span> <span class="n">DBL_MAX</span><span class="p">;</span>
+	<span class="n">u_max</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+	<span class="n">v_min</span> <span class="o">=</span> <span class="n">DBL_MAX</span><span class="p">;</span>
+	<span class="n">v_max</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">numPoints</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+		<span class="n">pt_a</span> <span class="o">=</span> <span class="n">Vec4d</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">X</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Y</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Z</span><span class="p">,</span> <span class="n">points</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">W</span><span class="p">);</span>
+		<span class="n">vec_from_r_to_a</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">pt_a</span><span class="p">;</span>
+		<span class="c1">//projection onto the e_x axis (u coordinate)</span>
+		<span class="n">u</span> <span class="o">=</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_x</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+		<span class="c1">//projection onto the e_y axis (v coordinate)</span>
+		<span class="n">v</span> <span class="o">=</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_y</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_y</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">vec_from_r_to_a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">e_y</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+
+		<span class="n">uv_Coordinate</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">);</span>
+		
+		<span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&lt;</span> <span class="n">u_min</span><span class="p">){</span>
+			<span class="n">u_min</span> <span class="o">=</span> <span class="n">u</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">&lt;</span> <span class="n">v_min</span><span class="p">){</span>
+			<span class="n">v_min</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="o">&gt;</span> <span class="n">u_max</span><span class="p">){</span>
+			<span class="n">u_max</span> <span class="o">=</span> <span class="n">u</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;</span> <span class="n">v_max</span><span class="p">){</span>
+			<span class="n">v_max</span> <span class="o">=</span> <span class="n">v</span><span class="p">;</span>
+		<span class="p">}</span>
+
+		<span class="n">basisPts</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">uv_Coordinate</span><span class="p">);</span>
+		
+	<span class="p">}</span>
+
+	<span class="c1">//Set the u and v scales... since apparently we shouldn't store the uv coordinate normalized yet.</span>
+	<span class="n">uScale</span> <span class="o">=</span> <span class="n">u_max</span> <span class="o">-</span> <span class="n">u_min</span><span class="p">;</span>
+	<span class="n">vScale</span> <span class="o">=</span> <span class="n">v_max</span> <span class="o">-</span> <span class="n">v_min</span><span class="p">;</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="compute-3d-positions">Compute 3D Positions</h2>
+
+<h3 id="samexy">SameXY()</h3>
+
+<p>This method takes a known point and a new point both specified by the user and determines the 3D position of the specified new point with the constraint that the new point must be directly above or below the known point. This can be particularly useful when blocking out cube-like geometry. Again this method was commented heavily, so the logic is clear.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//		Computes the 3D position of newPoint using knownPoint</span>
+<span class="c1">//		that has the same X and Y coordinate, i.e. is directly</span>
+<span class="c1">//		below or above newPoint.</span>
+<span class="c1">//</span>
+<span class="kt">void</span> <span class="n">ImgView</span><span class="o">::</span><span class="n">sameXY</span><span class="p">()</span>
+<span class="p">{</span>
+	  <span class="k">if</span> <span class="p">(</span><span class="n">pntSelStack</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="p">{</span>
+		  <span class="n">fl_alert</span><span class="p">(</span><span class="s">"Not enough points on the stack."</span><span class="p">);</span>
+		  <span class="k">return</span><span class="p">;</span>
+		<span class="p">}</span>
+	  
+	  <span class="n">SVMPoint</span> <span class="o">&amp;</span><span class="n">newPoint</span> <span class="o">=</span> <span class="o">*</span><span class="n">pntSelStack</span><span class="p">[</span><span class="n">pntSelStack</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+	  <span class="n">SVMPoint</span> <span class="o">&amp;</span><span class="n">knownPoint</span> <span class="o">=</span> <span class="o">*</span><span class="n">pntSelStack</span><span class="p">[</span><span class="n">pntSelStack</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">2</span><span class="p">];</span>
+	  
+	  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">knownPoint</span><span class="p">.</span><span class="n">known</span><span class="p">()</span> <span class="p">)</span>
+		<span class="p">{</span>
+		  <span class="n">fl_alert</span><span class="p">(</span><span class="s">"Can't compute relative values for unknown point."</span><span class="p">);</span>
+		  <span class="k">return</span><span class="p">;</span>
+		<span class="p">}</span>
+	  
+	  <span class="k">if</span><span class="p">(</span> <span class="n">refPointOffPlane</span> <span class="o">==</span> <span class="nb">NULL</span> <span class="p">)</span>
+		<span class="p">{</span>
+		  <span class="n">fl_alert</span><span class="p">(</span><span class="s">"Need to specify the reference height first."</span><span class="p">);</span>
+		  <span class="k">return</span><span class="p">;</span>
+		<span class="p">}</span>
+
+	<span class="c1">//right off the bat the x and y coordinates for the new point must be the same as the known point</span>
+	<span class="c1">//and the W coordinate will be 1.0</span>
+	<span class="n">newPoint</span><span class="p">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">knownPoint</span><span class="p">.</span><span class="n">X</span><span class="p">;</span>
+	<span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">knownPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
+	<span class="n">newPoint</span><span class="p">.</span><span class="n">W</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+	<span class="c1">//just need to solve for Z now...</span>
+
+
+	<span class="c1">//matrix version of the homography for easy arithmetic operations in later parts</span>
+	<span class="n">Mat3d</span> <span class="n">homographyMatrix</span> <span class="o">=</span> <span class="n">Mat3d</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+
+	<span class="kt">double</span> <span class="n">height_mag</span><span class="p">,</span> <span class="n">img_cross_ratio</span><span class="p">;</span>
+	<span class="n">Vec3d</span> <span class="n">horizon</span><span class="p">;</span>
+	<span class="cm">/*
+	There are many vectors points that will need to be defined.
+	I'll define them using vectors...
+	*/</span>
+	<span class="n">Vec3d</span> <span class="n">b</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">t</span><span class="p">;</span> <span class="c1">//image points represented as p = [x;y;1]</span>
+	<span class="n">Vec3d</span> <span class="n">t_0</span><span class="p">,</span> <span class="n">b_0</span><span class="p">;</span> <span class="c1">//top and bootom of the object to be measured</span>
+	<span class="n">Vec3d</span> <span class="n">v</span><span class="p">,</span> <span class="n">t_1</span><span class="p">,</span> <span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">;</span>
+
+	<span class="c1">//intermediate parameters used in calculations later...</span>
+	<span class="kt">double</span> <span class="n">r_x</span><span class="p">,</span> <span class="n">r_y</span><span class="p">,</span> <span class="n">t_x</span><span class="p">,</span> <span class="n">t_y</span><span class="p">;</span>
+	<span class="n">Vec3d</span> <span class="n">unconverted_b</span><span class="p">,</span> <span class="n">unconverted_b_0</span><span class="p">;</span>
+	<span class="n">Vec3d</span> <span class="n">cp_b_b0</span><span class="p">,</span> <span class="n">cp_r_b</span><span class="p">,</span> <span class="n">cp_v_t0</span><span class="p">;</span>  <span class="c1">//intermediate cross products used later</span>
+	<span class="n">Vec3d</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">dd</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">aa_len</span><span class="p">,</span> <span class="n">bb_len</span><span class="p">,</span> <span class="n">cc_len</span><span class="p">,</span> <span class="n">dd_len</span><span class="p">,</span> <span class="n">dp_parallel_check</span><span class="p">;</span>
+
+	<span class="c1">//r is the reference point off the plane, which was defined in the editor as having a reference height</span>
+	<span class="c1">//therefore... </span>
+	<span class="n">r_x</span> <span class="o">=</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">u</span> <span class="o">/</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
+	<span class="n">r_y</span> <span class="o">=</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">/</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
+	<span class="n">r</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">r_x</span><span class="p">,</span> <span class="n">r_y</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>  
+
+	<span class="c1">//t_0 is the top of the object in question</span>
+	<span class="n">t_x</span> <span class="o">=</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">u</span> <span class="o">/</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+	<span class="n">t_y</span> <span class="o">=</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">v</span> <span class="o">/</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">w</span><span class="p">;</span>
+	<span class="n">t_0</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">t_x</span><span class="p">,</span> <span class="n">t_y</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+
+
+	<span class="c1">//have to define v now...using the vanishing points already calculated</span>
+	<span class="n">v_x</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">xVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+	<span class="n">v_y</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">yVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+	<span class="n">v_z</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">zVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+
+	<span class="n">unconverted_b_0</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">knownPoint</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">knownPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+	<span class="n">unconverted_b</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">X</span><span class="p">,</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">Y</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+
+	<span class="n">b_0</span> <span class="o">=</span> <span class="n">homographyMatrix</span><span class="o">*</span><span class="n">unconverted_b_0</span><span class="p">;</span>
+	<span class="n">b</span> <span class="o">=</span> <span class="n">homographyMatrix</span><span class="o">*</span><span class="n">unconverted_b</span><span class="p">;</span>
+
+	<span class="n">cp_b_b0</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">b_0</span><span class="p">);</span>
+
+	<span class="c1">//v_x and v_y are calculated, from them it is possible to calculate the horizon.</span>
+	<span class="n">horizon</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">);</span>
+
+	<span class="c1">//knowing the horizon and the cross product between b and b_0, it is possible to find v</span>
+	<span class="n">v</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_b_b0</span><span class="p">,</span> <span class="n">horizon</span><span class="p">);</span>
+
+	<span class="c1">//calculate t naively... don't know if this will error on a divide by 0 in a rare case.. maybe should check before</span>
+	<span class="n">cp_r_b</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">b</span><span class="p">);</span>
+	<span class="n">cp_v_t0</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">t_0</span><span class="p">);</span>
+	<span class="n">t</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_v_t0</span><span class="p">,</span> <span class="n">cp_r_b</span><span class="p">);</span>
+
+	<span class="c1">//then check to make sure cp_b_b0 and the horizon are not parallel.... </span>
+	<span class="c1">//that is check to see if cross(cp_b_b0, horizon) != zeroVector</span>
+	<span class="c1">//If v is the zero vector, the vectors were parallel and in this special case, t should be changed to just t0+b-b0</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+		<span class="n">t</span> <span class="o">=</span> <span class="n">t_0</span> <span class="o">+</span> <span class="n">b</span> <span class="o">-</span> <span class="n">b_0</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="c1">//normalize so that in each vector the third term is 1</span>
+	<span class="cm">/* The Following Doesn't work for some reason, so just manually entered them
+		t *= t[2];
+		b *= b[2];
+		v_z *= v_z[2];
+		r *= r[2];
+	*/</span>
+	<span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+	<span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+	<span class="n">v_z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+	<span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+
+	<span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+	<span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+	<span class="n">v_z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+	<span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> 
+
+	<span class="n">t</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+	<span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+	<span class="n">v_z</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+	<span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+	<span class="cm">/*calculate the image cross ratio defined as
+		H/R = ( ||t-b|| ||v_z - r|| )/( ||r - b|| ||v_z - t|| )
+	*/</span>
+	<span class="n">aa</span> <span class="o">=</span> <span class="n">t</span> <span class="o">-</span> <span class="n">b</span><span class="p">;</span>
+	<span class="n">bb</span> <span class="o">=</span> <span class="n">v_z</span> <span class="o">-</span> <span class="n">r</span><span class="p">;</span>
+	<span class="n">cc</span> <span class="o">=</span> <span class="n">r</span> <span class="o">-</span> <span class="n">b</span><span class="p">;</span>
+	<span class="n">dd</span> <span class="o">=</span> <span class="n">v_z</span> <span class="o">-</span> <span class="n">t</span><span class="p">;</span>
+
+	<span class="n">aa_len</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">aa</span><span class="o">*</span><span class="n">aa</span><span class="p">);</span>
+	<span class="n">bb_len</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">bb</span><span class="o">*</span><span class="n">bb</span><span class="p">);</span>
+	<span class="n">cc_len</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">cc</span><span class="o">*</span><span class="n">cc</span><span class="p">);</span>
+	<span class="n">dd_len</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dd</span><span class="o">*</span><span class="n">dd</span><span class="p">);</span>
+
+	<span class="n">img_cross_ratio</span> <span class="o">=</span> <span class="p">(</span> <span class="n">aa_len</span> <span class="o">*</span> <span class="n">bb_len</span> <span class="p">)</span> <span class="o">/</span> <span class="p">(</span> <span class="n">cc_len</span> <span class="o">*</span> <span class="n">dd_len</span> <span class="p">);</span>
+
+	<span class="n">height_mag</span> <span class="o">=</span> <span class="n">img_cross_ratio</span><span class="o">*</span><span class="n">referenceHeight</span><span class="p">;</span> <span class="c1">//magnitude of the height, sign still undetermined</span>
+
+	<span class="cm">/*
+		At this point height_mag is the position of t0 relative to b0 in the positive direction... so
+		it could actually be a negative number depending on the nature of the vector definitions. To account
+		for the possibility of the vector between b0 and t0 being either parallel or anti parallel to the vector 
+		between the reference b and v_z, it is probably a good idea to check for anti-parallel nature and swap the sign
+		so that our height is correct relative to b0.*/</span>
+	
+	<span class="cm">/*To check for anti-parallel and parallel, simply check the sign of the dotproduct*/</span>
+	<span class="c1">//recall dotproduct is a1*b1+a2*b2+a3*b3, therefore...</span>
+	<span class="n">dp_parallel_check</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_0</span> <span class="o">-</span> <span class="n">b_0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_z</span> <span class="o">-</span> <span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">t_0</span> <span class="o">-</span> <span class="n">b_0</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_z</span> <span class="o">-</span> <span class="n">b</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">t_0</span> <span class="o">-</span> <span class="n">b_0</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">v_z</span> <span class="o">-</span> <span class="n">b</span><span class="p">)[</span><span class="mi">2</span><span class="p">];</span> 
+	<span class="k">if</span> <span class="p">(</span><span class="n">dp_parallel_check</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">){</span>
+		<span class="n">newPoint</span><span class="p">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">height_mag</span><span class="p">;</span>
+	<span class="p">}</span>
+	<span class="k">else</span><span class="p">{</span>
+		<span class="n">newPoint</span><span class="p">.</span><span class="n">Z</span> <span class="o">=</span> <span class="o">-</span><span class="n">height_mag</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	 <span class="n">newPoint</span><span class="p">.</span><span class="n">known</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+	 
+	 <span class="n">printf</span><span class="p">(</span> <span class="s">"Calculated new coordinates for point: (%e, %e, %e)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">Z</span> <span class="p">);</span>
+	 
+	 <span class="n">redraw</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="samezplane">SameZPlane()</h3>
+
+<p>This method takes both a known and new point specified by the user and computes the 3D position of the newPoint with the constraint that the new point must have the same Z coordinate as the known point. This method has been heavily commented.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//		Compute the 3D position of newPoint using knownPoint</span>
+<span class="c1">//		that lies on the same plane and whose 3D position is known.</span>
+<span class="kt">void</span> <span class="n">ImgView</span><span class="o">::</span><span class="n">sameZPlane</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">pntSelStack</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">)</span>
+	<span class="p">{</span>
+	  <span class="n">fl_alert</span><span class="p">(</span><span class="s">"Not enough points on the stack."</span><span class="p">);</span>
+	  <span class="k">return</span><span class="p">;</span>
+	<span class="p">}</span>
+  
+  <span class="n">SVMPoint</span> <span class="o">&amp;</span><span class="n">newPoint</span> <span class="o">=</span> <span class="o">*</span><span class="n">pntSelStack</span><span class="p">[</span><span class="n">pntSelStack</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+  <span class="n">SVMPoint</span> <span class="o">&amp;</span><span class="n">knownPoint</span> <span class="o">=</span> <span class="o">*</span><span class="n">pntSelStack</span><span class="p">[</span><span class="n">pntSelStack</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">2</span><span class="p">];</span>
+  
+  <span class="k">if</span><span class="p">(</span> <span class="o">!</span><span class="n">knownPoint</span><span class="p">.</span><span class="n">known</span><span class="p">()</span> <span class="p">)</span>
+	<span class="p">{</span>
+	  <span class="n">fl_alert</span><span class="p">(</span><span class="s">"Can't compute relative values for unknown point."</span><span class="p">);</span>
+	  <span class="k">return</span><span class="p">;</span>
+	<span class="p">}</span>
+
+<span class="c1">//right off the bat can populate the Z and W in newPoint, but will need to calculate the X and Y</span>
+<span class="n">newPoint</span><span class="p">.</span><span class="n">Z</span> <span class="o">=</span> <span class="n">knownPoint</span><span class="p">.</span><span class="n">Z</span><span class="p">;</span>
+<span class="n">newPoint</span><span class="p">.</span><span class="n">W</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+<span class="c1">//matrix version of the homography for easy arithmetic operations in later parts</span>
+<span class="n">Mat3d</span> <span class="n">homographyMatrix</span> <span class="o">=</span> <span class="n">Mat3d</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+<span class="c1">//matrix version of the homography inverse for easy arithmetic operations in later parts</span>
+<span class="n">Mat3d</span> <span class="n">homographyInverseMatrix</span> <span class="o">=</span> <span class="n">Mat3d</span><span class="p">(</span><span class="n">Hinv</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">Hinv</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+
+<span class="cm">/*
+more generalized version:
+	Given reference point is t1, the new point is m0, and you want to compute the point b0 
+	(once you have b0, you can compute its X and Y positions using H).  
+	vz  can be used instead of t0 to help find b0. 
+	Not given the image position of b1, but can compute it from its 3D coordinates (knowing 
+	it has the same X-Y coords as t1 and is on the ground), using Hinv.
+*/</span>
+
+<span class="n">Vec3d</span> <span class="n">working_m0</span><span class="p">,</span>	<span class="c1">//m_0 copy... leave original m_0 untouched... not to be confused with reference point t1</span>
+	<span class="n">k_P</span><span class="p">,</span>	<span class="c1">//known Point (actual reference point t1)</span>
+	<span class="n">m_0</span><span class="p">,</span>	<span class="c1">//new point</span>
+	<span class="n">b_0</span><span class="p">;</span>	<span class="c1">//point to compute</span>
+
+<span class="n">Vec3d</span> <span class="n">b_1</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">,</span> <span class="n">unconverted_b1</span><span class="p">;</span>
+<span class="c1">//intermediate cross products used in calculations</span>
+<span class="n">Vec3d</span> <span class="n">cp_working_m0_vz</span><span class="p">,</span> <span class="n">cp_vx_vy</span><span class="p">,</span> <span class="n">cp_b1_v</span><span class="p">,</span> <span class="n">cp_working_m0_kP</span><span class="p">;</span>
+
+
+<span class="n">working_m0</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">newPoint</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">k_P</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">knownPoint</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">knownPoint</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">knownPoint</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">m_0</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">newPoint</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">unconverted_b1</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">knownPoint</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">knownPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+<span class="n">b_1</span> <span class="o">=</span> <span class="n">homographyMatrix</span> <span class="o">*</span> <span class="n">unconverted_b1</span><span class="p">;</span>
+
+
+<span class="n">v_x</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">xVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_y</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">yVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_z</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">zVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+
+<span class="cm">/*	Compute the vanishing point v	*/</span>
+<span class="n">cp_vx_vy</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">);</span><span class="c1">//horizonatal horizon</span>
+<span class="n">cp_working_m0_vz</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">working_m0</span><span class="p">,</span> <span class="n">v_z</span><span class="p">);</span>
+<span class="n">cp_working_m0_kP</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">working_m0</span><span class="p">,</span> <span class="n">k_P</span><span class="p">);</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_working_m0_kP</span><span class="p">,</span> <span class="n">cp_vx_vy</span><span class="p">);</span>
+<span class="cm">/*
+	A special case of is a point on the reference plane. In this case, the reference homography 
+	H can be used to compute its 3D position. If its not the special case, then the general case must
+	be employed... as described above. 
+*/</span>	
+<span class="k">if</span> <span class="p">(</span><span class="n">knownPoint</span><span class="p">.</span><span class="n">Z</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+	<span class="n">b_0</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">newPoint</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">else</span><span class="p">{</span>
+	<span class="c1">// as before in sameX,Y check if the cross product yielded a zero vector indicating parallelism...</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="n">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">){</span>
+		<span class="n">b_0</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">b_1</span><span class="p">,</span> <span class="n">cp_working_m0_vz</span><span class="p">);</span>
+	<span class="p">}</span>
+	<span class="k">else</span><span class="p">{</span>
+		<span class="n">cp_b1_v</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">b_1</span><span class="p">,</span> <span class="n">v</span><span class="p">);</span>
+		<span class="n">b_0</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_b1_v</span><span class="p">,</span> <span class="n">cp_working_m0_vz</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//normalize so that in vector b_0 the third term is 1.. again the operator wasn't working, so just did</span>
+<span class="c1">//it out by hand.</span>
+<span class="n">b_0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">b_0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">b_0</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">b_0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">b_0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">b_0</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">b_0</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+<span class="n">m_0</span> <span class="o">=</span> <span class="n">homographyInverseMatrix</span><span class="o">*</span><span class="n">b_0</span><span class="p">;</span>
+
+<span class="c1">//normalize m_0</span>
+<span class="n">m_0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">m_0</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">m_0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">m_0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">m_0</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+
+<span class="n">newPoint</span><span class="p">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">m_0</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">m_0</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+
+ <span class="n">newPoint</span><span class="p">.</span><span class="n">known</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+ 
+ <span class="n">printf</span><span class="p">(</span> <span class="s">"Calculated new coordinates for point: (%e, %e, %e)</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">Z</span> <span class="p">);</span>
+ 
+ <span class="n">redraw</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="solving-for-opposite-corners">Solving for Opposite Corners</h3>
+
+<p>This method takes the 2D position of two corners indicating a rectangular face and computes the opposite two corners so as to complete a rectangle in XZ plane. This is helpful for drawing walls of geometry. These method rely alot on the previously written methods sameZPlane and sameXY. Again this method is heavily commented.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//     Given the 2D positions of two corners of a rectangular face parallel to the XZ plane, compute</span>
+<span class="c1">//     the 2D positions of the other two corners</span>
+<span class="kt">void</span> <span class="n">ImgView</span><span class="o">::</span><span class="n">solveForOppositeCorners</span><span class="p">(</span><span class="kt">double</span> <span class="n">u0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">v0</span><span class="p">,</span> <span class="kt">double</span> <span class="n">u2</span><span class="p">,</span> <span class="kt">double</span> <span class="n">v2</span><span class="p">,</span>
+									  <span class="kt">double</span> <span class="o">&amp;</span><span class="n">u1</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">v1</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">u3</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">v3</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/* Vanishing points must be known */</span>
+  <span class="n">assert</span><span class="p">(</span><span class="n">xVanish</span><span class="p">.</span><span class="n">known</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">known</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">known</span><span class="p">());</span>
+
+  <span class="c1">// Given the 2D positions of corners p0 and p2 of the face, compute the 2D positions of p1 and p3</span>
+  <span class="c1">// Remember that this face is on a plane perpendicular to the plane x=0</span>
+  <span class="c1">// Store the results in variables 'u1, v1' and 'u3, v3'</span>
+
+<span class="c1">//will need to use the vanishing points and construct various lines to find the points</span>
+<span class="c1">//want to find p1 and p3 using p0 and p2</span>
+
+
+<span class="c1">//will need some points</span>
+<span class="n">Vec3d</span> <span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">p3</span><span class="p">;</span>	<span class="c1">// 4 points for the corners</span>
+<span class="n">Vec3d</span> <span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">;</span>	<span class="c1">// 3 points for the vanishing points</span>
+
+<span class="c1">//will need some intermediate cross products</span>
+<span class="n">Vec3d</span> <span class="n">cp_p0_vx</span><span class="p">,</span> <span class="n">cp_p0_vz</span><span class="p">,</span> <span class="n">cp_p2_vx</span><span class="p">,</span> <span class="n">cp_p2_vz</span><span class="p">;</span>
+
+
+<span class="c1">//populate the known points p0 and p2</span>
+<span class="n">p0</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">u0</span><span class="p">,</span> <span class="n">v0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+<span class="n">p2</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">u2</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+
+<span class="c1">//populate the vanishing points</span>
+<span class="n">v_x</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">xVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_y</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">yVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_z</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">zVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+
+<span class="c1">//calculate the intermediate cross products</span>
+<span class="n">cp_p0_vx</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">v_x</span><span class="p">);</span>
+<span class="n">cp_p0_vz</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">v_z</span><span class="p">);</span>
+<span class="n">cp_p2_vx</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">v_x</span><span class="p">);</span>
+<span class="n">cp_p2_vz</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">v_z</span><span class="p">);</span>
+
+<span class="c1">//populate the unknown points p1 and p3</span>
+<span class="n">p1</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_p0_vx</span><span class="p">,</span> <span class="n">cp_p2_vz</span><span class="p">);</span>
+<span class="n">p3</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_p0_vz</span><span class="p">,</span> <span class="n">cp_p2_vx</span><span class="p">);</span>
+
+<span class="c1">//Normalize p1 and p3</span>
+
+<span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">p3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">p3</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">p3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">p3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">p3</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">p1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">p3</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+<span class="c1">//report the coordinates by placing them into u1 v1 and u3 v3</span>
+<span class="n">u1</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">u3</span> <span class="o">=</span> <span class="n">p3</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">v1</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">v3</span> <span class="o">=</span> <span class="n">p3</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="solve-for-opposite-face">Solve for Opposite Face</h3>
+
+<p>This method solves for the opposite face of a user defined rectangle.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//     Given the 2D positions of one rectangular face parallel to the XZ plane,</span>
+<span class="c1">//     compute the 2D positions of a parallel face being swept out from it.</span>
+<span class="c1">//     Mouse position is given; one of the lines on the parallel face should pass</span>
+<span class="c1">//     through the mouse position</span>
+<span class="kt">void</span> <span class="n">ImgView</span><span class="o">::</span><span class="n">solveForOppositeFace</span><span class="p">(</span><span class="n">SVMSweep</span> <span class="o">*</span><span class="n">sweep</span><span class="p">,</span> <span class="kt">double</span> <span class="n">imgX</span><span class="p">,</span> <span class="kt">double</span> <span class="n">imgY</span><span class="p">,</span>
+								   <span class="n">Vec3d</span> <span class="o">&amp;</span><span class="n">p4_out</span><span class="p">,</span> <span class="n">Vec3d</span> <span class="o">&amp;</span><span class="n">p5_out</span><span class="p">,</span> <span class="n">Vec3d</span> <span class="o">&amp;</span><span class="n">p6_out</span><span class="p">,</span> <span class="n">Vec3d</span> <span class="o">&amp;</span><span class="n">p7_out</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">SVMPolygon</span> <span class="o">*</span><span class="n">poly</span> <span class="o">=</span> <span class="n">sweep</span><span class="o">-&gt;</span><span class="n">poly</span><span class="p">;</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="n">poly</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span>
+	<span class="k">return</span><span class="p">;</span>
+
+  <span class="c1">// Get the four existing points</span>
+  <span class="n">SVMPoint</span> <span class="o">*</span><span class="n">n0</span><span class="p">,</span> <span class="o">*</span><span class="n">n1</span><span class="p">,</span> <span class="o">*</span><span class="n">n2</span><span class="p">,</span> <span class="o">*</span><span class="n">n3</span><span class="p">;</span>
+  <span class="n">poly</span><span class="o">-&gt;</span><span class="n">getFourPoints</span><span class="p">(</span><span class="o">&amp;</span><span class="n">n0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n2</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n3</span><span class="p">);</span>
+
+  <span class="n">Vec3d</span> <span class="n">p0</span><span class="p">(</span><span class="n">n0</span><span class="o">-&gt;</span><span class="n">u</span><span class="p">,</span> <span class="n">n0</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">,</span> <span class="n">n0</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">);</span>
+  <span class="n">Vec3d</span> <span class="n">p1</span><span class="p">(</span><span class="n">n1</span><span class="o">-&gt;</span><span class="n">u</span><span class="p">,</span> <span class="n">n1</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">,</span> <span class="n">n1</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">);</span>
+  <span class="n">Vec3d</span> <span class="n">p2</span><span class="p">(</span><span class="n">n2</span><span class="o">-&gt;</span><span class="n">u</span><span class="p">,</span> <span class="n">n2</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">,</span> <span class="n">n2</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">);</span>
+  <span class="n">Vec3d</span> <span class="n">p3</span><span class="p">(</span><span class="n">n3</span><span class="o">-&gt;</span><span class="n">u</span><span class="p">,</span> <span class="n">n3</span><span class="o">-&gt;</span><span class="n">v</span><span class="p">,</span> <span class="n">n3</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">);</span>
+
+  <span class="n">Vec3d</span> <span class="n">pMouse</span><span class="p">(</span><span class="n">imgX</span><span class="p">,</span> <span class="n">imgY</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+
+   <span class="c1">// Find the 2D image positions of box corners p4, p5, p6, p7, as described on the webpage.</span>
+  <span class="c1">// You will compute these positions using the known corners of the box (p0, p1, p2, p3, defined above)</span>
+  <span class="c1">// and the vanishing points.</span>
+  <span class="c1">// The line through points p4 and p5 will go through the mouse position, pMouse</span>
+  <span class="c1">// Store the results in variables p4, p5, p6, and p7.</span>
+  <span class="n">Vec3d</span> <span class="n">p4</span><span class="p">,</span> <span class="n">p5</span><span class="p">,</span> <span class="n">p6</span><span class="p">,</span> <span class="n">p7</span><span class="p">;</span>
+
+<span class="c1">//will need some points</span>
+<span class="c1">//Vec3d p4, p5, p6, p7	// 4 points for the corners already specified above</span>
+<span class="n">Vec3d</span> <span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">;</span>	<span class="c1">// 3 points for the vanishing points</span>
+
+<span class="c1">//will need some intermediate cross products (this is basically just stacking cross products to determine points</span>
+<span class="n">Vec3d</span> <span class="n">cp_p0_vy</span><span class="p">,</span> <span class="n">cp_p1_vy</span><span class="p">,</span> <span class="n">cp_p2_vy</span><span class="p">,</span> <span class="n">cp_p3_vy</span><span class="p">,</span> <span class="n">cp_p4_vz</span><span class="p">,</span> <span class="n">cp_p5_vz</span><span class="p">,</span> <span class="n">cp_pM_vx</span><span class="p">;</span>
+
+<span class="c1">//populate the vanishing points</span>
+<span class="n">v_x</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">xVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_y</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">yVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_z</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">zVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+
+<span class="c1">//calculate the necessary intermediate cross products</span>
+<span class="n">cp_p0_vy</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span> <span class="n">v_y</span><span class="p">);</span>
+<span class="n">cp_p1_vy</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p1</span><span class="p">,</span> <span class="n">v_y</span><span class="p">);</span> 
+<span class="n">cp_p2_vy</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p2</span><span class="p">,</span> <span class="n">v_y</span><span class="p">);</span> 
+<span class="n">cp_p3_vy</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p3</span><span class="p">,</span> <span class="n">v_y</span><span class="p">);</span> 
+<span class="n">cp_p4_vz</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p4</span><span class="p">,</span> <span class="n">v_z</span><span class="p">);</span> 
+<span class="n">cp_p5_vz</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">p5</span><span class="p">,</span> <span class="n">v_z</span><span class="p">);</span>
+<span class="n">cp_pM_vx</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">pMouse</span><span class="p">,</span> <span class="n">v_x</span><span class="p">);</span> 
+
+<span class="c1">//populate the unknown points p4, p5, p6, p7</span>
+<span class="n">p4</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_p0_vy</span><span class="p">,</span> <span class="n">cp_pM_vx</span><span class="p">);</span> 
+<span class="n">p5</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_p1_vy</span><span class="p">,</span> <span class="n">cp_pM_vx</span><span class="p">);</span>
+<span class="n">p6</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_p2_vy</span><span class="p">,</span> <span class="n">cp_p5_vz</span><span class="p">);</span>
+<span class="n">p7</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_p3_vy</span><span class="p">,</span> <span class="n">cp_p4_vz</span><span class="p">);;</span>
+
+ <span class="n">p4_out</span> <span class="o">=</span> <span class="n">p4</span><span class="p">;</span>
+ <span class="n">p5_out</span> <span class="o">=</span> <span class="n">p5</span><span class="p">;</span>
+ <span class="n">p6_out</span> <span class="o">=</span> <span class="n">p6</span><span class="p">;</span>
+ <span class="n">p7_out</span> <span class="o">=</span> <span class="n">p7</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="finding-3d-positions-of-box-corners">Finding 3D positions of Box Corners</h3>
+
+<p>This method notes the anchor point of a box and calculates the positions of the other corners. It is heavily commented.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//    Find the 3D positions of the 8 corners of a box.  The 3D position of points[0] is known.</span>
+<span class="kt">void</span> <span class="n">ImgView</span><span class="o">::</span><span class="n">find3DPositionsBox</span><span class="p">(</span><span class="n">SVMPoint</span> <span class="o">*</span><span class="n">points</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+<span class="p">{</span>
+  <span class="c1">// Computes the 3D positions of the corners of the box using their 2D positions </span>
+  <span class="c1">// and the known 3D position of points[0].  Stores the results in points[1] through points[7].  </span>
+  <span class="c1">// Uses the sameXY and sameZ routines</span>
+  <span class="c1">// pntSelStack is a stack of points from which one can push and pop points</span>
+
+<span class="c1">//push the anchor to the stack, and keep it there since all </span>
+<span class="c1">//pts on the bottom will be related to the anchor by sameZPlane</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+<span class="cm">/*Calculate the locations of the lower 4 points first
+	assume anchor is the bottom front corner as shown in pic*/</span>
+
+<span class="cm">/* -------LEFT BOTTOM POINT ---------*/</span>
+<span class="c1">//first push the left bottom point to the stack</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">4</span><span class="p">]);</span>
+<span class="c1">//we know it is in the same ground plane, so can use sameZplane .</span>
+<span class="n">sameZPlane</span><span class="p">();</span>
+<span class="c1">//be sure to pop if off before moving on to the next point</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+<span class="cm">/* -------RIGHT BOTTOM POINT ---------*/</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="n">sameZPlane</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+<span class="cm">/* -------REAR BOTTOM POINT ---------*/</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">5</span><span class="p">]);</span>
+<span class="n">sameZPlane</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+
+
+<span class="cm">/*Calculate the locations of the upper 4 points second
+	assume anchor is the bottom front corner as shown in pic
+
+Find each upper coordinate by simple taking each point on the bottom
+level and finding the coordinate directly above it (in the sameXY)
+*/</span>
+
+
+<span class="cm">/* -------FRONT UPPER POINT (directly above anchor 0) ---------*/</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+<span class="c1">//since this point is directly above the anchor, can use sameXY</span>
+<span class="n">sameXY</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span> <span class="c1">//don't want to be holding the anchor anymore, so finally pop it off too</span>
+
+<span class="cm">/* -------REAR UPPER POINT (directly above pt5) ---------*/</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">5</span><span class="p">]);</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">6</span><span class="p">]);</span>
+<span class="n">sameXY</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+<span class="cm">/* -------LEFT UPPER POINT (directly above pt4) ---------*/</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">4</span><span class="p">]);</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">7</span><span class="p">]);</span>
+<span class="n">sameXY</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+<span class="cm">/* -------RIGHT UPPER POINT (directly above pt2) ---------*/</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+<span class="n">sameXY</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="computing-camera-position-and-projection-matrix">Computing Camera Position and Projection Matrix</h3>
+
+<p>This method computes the position of the camera, assuming the reference homography and reference height have already been specified. It uses a simple concept that the camera must project through the image plane and onto the ground plane. A vertical ray will define this intersection. Uses sameZplane() function written previously to help easily find the X and Y coordinates. I have not tested this function yet… but jotted out the logic of the code.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Compute the camera position</span>
+<span class="kt">void</span> <span class="n">ImgView</span><span class="o">::</span><span class="n">computeCameraParameters</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">refPointOffPlane</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fl_message</span><span class="p">(</span><span class="s">"Reference height must be set</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+	<span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">homographyComputed</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fl_message</span><span class="p">(</span><span class="s">"Must first compute reference homography</span><span class="se">\n</span><span class="s">"</span><span class="p">);</span>
+	<span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="c1">// Computes the height of the camera, store in z_cam, and then x and y coordinates of the camera,</span>
+  <span class="c1">// storing in x_cam and y_cam</span>
+  <span class="kt">double</span> <span class="n">z_cam</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+  <span class="kt">double</span> <span class="n">x_cam</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">y_cam</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+
+<span class="cm">/*
+c0 will project onto the image plane at a location defined by the intersection of the ray
+from c0 through the camera center with the image plane. This ray will be vertical, extending directly
+up from the ground plane through the image plane and through the camera center. Because this ray can 
+be infinitely long, it will have the same projection as the Z vanishing point v_z. Using v_z in combination
+with the sameZplane function will give the X and Y coordinate of the camera 
+*/</span>
+
+
+<span class="c1">//will need a homography matrix in easy arithmetic friendly form...</span>
+<span class="n">Mat3d</span> <span class="n">homographyMatrix</span> <span class="o">=</span> <span class="n">Mat3d</span><span class="p">(</span><span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">H</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">2</span><span class="p">]);</span>
+
+<span class="c1">//vanishing point and its components</span>
+<span class="n">Vec3d</span> <span class="n">v</span><span class="p">,</span> <span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">,</span> <span class="n">v_z</span><span class="p">;</span>
+
+<span class="c1">//horizon</span>
+<span class="n">Vec3d</span> <span class="n">pre_horizon</span><span class="p">;</span>
+
+<span class="c1">//image points represented as p = [x;y;1]</span>
+<span class="n">Vec3d</span> <span class="n">r</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">x_comp</span><span class="p">,</span> <span class="n">y_comp</span><span class="p">;</span>
+<span class="c1">//intermediate points</span>
+<span class="n">Vec3d</span> <span class="n">unconverted_ref_pt</span><span class="p">,</span> <span class="n">converted_ref_pt</span><span class="p">;</span>
+<span class="c1">//svm points for use later</span>
+<span class="n">SVMPoint</span> <span class="n">horizon_svmPt</span><span class="p">,</span> <span class="n">refPt_svm</span><span class="p">,</span> <span class="n">c0</span><span class="p">;</span>
+
+<span class="c1">//intermediate cross products</span>
+<span class="n">Vec3d</span> <span class="n">cp_vx_vy</span><span class="p">,</span> <span class="n">cp_r_convREF</span><span class="p">;</span>
+
+<span class="c1">//convert the ref point</span>
+<span class="n">unconverted_ref_pt</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">X</span><span class="p">,</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">Y</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+<span class="n">converted_ref_pt</span> <span class="o">=</span> <span class="n">homographyMatrix</span><span class="o">*</span><span class="n">unconverted_ref_pt</span><span class="p">;</span>
+
+<span class="c1">//determine the image points</span>
+<span class="n">x_comp</span> <span class="o">=</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">u</span> <span class="o">/</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
+<span class="n">y_comp</span> <span class="o">=</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">v</span> <span class="o">/</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">w</span><span class="p">;</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">x_comp</span><span class="p">,</span> <span class="n">y_comp</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+
+
+<span class="c1">//populate vanishing points v_x, v_y and v_z</span>
+<span class="n">v_x</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">xVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">xVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_y</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">yVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">yVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+<span class="n">v_z</span> <span class="o">=</span> <span class="n">Vec3d</span><span class="p">(</span><span class="n">zVanish</span><span class="p">.</span><span class="n">u</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">v</span><span class="p">,</span> <span class="n">zVanish</span><span class="p">.</span><span class="n">w</span><span class="p">);</span>
+
+<span class="c1">//calculate the intermediate cross products</span>
+<span class="n">cp_vx_vy</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">v_x</span><span class="p">,</span> <span class="n">v_y</span><span class="p">);</span>
+<span class="n">cp_r_convREF</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">converted_ref_pt</span><span class="p">);</span>
+
+
+<span class="n">pre_horizon</span> <span class="o">=</span> <span class="n">cross</span><span class="p">(</span><span class="n">cp_vx_vy</span><span class="p">,</span> <span class="n">cp_r_convREF</span><span class="p">);</span>
+
+<span class="c1">//normalize pre_horizon and converted ref pt and v_z</span>
+<span class="n">pre_horizon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_horizon</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">pre_horizon</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">v_z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">pre_horizon</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pre_horizon</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">pre_horizon</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="n">v_z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+
+<span class="c1">//populate horizon_svmPt</span>
+<span class="n">horizon_svmPt</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">pre_horizon</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">horizon_svmPt</span><span class="p">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">pre_horizon</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">horizon_svmPt</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span> 
+<span class="n">horizon_svmPt</span><span class="p">.</span><span class="n">W</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">converted_ref_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">X</span> <span class="o">=</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">X</span><span class="p">;</span>
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">Y</span> <span class="o">=</span> <span class="n">refPointOffPlane</span><span class="o">-&gt;</span><span class="n">Y</span><span class="p">;</span>
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">Z</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">;</span>
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">W</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+<span class="n">refPt_svm</span><span class="p">.</span><span class="n">known</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+
+<span class="n">c0</span><span class="p">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="n">c0</span><span class="p">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">v_z</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<span class="n">c0</span><span class="p">.</span><span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">;</span>
+
+<span class="c1">//use the refPt_svm to determine the correct height/ z coordinate of the camera position</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">&amp;</span><span class="n">refPt_svm</span><span class="p">);</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">&amp;</span><span class="n">horizon_svmPt</span><span class="p">);</span>
+<span class="n">sameXY</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+<span class="c1">//use the refPt_svm to determine the correct x and y coordinate for the camera position</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="o">&amp;</span><span class="n">c0</span><span class="p">);</span>
+<span class="n">sameZPlane</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+<span class="n">pntSelStack</span><span class="p">.</span><span class="n">pop_back</span><span class="p">();</span>
+
+<span class="c1">//remember to get the height/z coordinate from the horizon_svmPt and the x and y from c0</span>
+<span class="n">z_cam</span> <span class="o">=</span> <span class="n">horizon_svmPt</span><span class="p">.</span><span class="n">Z</span><span class="p">;</span>
+<span class="n">x_cam</span> <span class="o">=</span> <span class="n">c0</span><span class="p">.</span><span class="n">X</span><span class="p">;</span>
+<span class="n">y_cam</span> <span class="o">=</span> <span class="n">c0</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
+
+ <span class="n">camPos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x_cam</span><span class="p">;</span>
+ <span class="n">camPos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y_cam</span><span class="p">;</span>
+ <span class="n">camPos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">z_cam</span><span class="p">;</span>
+
+ <span class="n">printf</span><span class="p">(</span><span class="s">"Camera is at [ %0.3f %0.3f %0.3f ]</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">camPos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">camPos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">camPos</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+
+ <span class="n">camComputed</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="testing">Testing</h2>
+
+<h3 id="how-i-built-models">How I built models</h3>
+
+<p>I adopted the following pipeline when building 3d texture mapped models from a single image…</p>
+
+<ul>
+  <li>Draw 3 lines for each axis on long lines in the scene aligned with axis.</li>
+  <li>Calculate VPs</li>
+  <li>Connect 4 of the lines to make a rectangle (if they shared vertices).</li>
+  <li>Manually enter the values of the 4 lower points.</li>
+  <li>Manually enter the value of 1 upper point and mark as ref</li>
+  <li>Compute Homography</li>
+  <li>Use sameXY and sameZplane to specify the coordiante of the rest of the points in a box.</li>
+  <li>Create polygons out of each side of the box and name them.</li>
+  <li>Export as the wrl file type, not vrml</li>
+  <li>Use Irfan view to batch convert all the exported .tga files to .gif</li>
+  <li>Import the mesh (.wrl) file into meshlab using the import option</li>
+  <li>Look around at the cool model</li>
+</ul>
+
+<p>A few pictures from this pipeline using a very simple source image are shown below.</p>
+
+<figure class="half">
+    <img src="/images/single-view-modeling/van_0.webp" />
+    <img src="/images/single-view-modeling/hom_0.webp" />
+    <figcaption>Computing Vanishing Points (left) and Homography (right)</figcaption>
+</figure>
+
+<figure class="half">
+    <img src="/images/single-view-modeling/model_0.webp" />
+    <img src="/images/single-view-modeling/model_1.webp" />
+    <figcaption>Final viewable 3D texture mapped model</figcaption>
+</figure>
+
+<figure class="half">
+    <img src="/images/single-view-modeling/van_1.webp" />
+    <img src="/images/single-view-modeling/hom_1.webp" />
+    <figcaption>Computing Vanishing Points (left) and Homography (right)</figcaption>
+</figure>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#computer-vision" class="page__taxonomy-item p-category" rel="tag">computer vision</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2015-10-25">October 25, 2015</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Single+View+Modeling%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-single-view-modeling%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-single-view-modeling%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-single-view-modeling/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-optical-character-recongition/" class="pagination--pager" title="Optical Character Recognition w/ OpenCV and Deep Learning
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-digit-classification/" class="pagination--pager" title="Digit Classification
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

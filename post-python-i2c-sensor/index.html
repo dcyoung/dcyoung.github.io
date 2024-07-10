@@ -1,0 +1,867 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Using hardware sensors in Python: I2C</title>
+<meta name="description" content="Creating a python library to communicate w/ a hardware sensor on a Raspberry PI.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Using hardware sensors in Python: I2C">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-python-i2c-sensor/">
+
+
+  <meta property="og:description" content="Creating a python library to communicate w/ a hardware sensor on a Raspberry PI.">
+
+
+
+  <meta property="og:image" content="https://media.digikey.com/Photos/AKM%20Semiconductor/MFG_AK9750.jpg">
+
+
+
+
+
+  <meta property="article:published_time" content="2017-08-15T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2017-08-15T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-python-i2c-sensor/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Using hardware sensors in Python: I2C">
+    <meta itemprop="description" content="Creating a python library to communicate w/ a hardware sensor on a Raspberry PI.">
+    <meta itemprop="datePublished" content="2017-08-15T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2017-08-15T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-python-i2c-sensor/" itemprop="url">Using hardware sensors in Python: I2C
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#background">Background</a></li><li><a href="#constants">Constants</a></li><li><a href="#general-io">General IO</a></li><li><a href="#sensor-api">Sensor API</a></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="background">Background</h2>
+
+<p>For a prototype device, I needed to communicate with a hardware sensor using a Raspberry PI. The sensor used a 16bit digital output to I2C bus. So I created a python library to handle the low level communication… allowing me to write application logic in python. I’ve outlined the process below, which should apply to many sensors.</p>
+
+<p>To see the complete source code see: <a href="https://github.com/detectlabs/AK9750-python-library">github.com/detectlabs/AK9750-python-library</a></p>
+
+<h2 id="constants">Constants</h2>
+
+<p>First, define any necessary constants for your device. This includes any settings, register addresses or parameter values defined in your sensors datasheet. For example, the values below for an AK9750 sensor were sourced from the official <a href="https://media.digikey.com/pdf/Data%20Sheets/AKM%20Semiconductor%20Inc.%20PDFs/AK9750_Oct2015.pdf">sensor datasheet</a>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">I2C_SPEED_STANDARD</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="n">I2C_SPEED_FAST</span> <span class="o">=</span> <span class="mi">400000</span>
+
+<span class="n">AK9750_DEFAULT_ADDRESS</span> <span class="o">=</span> <span class="mh">0x64</span>  <span class="c1"># 7-bit unshifted default I2C Address
+</span>
+<span class="c1"># Register addresses
+</span><span class="n">AK9750_TMP</span> <span class="o">=</span> <span class="mh">0x0E</span>
+<span class="n">AK9750_ECNTL1</span> <span class="o">=</span> <span class="mh">0x1C</span>
+<span class="p">...</span>
+
+<span class="c1"># Valid sensor modes - Register ECNTL1
+</span><span class="n">AK9750_MODE_STANDBY</span> <span class="o">=</span> <span class="mb">0b000</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<h2 id="general-io">General IO</h2>
+
+<p>Write some utilities to handle general IO over i2c.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">I2C_BUS</span> <span class="o">=</span> <span class="n">smbus</span><span class="p">.</span><span class="n">SMBus</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">i2c_read</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">length</span><span class="p">):</span>
+    <span class="s">""" i2c bus read """</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">I2C_BUS</span><span class="p">.</span><span class="n">read_i2c_block_data</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">IOError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">"IOError"</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+
+
+<span class="k">def</span> <span class="nf">i2c_write</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="s">""" i2c bus write """</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">I2C_BUS</span><span class="p">.</span><span class="n">write_i2c_block_data</span><span class="p">(</span><span class="n">address</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+    <span class="k">except</span> <span class="nb">IOError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">"IOError"</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+    <span class="k">return</span> <span class="bp">True</span>
+
+
+<span class="k">def</span> <span class="nf">get_16_bit_int</span><span class="p">(</span><span class="n">byte_list</span><span class="p">):</span>
+    <span class="s">""" Returns an int16 intepretation of the first two bytes of a list of bytes """</span>
+    <span class="k">return</span> <span class="n">struct</span><span class="p">.</span><span class="n">unpack</span><span class="p">(</span><span class="s">"=h"</span><span class="p">,</span> <span class="s">''</span><span class="p">.</span><span class="n">join</span><span class="p">([</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">byte_list</span><span class="p">[:</span><span class="mi">2</span><span class="p">]]))[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre></div></div>
+
+<h2 id="sensor-api">Sensor API</h2>
+
+<p>Create a class to abstract your sensor, and add utility methods to read sensor values or write commands.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">AK9750</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="s">""" AK9750 """</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="o">=</span><span class="n">AK9750_DEFAULT_ADDRESS</span><span class="p">):</span>
+        <span class="s">""" Initialize the AK9750 Sensor """</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">device_address</span> <span class="o">=</span> <span class="n">address</span>
+        <span class="k">print</span> <span class="s">"Device address: "</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">device_address</span>
+
+    <span class="k">def</span> <span class="nf">read_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reg</span><span class="p">):</span>
+        <span class="s">""" Reads a byte from the specified register at this device's address """</span>
+        <span class="k">return</span> <span class="n">i2c_read</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">device_address</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">read_register_16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reg</span><span class="p">):</span>
+        <span class="s">""" Reads a 16 bit int value from  from the specified register at this device's address """</span>
+        <span class="k">return</span> <span class="n">get_16_bit_int</span><span class="p">(</span><span class="n">i2c_read</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">device_address</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">write_register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="n">byte</span><span class="p">):</span>
+        <span class="s">""" Writes the byte to the specified register at this device's address """</span>
+        <span class="n">i2c_write</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">device_address</span><span class="p">,</span> <span class="n">reg</span><span class="p">,</span> <span class="p">[</span><span class="n">byte</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">set_to_stanby</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">""" An example to set the sensor to standy mode """</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">AK9750_MODE_STANDBY</span>
+
+        <span class="c1"># Read current settings
+</span>        <span class="n">current_settings</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">read_register</span><span class="p">(</span><span class="n">AK9750_ECNTL1</span><span class="p">)</span>
+
+        <span class="c1"># Clear the mode bits and replace with the new setting
+</span>        <span class="n">current_settings</span> <span class="o">=</span> <span class="n">current_settings</span> <span class="o">&amp;</span> <span class="mb">0b11111000</span>
+        <span class="n">current_settings</span> <span class="o">=</span> <span class="n">current_settings</span> <span class="o">|</span> <span class="n">mode</span>
+
+        <span class="c1"># Write
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">write_register</span><span class="p">(</span><span class="n">AK9750_ECNTL1</span><span class="p">,</span> <span class="n">current_settings</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_temperature</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">""" An exampleto read data from the sensor...
+            Returns the temperature in degrees celcius 
+        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">read_register_16</span><span class="p">(</span><span class="n">AK9750_TMP</span><span class="p">)</span>
+        <span class="c1"># Temp is 10-bit
+</span>        <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="mi">6</span>
+        <span class="k">return</span> <span class="mf">26.75</span> <span class="o">+</span> <span class="p">(</span><span class="n">value</span> <span class="o">*</span> <span class="mf">0.125</span><span class="p">)</span>
+    
+    <span class="p">...</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#diy" class="page__taxonomy-item p-category" rel="tag">diy</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#electronics" class="page__taxonomy-item p-category" rel="tag">electronics</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2017-08-15">August 15, 2017</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Using+hardware+sensors+in+Python%3A+I2C%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-python-i2c-sensor%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-python-i2c-sensor%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-python-i2c-sensor/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-detect-tsc/" class="pagination--pager" title="Multi-channel Time Series Classification w/ Deep Learning
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-stewart-platform-simulator/" class="pagination--pager" title="Interactive Robot Simulator
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

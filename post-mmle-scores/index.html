@@ -1,0 +1,915 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Practical ML: Detecting Out-of-Distribution Data</title>
+<meta name="description" content="Detecting out of distribution samples using">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Practical ML: Detecting Out-of-Distribution Data">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-mmle-scores/">
+
+
+  <meta property="og:description" content="Detecting out of distribution samples using">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/mmle-scores/softmax.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2023-02-05T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2023-02-05T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-mmle-scores/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Practical ML: Detecting Out-of-Distribution Data">
+    <meta itemprop="description" content="Detecting out of distribution samples using">
+    <meta itemprop="datePublished" content="2023-02-05T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2023-02-05T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-mmle-scores/" itemprop="url">Practical ML: Detecting Out-of-Distribution Data
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Recently I worked on a project triangulating geo-coordinates of signals based on registrations in a radio network. Attempting to improve on traditional optimization based trilateration, I turned to neural networks to pick up subtle patterns in the underlying data space (ex: terrain in certain regions affects observed signal strength). This approach outperformed existing trilateration algorithms but suffered from high variance in the prediction quality. Most of the problematic predictions stemmed from samples that were not represented well in the original training data. This example highlighted a common problem in applied ML.</p>
+
+<p>Wouldn’t it be nice if we could improve confidence in our predictions by detecting cases where new data differs significantly from the training distribution. One way to formalize this is <code class="language-plaintext highlighter-rouge">Out-of-Distribution detection</code>. See borrowed image below.</p>
+
+<p><img src="https://raw.githubusercontent.com/dlmacedo/robust-deep-learning/e7debdd54e6f38c692913d34a99d466a8c294eff/assets/rdl.png" alt="ood example" /></p>
+
+<p>For the triangulation problem described above, I turned to a slick solution introduced in the paper: <a href="https://arxiv.org/abs/2205.05874">Distinction Maximization Loss</a>, which describes a drop-in replacement to a typical softmax layer and a <code class="language-plaintext highlighter-rouge">Max-Mean Logit Entropy Score</code> that can be used to better detect “Out-of-Distribution” samples at inference time.</p>
+
+<h2 id="implementing-dismax">Implementing DisMax</h2>
+
+<p>The authors provide some code, but I was not able to get their implementations working. Instead I implemented the basics and created the following example to demonstrate the approach.</p>
+
+<p>DisMax is comprised of a replacement for the classification layer in a model and a replacement for the cross entropy loss used to train the model. A minimal implementation below:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DisMaxLossFirstPart</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="s">"""This part replaces the model classifier output layer nn.Linear()."""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DisMaxLossFirstPart</span><span class="p">,</span> <span class="bp">self</span><span class="p">).</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">num_features</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="n">num_classes</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">distance_scale</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">constant_</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">distance_scale</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prototypes</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">num_features</span><span class="p">))</span>
+        <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">normal_</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">prototypes</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">temperature</span><span class="p">]),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">False</span>
+        <span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">distances_from_normalized_vectors</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">cdist</span><span class="p">(</span>
+            <span class="n">F</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">features</span><span class="p">),</span>
+            <span class="n">F</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">prototypes</span><span class="p">),</span>
+            <span class="n">p</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+            <span class="n">compute_mode</span><span class="o">=</span><span class="s">"donot_use_mm_for_euclid_dist"</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">isometric_distances</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">distance_scale</span><span class="p">)</span> <span class="o">*</span> <span class="n">distances_from_normalized_vectors</span>
+        <span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">isometric_distances</span> <span class="o">+</span> <span class="n">isometric_distances</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">logits</span> <span class="o">/</span> <span class="bp">self</span><span class="p">.</span><span class="n">temperature</span>
+
+    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"num_features={}, num_classes={}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">num_features</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">num_classes</span>
+        <span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">DisMaxLossSecondPart</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="s">"""This part replaces the nn.CrossEntropyLoss()"""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_classifier</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DisMaxLossSecondPart</span><span class="p">,</span> <span class="bp">self</span><span class="p">).</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">model_classifier</span> <span class="o">=</span> <span class="n">model_classifier</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">entropic_scale</span> <span class="o">=</span> <span class="mf">10.0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logits</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">logits</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="bp">self</span><span class="p">.</span><span class="n">entropic_scale</span> <span class="o">*</span> <span class="n">logits</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">model_classifier</span><span class="p">.</span><span class="n">training</span>
+            <span class="k">else</span> <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">logits</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">probabilities_at_targets</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">),</span> <span class="n">targets</span><span class="p">]</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">probabilities_at_targets</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">loss</span>
+</code></pre></div></div>
+
+<p>Training a model w/ the DisMax layer and loss is simple - nothing fancy here:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span> <span class="o">=</span> <span class="p">...</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">DisMaxLossSecondPart</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">classifier</span><span class="p">)</span>
+<span class="p">...</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">TRAIN_STEPS</span><span class="p">):</span>
+  <span class="p">...</span>
+  <span class="c1"># Predict coordinates and evaluate loss
+</span>  <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">Xtr</span><span class="p">)</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">Ytr</span><span class="p">)</span>
+  <span class="c1"># Backward pass
+</span>  <span class="n">optimizer</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+  <span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+  <span class="n">optimizer</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="implementing-maximum-mean-logit-entropy-score">Implementing Maximum Mean Logit Entropy Score</h2>
+
+<p>Implementing the MMLE score is very simple. I chose to use numpy here for simplicity in the plots to come.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span> <span class="k">as</span> <span class="n">softmax_np</span>
+<span class="k">def</span> <span class="nf">mmles_np</span><span class="p">(</span><span class="n">logits</span><span class="p">:</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">:</span>
+    <span class="s">"""Maximum Mean Logit Entropy Score"""</span>
+    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">softmax_np</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">logits</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">logits</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">probabilities</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)).</span><span class="nb">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Here logits can be used to calculate not only <code class="language-plaintext highlighter-rouge">softmax scores</code> (traditional) but also <code class="language-plaintext highlighter-rouge">MMLE scores</code> which we’ll compare in the next section.</p>
+
+<h2 id="does-it-work">Does it work?</h2>
+
+<p>To demonstrate the use, I first generate some simple 2D data to represent ~200 “In-Distribution” classes and 1 very “Out-of-Distribution” class.</p>
+
+<p><img src="/images/mmle-scores/clusters.webp" alt="clusters" />
+<em>Note the difference in the axes of the OOD data</em></p>
+
+<p>Then I train and calibrate the model (see full notebook for details), before predicting on two different sets of data:</p>
+
+<ul>
+  <li>held out validation dataset (In-Distribution)</li>
+  <li>held out validation dataset (Out-of-Distribution)</li>
+</ul>
+
+<p>For both sets I calculate the <code class="language-plaintext highlighter-rouge">softmax scores</code> (traditional) and the <code class="language-plaintext highlighter-rouge">MMLE scores</code>.</p>
+
+<p><img src="/images/mmle-scores/softmax.webp" alt="softmax" /></p>
+
+<p><img src="/images/mmle-scores/mmles.webp" alt="softmax" /></p>
+
+<p>As you can see, from the exact same logits the <code class="language-plaintext highlighter-rouge">MMLE scores</code> provide a much stronger delineation of “In-Distribution” vs “Out-of-Distribution” data.</p>
+
+<p>To demonstrate more programmatic use, here is an example of calculating thresholds from the validation data:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">val_scores</span> <span class="o">=</span> <span class="p">...</span> <span class="c1"># MMLE scores for the validation samples
+</span><span class="n">mmle_score_thresholds</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">):</span> <span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">val_scores</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="p">}</span> <span class="c1"># {'0': -102.35904790566515, '0.05': -101.01156283044743, '0.1': -100.71284565474099, '0.25': -100.33496655987776, '0.5': -100.13457710062065, '0.75': -100.00017678930712, '0.9': -99.95630884123959, '0.95': -99.93938238309974, '1.0': -99.92696776594504}
+</span></code></pre></div></div>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">val_scores</span> <span class="o">=</span> <span class="p">...</span> <span class="c1"># MMLE scores for the validation samples
+</span><span class="n">ood_scores</span> <span class="o">=</span> <span class="p">...</span> <span class="c1"># MMLE scores for the OOD samples
+</span><span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">mmle_score_thresholds</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">ood_flagged_as_ood</span> <span class="o">=</span> <span class="n">ood_scores</span> <span class="o">&lt;</span> <span class="n">t</span>
+    <span class="n">ood_flagged_as_ood_perc</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">ood_flagged_as_ood</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">ood_flagged_as_ood</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">id_flagged_as_ood</span> <span class="o">=</span> <span class="n">val_scores</span> <span class="o">&lt;</span> <span class="n">t</span>
+    <span class="n">id_flagged_as_ood_perc</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">id_flagged_as_ood</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">id_flagged_as_ood</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="mi">50</span><span class="o">*</span><span class="s">"="</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Using p=</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s">, thresh=</span><span class="si">{</span><span class="n">t</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\t</span><span class="si">{</span><span class="n">id_flagged_as_ood_perc</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">% of valid (in distribution) samples would be incorrectly flagged as OOD"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\t</span><span class="si">{</span><span class="n">ood_flagged_as_ood_perc</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">% of invalid (out of distribution) samples would be correctly flagged as OOD"</span><span class="p">)</span>
+
+<span class="c1"># ==================================================
+# Using p=0, thresh=-102.36
+# 	0.00% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ==================================================
+# Using p=0.05, thresh=-101.01
+# 	0.05% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ==================================================
+# Using p=0.1, thresh=-100.71
+# 	0.10% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ==================================================
+# Using p=0.25, thresh=-100.33
+# 	0.25% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ...
+</span></code></pre></div></div>
+
+<p>For more details, I’ve upload the <a href="https://github.com/dcyoung/ml-triangulation/blob/main/ood_detection.ipynb">full notebook</a>.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2023-02-05">February 5, 2023</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Practical+ML%3A+Detecting+Out-of-Distribution+Data%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-mmle-scores%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-mmle-scores%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-mmle-scores/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" class="pagination--pager" title="Automating Free Staging Deployments for Github Pages
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-r3f-nn-visualizer/" class="pagination--pager" title="Interactive Neural Network Visualizer
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/spleeter-pytorch/architecture.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-spleeter-pytorch/" rel="permalink">Audio Source Separation w/ Deep Learning
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          2 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">A from scratch pytorch implementation of Spleeter - a network to separate vocal and instrumental tracks from an input song.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

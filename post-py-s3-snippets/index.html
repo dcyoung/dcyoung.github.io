@@ -1,0 +1,1149 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Useful S3 Python Snippets</title>
+<meta name="description" content="A collection of useful actions when interacting w/ s3 in python.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Useful S3 Python Snippets">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-py-s3-snippets/">
+
+
+  <meta property="og:description" content="A collection of useful actions when interacting w/ s3 in python.">
+
+
+
+  <meta property="og:image" content="https://logicoretech.com/wp-content/uploads/2022/05/Python-Symbol.png">
+
+
+
+
+
+  <meta property="article:published_time" content="2019-06-30T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2019-06-30T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-py-s3-snippets/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Useful S3 Python Snippets">
+    <meta itemprop="description" content="A collection of useful actions when interacting w/ s3 in python.">
+    <meta itemprop="datePublished" content="2019-06-30T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2019-06-30T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-py-s3-snippets/" itemprop="url">Useful S3 Python Snippets
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          6 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#key-manipulation">Key manipulation</a></li><li><a href="#client-control">Client Control</a></li><li><a href="#basic-io">Basic IO</a></li><li><a href="#searching-files-in-s3">Searching files in s3</a></li><li><a href="#adding-simple-caching">Adding simple caching</a></li><li><a href="#asyncio">AsyncIO</a></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="key-manipulation">Key manipulation</h2>
+
+<p>I like to deal with keys in the format <code class="language-plaintext highlighter-rouge">s3://&lt;bucket-name&gt;/path/to/file.ext</code>.</p>
+
+<p>Some validation helpers are always useful:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">S3_PREFIX</span> <span class="o">=</span> <span class="s">"s3://"</span>
+
+<span class="k">def</span> <span class="nf">is_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">s3_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">S3_PREFIX</span><span class="p">)</span><span class="o">-&gt;</span><span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s3_path</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">s3_prefix</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>This makes it easy to handle arbitrary input uris be they local file paths or remote s3 paths. For example:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">uri</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">is_s3_path</span><span class="p">(</span><span class="n">uri</span><span class="p">):</span>
+        <span class="c1"># load the remote file... 
+</span>    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># load the local file...
+</span>    <span class="c1"># ...
+</span></code></pre></div></div>
+
+<p>Many actions require parsing a bucket-name and or a key suffix:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">sanitize_separators</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">.</span><span class="n">replace</span><span class="p">(</span><span class="s">"</span><span class="se">\\</span><span class="s">"</span><span class="p">,</span> <span class="s">"/"</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="s">"""
+    Parameters:
+        s3_path (str): an s3 path in the format of s3://&lt;bucket-name&gt;/path/to/key
+    Returns:
+        Tuple[str,str]: (bucket name, key)
+        example:
+            split_s3_path("s3://some-bucket/path/to/image.jpg") -&gt; ("some-bucket", "path/to/image.jpg")
+    """</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected s3 path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/key"</span>
+
+    <span class="n">s3_path</span> <span class="o">=</span> <span class="n">s3_path</span><span class="p">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">S3_PREFIX</span><span class="p">)</span>
+    <span class="n">all_parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">osp</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">s3_path</span><span class="p">:</span>  <span class="c1"># sentinel for absolute paths
+</span>            <span class="n">all_parts</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">break</span>
+        <span class="k">elif</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">s3_path</span><span class="p">:</span>  <span class="c1"># sentinel for relative paths
+</span>            <span class="n">all_parts</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">break</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s3_path</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">all_parts</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">all_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sanitize_separators</span><span class="p">(</span>
+        <span class="n">osp</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="o">*</span><span class="n">all_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s">""</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="client-control">Client Control</h2>
+
+<p>I like to control credentials and other defaults through environment variables.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Ex: "http://localhost:30000"
+</span><span class="n">S3_ENDPOINT</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">"S3_ENDPOINT"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_default_s3_client</span><span class="p">(</span><span class="n">endpoint_url</span><span class="p">:</span><span class="nb">str</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">boto3</span><span class="p">.</span><span class="n">client</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">endpoint_url</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">endpoint_url</span> <span class="o">=</span> <span class="n">S3_ENDPOINT</span> <span class="k">if</span> <span class="n">S3_ENDPOINT</span> <span class="k">else</span> <span class="bp">None</span>
+    <span class="k">return</span> <span class="n">boto3</span><span class="p">.</span><span class="n">client</span><span class="p">(</span>
+        <span class="s">"s3"</span><span class="p">,</span>
+        <span class="n">endpoint_url</span><span class="o">=</span><span class="n">endpoint_url</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="basic-io">Basic IO</h2>
+
+<p>Checking if a file exists:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">key_exists</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected s3 path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/key"</span>
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="n">s3_bucket</span><span class="p">,</span> <span class="n">s3_key</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">list_objects_v2</span><span class="p">(</span>
+        <span class="n">Bucket</span><span class="o">=</span><span class="n">s3_bucket</span><span class="p">,</span>
+        <span class="n">Prefix</span><span class="o">=</span><span class="n">s3_key</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">response</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"Contents"</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="s">"Key"</span><span class="p">]</span> <span class="o">==</span> <span class="n">s3_key</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+    <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>Check if a directory exists:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">dir_exists</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="c1"># Folder should exist, but can be empty
+</span>    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected s3 path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/key"</span>
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="n">s3_bucket</span><span class="p">,</span> <span class="n">s3_key</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+    <span class="n">s3_key</span> <span class="o">=</span> <span class="n">s3_key</span><span class="p">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">list_objects</span><span class="p">(</span>
+        <span class="n">Bucket</span><span class="o">=</span><span class="n">s3_bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">s3_key</span><span class="p">,</span> <span class="n">Delimiter</span><span class="o">=</span><span class="s">"/"</span><span class="p">,</span> <span class="n">MaxKeys</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="s">"CommonPrefixes"</span> <span class="ow">in</span> <span class="n">resp</span>
+</code></pre></div></div>
+
+<p>Read the bytes of a file:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">read_file_s3</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected s3 path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/key"</span>
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="n">s3_bucket</span><span class="p">,</span> <span class="n">s3_key</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">s3_bucket</span><span class="p">,</span> <span class="n">Key</span><span class="o">=</span><span class="n">s3_key</span><span class="p">)</span>
+    <span class="n">body</span> <span class="o">=</span> <span class="n">response</span><span class="p">[</span><span class="s">"Body"</span><span class="p">].</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">encoding</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">body</span><span class="p">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">body</span>
+</code></pre></div></div>
+
+<p>For example, you can load a JSON file from s3 in memory:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">load_json_s3</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">Dict</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">json</span><span class="p">.</span><span class="n">loads</span><span class="p">(</span>
+        <span class="n">read_file_s3</span><span class="p">(</span><span class="n">s3_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">).</span><span class="n">decode</span><span class="p">(</span><span class="s">"utf-8"</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Or open an image from s3 in memory:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># PIL Variant
+</span><span class="k">def</span> <span class="nf">imread</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">read_file_s3</span><span class="p">(</span><span class="n">s3_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+
+<span class="c1"># OpenCV Variant
+</span><span class="k">def</span> <span class="nf">imread</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">read_style</span><span class="o">=</span><span class="n">cv2</span><span class="p">.</span><span class="n">IMREAD_UNCHANGED</span><span class="p">):</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">read_file_s3</span><span class="p">(</span><span class="n">s3_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">cv2</span><span class="p">.</span><span class="n">imdecode</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buf</span><span class="p">),</span> <span class="n">read_style</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">im</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">,</span> <span class="n">s3_path</span>
+    <span class="k">return</span> <span class="n">im</span>
+</code></pre></div></div>
+
+<p>Downloading a file to disk:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">download_file</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dst_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/key.ext"</span>
+
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="n">bucket</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dst_path</span><span class="p">,</span> <span class="s">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">client</span><span class="p">.</span><span class="n">download_fileobj</span><span class="p">(</span><span class="n">bucket</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Uploading a local file to s3:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">upload_file_to_s3</span><span class="p">(</span><span class="n">src_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">osp</span><span class="p">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">src_path</span><span class="p">),</span> <span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">src_path</span><span class="si">}</span><span class="s"> does NOT exist."</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/file"</span>
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="n">bucket</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+    <span class="n">client</span><span class="p">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">src_path</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">upload_file_object_to_s3</span><span class="p">(</span><span class="n">file_obj</span><span class="p">,</span> <span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/"</span>
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="n">bucket</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+    <span class="n">logger</span><span class="p">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s">"Uploading file obj to </span><span class="si">{</span><span class="n">s3_path</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="n">client</span><span class="p">.</span><span class="n">upload_fileobj</span><span class="p">(</span><span class="n">file_obj</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Uploading a local directory to s3:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">upload_local_directory_to_s3</span><span class="p">(</span>
+    <span class="n">input_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">exist_ok</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span>
+<span class="p">):</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/"</span>
+
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+
+    <span class="n">s3_path</span> <span class="o">=</span> <span class="n">sanitize_separators</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+    <span class="n">s3_path</span> <span class="o">=</span> <span class="n">s3_path</span> <span class="k">if</span> <span class="n">s3_path</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span> <span class="k">else</span> <span class="n">s3_path</span> <span class="o">+</span> <span class="s">"/"</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">exist_ok</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">key_exists</span><span class="p">(</span>
+            <span class="n">s3_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span>
+        <span class="p">),</span> <span class="s">"Destination path already exists!"</span>
+
+    <span class="k">for</span> <span class="n">local_path</span><span class="p">,</span> <span class="n">sub_dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="p">.</span><span class="n">walk</span><span class="p">(</span><span class="n">input_dir</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">fname</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">src_path</span> <span class="o">=</span> <span class="n">osp</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">local_path</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+            <span class="n">rel_path</span> <span class="o">=</span> <span class="n">osp</span><span class="p">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">src_path</span><span class="p">,</span> <span class="n">input_dir</span><span class="p">)</span>
+            <span class="n">dst_s3_path</span> <span class="o">=</span> <span class="n">sanitize_separators</span><span class="p">(</span><span class="n">osp</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">rel_path</span><span class="p">))</span>
+            <span class="n">upload_file_to_s3</span><span class="p">(</span><span class="n">src_path</span><span class="o">=</span><span class="n">src_path</span><span class="p">,</span> <span class="n">s3_path</span><span class="o">=</span><span class="n">dst_s3_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="searching-files-in-s3">Searching files in s3</h2>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">get_matching_s3_objects</span><span class="p">(</span>
+    <span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">:</span>
+    <span class="s">"""
+    Generate objects in an S3 bucket.
+    :param bucket: Name of the S3 bucket.
+    :param prefix: Only fetch objects whose key starts with this prefix (optional).
+    :param suffix: Only fetch objects whose keys end with this suffix (optional).
+    """</span>
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_paginator</span><span class="p">(</span><span class="s">"list_objects_v2"</span><span class="p">)</span>
+
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">"Bucket"</span><span class="p">:</span> <span class="n">bucket</span><span class="p">}</span>
+
+    <span class="c1"># We can pass the prefix directly to the S3 API.  If the user has passed
+</span>    <span class="c1"># a tuple or list of prefixes, we go through them one by one.
+</span>    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">prefixes</span> <span class="o">=</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">prefixes</span> <span class="o">=</span> <span class="n">prefix</span>
+
+    <span class="k">for</span> <span class="n">key_prefix</span> <span class="ow">in</span> <span class="n">prefixes</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s">"Prefix"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sanitize_separators</span><span class="p">(</span><span class="n">key_prefix</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">paginator</span><span class="p">.</span><span class="n">paginate</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">contents</span> <span class="o">=</span> <span class="n">page</span><span class="p">[</span><span class="s">"Contents"</span><span class="p">]</span>
+            <span class="k">except</span> <span class="nb">KeyError</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">contents</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s">"Key"</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">key</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
+                    <span class="k">yield</span> <span class="n">obj</span>
+
+
+<span class="k">def</span> <span class="nf">get_matching_s3_keys</span><span class="p">(</span><span class="n">bucket</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s">""</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="s">"""
+    Generate the keys in an S3 bucket.
+    :param bucket: Name of the S3 bucket.
+    :param prefix: Only fetch keys that start with this prefix (optional).
+    :param suffix: Only fetch keys that end with this suffix (optional).
+    """</span>
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">get_matching_s3_objects</span><span class="p">(</span>
+        <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span>
+    <span class="p">):</span>
+        <span class="k">yield</span> <span class="n">obj</span><span class="p">[</span><span class="s">"Key"</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">get_immediate_subdirs</span><span class="p">(</span>
+    <span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="s">"""Gets the immediate subdirectory names
+    Args:
+        s3_path [str]:
+        client: the s3 cient
+    Returns:
+        [List[str]]: a collection of names for any immediate subdirectories
+    """</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/dir/"</span>
+
+    <span class="k">if</span> <span class="n">client</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">get_default_s3_client</span><span class="p">()</span>
+
+    <span class="n">bucket</span><span class="p">,</span> <span class="n">prefix</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"/"</span><span class="p">):</span>
+        <span class="n">prefix</span> <span class="o">+=</span> <span class="s">"/"</span>
+
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">client</span><span class="p">.</span><span class="n">get_paginator</span><span class="p">(</span><span class="s">"list_objects_v2"</span><span class="p">)</span>
+    <span class="n">subdirs</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">paginator</span><span class="p">.</span><span class="n">paginate</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">Delimiter</span><span class="o">=</span><span class="s">"/"</span><span class="p">):</span>
+        <span class="n">prefixes</span> <span class="o">=</span> <span class="n">page</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"CommonPrefixes"</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">prefixes</span><span class="p">:</span>
+            <span class="n">prefix_name</span> <span class="o">=</span> <span class="n">prefix</span><span class="p">[</span><span class="s">"Prefix"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">prefix_name</span><span class="p">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">"/"</span><span class="p">):</span>
+                <span class="n">subdir</span> <span class="o">=</span> <span class="n">prefix_name</span><span class="p">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">"/"</span><span class="p">)</span>
+                <span class="n">subdirs</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">subdir</span><span class="p">.</span><span class="n">split</span><span class="p">(</span><span class="s">"/"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">subdirs</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="adding-simple-caching">Adding simple caching</h2>
+
+<p>A very simple caching decorator based on a least-recently used cache.</p>
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">lru_cache</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Memory</span>
+
+<span class="n">DEFAULT_CACHE_DIRECTORY</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">"MY_S3_DATA_CACHE_DIRECTORY"</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+<span class="n">CACHE_MEMORY</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">Memory</span><span class="p">(</span>
+        <span class="n">location</span><span class="o">=</span><span class="n">DEFAULT_CACHE_DIRECTORY</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">mmap_mode</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">DEFAULT_CACHE_DIRECTORY</span>
+    <span class="k">else</span> <span class="bp">None</span>
+<span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_optional_cache_decorator</span><span class="p">():</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">DEFAULT_CACHE_DIRECTORY</span><span class="p">:</span>
+            <span class="c1"># Return caching
+</span>            <span class="k">return</span> <span class="n">CACHE_MEMORY</span><span class="p">.</span><span class="n">cache</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="c1"># No caching... return the function unchanged
+</span>        <span class="k">return</span> <span class="n">func</span>
+
+    <span class="k">return</span> <span class="n">decorator</span>
+</code></pre></div></div>
+
+<p>The above decorator can be useful when repeatedly pulling the same data from s3 - for example, a dataloader used during a model training routine. Take the example of an image data loader. Applying the caching decorator to the “read file” operation will cache the raw file data stored in s3… which likely represents compressed “jpeg” binary data. Downstream utilities like “imread” which yield dramaticcally larger structures (image arrays or tensors) can repeat the minimal last-mile work decoding the image from the cache. For example:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">_optional_cache_decorator</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">read_file_s3</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="p">...</span>
+
+<span class="k">def</span> <span class="nf">imread</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">read_file_s3</span><span class="p">(</span><span class="n">s3_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">buf</span><span class="p">))</span>
+</code></pre></div></div>
+
+<h2 id="asyncio">AsyncIO</h2>
+
+<p>Depending on the situation, it can be much faster to leverage async variants:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Basic IO
+</span><span class="k">async</span> <span class="k">def</span> <span class="nf">download_object</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">sem</span><span class="p">):</span>
+    <span class="s">"""Downloads an object from s3"""</span>
+    <span class="k">assert</span> <span class="n">is_s3_path</span><span class="p">(</span>
+        <span class="n">s3_path</span>
+    <span class="p">),</span> <span class="sa">f</span><span class="s">"Expected path in the form </span><span class="si">{</span><span class="n">S3_PREFIX</span><span class="si">}</span><span class="s">&lt;bucket&gt;/path/to/key.ext"</span>
+    <span class="n">bucket</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="n">split_s3_path</span><span class="p">(</span><span class="n">s3_path</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">sem</span><span class="p">:</span>
+        <span class="c1"># get object from s3
+</span>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="p">.</span><span class="n">get_object</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="c1"># this will ensure the connection is correctly re-used/closed
+</span>        <span class="k">async</span> <span class="k">with</span> <span class="n">response</span><span class="p">[</span><span class="s">"Body"</span><span class="p">]</span> <span class="k">as</span> <span class="n">stream</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">stream</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">save_object</span><span class="p">(</span><span class="n">s3_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">sem</span><span class="p">):</span>
+    <span class="s">"""Download an object from s3 and saves it to disk"""</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">download_object</span><span class="p">(</span><span class="n">s3_path</span><span class="o">=</span><span class="n">s3_path</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">,</span> <span class="n">sem</span><span class="o">=</span><span class="n">sem</span><span class="p">)</span>
+    <span class="n">os</span><span class="p">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">osp</span><span class="p">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_path</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiofiles</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="s">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">f</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>For example, downloading many files concurrently significantly outperforms the AWS CLI:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s3_uris</span> <span class="o">=</span> <span class="p">...</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">aiobotocore</span><span class="p">.</span><span class="n">AioSession</span><span class="p">().</span><span class="n">create_client</span><span class="p">(</span><span class="s">"s3"</span><span class="p">)</span>
+<span class="n">sem</span> <span class="o">=</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s3_uris</span><span class="p">),</span> <span class="mi">25</span><span class="p">))</span>
+<span class="k">await</span> <span class="n">asyncio</span><span class="p">.</span><span class="n">gather</span><span class="p">(</span>
+    <span class="o">*</span><span class="p">[</span>
+        <span class="n">save_object</span><span class="p">(</span>
+            <span class="n">s3_path</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span>
+            <span class="n">output_path</span><span class="o">=</span><span class="n">osp</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="s">"output"</span><span class="p">,</span> <span class="n">osp</span><span class="p">.</span><span class="n">basename</span><span class="p">(</span><span class="n">uri</span><span class="p">)),</span>
+            <span class="n">client</span><span class="o">=</span><span class="n">s3_client</span><span class="p">,</span>
+            <span class="n">sem</span><span class="o">=</span><span class="n">sem</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">uri</span> <span class="ow">in</span> <span class="n">uris</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#software-notes" class="page__taxonomy-item p-category" rel="tag">software notes</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2019-06-30">June 30, 2019</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Useful+S3+Python+Snippets%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-py-s3-snippets%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-py-s3-snippets%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-py-s3-snippets/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-talk-how-neural-networks-see-the-world/" class="pagination--pager" title="Talk: How Neural Networks See the World
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-ue4-music-visualization/" class="pagination--pager" title="Interactive Music Visualization in Unreal Engine
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

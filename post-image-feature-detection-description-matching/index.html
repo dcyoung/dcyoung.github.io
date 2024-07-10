@@ -1,0 +1,1504 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Image Feature Detection, Description and Matching</title>
+<meta name="description" content="Discriminating and matching features in images.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Image Feature Detection, Description and Matching">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-image-feature-detection-description-matching/">
+
+
+  <meta property="og:description" content="Discriminating and matching features in images.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/image-feature-detection-description-matching/0.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2015-09-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2015-09-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-image-feature-detection-description-matching/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Image Feature Detection, Description and Matching">
+    <meta itemprop="description" content="Discriminating and matching features in images.">
+    <meta itemprop="datePublished" content="2015-09-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2015-09-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-image-feature-detection-description-matching/" itemprop="url">Image Feature Detection, Description and Matching
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          21 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#project-overview">Project Overview</a></li><li><a href="#feature-detection">Feature Detection</a><ul><li><a href="#computing-harris-features">Computing Harris Features</a></li><li><a href="#computing-local-maxima">Computing Local Maxima</a></li><li><a href="#performance">Performance</a></li></ul></li><li><a href="#feature-description-using-image-pyramids">Feature Description (Using Image Pyramids)</a><ul><li><a href="#overview--major-design-choices">Overview + Major Design Choices</a></li><li><a href="#defining-the-angle-of-rotation">​Defining the angle of rotation</a></li><li><a href="#interpolating-an-un-rotated-image">Interpolating an un-rotated image</a></li><li><a href="#sift">SIFT</a></li><li><a href="#normalizing-output-vector">Normalizing output vector</a></li><li><a href="#performance-roc-curves">Performance (ROC curves)</a></li><li><a href="#performance-average-auc">Performance (Average AUC)</a></li><li><a href="#strengths-and-weaknesses-of-algorithm">Strengths and Weaknesses of Algorithm</a></li></ul></li><li><a href="#feature-matching">Feature Matching</a></li></ul>
+            </nav>
+          </aside>
+        
+        <figure class="half">
+  <a href="/images/image-feature-detection-description-matching/0.webp">
+    <img src="/images/image-feature-detection-description-matching/0.webp" />
+  </a>
+  <a href="/images/image-feature-detection-description-matching/1.webp">
+    <img src="/images/image-feature-detection-description-matching/1.webp" />
+  </a>
+</figure>
+
+<figure class="half">
+  <a href="/images/image-feature-detection-description-matching/2.webp">
+    <img src="/images/image-feature-detection-description-matching/2.webp" />
+  </a>
+  <a href="/images/image-feature-detection-description-matching/3.webp">
+    <img src="/images/image-feature-detection-description-matching/3.webp" />
+  </a>
+</figure>
+
+<h2 id="project-overview">Project Overview</h2>
+
+<p>The idea for this project was to detect discriminating features in an image and find the best matching features in other images. The detected features are invariant to basic transformations including translation, rotation, illumination and scale.</p>
+
+<h2 id="feature-detection">Feature Detection</h2>
+
+<p>It can be rather difficult to describe qualitatively what makes a good feature worthy of detection in a computer vision project. One of the simplest methods is by corner detection. Most gray scale photos can be thought of as combination of uniform patches, lines and corners. Between those three features, the corner is by far the most detectable and unique. In a uniform patch, pixels adjacent to a single pixel do not vary much. In a line, the variation will only be in one direction. With a corner however, shifting the feature in any direction should pose a change in the intensity of the adjacent pixels. Selecting pixels that present the maximum change when shifted in any direction is the base of a very basic feature detection scheme.</p>
+
+<p>To identify points of interest in the image, I will use the Harris corner detection method. That is to say, for each point in the image I consider a window of pixels around that point. I then compute the Harris matrix H for the point by summing the gradient of the pixel (as defined by a basic Sobel matrix) while including a weighting scheme defined by a gaussian filter. The weights of the gaussian filter were chosen to be circularly symmetric to account for rotation variance. To find interest points I define a corner strength function c(H) = determinant(H)/trace(H) and normalize by the global maximum in the photo. Once this corner strength value has been computed for every pixel, I choose points where c is above threshold and also where c is a local maximum among surrounding pixels.</p>
+
+<h3 id="computing-harris-features">Computing Harris Features</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">ComputeHarrisFeatures</span><span class="p">(</span><span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">image</span><span class="p">,</span> <span class="n">FeatureSet</span> <span class="o">&amp;</span><span class="n">features</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="c1">//Create grayscale image used for Harris detection</span>
+	<span class="n">CFloatImage</span> <span class="n">grayImage</span><span class="o">=</span><span class="n">ConvertToGray</span><span class="p">(</span><span class="n">image</span><span class="p">);</span>
+
+	<span class="c1">//Create image to store Harris values</span>
+	<span class="n">CFloatImage</span> <span class="n">harrisImage</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">,</span><span class="n">image</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+
+	<span class="c1">//Create image to store local maximum harris values as 1, other pixels 0</span>
+	<span class="n">CByteImage</span> <span class="n">harrisMaxImage</span><span class="p">(</span><span class="n">image</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">,</span><span class="n">image</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+
+	
+	<span class="c1">//compute Harris values puts harris values at each pixel position in harrisImage. </span>
+	<span class="c1">//You'll need to implement this function.</span>
+	<span class="n">computeHarrisValues</span><span class="p">(</span><span class="n">grayImage</span><span class="p">,</span> <span class="n">harrisImage</span><span class="p">);</span>
+	
+	<span class="c1">// Threshold the harris image and compute local maxima.  You'll need to implement this function.</span>
+	<span class="n">computeLocalMaxima</span><span class="p">(</span><span class="n">harrisImage</span><span class="p">,</span><span class="n">harrisMaxImage</span><span class="p">);</span>
+	<span class="c1">// Prints out the harris image for debugging purposes</span>
+	<span class="n">CByteImage</span> <span class="n">tmp</span><span class="p">(</span><span class="n">harrisImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">());</span>
+	<span class="n">convertToByteImage</span><span class="p">(</span><span class="n">harrisImage</span><span class="p">,</span> <span class="n">tmp</span><span class="p">);</span>
+	<span class="n">WriteFile</span><span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="s">"harris.tga"</span><span class="p">);</span>
+	
+	<span class="c1">//will then proceed to describe each feature... see feature descriptor</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*Loop through the image to compute the harris corner values
+srcImage:  grayscale of original image
+harrisImage:  populate the harris values per pixel in this image*/</span>
+<span class="kt">void</span> <span class="nf">computeHarrisValues</span><span class="p">(</span><span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">srcImage</span><span class="p">,</span> <span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">harrisImage</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="c1">//I think everything up to calculating c(H) will be done in this method</span>
+	<span class="c1">//I think that the harrisImage is a 1 channel image (will appear as grayscale) and i will just populate that value with the c(H) value of that pixel</span>
+	<span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">;</span>
+
+
+
+	<span class="c1">//first compute Ix, Iy and the 2x2 matrix comprised of them</span>
+	<span class="n">CFloatImage</span> <span class="n">gradientMatrices</span><span class="p">(</span><span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">,</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span>
+	<span class="n">computeGradientMatrices</span><span class="p">(</span><span class="n">srcImage</span><span class="p">,</span> <span class="n">gradientMatrices</span><span class="p">);</span>
+	
+
+	<span class="kt">float</span> <span class="n">c_H_max</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="c1">//for every pixel (not at the boarder)</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			<span class="c1">//use a nxn window around the pixel and multiply each 2x2 matrix from gradientMatrices for that pixel by the corresponding (by index) weight from the gaussian filter (nxn)</span>
+			<span class="c1">//sum over all the 2 dimmensional matrices in that window</span>
+			<span class="kt">float</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+			
+			<span class="c1">//assume gaussian window is 5x5</span>
+			<span class="kt">int</span> <span class="n">startY</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+			<span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startY</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">startX</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+					<span class="kt">int</span> <span class="n">matchingGaussianIndex</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+					<span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>
+					<span class="n">H_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>
+					<span class="n">H_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>
+					<span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>				
+				<span class="p">}</span>
+			<span class="p">}</span>
+						
+			<span class="c1">//calculate c(H) = det(H)/trace(H)</span>
+			<span class="kt">float</span> <span class="n">c_H</span> <span class="o">=</span> <span class="p">(</span><span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+			<span class="n">harrisImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">c_H</span><span class="p">;</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">c_H</span> <span class="o">&gt;</span> <span class="n">c_H_max</span><span class="p">){</span> <span class="c1">//keep track of the maximum c_H to help normalize later</span>
+				<span class="n">c_H_max</span> <span class="o">=</span> <span class="n">c_H</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="c1">//normalize the intensity</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">harrisImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">harrisImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">c_H_max</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>           
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*computes Ix^2, IxIy; IyIx, Iy^2... the intermediate gradient matrix used in defining H*/</span>
+<span class="kt">void</span> <span class="nf">computeGradientMatrices</span><span class="p">(</span><span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">srcImage</span><span class="p">,</span> <span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">gradientMatrices</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">;</span>
+
+	<span class="c1">//for every pixel thats not on the boarders</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">h</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">w</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			
+			<span class="c1">//for a box 5x5 centered around that pixel</span>
+			<span class="kt">float</span> <span class="n">Ix</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="kt">float</span> <span class="n">Iy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="kt">int</span> <span class="n">startY</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+			<span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startY</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">startX</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+					<span class="kt">int</span> <span class="n">matchingSobelIndex</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+					<span class="n">Ix</span> <span class="o">+=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">sobelX</span><span class="p">[</span><span class="n">matchingSobelIndex</span><span class="p">];</span>
+					<span class="n">Iy</span> <span class="o">+=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">sobelY</span><span class="p">[</span><span class="n">matchingSobelIndex</span><span class="p">];</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+			<span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">Ix</span><span class="o">*</span><span class="n">Ix</span><span class="p">;</span>
+			<span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">Ix</span><span class="o">*</span><span class="n">Iy</span><span class="p">;</span>
+			<span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">Iy</span><span class="o">*</span><span class="n">Ix</span><span class="p">;</span>
+			<span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">=</span> <span class="n">Iy</span><span class="o">*</span><span class="n">Iy</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="computing-local-maxima">Computing Local Maxima</h3>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*Loop through the harrisImage to threshold and compute the local maxima in a neighborhood
+srcImage:  image with Harris values
+destImage: Assign 1 to a pixel if it is above a threshold and is the local maximum in 3x3 window, 0 otherwise.*/</span>
+<span class="kt">void</span> <span class="nf">computeLocalMaxima</span><span class="p">(</span><span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">srcImage</span><span class="p">,</span> <span class="n">CByteImage</span> <span class="o">&amp;</span><span class="n">destImage</span><span class="p">)</span>
+<span class="p">{</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">destImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">destImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			<span class="n">destImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="kt">float</span> <span class="n">strengthThreshold</span> <span class="o">=</span> <span class="mf">0.017</span><span class="p">;</span>
+	
+	<span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">;</span>
+
+	<span class="kt">float</span> <span class="n">currFeatureStrength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">float</span> <span class="n">featureStrengthLocalMax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">float</span> <span class="n">comparedPixelFeatureStrength</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	
+	<span class="cm">/*by excluding features that are at pixels within 15pixels of the edges, we avoid boundary conditions 
+	with the rotation 20x20 grid used in interpolation*/</span>
+	<span class="cm">/*for every pixel (not within 15 pixels of the boarder)*/</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">15</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">15</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">15</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">w</span> <span class="o">-</span> <span class="mi">15</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+			<span class="c1">//check corner strength value of that pixel</span>
+			<span class="c1">//if its above threshold, check to see if it is a local max in a 3x3 window</span>
+			<span class="n">currFeatureStrength</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">currFeatureStrength</span> <span class="o">&gt;=</span> <span class="n">strengthThreshold</span><span class="p">){</span>
+				<span class="c1">//check that the pixel is a local maxima</span>
+				<span class="n">featureStrengthLocalMax</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+					<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+						<span class="c1">//determine if pixel x,y is the local max in a 3x3 window</span>
+						<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="n">y</span><span class="p">){</span>
+							<span class="c1">//do nothing</span>
+						<span class="p">}</span>
+						<span class="k">else</span><span class="p">{</span>
+							<span class="n">comparedPixelFeatureStrength</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+							<span class="k">if</span> <span class="p">(</span><span class="n">comparedPixelFeatureStrength</span> <span class="o">&gt;</span> <span class="n">featureStrengthLocalMax</span><span class="p">){</span>
+								<span class="n">featureStrengthLocalMax</span> <span class="o">=</span> <span class="n">comparedPixelFeatureStrength</span><span class="p">;</span>
+							<span class="p">}</span>
+						<span class="p">}</span>
+
+					<span class="p">}</span>
+				<span class="p">}</span>
+				<span class="c1">//if x,y is a local max, set that pixel to 1 and all other adjacent pixels default to 0</span>
+				<span class="k">if</span> <span class="p">(</span><span class="n">currFeatureStrength</span> <span class="o">&gt;</span> <span class="n">featureStrengthLocalMax</span><span class="p">){</span>
+					<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+						<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+							<span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">==</span> <span class="n">x</span> <span class="o">&amp;&amp;</span> <span class="n">j</span> <span class="o">==</span> <span class="n">y</span><span class="p">){</span>
+								<span class="n">destImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+							<span class="p">}</span>
+							<span class="k">else</span><span class="p">{</span>
+								<span class="n">destImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+							<span class="p">}</span>
+						<span class="p">}</span>
+					<span class="p">}</span>
+					
+					
+				<span class="p">}</span>
+
+				<span class="c1">//possible optimization (skip column if the feature is a local max)	</span>
+			<span class="p">}</span>
+
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="performance">Performance</h3>
+
+<p>To demonstrate the operation of the original feature detector, two example images have been included with their resulting detected features. To discern the feature pixels, one might need to turn the brightness up on their display… as they can be hard to see.</p>
+
+<figure class="half">
+<img src="/images/image-feature-detection-description-matching/0.webp" />
+<img src="/images/image-feature-detection-description-matching/1.webp" />
+</figure>
+
+<figure class="half">
+<img src="/images/image-feature-detection-description-matching/2.webp" />
+<img src="/images/image-feature-detection-description-matching/3.webp" />
+</figure>
+
+<h2 id="feature-description-using-image-pyramids">Feature Description (Using Image Pyramids)</h2>
+
+<p>After unique features have been detected/identified, it is necessary to describe these features thoroughly and efficiently so that a matching algorithm can easily compare the descriptions of two features from different images. A good feature descriptor must take into account changes in position, orientation and illumination.</p>
+
+<h3 id="overview--major-design-choices">Overview + Major Design Choices</h3>
+
+<p>The general outline of my feature descriptor is the following:</p>
+
+<ul>
+  <li>Define the Angle of Rotation for the feature.</li>
+  <li>Use bilinear interpolation and the knowledge of the angle of rotation to create a new unrotated image from the original image (just a small space around the feature).</li>
+  <li>Perform my own version of SIFT on the interpolated image.</li>
+  <li>Normalize output vector from my SIFT, threshold the values and normalize the vector again.</li>
+</ul>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*Loop through feature points in harrisMaxImage and create feature descriptor 
+for each point above a threshold*/</span>
+
+<span class="kt">int</span> <span class="n">id</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">y</span> <span class="o">&lt;</span> <span class="n">harrisMaxImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">;</span><span class="n">y</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">harrisMaxImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">;</span><span class="n">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+	
+		<span class="c1">// Skip over non-maxima</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">harrisMaxImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+			<span class="k">continue</span><span class="p">;</span>
+
+		<span class="c1">//else the pixel is a valid feature and needs some more description for future feature matching</span>
+		<span class="n">Feature</span> <span class="n">f</span><span class="p">;</span>
+		<span class="n">f</span><span class="p">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">++</span><span class="p">;</span>
+		<span class="n">f</span><span class="p">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span>
+		<span class="n">f</span><span class="p">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+		
+		<span class="c1">//f.type = ??;</span>
+
+		<span class="c1">//Basic Process:</span>
+		<span class="c1">//1. find the angle of rotation, store it in f.angleRadians</span>
+		<span class="c1">//2. use bilinear interpolation to find a rotated 16x16 grid (that has been unrotated by the known angle of rotation)</span>
+		<span class="c1">//3. perform sift on that new grid and store the 128element vector that describes the feature in f.data</span>
+			<span class="c1">//when computing sift, make sure to not include features that are within 10 pixels of boarder to avoid a situation where the 16x16 grid or the 5x5 layered sobel on top extend beyond the boarder</span>
+		<span class="c1">//4. store the feature</span>
+
+
+		<span class="c1">//Process Step 1: </span>
+		<span class="n">f</span><span class="p">.</span><span class="n">angleRadians</span> <span class="o">=</span> <span class="n">computeFeatureRotationAngle</span><span class="p">(</span><span class="n">grayImage</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+
+		<span class="c1">//Process Step 2:</span>
+		<span class="n">CFloatImage</span> <span class="n">rotatedImage</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span> <span class="c1">//new image that will hold the un-rotated 16x16 grid (20x20 to account for sobel matrices)</span>
+		<span class="c1">//assume the inner 16x16 grid to be centered around the pixel at 7,7</span>
+		<span class="n">interpolateRotatedImage</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">rotatedImage</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">y</span><span class="p">,</span> <span class="n">f</span><span class="p">.</span><span class="n">angleRadians</span><span class="p">);</span>
+
+		<span class="c1">//Process Step 3: </span>
+		<span class="n">f</span><span class="p">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">sift</span><span class="p">(</span><span class="n">rotatedImage</span><span class="p">);</span>
+
+		
+
+		<span class="c1">// Add the feature to the list of features</span>
+		<span class="n">features</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="defining-the-angle-of-rotation">​Defining the angle of rotation</h3>
+
+<p>The first step in describing each feature was to determine the angle of rotation from 0 radians (arbitrarily chosen to be +x pixel direction of the original image) to the eigenvector associated with the larger eigen value from that feature. Determining a descriptive angle using this method ensured that the same feature in a different image would be described the same way regardless of its default orientation.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*For the feature centered in srcImage, compute the angle of rotation based off 
+	the eigenvector associated with the larger eigenvalue*/</span>
+<span class="kt">float</span> <span class="nf">computeFeatureRotationAngle</span><span class="p">(</span><span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">srcImage</span><span class="p">,</span> <span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
+	
+	<span class="kt">int</span> <span class="n">w</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">;</span>
+
+	<span class="kt">float</span> <span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">=</span><span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+	<span class="kt">float</span> <span class="n">Ix</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">float</span> <span class="n">Iy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">startY</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">startX</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">2</span><span class="p">;</span>
+	<span class="c1">//for every pixel thats not on the boarders</span>
+	<span class="c1">//for a box 5x5 centered around that pixel</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startY</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">startX</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+			<span class="kt">int</span> <span class="n">matchingSobelIndex</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+			<span class="n">Ix</span> <span class="o">+=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">sobelX</span><span class="p">[</span><span class="n">matchingSobelIndex</span><span class="p">];</span>
+			<span class="n">Iy</span> <span class="o">+=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">sobelY</span><span class="p">[</span><span class="n">matchingSobelIndex</span><span class="p">];</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ix</span><span class="o">*</span><span class="n">Ix</span><span class="p">;</span>
+	<span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">Ix</span><span class="o">*</span><span class="n">Iy</span><span class="p">;</span>
+	<span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">Iy</span><span class="o">*</span><span class="n">Ix</span><span class="p">;</span>
+	<span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">Iy</span><span class="o">*</span><span class="n">Iy</span><span class="p">;</span>
+		
+
+	<span class="kt">float</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+
+	<span class="c1">//assume gaussian window is 5x5</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">startY</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="n">startX</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">3</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+			<span class="kt">int</span> <span class="n">matchingGaussianIndex</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">*</span> <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">j</span> <span class="o">-</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="p">);</span>
+			<span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>
+			<span class="n">H_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>
+			<span class="n">H_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>
+			<span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+=</span> <span class="n">gradientMatrix</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="n">gaussian5x5</span><span class="p">[</span><span class="n">matchingGaussianIndex</span><span class="p">];</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+	<span class="kt">float</span> <span class="n">lambda_pos</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">*</span><span class="p">(</span><span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">])));</span>
+	<span class="c1">//float lambda_neg = 0.5*(H_matrix[0] + H_matrix[3] - sqrt(4 * H_matrix[1] * H_matrix[2] + (H_matrix[0] - H_matrix[3])*(H_matrix[0] - H_matrix[3])));</span>
+
+
+	<span class="c1">//solve for eigenvector components Vx and Vy associated with lambda_pos... </span>
+	<span class="kt">float</span> <span class="n">V_x</span><span class="p">;</span>
+	<span class="kt">float</span> <span class="n">V_y</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">H_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">){</span>
+		<span class="n">V_x</span> <span class="o">=</span> <span class="n">lambda_pos</span> <span class="o">-</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">3</span><span class="p">];</span>
+		<span class="n">V_y</span> <span class="o">=</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">H_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span><span class="mi">0</span><span class="p">){</span>
+		<span class="n">V_x</span> <span class="o">=</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+		<span class="n">V_y</span> <span class="o">=</span> <span class="n">lambda_pos</span> <span class="o">-</span> <span class="n">H_matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="k">else</span><span class="p">{</span>
+		<span class="n">V_x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+		<span class="n">V_y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="p">}</span>
+
+	<span class="c1">//return the angle of rotation calculated from that vector corresponding to the larger eigenvalue</span>
+	<span class="k">return</span> <span class="n">atan2</span><span class="p">(</span><span class="n">V_y</span><span class="p">,</span> <span class="n">V_x</span><span class="p">);</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="interpolating-an-un-rotated-image">Interpolating an un-rotated image</h3>
+
+<p>After the angle of rotation was calculated for each feature, it was possible to rotate that feature back around to 0 degrees. Feeding this result into the subsequent steps (SIFT) would ensure that the same features from different images would be described according to the same axis… therefore maintaining an invariance to rotation. In order to conduct this phase of the algorithm, a small window around the feature was taken from the original image and each pixel in that window was recalculated to be a new x and y coordinate after the counter rotation by the original angle found for that feature. This put the feature in a normalized orientation, but the x and y coordinates of the original pixels no longer fall on integer values associated with a pixel in the new counter rotated image. To create valuable pixels containing the same information as this counter-rotated image, each counter-rotated (x,y) coordinate was assigned an intensity value based off the 4 pixels around the location where it fell in the original image. To accomplish this, bilinear interpolation was used and the result was a normalized unrotated box containing the feature that could be fed into SIFT.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*conduct bilinear interpolation to find a rotated 16x16 grid(that has been unrotated by the known angle of rotation)*/</span>
+<span class="kt">void</span> <span class="nf">interpolateRotatedImage</span><span class="p">(</span><span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">srcImage</span><span class="p">,</span> <span class="n">CFloatImage</span> <span class="n">rotatedImage</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pX</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pY</span><span class="p">,</span> <span class="kt">float</span> <span class="n">angle</span><span class="p">){</span>
+
+	<span class="c1">//pX,pY is assumed to be indice 7,7 in the 16x16 grid. Therefore in the 20x20 grid it is actually indices 9,9</span>
+	<span class="c1">//the top left corner of the 20x20 block is therefore at coordinate (pX-9, pY-9) in the srcImage</span>
+	<span class="c1">//the bottom right corner of the 20x20 block is therefore at coordinate (pX+10,pY+10)</span>
+
+	<span class="kt">float</span> <span class="n">x_rot</span><span class="p">,</span> <span class="n">y_rot</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">interpolatedIntensity</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">;</span>
+	<span class="c1">//for every pixel in srcImage in a 20x20 box around the feature point pX,pY... interpolate a new rotated value to be placed in rotatedImage</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="n">pX</span> <span class="o">-</span> <span class="mi">9</span><span class="p">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">pX</span> <span class="o">+</span> <span class="mi">11</span><span class="p">;</span> <span class="n">x</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">y</span> <span class="o">=</span> <span class="n">pY</span> <span class="o">-</span> <span class="mi">9</span><span class="p">;</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="n">pY</span> <span class="o">+</span> <span class="mi">11</span><span class="p">;</span> <span class="n">y</span><span class="o">++</span><span class="p">){</span>
+
+			<span class="n">x_rot</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">pX</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">pY</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">+</span> <span class="n">pX</span><span class="p">;</span>
+			<span class="n">y_rot</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">pX</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">pY</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="o">+</span> <span class="n">pY</span><span class="p">;</span>
+
+			<span class="c1">// check and handle rotations where the x' and y' are ints... and where one of them is but the other is not</span>
+			<span class="k">if</span> <span class="p">(</span><span class="n">floorf</span><span class="p">(</span><span class="n">x_rot</span><span class="p">)</span> <span class="o">==</span> <span class="n">x_rot</span> <span class="o">&amp;&amp;</span> <span class="n">floorf</span><span class="p">(</span><span class="n">y_rot</span><span class="p">)</span> <span class="o">==</span> <span class="n">y_rot</span><span class="p">){</span>
+				<span class="c1">//if both of the rotated coordinates are ints</span>
+				<span class="c1">//(ie: they fall on exact pixels and the rotationw was a multiple of 90 degrees)</span>
+				<span class="c1">//simply weight that pixel value by 100% for the inteprolation... ie no need to interpolate</span>
+				<span class="n">rotatedImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">pX</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">pY</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="kt">int</span><span class="p">(</span><span class="n">x_rot</span><span class="p">),</span> <span class="kt">int</span><span class="p">(</span><span class="n">y_rot</span><span class="p">),</span> <span class="mi">0</span><span class="p">);</span>
+			<span class="p">}</span>
+			<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="n">x_rot</span><span class="p">)</span> <span class="o">==</span> <span class="n">x_rot</span><span class="p">){</span>
+				<span class="c1">//if the x coordinate falls on an int... interpolate between the pixel above and below the coordinate</span>
+
+				<span class="n">y0</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">y_rot</span><span class="p">);</span>
+				<span class="n">y1</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+				<span class="c1">//calculate the length of the lines formed by the coordiante and the 2 adjacent pixels on the same col</span>
+				<span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_rot</span> <span class="o">-</span> <span class="n">y0</span><span class="p">);</span>
+				<span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y_rot</span><span class="p">);</span>
+				<span class="n">interpolatedIntensity</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x_rot</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span>
+					<span class="o">+</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x_rot</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">A</span><span class="p">;</span>
+
+				<span class="n">rotatedImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">pX</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">pY</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">interpolatedIntensity</span><span class="p">;</span>
+
+			<span class="p">}</span>
+			<span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="n">y_rot</span><span class="p">)</span> <span class="o">==</span> <span class="n">y_rot</span><span class="p">){</span>
+				<span class="c1">//if the y coordinate falls on an int... interpolate between the pixel to the left and to the right</span>
+
+				<span class="n">x0</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">x_rot</span><span class="p">);</span>
+				<span class="n">x1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+
+				<span class="c1">//calculate the length of the lines formed by the coordiante and the 2 adjacent pixels on the same row</span>
+				<span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_rot</span> <span class="o">-</span> <span class="n">x0</span><span class="p">);</span>
+				<span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x_rot</span><span class="p">);</span>
+				<span class="n">interpolatedIntensity</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y_rot</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span>
+					<span class="o">+</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y_rot</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="n">A</span><span class="p">;</span>
+
+				<span class="n">rotatedImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">pX</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">pY</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">interpolatedIntensity</span><span class="p">;</span>
+
+			<span class="p">}</span>
+			<span class="k">else</span><span class="p">{</span>
+				<span class="c1">//the coordinate is not an integer in either dimension, so perform bilinear interpolation</span>
+
+				<span class="n">x0</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">x_rot</span><span class="p">);</span>
+				<span class="n">x1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+				<span class="n">y0</span> <span class="o">=</span> <span class="kt">int</span><span class="p">(</span><span class="n">y_rot</span><span class="p">);</span>
+				<span class="n">y1</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+				<span class="c1">//calculate the areas of the rectangles formed by the rotated coordinate and its 4 closest pixels</span>
+				<span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_rot</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y_rot</span> <span class="o">-</span> <span class="n">y0</span><span class="p">);</span>
+				<span class="n">B</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x_rot</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y_rot</span> <span class="o">-</span> <span class="n">y0</span><span class="p">);</span>
+				<span class="n">C</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_rot</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y_rot</span><span class="p">);</span>
+				<span class="n">D</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x_rot</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y_rot</span><span class="p">);</span>
+
+				<span class="n">interpolatedIntensity</span> <span class="o">=</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">D</span>
+					<span class="o">+</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">C</span>
+					<span class="o">+</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">B</span>
+					<span class="o">+</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">A</span><span class="p">;</span>
+
+				<span class="n">rotatedImage</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="p">(</span><span class="n">pX</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">pY</span> <span class="o">-</span> <span class="mi">9</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="n">interpolatedIntensity</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="sift">SIFT</h3>
+
+<p>To further describe the feature, I chose to implement a version of the SIFT algorithm because of its powerful nature and simplicity. My algorithm splits the angle normalized image containing the feature into 16 small 4x4 pixel boxes. For each box the gradient of each pixel is calculated. Then the magnitude of that gradient vector is added to one of 8 buckets that each represent 1/8th of the 2*pi range on a complete circle. The angle of the gradient vector determines which bucket the vector’s magnitude will be added to. This is a very simple histogram. Once each of the 16 4x4 boxes has a completed 8 element vector, all 16 of the 8 element vectors are collectively stored in a single 128 element vector.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/*conduct the sift procedure on the 16x16 grid centered in the 20x20 srcImage*/</span>
+<span class="n">vector</span> <span class="nf">sift</span><span class="p">(</span><span class="n">CFloatImage</span> <span class="o">&amp;</span><span class="n">srcImage</span><span class="p">){</span>
+	<span class="c1">//first calculate the gradient Ix and Iy  (dI/dx and dI/dy) at every pixel in the image</span>
+	<span class="c1">//only the Ix and Iy components will be necessary, but I'll just take what i need from gradientMatrices after its all calculated</span>
+	<span class="n">CFloatImage</span> <span class="n">gradientMatrices</span><span class="p">(</span><span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">width</span><span class="p">,</span> <span class="n">srcImage</span><span class="p">.</span><span class="n">Shape</span><span class="p">().</span><span class="n">height</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+	<span class="n">computeGradientMatrices</span><span class="p">(</span><span class="n">srcImage</span><span class="p">,</span> <span class="n">gradientMatrices</span><span class="p">);</span>
+
+	<span class="c1">//initialize a vector to hold the 128 element description that will be returned</span>
+	<span class="n">vector</span> <span class="n">siftResult</span><span class="p">(</span><span class="mi">128</span><span class="p">);</span>
+
+
+	<span class="c1">//initialize a vector of empty buckets that will be cleared and re-used for every 4x4 block</span>
+	<span class="c1">//the first element holds the combined magnitude of gradients in the 0 -&gt; 2*pi/8 range...</span>
+	<span class="c1">//the second element holds the combined magnitude of gradients in the 2*pi/8 -&gt; 2(2*pi/8) range </span>
+	<span class="c1">//etc..</span>
+	<span class="kt">float</span> <span class="n">buckets</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">};</span>
+	
+	<span class="c1">// partial derivatives of intensity, ie: vector components of the gradient</span>
+	<span class="kt">float</span> <span class="n">Ix</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="kt">float</span> <span class="n">Iy</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+
+	<span class="c1">//divide the 16x16 grid centered in the 20x20 srcImage into 16 different 4x4 blocks</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">row</span><span class="o">++</span><span class="p">){</span>
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">col</span><span class="o">++</span><span class="p">){</span>
+			
+			<span class="c1">//reset the buckets to 0</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">bucketIdx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">bucketIdx</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">bucketIdx</span><span class="o">++</span><span class="p">){</span>
+				<span class="n">buckets</span><span class="p">[</span><span class="n">bucketIdx</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+			<span class="p">}</span>
+
+			<span class="c1">//for each 4x4 block, calculate the 8 bucket (histogram) vector describing its gradient</span>
+			<span class="c1">//upper left corner of the current 4x4 block is at pixel (2+row*4, 2+col*4)</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+				<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">){</span>
+					<span class="c1">//current coordinate in the 4x4 box is i,j... </span>
+					<span class="c1">//current coordiante in the 16x16 box is col*4+i, row*4+j... </span>
+					<span class="c1">//current coordinate in the 20x20 box is 2+col*4+i, 2+row*4+j...</span>
+					
+					<span class="c1">//the value of Ix and Iy gradient components are calculated below</span>
+					<span class="n">Ix</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">col</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">row</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">j</span><span class="p">,</span> <span class="mi">0</span><span class="p">));</span>
+					<span class="n">Iy</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">gradientMatrices</span><span class="p">.</span><span class="n">Pixel</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">col</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">i</span><span class="p">,</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">row</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">j</span><span class="p">,</span> <span class="mi">3</span><span class="p">));</span>
+					
+					<span class="c1">//FIXME: don't know if this will be right because the y axis faces downward in the image??? but im treating it as if it is upwards??</span>
+					<span class="c1">//in the end the descriptor should be consistent between different images that use it... so it shouldn't matter</span>
+					<span class="kt">float</span> <span class="n">vectorMagnitude</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">Ix</span><span class="o">*</span><span class="n">Ix</span><span class="o">+</span><span class="n">Iy</span><span class="o">*</span><span class="n">Iy</span><span class="p">);</span> <span class="c1">//the magnitude of the combinant vector</span>
+					<span class="kt">float</span> <span class="n">vectorRadianAngle</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">Iy</span><span class="p">,</span> <span class="n">Ix</span><span class="p">);</span>  <span class="c1">//an angle describing the combinant vector in radians (returns value between -pi and pi)</span>
+					
+					<span class="k">if</span> <span class="p">(</span><span class="n">vectorRadianAngle</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+						<span class="n">vectorRadianAngle</span> <span class="o">+=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">PI</span><span class="p">;</span>
+					<span class="p">}</span>
+					<span class="c1">//sum the magnitudes in their corresponding buckets</span>
+					<span class="n">buckets</span><span class="p">[</span><span class="kt">int</span><span class="p">(</span><span class="n">vectorRadianAngle</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">PI</span> <span class="o">/</span> <span class="mi">8</span><span class="p">))]</span> <span class="o">+=</span> <span class="n">vectorMagnitude</span><span class="p">;</span>
+
+				<span class="p">}</span>
+			<span class="p">}</span>
+			
+			<span class="c1">//place the bucket values in the final 128 element vector in the correct place.</span>
+			<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">){</span>
+				<span class="n">siftResult</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="mi">32</span> <span class="o">+</span> <span class="n">col</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">buckets</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+			<span class="p">}</span>
+			
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="k">return</span> <span class="n">siftResult</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="normalizing-output-vector">Normalizing output vector</h3>
+
+<p>At the end of my SIFT algorithm, I normalize the 128 element vector to unit length to maintain in-variance to changes in illumination. I also proceeded to threshold the normalized values to a value of 0.2 and then re-normalize the vector a second time. This helped maintain in-variance to non-linear changes in illumination.
+​
+Without this normalization technique the AUC for bench-marking the bikes image set was 0.687217 whereas with the normalization the AUC was 0.694351. This image set didn’t have very drastic changes in illumination however. Looking at leuven image set, where illumination change is more apparent, the AUC jumped from 0.758304 to 0.832059 when I included the normalization. This is a much larger change and demonstrates how image sets with variation in illumination are handled with the inclusion of my normalization technique. My technique appears to be very effective.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//normalize the vector to unit length in order to enhance invariance to illumination</span>
+<span class="kt">float</span> <span class="n">length_squared</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">){</span>
+	<span class="n">length_squared</span> <span class="o">+=</span> <span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">*</span><span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+<span class="p">}</span>
+<span class="kt">float</span> <span class="n">length</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">length_squared</span><span class="p">);</span>
+<span class="kt">bool</span> <span class="n">normalizeAgain</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">){</span>
+	<span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="n">length</span><span class="p">;</span>
+	<span class="k">if</span> <span class="p">(</span><span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.2</span><span class="p">){</span>
+		<span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
+		<span class="n">normalizeAgain</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">//reduce effects of non-linear illumination by using a threshold of 0.2 and normalizing again</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">normalizeAgain</span><span class="p">){</span>
+	<span class="kt">float</span> <span class="n">length_squared</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">){</span>
+		<span class="n">length_squared</span> <span class="o">+=</span> <span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">];</span>
+	<span class="p">}</span>
+	<span class="kt">float</span> <span class="n">length</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">length_squared</span><span class="p">);</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="mi">128</span><span class="p">;</span> <span class="n">k</span><span class="o">++</span><span class="p">){</span>
+		<span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">/</span> <span class="n">length</span><span class="p">;</span>
+		<span class="k">if</span> <span class="p">(</span><span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">&gt;</span><span class="mf">0.2</span><span class="p">){</span>
+			<span class="n">siftResult</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="performance-roc-curves">Performance (ROC curves)</h3>
+
+<p>The following curves and tables describe the performance of the matching using my implementation of a descriptor compared to some of the leading SIFT implementations available today. Additionally they compare the use of a simple sum of squares difference when matching and a ratio test for matching. See my feature matching page to view the code for these two matching types.</p>
+
+<p>ROC curve for the graf photos (AUC values in the table).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">My Implementation + SSD</th>
+      <th style="text-align: center">My Implementation + Ratio</th>
+      <th style="text-align: center">SIFT + SSD</th>
+      <th style="text-align: center">SIFT + Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0.782022</td>
+      <td style="text-align: center">0.774843</td>
+      <td style="text-align: center">0.932023</td>
+      <td style="text-align: center">0.966663</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/image-feature-detection-description-matching/4.webp" alt="results1" class="align-center" /></p>
+
+<p>ROC curve for the yosemite photos (AUC values in the table)</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">My Implementation + SSD</th>
+      <th style="text-align: center">My Implementation + Ratio</th>
+      <th style="text-align: center">SIFT + SSD</th>
+      <th style="text-align: center">SIFT + Ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0.885658</td>
+      <td style="text-align: center">0.890320</td>
+      <td style="text-align: center">0.994692</td>
+      <td style="text-align: center">0.993979</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/images/image-feature-detection-description-matching/5.webp" alt="results2" class="align-center" /></p>
+
+<h3 id="performance-average-auc">Performance (Average AUC)</h3>
+
+<p>​My Own Descriptor and Ratio Test Matching</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Bikes</th>
+      <th style="text-align: center">Graf</th>
+      <th style="text-align: center">Leuven</th>
+      <th style="text-align: center">Wall</th>
+      <th style="text-align: center">Average</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0.694351</td>
+      <td style="text-align: center">0.610892</td>
+      <td style="text-align: center">0.832059</td>
+      <td style="text-align: center">0.718335</td>
+      <td style="text-align: center">0.713909</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>​My Own Descriptor and SSD Test Matching</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Bikes</th>
+      <th style="text-align: center">Graf</th>
+      <th style="text-align: center">Leuven</th>
+      <th style="text-align: center">Wall</th>
+      <th style="text-align: center">Average</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0.654525</td>
+      <td style="text-align: center">0.611547</td>
+      <td style="text-align: center">0.857094</td>
+      <td style="text-align: center">0.736532</td>
+      <td style="text-align: center">0.714925</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="strengths-and-weaknesses-of-algorithm">Strengths and Weaknesses of Algorithm</h3>
+
+<p>My chosen implementation is particularly resilient to changes in illumination, translation and rotation, but not to changes in scale (at least not by design). The SIFT method should be slightly invariant to scale intrinsically, but I did not pursue the inclusion of Gaussian image pyramids to specifically target scale changes. My performance scores indicate the best performance was on images with variance in translation (bikes) and illumination (leuven). Quantitatively, these were the best results. I also cut off the outermost 15 pixels around the whole border to avoid edge case conditions which may have impacted the performance.</p>
+
+<h2 id="feature-matching">Feature Matching</h2>
+
+<p>Once the noteworthy features in an image have been described, it is trivial to compare the descriptions to features from other images and define a match strength between features in the photos.</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// This just uses the ratio of the SSD distance of the two best matches as the score</span>
+<span class="c1">// and matches a feature in the first image with the closest feature in the second image.</span>
+<span class="c1">// It can match multiple features in the first image to the same feature in</span>
+<span class="c1">// the second image.</span>
+<span class="kt">void</span> <span class="nf">ratioMatchFeatures</span><span class="p">(</span><span class="k">const</span> <span class="n">FeatureSet</span> <span class="o">&amp;</span><span class="n">f1</span><span class="p">,</span> <span class="k">const</span> <span class="n">FeatureSet</span> <span class="o">&amp;</span><span class="n">f2</span><span class="p">,</span> <span class="n">vector</span> <span class="o">&amp;</span><span class="n">matches</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">totalScore</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">f1</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+	<span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">f2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+	<span class="n">matches</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+	<span class="n">totalScore</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	<span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">dBest</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">dSecondBest</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">idBest</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">dBest</span> <span class="o">=</span> <span class="mf">1e100</span><span class="p">;</span>
+		<span class="n">idBest</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">d</span> <span class="o">=</span> <span class="n">distanceSSD</span><span class="p">(</span><span class="n">f1</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">,</span> <span class="n">f2</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">data</span><span class="p">);</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="n">dBest</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">dSecondBest</span> <span class="o">=</span> <span class="n">dBest</span><span class="p">;</span>
+				<span class="n">dBest</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+				<span class="n">idBest</span> <span class="o">=</span> <span class="n">f2</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">id</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span><span class="p">;</span>
+		<span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id2</span> <span class="o">=</span> <span class="n">idBest</span><span class="p">;</span>
+		<span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span> <span class="o">=</span> <span class="n">dBest</span> <span class="o">/</span> <span class="n">dSecondBest</span><span class="p">;</span>
+		<span class="n">totalScore</span> <span class="o">+=</span> <span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Perform simple feature matching.  This just uses the SSD</span>
+<span class="c1">// distance between two feature vectors, and matches a feature in the</span>
+<span class="c1">// first image with the closest feature in the second image.  It can</span>
+<span class="c1">// match multiple features in the first image to the same feature in</span>
+<span class="c1">// the second image.</span>
+<span class="kt">void</span> <span class="nf">ssdMatchFeatures</span><span class="p">(</span><span class="k">const</span> <span class="n">FeatureSet</span> <span class="o">&amp;</span><span class="n">f1</span><span class="p">,</span> <span class="k">const</span> <span class="n">FeatureSet</span> <span class="o">&amp;</span><span class="n">f2</span><span class="p">,</span> <span class="n">vector</span> <span class="o">&amp;</span><span class="n">matches</span><span class="p">,</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">totalScore</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="kt">int</span> <span class="n">m</span> <span class="o">=</span> <span class="n">f1</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+	<span class="kt">int</span> <span class="n">n</span> <span class="o">=</span> <span class="n">f2</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+
+	<span class="n">matches</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">m</span><span class="p">);</span>
+	<span class="n">totalScore</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+	<span class="kt">double</span> <span class="n">d</span><span class="p">;</span>
+	<span class="kt">double</span> <span class="n">dBest</span><span class="p">;</span>
+	<span class="kt">int</span> <span class="n">idBest</span><span class="p">;</span>
+
+	<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">m</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">dBest</span> <span class="o">=</span> <span class="mf">1e100</span><span class="p">;</span>
+		<span class="n">idBest</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+		<span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+		<span class="p">{</span>
+			<span class="n">d</span> <span class="o">=</span> <span class="n">distanceSSD</span><span class="p">(</span><span class="n">f1</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">data</span><span class="p">,</span> <span class="n">f2</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">data</span><span class="p">);</span>
+
+			<span class="k">if</span> <span class="p">(</span><span class="n">d</span> <span class="o">&lt;</span> <span class="n">dBest</span><span class="p">)</span>
+			<span class="p">{</span>
+				<span class="n">dBest</span> <span class="o">=</span> <span class="n">d</span><span class="p">;</span>
+				<span class="n">idBest</span> <span class="o">=</span> <span class="n">f2</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">id</span><span class="p">;</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+
+		<span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id</span><span class="p">;</span>
+		<span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">id2</span> <span class="o">=</span> <span class="n">idBest</span><span class="p">;</span>
+		<span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span> <span class="o">=</span> <span class="n">dBest</span><span class="p">;</span>
+		<span class="n">totalScore</span> <span class="o">+=</span> <span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">score</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#computer-vision" class="page__taxonomy-item p-category" rel="tag">computer vision</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2015-09-01">September 1, 2015</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Image+Feature+Detection%2C+Description+and+Matching%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-image-feature-detection-description-matching%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-image-feature-detection-description-matching%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-image-feature-detection-description-matching/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-experimenting-with-nvidia-flex/" class="pagination--pager" title="Experimenting with NVidia FLEX
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-constraint-satisfaction-problems/" class="pagination--pager" title="Solving Constraint Satisfaction Problems
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

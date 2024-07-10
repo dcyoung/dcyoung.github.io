@@ -1,0 +1,1093 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>​Photometric Stereo: Shape from Shading</title>
+<meta name="description" content="Recovering surface normals and surface heights from lighting cues.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="​Photometric Stereo: Shape from Shading">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-photometric-stereo/">
+
+
+  <meta property="og:description" content="Recovering surface normals and surface heights from lighting cues.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/photometric-stereo/0.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-01-15T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-01-15T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-photometric-stereo/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="​Photometric Stereo: Shape from Shading">
+    <meta itemprop="description" content="Recovering surface normals and surface heights from lighting cues.">
+    <meta itemprop="datePublished" content="2016-01-15T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-01-15T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-photometric-stereo/" itemprop="url">​Photometric Stereo: Shape from Shading
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          8 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#overview">Overview</a></li><li><a href="#implementation">Implementation</a><ul><li><a href="#main-script">Main Script</a></li><li><a href="#pre-processing">Pre-Processing</a></li><li><a href="#calculating-albedo-and-surface-normals">Calculating Albedo and Surface Normals</a></li></ul></li><li><a href="#compute-surface-height-map-by-integration">Compute Surface Height Map by Integration</a></li><li><a href="#results">Results</a><ul><li><a href="#yaleb01">YaleB01</a></li><li><a href="#yaleb02">YaleB02</a></li><li><a href="#yaleb05">YaleB05</a></li><li><a href="#yaleb07">YaleB07</a></li></ul></li><li><a href="#results-discussion">Results Discussion</a><ul><li><a href="#integration-run-times-compared">Integration Run-Times Compared</a></li><li><a href="#violationslimitations">Violations/Limitations</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <h2 id="overview">Overview</h2>
+
+<p><img src="/images/photometric-stereo/0.webp" alt="preview" class="align-right" /></p>
+
+<p>The goal here was to implement shape from shading as described in Forsyth &amp; Ponce 2nd Edition, in order to reconstruct albedo and shape in the form of surface height-maps. The technique was applied to images of faces.</p>
+
+<p>The simple photometric stereo implemented here assumes the following:</p>
+
+<ul>
+  <li>A lambertian object</li>
+  <li>A local shading model (each point on a surface receives light only from sources visible at that point… ie: no global illumination)</li>
+  <li>A set of known light source directions</li>
+  <li>A set of pictures of an object, obtained in exactly the same camera/object configuration but using different light sources</li>
+  <li>Orthographic projection</li>
+</ul>
+
+<h2 class="text-justify" id="implementation">Implementation</h2>
+
+<p>The project goal is to reconstruct the surface as a heightmap above the x-y plane. This is accomplished through the intermediate step of recovering surface normals and using those normals to recover the surface heights.
+​
+Images of subjects from from the Yale Face database were used for testing. For each subject the following was performed:</p>
+
+<ol>
+  <li>Images and light source directions were acquired for 64 different light source directions + an ambient image</li>
+  <li>The data was pre-processed, which involved subtracting the ambient image from each image in the light source stack and normalizing the intensities</li>
+  <li>The albedo and surface normals were estimated, using a least squares solution of constructed linear systems</li>
+  <li>A surface height map was computed by integration. Multiple different paths were computed to compare the results.</li>
+</ol>
+
+<h3 id="main-script">Main Script</h3>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%clear everything</span>
+<span class="nb">clear</span> <span class="nb">all</span><span class="p">;</span>
+<span class="nb">clc</span><span class="p">;</span>
+
+<span class="c1">% path to the folder and subfolder</span>
+<span class="n">root_path</span> <span class="o">=</span> <span class="s1">'C:/DirectoryNameGoesHere'</span><span class="p">;</span>
+<span class="n">subject_name</span> <span class="o">=</span> <span class="s1">'yaleB01'</span><span class="p">;</span>
+
+<span class="c1">%'average'; % 'column', 'row', 'average', 'random'</span>
+<span class="n">integration_method</span> <span class="o">=</span> <span class="s1">'average'</span><span class="p">;</span> 
+
+
+<span class="c1">%% load images</span>
+<span class="n">full_path</span> <span class="o">=</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s1">'%s%s/'</span><span class="p">,</span> <span class="n">root_path</span><span class="p">,</span> <span class="n">subject_name</span><span class="p">);</span>
+<span class="p">[</span><span class="n">ambient_image</span><span class="p">,</span> <span class="n">imarray</span><span class="p">,</span> <span class="n">light_dirs</span><span class="p">]</span> <span class="o">=</span> <span class="n">LoadFaceImages</span><span class="p">(</span><span class="n">full_path</span><span class="p">,</span> <span class="n">subject_name</span><span class="p">,</span> <span class="mi">64</span><span class="p">);</span>
+<span class="n">image_size</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">ambient_image</span><span class="p">);</span>
+
+
+<span class="c1">%% preprocess the data: </span>
+<span class="c1">%% subtract ambient_image from each image in imarray</span>
+<span class="c1">%% make sure no pixel is less than zero</span>
+<span class="c1">%% rescale values in imarray to be between 0 and 1</span>
+<span class="n">pre_processed_imarray</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="n">imarray</span><span class="p">));</span>
+<span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">:</span> <span class="nb">size</span><span class="p">(</span><span class="n">imarray</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+   <span class="n">pre_processed_imarray</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">PreProcessImage</span><span class="p">(</span><span class="n">imarray</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">),</span> <span class="n">ambient_image</span><span class="p">);</span> 
+<span class="k">end</span>
+<span class="n">imarray</span> <span class="o">=</span> <span class="n">pre_processed_imarray</span><span class="p">;</span>
+
+
+<span class="c1">%% get albedo and surface normals (you need to fill in photometric_stereo)</span>
+<span class="p">[</span><span class="n">albedo_image</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">]</span> <span class="o">=</span> <span class="n">photometric_stereo</span><span class="p">(</span><span class="n">imarray</span><span class="p">,</span> <span class="n">light_dirs</span><span class="p">);</span>
+
+<span class="c1">%% reconstruct height map (you need to fill in get_surface for different integration methods)</span>
+<span class="n">height_map</span> <span class="o">=</span> <span class="n">get_surface</span><span class="p">(</span><span class="n">surface_normals</span><span class="p">,</span> <span class="n">image_size</span><span class="p">,</span> <span class="n">integration_method</span><span class="p">);</span>
+
+
+<span class="c1">%% display albedo and surface</span>
+<span class="n">display_output</span><span class="p">(</span><span class="n">albedo_image</span><span class="p">,</span> <span class="n">height_map</span><span class="p">);</span>
+
+<span class="c1">%% plot surface normal</span>
+<span class="n">plot_surface_normals</span><span class="p">(</span><span class="n">surface_normals</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="pre-processing">Pre-Processing</h3>
+
+<p>Pre-processing is very straight forward. Normalizing every pixel between 0 and 255 (max possible intensity) ensures consistency.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">output</span> <span class="p">]</span> <span class="o">=</span> <span class="n">PreProcessImage</span><span class="p">(</span> <span class="n">targetImg</span><span class="p">,</span> <span class="n">ambientImg</span> <span class="p">)</span>
+<span class="c1">%subtract the ambient image from the light source stack image, set </span>
+<span class="c1">%any negative values to zero, rescale the resulting intensities to between </span>
+<span class="c1">%0 and 1 (they are originally between 0 and 255)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">targetImg</span> <span class="o">-</span> <span class="n">ambientImg</span><span class="p">;</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">output</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">;</span>
+    <span class="n">output</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="o">.</span><span class="p">/</span><span class="mi">255</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="calculating-albedo-and-surface-normals">Calculating Albedo and Surface Normals</h3>
+
+<p>Having obtained the source vectors and intensity values, the basis of the problem can be laid out as follows:</p>
+
+<ul>
+  <li>Known: source vectors Sj and pixel values Ij(x,y)</li>
+  <li>Unknown: surface normal N(x,y) and albedo p(x,y)</li>
+</ul>
+
+<p>Assuming the response function of the camera is a linear scaling by a factor of “k”, Lambert’s law and a bit of regrouping terms will yield:</p>
+
+<p><img src="/images/photometric-stereo/1.webp" alt="eq-1" class="align-center" /></p>
+
+<p>where g(x,y) refers to the normals scaled by albedo and Vj refers to the scaled light source vector.</p>
+
+<p>A linear system can be setup for each pixel according to this formula. This system can then be solved for the normals and alebdo. Stacking all the linear systems on top of one another in matrices will yield the following:</p>
+
+<p><img src="/images/photometric-stereo/2.webp" alt="eq-2" class="align-center" /></p>
+
+<p>Obtaining a least-squares solution for g(x,y) is simple in Matlab. Recall that g(x,y) must be equal to N(x,y)*p(x,y) and since N(x,y) is a unit normal, the albedo p(x,y) is given by the magnitude of g(x,y).</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span><span class="n">albedo_image</span><span class="p">,</span> <span class="n">surface_normals</span><span class="p">]</span> <span class="o">=</span> <span class="n">photometric_stereo</span><span class="p">(</span><span class="n">imarray</span><span class="p">,</span> <span class="n">light_dirs</span><span class="p">)</span>
+<span class="c1">% imarray: h x w x Nimages array of Nimages no. of images</span>
+<span class="c1">% light_dirs: Nimages x 3 array of light source directions</span>
+<span class="c1">% albedo_image: h x w image</span>
+<span class="c1">% surface_normals: h x w x 3 array of unit surface normals</span>
+
+
+    <span class="c1">%grab the dimensions</span>
+    <span class="p">[</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">numImages</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">imarray</span><span class="p">);</span>
+    <span class="c1">%initialize the </span>
+    <span class="n">albedo_image</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">);</span>
+    <span class="n">surface_normals</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+
+    <span class="n">linear_system</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">numImages</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+    <span class="k">for</span> <span class="n">col</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">w</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">h</span>
+            <span class="n">linear_system</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">numImages</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">imarray</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">numImages</span><span class="p">);</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">light_dirs</span><span class="p">\</span><span class="n">linear_system</span><span class="p">;</span>
+            <span class="n">magnitude</span> <span class="o">=</span> <span class="nb">norm</span><span class="p">(</span><span class="n">g</span><span class="p">);</span>
+            <span class="n">albedo_image</span><span class="p">(</span><span class="n">row</span><span class="p">,</span><span class="n">col</span><span class="p">)</span> <span class="o">=</span> <span class="n">magnitude</span><span class="p">;</span>
+            <span class="n">surface_normals</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="p">:)</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="p">/</span><span class="n">magnitude</span><span class="p">;</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="compute-surface-height-map-by-integration">Compute Surface Height Map by Integration</h2>
+
+<p>Here the surface height map is computed via integration. Instead of continuous integration of the partial derivatives over a path, different strategies are compared which simply sum the discrete values/steps that make up the path. In the “average” case, the integration is performed over both the row and column first paths, and then averaged. In the random case, 100 random paths starting from pixel 1,1 are used as the paths for integration. For each, a random increment of row or column creeps the integration closer to the target pixel location. This was easy to implement, and yields descent results when the average is taken, but it is limited. An improved implementation may have started the integration from different pixels values (such as different corners) so that the error did not accumulate towards one far corner. To keep the code simple, the built in Matlab function “cumsum” is used to perform the cumulative summations for the integrations. The partial derivatives are calculated and stored in matrices before the integrations are performed in order to speed things up. Even the 100 integration paths for the random case are performed in just a few seconds.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span>  <span class="n">height_map</span> <span class="o">=</span> <span class="n">get_surface</span><span class="p">(</span><span class="n">surface_normals</span><span class="p">,</span> <span class="n">image_size</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+<span class="c1">% surface_normals: 3 x num_pixels array of unit surface normals</span>
+<span class="c1">% image_size: [h, w] of output height map/image</span>
+<span class="c1">% height_map: height map of object</span>
+
+    <span class="n">h</span> <span class="o">=</span> <span class="n">image_size</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">image_size</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">height_map</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">);</span>
+  
+    <span class="n">dfdx</span> <span class="o">=</span> <span class="n">surface_normals</span><span class="p">(:,:,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="p">/</span><span class="n">surface_normals</span><span class="p">(:,:,</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">dfdy</span> <span class="o">=</span> <span class="n">surface_normals</span><span class="p">(:,:,</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="p">/</span><span class="n">surface_normals</span><span class="p">(:,:,</span><span class="mi">3</span><span class="p">);</span>
+    
+    <span class="k">for</span> <span class="n">u</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">h</span>
+        <span class="k">for</span> <span class="n">v</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">w</span> 
+            <span class="k">switch</span> <span class="n">method</span>
+                <span class="k">case</span> <span class="s1">'column'</span>  
+                        <span class="n">col_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdy</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">u</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span> <span class="c1">%col</span>
+                        <span class="n">row_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdx</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">v</span><span class="p">),</span><span class="mi">2</span><span class="p">);</span> <span class="c1">%row</span>
+                        <span class="n">height_map</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="n">col_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">col_sum</span><span class="p">))</span> <span class="o">+</span> <span class="n">row_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">row_sum</span><span class="p">));</span>
+                <span class="k">case</span> <span class="s1">'row'</span>
+                        <span class="n">row_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdx</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">v</span><span class="p">),</span><span class="mi">2</span><span class="p">);</span> <span class="c1">%row</span>
+                        <span class="n">col_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdy</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span> <span class="c1">%col</span>
+                        <span class="n">height_map</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="n">row_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">row_sum</span><span class="p">))</span> <span class="o">+</span> <span class="n">col_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">col_sum</span><span class="p">));</span>
+                <span class="k">case</span> <span class="s1">'average'</span>
+                        <span class="n">z</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+                        <span class="n">col_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdy</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">u</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span> <span class="c1">%col</span>
+                        <span class="n">row_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdx</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">v</span><span class="p">),</span><span class="mi">2</span><span class="p">);</span> <span class="c1">%row</span>
+                        <span class="n">z</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="n">col_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">col_sum</span><span class="p">))</span> <span class="o">+</span> <span class="n">row_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">row_sum</span><span class="p">));</span>
+
+                        <span class="n">row_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdx</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span><span class="n">v</span><span class="p">),</span><span class="mi">2</span><span class="p">);</span> <span class="c1">%row</span>
+                        <span class="n">col_sum</span> <span class="o">=</span> <span class="nb">cumsum</span><span class="p">(</span><span class="n">dfdy</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">),</span><span class="mi">1</span><span class="p">);</span> <span class="c1">%col</span>
+                        <span class="n">z</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">=</span> <span class="n">row_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">row_sum</span><span class="p">))</span> <span class="o">+</span> <span class="n">col_sum</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">col_sum</span><span class="p">));</span>
+                        <span class="n">height_map</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="nb">mean</span><span class="p">(</span><span class="n">z</span><span class="p">);</span>
+                <span class="k">case</span> <span class="s1">'random'</span>
+                        <span class="n">numRandPaths</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+                        <span class="n">height_maps</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">h</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">numRandPaths</span><span class="p">);</span>
+                        <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numRandPaths</span>
+                            <span class="n">row_sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                            <span class="n">col_sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+                            <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                            <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+                            <span class="k">while</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">u</span> <span class="o">&amp;&amp;</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">v</span>
+                                <span class="k">if</span> <span class="nb">rand</span> <span class="o">&gt;</span> <span class="mf">0.5</span> 
+                                    <span class="n">row_sum</span> <span class="o">=</span> <span class="n">row_sum</span> <span class="o">+</span> <span class="n">dfdx</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+                                    <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                                <span class="k">else</span>
+                                    <span class="n">col_sum</span> <span class="o">=</span> <span class="n">col_sum</span> <span class="o">+</span> <span class="n">dfdy</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+                                    <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                                <span class="k">end</span>
+                            <span class="k">end</span>
+                            <span class="k">while</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="n">u</span>
+                                <span class="n">col_sum</span> <span class="o">=</span> <span class="n">col_sum</span> <span class="o">+</span> <span class="n">dfdy</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+                                <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                            <span class="k">end</span>
+                            <span class="k">while</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="n">v</span>
+                                <span class="n">row_sum</span> <span class="o">=</span> <span class="n">row_sum</span> <span class="o">+</span> <span class="n">dfdx</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+                                <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+                            <span class="k">end</span>
+                            <span class="n">height_maps</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="n">row_sum</span> <span class="o">+</span> <span class="n">col_sum</span><span class="p">;</span>
+                        <span class="k">end</span>
+                        <span class="c1">%height_map(u,v) = row_sum + col_sum;</span>
+                        <span class="n">height_map</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">)</span> <span class="o">=</span> <span class="nb">mean</span><span class="p">(</span><span class="n">height_maps</span><span class="p">(</span><span class="n">u</span><span class="p">,</span><span class="n">v</span><span class="p">,:));</span>
+                <span class="k">otherwise</span> 
+                    <span class="nb">error</span><span class="p">(</span><span class="s1">'Specified method is invalid.'</span><span class="p">);</span>
+            <span class="k">end</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="results">Results</h2>
+
+<p>Results were generated for four different faces from the dataset. For each, the following are included:</p>
+
+<ul>
+  <li>calculated albedo</li>
+  <li>calculated surface normals</li>
+  <li>results of each integration path method, including “row”, “columns”, “average” and “random”</li>
+</ul>
+
+<p>The angles for each photo result were chosen to highlight any unique flaws from that integration path.</p>
+
+<h3 id="yaleb01">YaleB01</h3>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/3.webp" />
+  <img src="/images/photometric-stereo/4.webp" />
+  <img src="/images/photometric-stereo/5.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/6.webp" />
+  <img src="/images/photometric-stereo/7.webp" />
+  <img src="/images/photometric-stereo/8.webp" />
+</figure>
+
+<h3 id="yaleb02">YaleB02</h3>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/9.webp" />
+  <img src="/images/photometric-stereo/10.webp" />
+  <img src="/images/photometric-stereo/11.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/12.webp" />
+  <img src="/images/photometric-stereo/13.webp" />
+  <img src="/images/photometric-stereo/14.webp" />
+</figure>
+
+<h3 id="yaleb05">YaleB05</h3>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/15.webp" />
+  <img src="/images/photometric-stereo/16.webp" />
+  <img src="/images/photometric-stereo/17.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/18.webp" />
+  <img src="/images/photometric-stereo/19.webp" />
+  <img src="/images/photometric-stereo/20.webp" />
+</figure>
+
+<h3 id="yaleb07">YaleB07</h3>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/21.webp" />
+  <img src="/images/photometric-stereo/22.webp" />
+  <img src="/images/photometric-stereo/23.webp" />
+</figure>
+
+<figure class="third">
+  <img src="/images/photometric-stereo/24.webp" />
+  <img src="/images/photometric-stereo/25.webp" />
+  <img src="/images/photometric-stereo/26.webp" />
+</figure>
+
+<h2 id="results-discussion">Results Discussion</h2>
+
+<p>​The row and column integration methods are essentially the same, just operating on different order of axis. The result is an obvious error along one of the axis, but decent results along the other. Averaging the two normally yields superior performance, as it reduces noise from the inferior axis of each. Random integration performs well but accumulates noise in the lower left corner because all integration paths are starting in the top left pixel. A better implementation would have varied the starting pixel for integration and adjusted the integration to be consistent. Increasing the number of paths used for the random average results in better surface accuracy but at the cost of computation time. The best method for all faces was either “average” or “random” depending on the face. If there was a particularly large ripple in one of the faces (such as the row integration of YaleB01), then the random integration performed better than the average integration.</p>
+
+<h3 id="integration-run-times-compared">Integration Run-Times Compared</h3>
+
+<p>The following table shows the running time of the “get_surface.m” function which performs the integration. The values in each row of the table should all be the same, as the integration method is unchanged and the image size is constant between all faces. The row and columns are very similar in performs save for a miniature difference attributable to additional calculations for transposing the vectors for cumsum. The average is a little more than double the row or column, which makes since as it performs both and then computes their average. Lastly, the random integration method performs 100 trials each with similar cost to rows or columns integration. As expected, the duration is around 100x that of the row or column. This means performance is scaling very well, and fewer trials would lead to a shorter run time.</p>
+
+<figure>
+<img src="/images/photometric-stereo/27.webp" />
+<figcaption>Duration of "get_surface.m" function with various integration methods for each face. Values in seconds.</figcaption>
+</figure>
+
+<h3 id="violationslimitations">Violations/Limitations</h3>
+
+<p>Recall that the simple photometric stereo implemented here assumes the following:</p>
+
+<ul>
+  <li>​A lambertian object</li>
+  <li>A local shading model (no global illumination)</li>
+  <li>A set of known light source directions</li>
+  <li>A set of pictures of an object, obtained in exactly the same camera/object configuration but using different light sources</li>
+  <li>Orthographic projection</li>
+</ul>
+
+<p>​
+​However, in reality a lot of the previously listed assumptions do not hold true. Contradicting each assumption individually:</p>
+
+<ul>
+  <li>Human skin is far from lambertian. Light can be sub-scattered beneath the skin. Additionally, oil on the skin often makes for an extremely specular surface. This is especially true on the nose, cheeks and chin. Eyes are also extremely specular.</li>
+  <li>There is no way for a local shading model to exist in reality. Light will bounce and reflect off surfaces, illuminating surfaces nearby. Inevitably, when light hits a spot on the face it will also contribute to illumination of nearby skin.</li>
+  <li>The set of light source directions is known, but there could be imprecision or measurement errors.</li>
+  <li>The pictures were hopefully obtained using the same camera/object configuration, but this cannot be verified.</li>
+  <li>True Othographic projection is not impossible with the kind of camera used to capture these photos. A rendering program would have to output such images if orthographic view is necessary.</li>
+</ul>
+
+<p>​Despite these overwhelming contradictions, the  results  show  that valuable reconstruction of an informative surface can be obtained using shape from shading.</p>
+
+<p>Removing images that seem to violate the assumptions might help the overall performance. Six images appeared to have high specular reflection, and were removed from the dataset (originally 64 images -&gt;  now 58 images). The results of this subset of viewpoints are shown below (subset on right, original on left). There did not appear to be any discernible differences.</p>
+
+<figure class="half">
+<img src="/images/photometric-stereo/28.webp" />
+<img src="/images/photometric-stereo/29.webp" />
+</figure>
+
+<figure class="half">
+<img src="/images/photometric-stereo/30.webp" />
+<img src="/images/photometric-stereo/31.webp" />
+</figure>
+
+<figure class="half">
+<img src="/images/photometric-stereo/32.webp" />
+<img src="/images/photometric-stereo/33.webp" />
+</figure>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#computer-vision" class="page__taxonomy-item p-category" rel="tag">computer vision</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-01-15">January 15, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=%E2%80%8BPhotometric+Stereo%3A+Shape+from+Shading%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-photometric-stereo%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-photometric-stereo%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-photometric-stereo/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-blob-analysis/" class="pagination--pager" title="Visualizing High Dimensional Data: Blob Analysis + PCA
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-image-segmentation-with-em/" class="pagination--pager" title="​Image Segmentation w/ EM Algorithm
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

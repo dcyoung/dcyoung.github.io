@@ -1,0 +1,1287 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Estimating Homography w/ RANSAC</title>
+<meta name="description" content="Implementing a robust homography estimation to register pairs of images separated either by a 2D or 3D projective transformation.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Estimating Homography w/ RANSAC">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-estimating-homography/">
+
+
+  <meta property="og:description" content="Implementing a robust homography estimation to register pairs of images separated either by a 2D or 3D projective transformation.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/estimating-homography/8.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2016-03-02T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2016-03-02T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-estimating-homography/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Estimating Homography w/ RANSAC">
+    <meta itemprop="description" content="Implementing a robust homography estimation to register pairs of images separated either by a 2D or 3D projective transformation.">
+    <meta itemprop="datePublished" content="2016-03-02T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2016-03-02T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-estimating-homography/" itemprop="url">Estimating Homography w/ RANSAC
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          13 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#fitting-a-homography-provided-known-matches">Fitting a Homography (Provided Known Matches)</a></li><li><a href="#generalized-ransac">Generalized RANSAC</a></li><li><a href="#estimating-homography-using-ransac">Estimating Homography using RANSAC</a><ul><li><a href="#calling-the-ransac-for-homography-parameters">Calling the RANSAC for homography (parameters)</a></li><li><a href="#calculating-residual-errors">Calculating Residual Errors</a></li></ul></li><li><a href="#applied-example-stitching-images">Applied Example (stitching images)</a><ul><li><a href="#main-script">Main Script</a></li><li><a href="#detecting-feature">Detecting Feature</a></li><li><a href="#describing-features">Describing Features</a></li><li><a href="#matching-features">Matching Features</a></li><li><a href="#estimated-homography-results">Estimated Homography Results</a></li><li><a href="#warping-image">Warping Image</a></li><li><a href="#stitching-image">Stitching Image</a></li></ul></li><li><a href="#reference-implementation">Reference Implementation</a></li></ul>
+            </nav>
+          </aside>
+        
+        <figure class="half">
+    <img src="/images/estimating-homography/0.webp" />
+    <img src="/images/estimating-homography/1.webp" />
+    <figcaption>Input images 1 (left) and 2 (right).</figcaption>
+</figure>
+
+<figure>
+    <img src="/images/estimating-homography/8.webp" />
+    <figcaption>Final stitched composite.</figcaption>
+</figure>
+
+<p>The main goal is to implement robust homography and fundamental matrix estimation to register pairs of images separated either by a 2D or 3D projective transformation. This page details the estimation of homography. Another page coming soon will detail the estimation of the fundamental matrix.</p>
+
+<p>The source code can be obtained here: <a href="https://github.com/dcyoung/ImageAlign">github.com/dcyoung/ImageAlign</a></p>
+
+<h2 id="fitting-a-homography-provided-known-matches">Fitting a Homography (Provided Known Matches)</h2>
+
+<p>To be brief, the homography matrix is the transformation between two views of a planar surface OR between two images from cameras that share the same center. If parallel lines were somehow preserved, one could estimate this with 3 points… as 3 points are all that is needed to describe a parallelogram. However, homography describes a transform of a quadrilateral into any other quadrilateral. With an unrestricted quadrilateral, 4 points (4 matches for a total of 8 points to be more specific) are required for estimation. 
+​
+There are 2 linearly independent equations per match. All the equations are stacked into the 8x9 matrix “A” such that A<em>h=0, where h is a column vector of 9 values that make up the 3x3 H matrix. H has 9 parameters, but only 8 D.O.F. because the scale is arbitrary. Each match yields 2 linearly independent equations, so only 4 matches are required to estimate H. Finding the H matrix from A</em>h = 0 calls for homogenous least squares, ie: finding the h which minimizes ||A*h||^2.  This can be accomplished by setting h to the eigenvector of A’A corresponding to the smallest eigenvalue. In Matlab the solution can be obtained from the SVD of A by the singular vector corresponding to the smallest singular value.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">H</span> <span class="o">=</span> <span class="n">fit_homography</span><span class="p">(</span><span class="n">pts1_homogenous</span><span class="p">,</span> <span class="n">pts2_homogenous</span><span class="p">)</span>
+<span class="c1">%FIT_HOMOGRAPHY Summary of this function goes here</span>
+
+    <span class="k">if</span> <span class="nb">size</span><span class="p">(</span><span class="n">pts1_homogenous</span><span class="p">)</span> <span class="o">~=</span> <span class="nb">size</span><span class="p">(</span><span class="n">pts2_homogenous</span><span class="p">)</span>
+        <span class="nb">error</span><span class="p">(</span><span class="s1">'Number of matched features in the subset supplied to fit_homography does not match for both images'</span><span class="p">)</span>
+    <span class="k">end</span> 
+    
+    <span class="p">[</span><span class="n">numMatches</span><span class="p">,</span> <span class="o">~</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">pts1_homogenous</span><span class="p">);</span>
+    
+    <span class="c1">%create the A matrix</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="p">[];</span> <span class="c1">% will be 2*numMatches x 9</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numMatches</span>
+        <span class="c1">%assume homogenous versions of all the feature points</span>
+        <span class="n">p1</span> <span class="o">=</span> <span class="n">pts1_homogenous</span><span class="p">(</span><span class="n">i</span><span class="p">,:);</span>
+        <span class="n">p2</span> <span class="o">=</span> <span class="n">pts2_homogenous</span><span class="p">(</span><span class="n">i</span><span class="p">,:);</span>
+        
+        <span class="c1">% 2x9 matrix to append onto A. </span>
+        <span class="n">A_i</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>  <span class="p">,</span>   <span class="o">-</span><span class="n">p1</span>     <span class="p">,</span>   <span class="n">p2</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">p1</span><span class="p">;</span>
+                    <span class="n">p1</span>      <span class="p">,</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span>   <span class="o">-</span><span class="n">p2</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">p1</span><span class="p">];</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="p">[</span><span class="n">A</span><span class="p">;</span> <span class="n">A_i</span><span class="p">];</span>        
+    <span class="k">end</span>
+    
+    <span class="c1">%solve for A*h = 0</span>
+    <span class="p">[</span><span class="o">~</span><span class="p">,</span><span class="o">~</span><span class="p">,</span><span class="n">eigenVecs</span><span class="p">]</span> <span class="o">=</span> <span class="nb">svd</span><span class="p">(</span><span class="n">A</span><span class="p">);</span> <span class="c1">% Eigenvectors of transpose(A)*A</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">eigenVecs</span><span class="p">(:,</span><span class="mi">9</span><span class="p">);</span>     <span class="c1">% Vector corresponding to smallest eigenvalue </span>
+    <span class="n">H</span> <span class="o">=</span> <span class="nb">reshape</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>   <span class="c1">% Reshape into 3x3 matrix</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">H</span> <span class="o">.</span><span class="p">/</span> <span class="n">H</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>        <span class="c1">% Divide through by H(3,3)</span>
+    
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="generalized-ransac">Generalized RANSAC</h2>
+
+<p>I wrote  a function to perform RANSAC but left it slightly general, as I intend to use it in a different project later for estimating the fundamental matrix.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">bestFitModel</span><span class="p">,</span> <span class="n">inlierIndices</span> <span class="p">]</span> <span class="o">=</span> <span class="n">ransac_H</span><span class="p">(</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fitModelFxn</span><span class="p">,</span> <span class="n">errorFxn</span> <span class="p">)</span>
+<span class="c1">%RANSAC_H Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="p">[</span><span class="n">numMatches</span><span class="p">,</span> <span class="o">~</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">numInliersEachIteration</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">parameters</span><span class="o">.</span><span class="n">numIterations</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+    <span class="n">storedModels</span> <span class="o">=</span> <span class="p">{};</span><span class="c1">%zeros(parameters.numIterations,3,3);</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">parameters</span><span class="o">.</span><span class="n">numIterations</span><span class="p">;</span>
+        <span class="c1">%display(['Running ransac Iteration: ', num2str(i)]);</span>
+        
+        <span class="c1">%select a random subset of points</span>
+        <span class="n">subsetIndices</span> <span class="o">=</span> <span class="n">randsample</span><span class="p">(</span><span class="n">numMatches</span><span class="p">,</span> <span class="n">parameters</span><span class="o">.</span><span class="n">subsetSize</span><span class="p">);</span>
+        <span class="n">x_subset</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">subsetIndices</span><span class="p">,</span> <span class="p">:);</span>
+        <span class="n">y_subset</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">subsetIndices</span><span class="p">,</span> <span class="p">:);</span>
+            
+        <span class="c1">%fit a model to that subset</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">fitModelFxn</span><span class="p">(</span><span class="n">x_subset</span><span class="p">,</span> <span class="n">y_subset</span><span class="p">);</span>
+        
+        <span class="c1">%compute inliers, ie: find all remaining points that are </span>
+        <span class="c1">%"close" to the model and reject the rest as outliers</span>
+        <span class="n">residualErrors</span> <span class="o">=</span> <span class="n">errorFxn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+        
+        <span class="n">inlierIndices</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">residualErrors</span> <span class="o">&lt;</span> <span class="n">parameters</span><span class="o">.</span><span class="n">inlierDistThreshold</span><span class="p">);</span>      
+
+        <span class="c1">%record the number of inliers</span>
+        <span class="n">numInliersEachIteration</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">length</span><span class="p">(</span><span class="n">inlierIndices</span><span class="p">);</span>
+        
+        <span class="c1">%keep track of any models that generated an acceptable numbers of </span>
+        <span class="c1">%inliers. This collection can be parsed later to find the best fit</span>
+        <span class="n">currentInlierRatio</span> <span class="o">=</span> <span class="n">numInliersEachIteration</span><span class="p">(</span><span class="n">i</span><span class="p">)/</span><span class="n">numMatches</span><span class="p">;</span>
+        <span class="k">if</span> <span class="n">currentInlierRatio</span> <span class="o">&gt;=</span>  <span class="n">parameters</span><span class="o">.</span><span class="n">minInlierRatio</span>
+            <span class="c1">%re-fit the model using all of the inliers and store it</span>
+            <span class="n">x_inliers</span> <span class="o">=</span> <span class="n">x</span><span class="p">(</span><span class="n">inlierIndices</span><span class="p">,</span> <span class="p">:);</span>
+            <span class="n">y_inliers</span> <span class="o">=</span> <span class="n">y</span><span class="p">(</span><span class="n">inlierIndices</span><span class="p">,</span> <span class="p">:);</span>
+            <span class="n">storedModels</span><span class="p">{</span><span class="n">i</span><span class="p">}</span> <span class="o">=</span> <span class="n">fitModelFxn</span><span class="p">(</span><span class="n">x_inliers</span><span class="p">,</span> <span class="n">y_inliers</span><span class="p">);</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    
+    <span class="c1">%retrieve the model with the best fit (highest number of inliers)</span>
+    <span class="n">bestIteration</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">numInliersEachIteration</span> <span class="o">==</span> <span class="nb">max</span><span class="p">(</span><span class="n">numInliersEachIteration</span><span class="p">));</span>
+    <span class="n">bestIteration</span> <span class="o">=</span> <span class="n">bestIteration</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">%incase there was more than 1 with same value</span>
+    <span class="n">bestFitModel</span> <span class="o">=</span> <span class="n">storedModels</span><span class="p">{</span><span class="n">bestIteration</span><span class="p">};</span>
+    
+    <span class="c1">%recalculate the inlier indices for all points, this was done once before </span>
+    <span class="c1">%when calculting this model, but it wasn't stored for space reasons. </span>
+    <span class="c1">%Recalculate it now so that it can be returned to the caller</span>
+    <span class="n">residualErrors</span> <span class="o">=</span> <span class="n">errorFxn</span><span class="p">(</span><span class="n">bestFitModel</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+    <span class="n">inlierIndices</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">residualErrors</span> <span class="o">&lt;</span> <span class="n">parameters</span><span class="o">.</span><span class="n">inlierDistThreshold</span><span class="p">);</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="estimating-homography-using-ransac">Estimating Homography using RANSAC</h2>
+
+<h3 id="calling-the-ransac-for-homography-parameters">Calling the RANSAC for homography (parameters)</h3>
+
+<p>If we somehow had ground truth matches, the homography matrix H could be fit directly without any need for RANSAC. This was covered above. Unfortunately, more often than not, we don’t know the ground truth matches. If not all the matches are guaranteed to be true, the homography can be estimated using a subset of the top (least distance) putative matches. RANSAC is used for this estimation and it works like this:</p>
+
+<ul>
+  <li>Pick 4 matches at random</li>
+  <li>Estimate homography from the 4 matches</li>
+  <li>Look for additional inliers. That is, apply the estimated homogrpahy transform to points from 1 image and compare with points in other image to see if the distance is below some threshold. If so, its an inlier. If not, its an outlier.</li>
+  <li>Repeat multiple times</li>
+  <li>Return the homography estimate that yielded the most inliers.</li>
+</ul>
+
+<p>The following function uses the generalized RANSAC (written above) and the homography fitting function (also written above) to estimate the homography matrix.  The necessary 4 matches are defined by “parameters.subsetSize” indicating that RANSAC should use 4 matches to estimate the homography. The two function handles passed to the RANSAC are the custom functions written to fit and error test a homography model using 4 pairs of matching data points.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">H</span><span class="p">,</span> <span class="n">inlierIndices</span> <span class="p">]</span> <span class="o">=</span> <span class="n">estimate_homography</span><span class="p">(</span> <span class="n">img1Feat</span><span class="p">,</span> <span class="n">img2Feat</span> <span class="p">)</span>
+<span class="c1">%ESTIMATE_HOMOGRAPHY Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="n">parameters</span><span class="o">.</span><span class="n">numIterations</span> <span class="o">=</span> <span class="mi">150</span><span class="p">;</span>      <span class="c1">%the number of iterations to run</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">subsetSize</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>          <span class="c1">%number of matches to use each iteration</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">inlierDistThreshold</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>   <span class="c1">%the minimum distance for an inlier</span>
+    <span class="n">parameters</span><span class="o">.</span><span class="n">minInlierRatio</span> <span class="o">=</span> <span class="o">.</span><span class="mi">3</span><span class="p">;</span>     <span class="c1">%minimum inlier ratio required to store a fitted model</span>
+
+    <span class="p">[</span><span class="n">H</span><span class="p">,</span> <span class="n">inlierIndices</span><span class="p">]</span> <span class="o">=</span> <span class="n">ransac_H</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">img1Feat</span><span class="p">,</span> <span class="n">img2Feat</span><span class="p">,</span> <span class="o">@</span><span class="n">fit_homography</span><span class="p">,</span> <span class="o">@</span><span class="n">calc_residuals</span><span class="p">);</span>
+    
+    <span class="nb">display</span><span class="p">(</span><span class="s1">'Number of inliers:'</span><span class="p">);</span>
+    <span class="nb">display</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">inlierIndices</span><span class="p">));</span>
+    <span class="nb">display</span><span class="p">(</span><span class="s1">'Average residual for the inliers:'</span><span class="p">)</span>
+    <span class="nb">display</span><span class="p">(</span><span class="nb">mean</span><span class="p">(</span><span class="n">calc_residuals</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">img1Feat</span><span class="p">(</span><span class="n">inlierIndices</span><span class="p">,:),</span> <span class="n">img2Feat</span><span class="p">(</span><span class="n">inlierIndices</span><span class="p">,:))));</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="calculating-residual-errors">Calculating Residual Errors</h3>
+
+<p>The residual error is calculated here, and is used to error test a fit homography model. This will help RANSAC determine which matches are inliers or outliers given a homography estimate.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">residuals</span> <span class="o">=</span> <span class="n">calc_residuals</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">homoCoord1</span><span class="p">,</span> <span class="n">homoCoord2</span><span class="p">)</span>
+<span class="c1">%CALC_RESIDUALS Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="c1">%transform the points from img 1 by multiplying the homo coord by H</span>
+    <span class="n">transformedPoints</span> <span class="o">=</span> <span class="n">homoCoord1</span> <span class="o">*</span> <span class="n">H</span><span class="p">;</span>
+    
+    <span class="c1">%divide each pt by 3rd coord (scale factor lambda) to yield [x;y;1]</span>
+    <span class="c1">%before taking difference</span>
+    <span class="n">lambda_t</span> <span class="o">=</span>  <span class="n">transformedPoints</span><span class="p">(:,</span><span class="mi">3</span><span class="p">);</span> <span class="c1">%scale factor</span>
+    <span class="n">lambda_2</span> <span class="o">=</span> <span class="n">homoCoord2</span><span class="p">(:,</span><span class="mi">3</span><span class="p">);</span>    <span class="c1">%scale factor </span>
+    <span class="n">cartDistX</span> <span class="o">=</span> <span class="n">transformedPoints</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span> <span class="o">.</span><span class="p">/</span> <span class="n">lambda_t</span> <span class="o">-</span> <span class="n">homoCoord2</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)</span> <span class="o">.</span><span class="p">/</span> <span class="n">lambda_2</span><span class="p">;</span>
+    <span class="n">cartDistY</span> <span class="o">=</span> <span class="n">transformedPoints</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span> <span class="o">.</span><span class="p">/</span> <span class="n">lambda_t</span> <span class="o">-</span> <span class="n">homoCoord2</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)</span> <span class="o">.</span><span class="p">/</span> <span class="n">lambda_2</span><span class="p">;</span>
+    <span class="n">residuals</span> <span class="o">=</span> <span class="n">cartDistX</span> <span class="o">.*</span> <span class="n">cartDistX</span> <span class="o">+</span> <span class="n">cartDistY</span> <span class="o">.*</span> <span class="n">cartDistY</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="applied-example-stitching-images">Applied Example (stitching images)</h2>
+
+<p>Here, 2 images that share the same camera center are supplied to a script which does the following:</p>
+
+<ul>
+  <li>finds features</li>
+  <li>describes features</li>
+  <li>identifies matches</li>
+  <li>estimates homogrpahy using ransac</li>
+  <li>warps one image using the estimated homography</li>
+  <li>stitches the images together</li>
+</ul>
+
+<figure class="half">
+    <img src="/images/estimating-homography/0.webp" />
+    <img src="/images/estimating-homography/1.webp" />
+    <figcaption>Input images 1 (left) and 2 (right).</figcaption>
+</figure>
+
+<figure>
+    <img src="/images/estimating-homography/8.webp" />
+    <figcaption>Final stitched composite.</figcaption>
+</figure>
+
+<h3 id="main-script">Main Script</h3>
+
+<p>The following script provides an example of how to use all the written functions to estimate a homography matrix.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%Clean up the console and workspace</span>
+<span class="nb">clear</span> <span class="nb">all</span><span class="p">;</span> <span class="nb">clc</span><span class="p">;</span>
+
+<span class="c1">%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Load both images</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%</span>
+<span class="n">img1Filename</span> <span class="o">=</span> <span class="s1">'uttower_left.JPG'</span><span class="p">;</span>
+<span class="n">img2Filename</span> <span class="o">=</span> <span class="s1">'uttower_right.JPG'</span><span class="p">;</span>
+<span class="n">colorImg1</span> <span class="o">=</span> <span class="nb">imread</span><span class="p">(</span><span class="n">img1Filename</span><span class="p">);</span>
+<span class="n">colorImg2</span> <span class="o">=</span> <span class="nb">imread</span><span class="p">(</span><span class="n">img2Filename</span><span class="p">);</span>
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Convert to double and to grayscale</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="n">colorImg1</span> <span class="o">=</span> <span class="nb">im2double</span><span class="p">(</span><span class="n">colorImg1</span><span class="p">);</span>
+<span class="n">colorImg2</span> <span class="o">=</span> <span class="nb">im2double</span><span class="p">(</span><span class="n">colorImg2</span><span class="p">);</span>
+<span class="p">[</span><span class="n">heightImg1</span><span class="p">,</span> <span class="n">widthImg1</span><span class="p">,</span> <span class="o">~</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">colorImg1</span><span class="p">);</span>
+<span class="p">[</span><span class="n">heightImg2</span><span class="p">,</span> <span class="n">widthImg2</span><span class="p">,</span> <span class="o">~</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">colorImg2</span><span class="p">);</span>
+
+<span class="n">grayImg1</span> <span class="o">=</span> <span class="nb">rgb2gray</span><span class="p">(</span><span class="n">colorImg1</span><span class="p">);</span>
+<span class="n">grayImg2</span> <span class="o">=</span> <span class="nb">rgb2gray</span><span class="p">(</span><span class="n">colorImg2</span><span class="p">);</span>
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Detect feature points in both images</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="p">[</span><span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">c2</span><span class="p">]</span> <span class="o">=</span> <span class="n">detect_features</span><span class="p">(</span><span class="n">grayImg1</span><span class="p">,</span> <span class="n">grayImg2</span><span class="p">);</span>
+
+<span class="c1">%display an overlay of the features ontop of the image</span>
+<span class="nb">figure</span><span class="p">;</span> <span class="nb">imshow</span><span class="p">([</span><span class="n">colorImg1</span> <span class="n">colorImg2</span><span class="p">]);</span> <span class="nb">hold</span> <span class="n">on</span><span class="p">;</span> <span class="nb">title</span><span class="p">(</span><span class="s1">'Overlay detected features (corners)'</span><span class="p">);</span>
+<span class="nb">hold</span> <span class="n">on</span><span class="p">;</span> <span class="nb">plot</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span><span class="n">r1</span><span class="p">,</span><span class="s1">'ys'</span><span class="p">);</span> <span class="nb">plot</span><span class="p">(</span><span class="n">c2</span> <span class="o">+</span> <span class="n">widthImg1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="s1">'ys'</span><span class="p">);</span> 
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Extract local neighborhoods around every keypoint in both images</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">%Specify the size of the neighboring region to be described</span>
+<span class="n">neighborhoodRadius</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span> 
+
+<span class="c1">% Form descriptors simply by "flattening" the pixel values in each </span>
+<span class="c1">% neighborhood to one-dimensional vectors</span>
+<span class="n">featDescriptions_1</span> <span class="o">=</span> <span class="n">describe_features</span><span class="p">(</span><span class="n">grayImg1</span><span class="p">,</span> <span class="n">neighborhoodRadius</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">);</span>
+<span class="n">featDescriptions_2</span> <span class="o">=</span> <span class="n">describe_features</span><span class="p">(</span><span class="n">grayImg2</span><span class="p">,</span> <span class="n">neighborhoodRadius</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">c2</span><span class="p">);</span>
+
+<span class="c1">%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Match Features</span>
+<span class="c1">%%%%%%%%%%%%%%%%</span>
+<span class="n">numMatches</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+<span class="p">[</span><span class="n">img1_matchedFeature_idx</span><span class="p">,</span> <span class="n">img2_matchedFeature_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">match_features</span><span class="p">(</span><span class="n">numMatches</span><span class="p">,</span> <span class="n">featDescriptions_1</span><span class="p">,</span> <span class="n">featDescriptions_2</span><span class="p">);</span>
+
+<span class="n">match_r1</span> <span class="o">=</span> <span class="n">r1</span><span class="p">(</span><span class="n">img1_matchedFeature_idx</span><span class="p">);</span>
+<span class="n">match_c1</span> <span class="o">=</span> <span class="n">c1</span><span class="p">(</span><span class="n">img1_matchedFeature_idx</span><span class="p">);</span>
+<span class="n">match_r2</span> <span class="o">=</span> <span class="n">r2</span><span class="p">(</span><span class="n">img2_matchedFeature_idx</span><span class="p">);</span>
+<span class="n">match_c2</span> <span class="o">=</span> <span class="n">c2</span><span class="p">(</span><span class="n">img2_matchedFeature_idx</span><span class="p">);</span>
+
+<span class="c1">% Display an overlay of these best matched features on top of the images</span>
+<span class="nb">figure</span><span class="p">;</span> <span class="nb">imshow</span><span class="p">([</span><span class="n">colorImg1</span> <span class="n">colorImg2</span><span class="p">]);</span> <span class="nb">hold</span> <span class="n">on</span><span class="p">;</span> <span class="nb">title</span><span class="p">(</span><span class="s1">'Overlay top matched features'</span><span class="p">);</span>
+<span class="nb">hold</span> <span class="n">on</span><span class="p">;</span> <span class="nb">plot</span><span class="p">(</span><span class="n">match_c1</span><span class="p">,</span> <span class="n">match_r1</span><span class="p">,</span><span class="s1">'ys'</span><span class="p">);</span> <span class="nb">plot</span><span class="p">(</span><span class="n">match_c2</span> <span class="o">+</span> <span class="n">widthImg1</span><span class="p">,</span> <span class="n">match_r2</span><span class="p">,</span> <span class="s1">'ys'</span><span class="p">);</span> 
+
+<span class="c1">% Display lines connecting the matched features</span>
+<span class="n">plot_r</span> <span class="o">=</span> <span class="p">[</span><span class="n">match_r1</span><span class="p">,</span> <span class="n">match_r2</span><span class="p">];</span>
+<span class="n">plot_c</span> <span class="o">=</span> <span class="p">[</span><span class="n">match_c1</span><span class="p">,</span> <span class="n">match_c2</span> <span class="o">+</span> <span class="n">widthImg1</span><span class="p">];</span>
+<span class="nb">figure</span><span class="p">;</span> <span class="nb">imshow</span><span class="p">([</span><span class="n">colorImg1</span> <span class="n">colorImg2</span><span class="p">]);</span> <span class="nb">hold</span> <span class="n">on</span><span class="p">;</span> <span class="nb">title</span><span class="p">(</span><span class="s1">'Mapping of top matched features'</span><span class="p">);</span>
+<span class="nb">hold</span> <span class="n">on</span><span class="p">;</span> 
+<span class="nb">plot</span><span class="p">(</span><span class="n">match_c1</span><span class="p">,</span> <span class="n">match_r1</span><span class="p">,</span><span class="s1">'ys'</span><span class="p">);</span>           <span class="c1">%mark features from the 1st img</span>
+<span class="nb">plot</span><span class="p">(</span><span class="n">match_c2</span> <span class="o">+</span> <span class="n">widthImg1</span><span class="p">,</span> <span class="n">match_r2</span><span class="p">,</span> <span class="s1">'ys'</span><span class="p">);</span> <span class="c1">%mark features from the 2nd img</span>
+<span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="n">numMatches</span>             <span class="c1">%draw lines connecting matched features</span>
+    <span class="nb">plot</span><span class="p">(</span><span class="n">plot_c</span><span class="p">(</span><span class="n">i</span><span class="p">,:),</span> <span class="n">plot_r</span><span class="p">(</span><span class="n">i</span><span class="p">,:));</span>
+<span class="k">end</span>
+
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Estimate Homography</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">%create homogenous versions of the the matched feature points for each img</span>
+<span class="n">img1MatchFeatPts</span> <span class="o">=</span> <span class="p">[</span><span class="n">match_c1</span><span class="p">,</span> <span class="n">match_r1</span><span class="p">,</span> <span class="nb">ones</span><span class="p">(</span><span class="n">numMatches</span><span class="p">,</span><span class="mi">1</span><span class="p">)];</span>
+<span class="n">img2MatchFeatPts</span> <span class="o">=</span> <span class="p">[</span><span class="n">match_c2</span><span class="p">,</span> <span class="n">match_r2</span><span class="p">,</span> <span class="nb">ones</span><span class="p">(</span><span class="n">numMatches</span><span class="p">,</span><span class="mi">1</span><span class="p">)];</span>
+<span class="p">[</span><span class="n">H</span><span class="p">,</span> <span class="n">inlierIndices</span><span class="p">]</span> <span class="o">=</span> <span class="n">estimate_homography</span><span class="p">(</span><span class="n">img1MatchFeatPts</span><span class="p">,</span><span class="n">img2MatchFeatPts</span><span class="p">);</span>
+<span class="c1">%display(H);</span>
+</code></pre></div></div>
+
+<h3 id="detecting-feature">Detecting Feature</h3>
+
+<p><img src="/images/estimating-homography/3.webp" alt="ref" class="align-center" /></p>
+
+<p>A harris corner detector was used to detect features.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">c2</span> <span class="p">]</span> <span class="o">=</span> <span class="n">detect_features</span><span class="p">(</span> <span class="n">grayImg1</span><span class="p">,</span> <span class="n">grayImg2</span> <span class="p">)</span>
+<span class="c1">%DETECT_FEATURES Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="c1">%use harris corner detector</span>
+    <span class="n">points1</span> <span class="o">=</span> <span class="n">detectHarrisFeatures</span><span class="p">(</span><span class="n">grayImg1</span><span class="p">);</span>
+    <span class="n">points2</span> <span class="o">=</span> <span class="n">detectHarrisFeatures</span><span class="p">(</span><span class="n">grayImg2</span><span class="p">);</span>
+
+    <span class="c1">%extract the pixel locations from the features</span>
+    <span class="p">[</span><span class="n">r1</span><span class="p">,</span> <span class="n">c1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">deal</span><span class="p">(</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">points1</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span> <span class="p">);</span>
+    <span class="p">[</span><span class="n">r2</span><span class="p">,</span> <span class="n">c2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">deal</span><span class="p">(</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">points2</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span> <span class="p">);</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span> <span class="nb">length</span><span class="p">(</span><span class="n">points1</span><span class="p">)</span>
+        <span class="n">cornerLoc</span> <span class="o">=</span> <span class="n">points1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">Location</span><span class="p">;</span>
+        <span class="n">r1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">cornerLoc</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+        <span class="n">c1</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">cornerLoc</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+    <span class="k">end</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span> <span class="nb">length</span><span class="p">(</span><span class="n">points2</span><span class="p">)</span>
+        <span class="n">cornerLoc</span> <span class="o">=</span> <span class="n">points2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">Location</span><span class="p">;</span>
+        <span class="n">r2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">cornerLoc</span><span class="p">(</span><span class="mi">2</span><span class="p">));</span>
+        <span class="n">c2</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">cornerLoc</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="describing-features">Describing Features</h3>
+
+<p>​The following code extracts local neighborhoods around every keypoint in an image, and forms descriptors simply by “flattening” the pixel values in each neighborhood to a one-dimensional vector. The descriptors are normalized to have zero mean an unit standard deviation.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">featDescriptions</span> <span class="p">]</span> <span class="o">=</span> <span class="n">describe_features</span><span class="p">(</span> <span class="n">img</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span> <span class="p">)</span>
+<span class="c1">%DESCRIBE_FEATURES Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="n">numFeat</span> <span class="o">=</span> <span class="nb">length</span><span class="p">(</span><span class="n">r</span><span class="p">);</span> <span class="c1">%number of features</span>
+    <span class="n">featDescriptions</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="n">numFeat</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">^</span><span class="mi">2</span><span class="p">);</span>
+
+    <span class="c1">% matrix with a single 1 in the center and zeros all around it</span>
+    <span class="n">padHelper</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span> 
+    <span class="n">padHelper</span><span class="p">(</span><span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+    <span class="c1">% use the pad Helper matrix to pad the img such that the border values</span>
+    <span class="c1">% extend out by the radius</span>
+    <span class="n">paddedImg</span> <span class="o">=</span> <span class="n">imfilter</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">padHelper</span><span class="p">,</span> <span class="s1">'replicate'</span><span class="p">,</span> <span class="s1">'full'</span><span class="p">);</span>
+
+    <span class="c1">%Extract the neighborhoods around the found features</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">numFeat</span>
+        <span class="c1">%Determine the rows and cols that will make up the neighorhood around</span>
+        <span class="c1">%the feature. Recall that the padding has offset the indices of the </span>
+        <span class="c1">%features in the img.. so now, the indices held in r,c can be used as </span>
+        <span class="c1">%the top left corner of the neighborhood rather than its center</span>
+        <span class="n">rowRange</span> <span class="o">=</span> <span class="n">r</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">:</span> <span class="n">r</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">radius</span><span class="p">;</span>
+        <span class="n">colRange</span> <span class="o">=</span> <span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="p">:</span> <span class="n">c</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">radius</span><span class="p">;</span>
+        <span class="n">neighborhood</span> <span class="o">=</span> <span class="n">paddedImg</span><span class="p">(</span><span class="n">rowRange</span><span class="p">,</span> <span class="n">colRange</span><span class="p">);</span>
+        <span class="n">flattenedFeatureVec</span> <span class="o">=</span> <span class="n">neighborhood</span><span class="p">(:);</span>
+        <span class="n">featDescriptions</span><span class="p">(</span><span class="n">i</span><span class="p">,:)</span> <span class="o">=</span> <span class="n">flattenedFeatureVec</span><span class="p">;</span>
+    <span class="k">end</span>
+    
+    <span class="c1">%Normalize all descriptors to have zero mean and unit standard deviation</span>
+    <span class="n">featDescriptions</span> <span class="o">=</span> <span class="n">zscore</span><span class="p">(</span><span class="n">featDescriptions</span><span class="s1">')'</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="matching-features">Matching Features</h3>
+
+<p>Putative matches are selected based on the matrix of pairwise descriptor distances returned by a borrowed function “dist2” also shown below.</p>
+
+<p><img src="/images/estimating-homography/4.webp" alt="ref" class="align-center" />
+<img src="/images/estimating-homography/5.webp" alt="ref" class="align-center" /></p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span> <span class="n">img1Feature_idx</span><span class="p">,</span> <span class="n">img2Feature_idx</span> <span class="p">]</span> <span class="o">=</span> <span class="n">match_features</span><span class="p">(</span> <span class="n">numMatches</span><span class="p">,</span> <span class="n">featDescriptions_1</span><span class="p">,</span> <span class="n">featDescriptions_2</span><span class="p">)</span>
+<span class="c1">%MATCH_FEATURES Summary of this function goes here</span>
+<span class="c1">%   Detailed explanation goes here</span>
+
+    <span class="c1">%determine the dist between every pair of features between images</span>
+    <span class="c1">%(ie: every combination of 1 feature from img1 and 1 feature from img2)</span>
+    <span class="nb">distances</span> <span class="o">=</span> <span class="n">dist2</span><span class="p">(</span><span class="n">featDescriptions_1</span><span class="p">,</span> <span class="n">featDescriptions_2</span><span class="p">);</span>
+    <span class="c1">%sort these distances</span>
+    <span class="p">[</span><span class="o">~</span><span class="p">,</span><span class="n">distance_idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sort</span><span class="p">(</span><span class="nb">distances</span><span class="p">(:),</span> <span class="s1">'ascend'</span><span class="p">);</span>
+    <span class="c1">%select the smallest distances as the best matches</span>
+    <span class="n">bestMatches</span> <span class="o">=</span> <span class="n">distance_idx</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">numMatches</span><span class="p">);</span>
+    <span class="c1">% Determine the row,col indices in the distances matrix containing the best</span>
+    <span class="c1">% matches, as they'll be used to determine which feature pair produced that </span>
+    <span class="c1">% distance. The distances matrix is m x n where m = numFeaturesImg1 and </span>
+    <span class="c1">% n = numFeaturesImg2... so we access img1 feature as the row and img2</span>
+    <span class="c1">% feature as the col</span>
+    <span class="p">[</span><span class="n">rowIdx_inDistMatrix</span><span class="p">,</span> <span class="n">colIdx_inDistMatrix</span><span class="p">]</span> <span class="o">=</span> <span class="nb">ind2sub</span><span class="p">(</span><span class="nb">size</span><span class="p">(</span><span class="nb">distances</span><span class="p">),</span> <span class="n">bestMatches</span><span class="p">);</span>
+    <span class="n">img1Feature_idx</span> <span class="o">=</span> <span class="n">rowIdx_inDistMatrix</span><span class="p">;</span>
+    <span class="n">img2Feature_idx</span> <span class="o">=</span> <span class="n">colIdx_inDistMatrix</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<p>The borrowed function for squared distance.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">dist2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="c1">% DIST2	Calculates squared distance between two sets of points.</span>
+<span class="c1">% Adapted from Netlab neural network software:</span>
+<span class="c1">% http://www.ncrg.aston.ac.uk/netlab/index.php</span>
+<span class="c1">%</span>
+<span class="c1">%	Description</span>
+<span class="c1">%	D = DIST2(X, C) takes two matrices of vectors and calculates the</span>
+<span class="c1">%	squared Euclidean distance between them.  Both matrices must be of</span>
+<span class="c1">%	the same column dimension.  If X has M rows and N columns, and C has</span>
+<span class="c1">%	L rows and N columns, then the result has M rows and L columns.  The</span>
+<span class="c1">%	I, Jth entry is the  squared distance from the Ith row of X to the</span>
+<span class="c1">%	Jth row of C.</span>
+<span class="c1">%	Copyright (c) Ian T Nabney (1996-2001)</span>
+
+    <span class="p">[</span><span class="n">ndata</span><span class="p">,</span> <span class="n">dimx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">ncentres</span><span class="p">,</span> <span class="n">dimc</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">c</span><span class="p">);</span>
+    <span class="k">if</span> <span class="n">dimx</span> <span class="o">~=</span> <span class="n">dimc</span>
+        <span class="nb">error</span><span class="p">(</span><span class="s1">'Data dimension does not match dimension of centres'</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="n">n2</span> <span class="o">=</span> <span class="p">(</span><span class="nb">ones</span><span class="p">(</span><span class="n">ncentres</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">((</span><span class="n">x</span><span class="o">.^</span><span class="mi">2</span><span class="p">)</span><span class="s1">', 1))'</span> <span class="o">+</span> <span class="k">...</span>
+      <span class="nb">ones</span><span class="p">(</span><span class="n">ndata</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">((</span><span class="n">c</span><span class="o">.^</span><span class="mi">2</span><span class="p">)</span><span class="o">'</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="k">...</span>
+      <span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="o">'</span><span class="p">));</span>
+
+    <span class="c1">% Rounding errors occasionally cause negative entries in n2</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">n2</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">))</span>
+      <span class="n">n2</span><span class="p">(</span><span class="n">n2</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">)</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h3 id="estimated-homography-results">Estimated Homography Results</h3>
+
+<p>Out of the 200 generated putative matches, 117 inliers were found using the estimate_homography function. The average residual provided the final estimated homography matrix was 1.1855. The image below shows just the inlier matches overlaid on both images.</p>
+
+<p><img src="/images/estimating-homography/6.webp" alt="ref" class="align-center" /></p>
+
+<h3 id="warping-image">Warping Image</h3>
+
+<p>Transforming the first image by applying the estimated homography yields the following transformed image.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">% Warp image</span>
+<span class="n">homographyTransform</span> <span class="o">=</span> <span class="n">maketform</span><span class="p">(</span><span class="s1">'projective'</span><span class="p">,</span> <span class="n">H</span><span class="p">);</span>
+<span class="n">img1Transformed</span> <span class="o">=</span> <span class="n">imtransform</span><span class="p">(</span><span class="n">colorImg1</span><span class="p">,</span> <span class="n">homographyTransform</span><span class="p">);</span>
+<span class="nb">figure</span><span class="p">,</span> <span class="nb">imshow</span><span class="p">(</span><span class="n">img1Transformed</span><span class="p">);</span><span class="nb">title</span><span class="p">(</span><span class="s1">'Warped image'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p><img src="/images/estimating-homography/7.webp" alt="ref" class="align-center" /></p>
+
+<h3 id="stitching-image">Stitching Image</h3>
+
+<p>The final stiched composite:</p>
+
+<p><img src="/images/estimating-homography/8.webp" alt="ref" class="align-center" /></p>
+
+<p>A stitched composite image is generated using the transformed image and the original second image as inputs.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">% Stitch the images together with the correct overlap</span>
+<span class="n">stitchedCompositeImg</span> <span class="o">=</span> <span class="n">stitch</span><span class="p">(</span><span class="n">colorImg1</span><span class="p">,</span> <span class="n">colorImg2</span><span class="p">,</span> <span class="n">H</span><span class="p">);</span>
+<span class="nb">figure</span><span class="p">,</span> <span class="nb">imshow</span><span class="p">(</span><span class="n">stitchedCompositeImg</span><span class="p">);</span>
+<span class="nb">title</span><span class="p">(</span><span class="s1">'Alignment by homography'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function</span> <span class="p">[</span><span class="n">composite</span><span class="p">]</span> <span class="o">=</span> <span class="n">stitch</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">im2</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+
+    <span class="p">[</span><span class="n">h1</span><span class="p">,</span> <span class="n">w1</span><span class="p">,</span> <span class="n">numChannels1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">im1</span><span class="p">);</span>
+    <span class="p">[</span><span class="n">h2</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">numChannels2</span><span class="p">]</span> <span class="o">=</span> <span class="nb">size</span><span class="p">(</span><span class="n">im2</span><span class="p">);</span>
+    <span class="c1">%create a matrix of corner points for the first image</span>
+    <span class="n">corners</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">w1</span> <span class="mi">1</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="n">w1</span> <span class="n">h1</span> <span class="mi">1</span><span class="p">;</span>
+                <span class="mi">1</span> <span class="n">h1</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="c1">%warp the corner points using the homography matrix    </span>
+    <span class="n">warpCorners</span> <span class="o">=</span> <span class="n">homo_2_cart</span><span class="p">(</span> <span class="n">corners</span> <span class="o">*</span> <span class="n">H</span> <span class="p">);</span>
+
+    <span class="c1">%determine the minimum and maximum bounds for the composite image based off</span>
+    <span class="c1">%the warped corners</span>
+    <span class="n">minX</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span> <span class="nb">min</span><span class="p">(</span><span class="n">warpCorners</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)),</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">maxX</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span> <span class="nb">max</span><span class="p">(</span><span class="n">warpCorners</span><span class="p">(:,</span><span class="mi">1</span><span class="p">)),</span> <span class="n">w2</span><span class="p">);</span>
+    <span class="n">minY</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span> <span class="nb">min</span><span class="p">(</span><span class="n">warpCorners</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)),</span> <span class="mi">1</span><span class="p">);</span>
+    <span class="n">maxY</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span> <span class="nb">max</span><span class="p">(</span><span class="n">warpCorners</span><span class="p">(:,</span><span class="mi">2</span><span class="p">)),</span> <span class="n">h2</span><span class="p">);</span>
+
+    <span class="c1">%use those min and max bounds to define the resolution of the composite image</span>
+    <span class="n">xResRange</span> <span class="o">=</span> <span class="n">minX</span> <span class="p">:</span> <span class="n">maxX</span><span class="p">;</span> <span class="c1">%the range for x pixels</span>
+    <span class="n">yResRange</span> <span class="o">=</span> <span class="n">minY</span> <span class="p">:</span> <span class="n">maxY</span><span class="p">;</span> <span class="c1">%the range for y pixels</span>
+
+    <span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="nb">meshgrid</span><span class="p">(</span><span class="n">xResRange</span><span class="p">,</span><span class="n">yResRange</span><span class="p">)</span> <span class="p">;</span>
+    <span class="n">Hinv</span> <span class="o">=</span> <span class="nb">inv</span><span class="p">(</span><span class="n">H</span><span class="p">);</span>
+
+    <span class="n">warpedHomoScaleFactor</span> <span class="o">=</span> <span class="n">Hinv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">Hinv</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">Hinv</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+    <span class="n">warpX</span> <span class="o">=</span> <span class="p">(</span><span class="n">Hinv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">Hinv</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">Hinv</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="o">.</span><span class="p">/</span> <span class="n">warpedHomoScaleFactor</span> <span class="p">;</span>
+    <span class="n">warpY</span> <span class="o">=</span> <span class="p">(</span><span class="n">Hinv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">Hinv</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span> <span class="o">+</span> <span class="n">Hinv</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="o">.</span><span class="p">/</span> <span class="n">warpedHomoScaleFactor</span> <span class="p">;</span>
+
+
+    <span class="k">if</span> <span class="n">numChannels1</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="c1">%images are black and white... so simple interpolation</span>
+        <span class="n">blendedLeftHalf</span> <span class="o">=</span> <span class="nb">interp2</span><span class="p">(</span> <span class="nb">im2double</span><span class="p">(</span><span class="n">im1</span><span class="p">),</span> <span class="n">warpX</span><span class="p">,</span> <span class="n">warpY</span><span class="p">,</span> <span class="s1">'cubic'</span><span class="p">)</span> <span class="p">;</span>
+        <span class="n">blendedRightHalf</span> <span class="o">=</span> <span class="nb">interp2</span><span class="p">(</span> <span class="nb">im2double</span><span class="p">(</span><span class="n">im2</span><span class="p">),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">'cubic'</span><span class="p">)</span> <span class="p">;</span>
+    <span class="k">else</span>
+        <span class="c1">%images are RGB, so interpolate each channel individually</span>
+        <span class="n">blendedLeftHalf</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">yResRange</span><span class="p">),</span> <span class="nb">length</span><span class="p">(</span><span class="n">xResRange</span><span class="p">),</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="n">blendedRightHalf</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="nb">length</span><span class="p">(</span><span class="n">yResRange</span><span class="p">),</span> <span class="nb">length</span><span class="p">(</span><span class="n">xResRange</span><span class="p">),</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">:</span><span class="mi">3</span>
+            <span class="n">blendedLeftHalf</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">interp2</span><span class="p">(</span> <span class="nb">im2double</span><span class="p">(</span> <span class="n">im1</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)),</span> <span class="n">warpX</span><span class="p">,</span> <span class="n">warpY</span><span class="p">,</span> <span class="s1">'cubic'</span><span class="p">);</span>
+            <span class="n">blendedRightHalf</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="nb">interp2</span><span class="p">(</span> <span class="nb">im2double</span><span class="p">(</span> <span class="n">im2</span><span class="p">(:,:,</span><span class="n">i</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">'cubic'</span><span class="p">);</span>
+        <span class="k">end</span>
+    <span class="k">end</span>
+    <span class="c1">%create a blend weight matrix based off the presence of a pixel value from</span>
+    <span class="c1">%either image in the composite... ie: overlapping region has blendweight of</span>
+    <span class="c1">%2, a non overlapping region of 1 img has a blendweight of 1, and a region</span>
+    <span class="c1">%with no img (blank space) has a blendweight of 0.</span>
+    <span class="n">blendWeight</span> <span class="o">=</span> <span class="o">~</span><span class="nb">isnan</span><span class="p">(</span><span class="n">blendedLeftHalf</span><span class="p">)</span> <span class="o">+</span> <span class="o">~</span><span class="nb">isnan</span><span class="p">(</span><span class="n">blendedRightHalf</span><span class="p">)</span> <span class="p">;</span>
+    <span class="c1">%replace all NaN with 0, so they can be blended properly even if there is</span>
+    <span class="c1">%no pixel value there</span>
+    <span class="n">blendedLeftHalf</span><span class="p">(</span><span class="nb">isnan</span><span class="p">(</span><span class="n">blendedLeftHalf</span><span class="p">))</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+    <span class="n">blendedRightHalf</span><span class="p">(</span><span class="nb">isnan</span><span class="p">(</span><span class="n">blendedRightHalf</span><span class="p">))</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+    <span class="c1">%add the blendedLeft and Right halves together while dividing by the</span>
+    <span class="c1">%blendWeight for that pixel.</span>
+    <span class="n">composite</span> <span class="o">=</span> <span class="p">(</span><span class="n">blendedLeftHalf</span> <span class="o">+</span> <span class="n">blendedRightHalf</span><span class="p">)</span> <span class="o">.</span><span class="p">/</span> <span class="n">blendWeight</span> <span class="p">;</span>
+
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="reference-implementation">Reference Implementation</h2>
+
+<p><img src="/images/estimating-homography/9.webp" alt="ref" class="align-center" /></p>
+
+<p>The following is a short script to perform the same operations using commands built into MATLAB’s image processing toolbox. The code written above was an exercise in implementing the algorithms from scratch and not necessarily the most optimized implementations. If you’re looking for good results without worrying about the details, then this simple script will do the same thing.</p>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="c1">% Matlab Equivalent (GOLD STANDARD)</span>
+<span class="c1">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="c1">%Clean up the console and workspace</span>
+<span class="nb">clear</span> <span class="nb">all</span><span class="p">;</span>
+<span class="nb">clc</span><span class="p">;</span>
+
+<span class="c1">% Load both images</span>
+<span class="n">img1Filename</span> <span class="o">=</span> <span class="s1">'uttower_left.JPG'</span><span class="p">;</span>
+<span class="n">img2Filename</span> <span class="o">=</span> <span class="s1">'uttower_right.JPG'</span><span class="p">;</span>
+<span class="n">colorImg1</span> <span class="o">=</span> <span class="nb">imread</span><span class="p">(</span><span class="n">img1Filename</span><span class="p">);</span>
+<span class="n">colorImg2</span> <span class="o">=</span> <span class="nb">imread</span><span class="p">(</span><span class="n">img2Filename</span><span class="p">);</span>
+<span class="c1">% Convert to double and to grayscale</span>
+<span class="n">colorImg1</span> <span class="o">=</span> <span class="nb">im2double</span><span class="p">(</span><span class="n">colorImg1</span><span class="p">);</span>
+<span class="n">colorImg2</span> <span class="o">=</span> <span class="nb">im2double</span><span class="p">(</span><span class="n">colorImg2</span><span class="p">);</span>
+<span class="n">I1</span> <span class="o">=</span> <span class="nb">rgb2gray</span><span class="p">(</span><span class="n">colorImg1</span><span class="p">);</span>
+<span class="n">I2</span> <span class="o">=</span> <span class="nb">rgb2gray</span><span class="p">(</span><span class="n">colorImg2</span><span class="p">);</span>
+
+<span class="c1">%detect features</span>
+<span class="n">points1</span> <span class="o">=</span> <span class="n">detectHarrisFeatures</span><span class="p">(</span><span class="n">I1</span><span class="p">);</span>
+<span class="n">points2</span> <span class="o">=</span> <span class="n">detectHarrisFeatures</span><span class="p">(</span><span class="n">I2</span><span class="p">);</span>
+<span class="c1">%describe features</span>
+<span class="p">[</span><span class="n">features1</span><span class="p">,</span><span class="n">valid_points1</span><span class="p">]</span> <span class="o">=</span> <span class="n">extractFeatures</span><span class="p">(</span><span class="n">I1</span><span class="p">,</span><span class="n">points1</span><span class="p">);</span>
+<span class="p">[</span><span class="n">features2</span><span class="p">,</span><span class="n">valid_points2</span><span class="p">]</span> <span class="o">=</span> <span class="n">extractFeatures</span><span class="p">(</span><span class="n">I2</span><span class="p">,</span><span class="n">points2</span><span class="p">);</span>
+<span class="c1">%match features</span>
+<span class="n">indexPairs</span> <span class="o">=</span> <span class="n">matchFeatures</span><span class="p">(</span><span class="n">features1</span><span class="p">,</span><span class="n">features2</span><span class="p">);</span>
+
+<span class="n">matchedPoints1</span> <span class="o">=</span> <span class="n">valid_points1</span><span class="p">(</span><span class="n">indexPairs</span><span class="p">(:,</span><span class="mi">1</span><span class="p">),:);</span>
+<span class="n">matchedPoints2</span> <span class="o">=</span> <span class="n">valid_points2</span><span class="p">(</span><span class="n">indexPairs</span><span class="p">(:,</span><span class="mi">2</span><span class="p">),:);</span>
+<span class="c1">%display matches</span>
+<span class="nb">figure</span><span class="p">;</span> <span class="n">showMatchedFeatures</span><span class="p">(</span><span class="n">I1</span><span class="p">,</span><span class="n">I2</span><span class="p">,</span><span class="n">matchedPoints1</span><span class="p">,</span><span class="n">matchedPoints2</span><span class="p">,</span> <span class="s1">'montage'</span><span class="p">);</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#computer-vision" class="page__taxonomy-item p-category" rel="tag">computer vision</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#school-project" class="page__taxonomy-item p-category" rel="tag">school project</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2016-03-02">March 2, 2016</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Estimating+Homography+w%2F+RANSAC%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-estimating-homography%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-estimating-homography%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-estimating-homography/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-multinomial-regression/" class="pagination--pager" title="Multinomial Regression on Wide Datasets
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-fiducial-marker-tracking-for-ar/" class="pagination--pager" title="Fiducial Marker Tracking ​for Augmented Reality
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="https://dcyoung.github.io/pages/dcyoung/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dcyoung.github.io/pages/dcyoung/" rel="alternate" type="text/html" /><updated>2024-07-10T08:19:28+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/feed.xml</id><title type="html">David Young</title><subtitle>systems thinker &amp;&amp; passionate engineer</subtitle><author><name>David Young</name></author><entry><title type="html">Interactive Neural Network Visualizer</title><link href="https://dcyoung.github.io/pages/dcyoung/post-r3f-nn-visualizer/" rel="alternate" type="text/html" title="Interactive Neural Network Visualizer" /><published>2023-02-15T07:00:00+07:00</published><updated>2023-02-15T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/interactive-mlp-visualization</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-r3f-nn-visualizer/"><![CDATA[<p><a href="https://dcyoung.github.io/r3f-nn-visualizer/"><img src="https://github.com/dcyoung/r3f-nn-visualizer/raw/dev/docs/capture.gif" alt="" class="align-center" /></a></p>
+
+<p><a href="https://dcyoung.github.io/r3f-nn-visualizer/">Click HERE for an Interactive Demo</a></p>
+
+<p><a href="https://github.com/dcyoung/r3f-nn-visualizer">See the source code</a></p>
+
+<h2 id="training-a-model">Training a model</h2>
+
+<p>To be sure the model could run in browser on any device I turned to Tensorflow.js. I kept the setup small - an MLP w/ 2 hidden layers that learns to classify MNist digits. This should be familiar to anyone whose worked with networks.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="kd">const</span> <span class="nx">model</span> <span class="o">=</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">sequential</span><span class="p">();</span>
+  <span class="c1">// Hidden Layers</span>
+  <span class="nx">model</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">tf</span><span class="p">.</span><span class="nx">layers</span><span class="p">.</span><span class="nx">dense</span><span class="p">({</span><span class="na">inputShape</span><span class="p">:</span> <span class="p">[</span><span class="mi">28</span><span class="o">*</span><span class="mi">28</span><span class="p">],</span> <span class="na">units</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="na">activation</span><span class="p">:</span> <span class="dl">"</span><span class="s2">relu</span><span class="dl">"</span><span class="p">}));</span>
+  <span class="nx">model</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">tf</span><span class="p">.</span><span class="nx">layers</span><span class="p">.</span><span class="nx">dense</span><span class="p">({</span><span class="na">units</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span> <span class="na">activation</span><span class="p">:</span> <span class="dl">"</span><span class="s2">relu</span><span class="dl">"</span><span class="p">}));</span>
+  <span class="c1">// output layer</span>
+  <span class="nx">model</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">tf</span><span class="p">.</span><span class="nx">layers</span><span class="p">.</span><span class="nx">dense</span><span class="p">({</span><span class="na">units</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="na">activation</span><span class="p">:</span> <span class="dl">"</span><span class="s2">softmax</span><span class="dl">"</span><span class="p">}));</span>
+</code></pre></div></div>
+
+<p>I also added some React components to interactively kick off training/inference.</p>
+
+<h2 id="probing-model-activations">Probing model activations</h2>
+
+<p>Next, I added the ability to forward a sample through the model and capture the activations from each layer.</p>
+
+<div class="language-ts highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">probeModelActivation</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span>
+  <span class="nx">sample</span><span class="p">:</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">Tensor</span><span class="o">&lt;</span><span class="nx">tf</span><span class="p">.</span><span class="nx">Rank</span><span class="o">&gt;</span><span class="p">,</span>
+  <span class="nx">model</span><span class="p">:</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">Sequential</span>
+<span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// const layerInputs_BK = [tf.zeros([1, 28 * 28 * 1])];</span>
+  <span class="kd">const</span> <span class="na">layerInputs</span><span class="p">:</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">Tensor</span><span class="o">&lt;</span><span class="nx">tf</span><span class="p">.</span><span class="nx">Rank</span><span class="o">&gt;</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[</span><span class="nx">sample</span><span class="p">];</span>
+  <span class="nx">model</span><span class="p">.</span><span class="nx">layers</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">layer</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">layerOutput</span> <span class="o">=</span> <span class="nx">layer</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">layerInputs</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+    <span class="nx">layerInputs</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">layerOutput</span> <span class="k">as</span> <span class="nx">tf</span><span class="p">.</span><span class="nx">Tensor</span><span class="o">&lt;</span><span class="nx">tf</span><span class="p">.</span><span class="nx">Rank</span><span class="o">&gt;</span><span class="p">);</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nx">ActivationData</span><span class="p">(</span>
+    <span class="k">await</span> <span class="nx">layerInputs</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">data</span><span class="p">(),</span>
+    <span class="k">await</span> <span class="nb">Promise</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">layerInputs</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="k">async</span> <span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="k">await</span> <span class="nx">t</span><span class="p">.</span><span class="nx">data</span><span class="p">()))</span>
+  <span class="p">);</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h2 id="visualizing-activations">Visualizing Activations</h2>
+
+<p>Lastly, I used <code class="language-plaintext highlighter-rouge">react-three-fiber</code> to create an interactive visualization of the network including the propagation of activations. Updating a lot of 3D lines proved fairly cumbersome in <code class="language-plaintext highlighter-rouge">react-three-fiber</code>. This was unexpected as most other features in the library have been a treat. If I was starting this project over, I’d default to <code class="language-plaintext highlighter-rouge">GLSL</code> shaders to allow for bit more control.</p>]]></content><author><name>David Young</name></author><category term="webdev" /><category term="machine learning" /><category term="ai" /><category term="3D" /><category term="art" /><summary type="html"><![CDATA[An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.]]></summary></entry><entry><title type="html">Practical ML: Detecting Out-of-Distribution Data</title><link href="https://dcyoung.github.io/pages/dcyoung/post-mmle-scores/" rel="alternate" type="text/html" title="Practical ML: Detecting Out-of-Distribution Data" /><published>2023-02-05T07:00:00+07:00</published><updated>2023-02-05T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/mmle-scores</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-mmle-scores/"><![CDATA[<p>Recently I worked on a project triangulating geo-coordinates of signals based on registrations in a radio network. Attempting to improve on traditional optimization based trilateration, I turned to neural networks to pick up subtle patterns in the underlying data space (ex: terrain in certain regions affects observed signal strength). This approach outperformed existing trilateration algorithms but suffered from high variance in the prediction quality. Most of the problematic predictions stemmed from samples that were not represented well in the original training data. This example highlighted a common problem in applied ML.</p>
+
+<p>Wouldn’t it be nice if we could improve confidence in our predictions by detecting cases where new data differs significantly from the training distribution. One way to formalize this is <code class="language-plaintext highlighter-rouge">Out-of-Distribution detection</code>. See borrowed image below.</p>
+
+<p><img src="https://raw.githubusercontent.com/dlmacedo/robust-deep-learning/e7debdd54e6f38c692913d34a99d466a8c294eff/assets/rdl.png" alt="ood example" /></p>
+
+<p>For the triangulation problem described above, I turned to a slick solution introduced in the paper: <a href="https://arxiv.org/abs/2205.05874">Distinction Maximization Loss</a>, which describes a drop-in replacement to a typical softmax layer and a <code class="language-plaintext highlighter-rouge">Max-Mean Logit Entropy Score</code> that can be used to better detect “Out-of-Distribution” samples at inference time.</p>
+
+<h2 id="implementing-dismax">Implementing DisMax</h2>
+
+<p>The authors provide some code, but I was not able to get their implementations working. Instead I implemented the basics and created the following example to demonstrate the approach.</p>
+
+<p>DisMax is comprised of a replacement for the classification layer in a model and a replacement for the cross entropy loss used to train the model. A minimal implementation below:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DisMaxLossFirstPart</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="s">"""This part replaces the model classifier output layer nn.Linear()."""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_features</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DisMaxLossFirstPart</span><span class="p">,</span> <span class="bp">self</span><span class="p">).</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">num_features</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="n">num_classes</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">distance_scale</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">constant_</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">distance_scale</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">prototypes</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">num_features</span><span class="p">))</span>
+        <span class="n">nn</span><span class="p">.</span><span class="n">init</span><span class="p">.</span><span class="n">normal_</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">prototypes</span><span class="p">,</span> <span class="n">mean</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Parameter</span><span class="p">(</span>
+            <span class="n">torch</span><span class="p">.</span><span class="n">tensor</span><span class="p">([</span><span class="n">temperature</span><span class="p">]),</span> <span class="n">requires_grad</span><span class="o">=</span><span class="bp">False</span>
+        <span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">distances_from_normalized_vectors</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">cdist</span><span class="p">(</span>
+            <span class="n">F</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="n">features</span><span class="p">),</span>
+            <span class="n">F</span><span class="p">.</span><span class="n">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">prototypes</span><span class="p">),</span>
+            <span class="n">p</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+            <span class="n">compute_mode</span><span class="o">=</span><span class="s">"donot_use_mm_for_euclid_dist"</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">isometric_distances</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">torch</span><span class="p">.</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">distance_scale</span><span class="p">)</span> <span class="o">*</span> <span class="n">distances_from_normalized_vectors</span>
+        <span class="p">)</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">isometric_distances</span> <span class="o">+</span> <span class="n">isometric_distances</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdim</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">logits</span> <span class="o">/</span> <span class="bp">self</span><span class="p">.</span><span class="n">temperature</span>
+
+    <span class="k">def</span> <span class="nf">extra_repr</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">"num_features={}, num_classes={}"</span><span class="p">.</span><span class="nb">format</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">num_features</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">num_classes</span>
+        <span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">DisMaxLossSecondPart</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="s">"""This part replaces the nn.CrossEntropyLoss()"""</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_classifier</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">DisMaxLossSecondPart</span><span class="p">,</span> <span class="bp">self</span><span class="p">).</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">model_classifier</span> <span class="o">=</span> <span class="n">model_classifier</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">entropic_scale</span> <span class="o">=</span> <span class="mf">10.0</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logits</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">batch_size</span> <span class="o">=</span> <span class="n">logits</span><span class="p">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="bp">self</span><span class="p">.</span><span class="n">entropic_scale</span> <span class="o">*</span> <span class="n">logits</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">model_classifier</span><span class="p">.</span><span class="n">training</span>
+            <span class="k">else</span> <span class="n">nn</span><span class="p">.</span><span class="n">Softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)(</span><span class="n">logits</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">probabilities_at_targets</span> <span class="o">=</span> <span class="n">probabilities</span><span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">),</span> <span class="n">targets</span><span class="p">]</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="o">-</span><span class="n">torch</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">probabilities_at_targets</span><span class="p">).</span><span class="n">mean</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">loss</span>
+</code></pre></div></div>
+
+<p>Training a model w/ the DisMax layer and loss is simple - nothing fancy here:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">model</span> <span class="o">=</span> <span class="p">...</span>
+<span class="n">criterion</span> <span class="o">=</span> <span class="n">DisMaxLossSecondPart</span><span class="p">(</span><span class="n">model</span><span class="p">.</span><span class="n">classifier</span><span class="p">)</span>
+<span class="p">...</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">TRAIN_STEPS</span><span class="p">):</span>
+  <span class="p">...</span>
+  <span class="c1"># Predict coordinates and evaluate loss
+</span>  <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">Xtr</span><span class="p">)</span>
+  <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">Ytr</span><span class="p">)</span>
+  <span class="c1"># Backward pass
+</span>  <span class="n">optimizer</span><span class="p">.</span><span class="n">zero_grad</span><span class="p">()</span>
+  <span class="n">loss</span><span class="p">.</span><span class="n">backward</span><span class="p">()</span>
+  <span class="n">optimizer</span><span class="p">.</span><span class="n">step</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h2 id="implementing-maximum-mean-logit-entropy-score">Implementing Maximum Mean Logit Entropy Score</h2>
+
+<p>Implementing the MMLE score is very simple. I chose to use numpy here for simplicity in the plots to come.</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">softmax</span> <span class="k">as</span> <span class="n">softmax_np</span>
+<span class="k">def</span> <span class="nf">mmles_np</span><span class="p">(</span><span class="n">logits</span><span class="p">:</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">:</span>
+    <span class="s">"""Maximum Mean Logit Entropy Score"""</span>
+    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">softmax_np</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">logits</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">logits</span><span class="p">.</span><span class="n">mean</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">probabilities</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">log</span><span class="p">(</span><span class="n">probabilities</span><span class="p">)).</span><span class="nb">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Here logits can be used to calculate not only <code class="language-plaintext highlighter-rouge">softmax scores</code> (traditional) but also <code class="language-plaintext highlighter-rouge">MMLE scores</code> which we’ll compare in the next section.</p>
+
+<h2 id="does-it-work">Does it work?</h2>
+
+<p>To demonstrate the use, I first generate some simple 2D data to represent ~200 “In-Distribution” classes and 1 very “Out-of-Distribution” class.</p>
+
+<p><img src="/images/mmle-scores/clusters.webp" alt="clusters" />
+<em>Note the difference in the axes of the OOD data</em></p>
+
+<p>Then I train and calibrate the model (see full notebook for details), before predicting on two different sets of data:</p>
+
+<ul>
+  <li>held out validation dataset (In-Distribution)</li>
+  <li>held out validation dataset (Out-of-Distribution)</li>
+</ul>
+
+<p>For both sets I calculate the <code class="language-plaintext highlighter-rouge">softmax scores</code> (traditional) and the <code class="language-plaintext highlighter-rouge">MMLE scores</code>.</p>
+
+<p><img src="/images/mmle-scores/softmax.webp" alt="softmax" /></p>
+
+<p><img src="/images/mmle-scores/mmles.webp" alt="softmax" /></p>
+
+<p>As you can see, from the exact same logits the <code class="language-plaintext highlighter-rouge">MMLE scores</code> provide a much stronger delineation of “In-Distribution” vs “Out-of-Distribution” data.</p>
+
+<p>To demonstrate more programmatic use, here is an example of calculating thresholds from the validation data:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">val_scores</span> <span class="o">=</span> <span class="p">...</span> <span class="c1"># MMLE scores for the validation samples
+</span><span class="n">mmle_score_thresholds</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">):</span> <span class="n">np</span><span class="p">.</span><span class="n">percentile</span><span class="p">(</span><span class="n">val_scores</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
+<span class="p">}</span> <span class="c1"># {'0': -102.35904790566515, '0.05': -101.01156283044743, '0.1': -100.71284565474099, '0.25': -100.33496655987776, '0.5': -100.13457710062065, '0.75': -100.00017678930712, '0.9': -99.95630884123959, '0.95': -99.93938238309974, '1.0': -99.92696776594504}
+</span></code></pre></div></div>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">val_scores</span> <span class="o">=</span> <span class="p">...</span> <span class="c1"># MMLE scores for the validation samples
+</span><span class="n">ood_scores</span> <span class="o">=</span> <span class="p">...</span> <span class="c1"># MMLE scores for the OOD samples
+</span><span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">mmle_score_thresholds</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">ood_flagged_as_ood</span> <span class="o">=</span> <span class="n">ood_scores</span> <span class="o">&lt;</span> <span class="n">t</span>
+    <span class="n">ood_flagged_as_ood_perc</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">ood_flagged_as_ood</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">ood_flagged_as_ood</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">id_flagged_as_ood</span> <span class="o">=</span> <span class="n">val_scores</span> <span class="o">&lt;</span> <span class="n">t</span>
+    <span class="n">id_flagged_as_ood_perc</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">id_flagged_as_ood</span><span class="p">.</span><span class="nb">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">id_flagged_as_ood</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="mi">50</span><span class="o">*</span><span class="s">"="</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Using p=</span><span class="si">{</span><span class="n">p</span><span class="si">}</span><span class="s">, thresh=</span><span class="si">{</span><span class="n">t</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\t</span><span class="si">{</span><span class="n">id_flagged_as_ood_perc</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">% of valid (in distribution) samples would be incorrectly flagged as OOD"</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="se">\t</span><span class="si">{</span><span class="n">ood_flagged_as_ood_perc</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">f</span><span class="si">}</span><span class="s">% of invalid (out of distribution) samples would be correctly flagged as OOD"</span><span class="p">)</span>
+
+<span class="c1"># ==================================================
+# Using p=0, thresh=-102.36
+# 	0.00% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ==================================================
+# Using p=0.05, thresh=-101.01
+# 	0.05% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ==================================================
+# Using p=0.1, thresh=-100.71
+# 	0.10% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ==================================================
+# Using p=0.25, thresh=-100.33
+# 	0.25% of valid (in distribution) samples would be incorrectly flagged as OOD
+# 	100.00% of invalid (out of distribution) samples would be correctly flagged as OOD
+# ...
+</span></code></pre></div></div>
+
+<p>For more details, I’ve upload the <a href="https://github.com/dcyoung/ml-triangulation/blob/main/ood_detection.ipynb">full notebook</a>.</p>]]></content><author><name>David Young</name></author><category term="machine learning" /><category term="ai" /><summary type="html"><![CDATA[Detecting out of distribution samples using]]></summary></entry><entry><title type="html">Automating Free Staging Deployments for Github Pages</title><link href="https://dcyoung.github.io/pages/dcyoung/post-gh-pages-staging-deployments/" rel="alternate" type="text/html" title="Automating Free Staging Deployments for Github Pages" /><published>2023-02-02T07:00:00+07:00</published><updated>2023-02-02T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/gh-pages-staging-deployments</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-gh-pages-staging-deployments/"><![CDATA[<h2 id="problem">Problem</h2>
+
+<p>In typical software projects a CI/CD pipeline manages not only a “Production” deployment but also multiple other deployments for testing new features or running nightly regression tests etc. Using a “Staging” deployment to review proposed changes before you commit to production will prevent users from seeing bugs.</p>
+
+<p>I use <a href="https://pages.github.com/">Github Pages</a> to host sites for many of my personal projects (including this blog). I also use Github Actions for CI/CD, to automatically build and deploy a site whenever I commit changes. However, <strong>Github Pages only supports a single deployment of any given repository</strong>. Therefore, testing changes in a hypothetical deployment is NOT easily possible.</p>
+
+<p>For professional projects I would use a more dedicated and feature rich CI/CD pipeline, but for side projects using Github Pages I wanted a simple solution:</p>
+
+<ul>
+  <li>free</li>
+  <li>low maintenance</li>
+  <li>close to code… all in Github if possible</li>
+  <li>basic staging deployment –&gt; allow me to view a deployed version of the app BEFORE I commit to prod</li>
+</ul>
+
+<h2 id="idea">Idea</h2>
+
+<p>To accomplish this, I used Github Actions. The lifecycle of a Pull Request (PR) controls the lifecycle of a staging deployment - ie: 1 deployment for each PR, created when the PR is opened and removed when the PR is closed.</p>
+
+<ul>
+  <li>Developer opens PR in the app repository
+    <ul>
+      <li>Github Action creates a repository for a staging deployment</li>
+      <li>Github Action builds the app and deploys it to the staging repository</li>
+      <li>Github Action writes a comment to the PR with a link to the live staging deployment</li>
+    </ul>
+  </li>
+  <li>Developer inspects the staging deployment</li>
+  <li>Developer merges or closes the open PR
+    <ul>
+      <li>Github Action deletes the staging repository (and staging deployment)</li>
+    </ul>
+  </li>
+  <li>If the PR was merged, Github Action builds and deploys the app to production</li>
+</ul>
+
+<p>The final result looks something like this:
+<img src="/images/gh-pages-staging-deployments/example-pr.webp" alt="pr" class="align-center" /></p>
+
+<h2 id="creating-github-actions">Creating Github Actions</h2>
+
+<p>This process requires 2 new Github Action <strong>actions</strong>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">create-git-repo</code>: creates a new github repository</li>
+  <li><code class="language-plaintext highlighter-rouge">delete-git-repo</code>: deletes an existing github repository</li>
+</ul>
+
+<p>I used simple JS scripts to hit the Github API, and made dedicated actions for each. I’d recommend tightly controlling any actions that leverage secrets or personal access tokens, rather than using third party actions. See the action repositories for more details: <a href="https://github.com/dcyoung/ga-create-git-repo">ga-create-git-repo</a>, <a href="https://github.com/dcyoung/ga-delete-git-repo">ga-delete-git-repo</a>.</p>
+
+<h2 id="creating-workflows">Creating Workflows</h2>
+
+<p>Next, the overall staging process requires 2 new Github Action <strong>workflows</strong>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">pr_staging_deploy</code>: creates and manages the staging deployment for open PRs
+    <ul>
+      <li>When a PR is opened
+        <ul>
+          <li>Creates the a new temporary repository to host the staging deployment</li>
+        </ul>
+      </li>
+      <li>When a PR is opened or when a commit is added to an opened PR
+        <ul>
+          <li>Builds the app</li>
+          <li>Deploys the app to the temporary staging repository</li>
+          <li>Posts or updates a link in the PR comments, providing a URL to the staging deployment</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">pr_staging_teardown</code>: removes staging deployments on PR merge/close
+    <ul>
+      <li>When a PR is closed (or merged), delete the staging repository &amp; deployment</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Again, the workflow centers around the lifecycle of a PR by using the <strong>pull request node id</strong> to create temporary repo names w/ deterministic behavior. See the <a href="https://github.com/dcyoung/r3f-audio-visualizer/tree/dev/.github/workflows">code</a> for more details.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Staging PR Deploy</span>
+<span class="c1"># Run when pull requests are opened</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">dev</span><span class="pi">]</span>
+<span class="na">env</span><span class="pi">:</span>
+  <span class="na">PR_REPO_NAME</span><span class="pi">:</span> <span class="s">staging-pr-$</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">create-page-host</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Create new repository for temporary deployment</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">dcyoung/ga-create-git-repo@v1.0.0</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">$</span>
+          <span class="c1"># org: dcyoung</span>
+          <span class="na">access-token</span><span class="pi">:</span> <span class="s">$</span>
+  <span class="na">pr-build-deploy</span><span class="pi">:</span>
+    <span class="na">needs</span><span class="pi">:</span> <span class="s">create-page-host</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">environment</span><span class="pi">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">pr-staging</span>
+      <span class="na">url</span><span class="pi">:</span> <span class="s">https://dcyoung.github.io/$/</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Setup Node.js</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/setup-node@v2</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Set GitHub Actions as Commit Author</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">git config --global user.name github-actions</span>
+          <span class="s">git config --global user.email github-actions@github.com</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout Repo</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s2">"</span><span class="s">pr-build"</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Install and Build</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">cd pr-build</span>
+          <span class="s">npm install</span>
+          <span class="s">npm run build -- --base=/$/</span>
+        <span class="na">env</span><span class="pi">:</span>
+          <span class="na">CI</span><span class="pi">:</span> <span class="s2">"</span><span class="s">"</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout temporary deployment target repo</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v2</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">repository</span><span class="pi">:</span> <span class="s">dcyoung/$</span>
+          <span class="na">fetch-depth</span><span class="pi">:</span> <span class="m">0</span>
+          <span class="na">path</span><span class="pi">:</span> <span class="s2">"</span><span class="s">pr-deploy"</span>
+          <span class="na">token</span><span class="pi">:</span> <span class="s">$</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Push files to target</span>
+        <span class="na">run</span><span class="pi">:</span> <span class="pi">|</span>
+          <span class="s">cp -r pr-build/dist/* pr-deploy</span>
+          <span class="s">cd pr-deploy</span>
+          <span class="s">git add .</span>
+          <span class="s">git commit -m $GITHUB_SHA</span>
+          <span class="s">git branch -M gh-pages</span>
+          <span class="s">git push -f -u origin gh-pages</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Create link in PR</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">mshick/add-pr-comment@v2</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">message</span><span class="pi">:</span> <span class="pi">|</span>
+            <span class="s">**Staging Preview:**</span>
+            <span class="s">https://dcyoung.github.io/$/</span>
+</code></pre></div></div>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">name</span><span class="pi">:</span> <span class="s">Staging PR Teardown</span>
+<span class="c1"># Run when pull requests are closed (includes merged)</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">pull_request</span><span class="pi">:</span>
+    <span class="na">branches</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">dev</span><span class="pi">]</span>
+    <span class="na">types</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">closed</span><span class="pi">]</span>
+<span class="na">env</span><span class="pi">:</span>
+  <span class="c1"># The name of the staging repo created for this</span>
+  <span class="na">PR_REPO_NAME</span><span class="pi">:</span> <span class="s">staging-pr-$</span>
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">delete-page-host</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Delete repository for temporary deployment</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">dcyoung/ga-delete-git-repo@v1.0.0</span>
+        <span class="na">with</span><span class="pi">:</span>
+          <span class="na">name</span><span class="pi">:</span> <span class="s">dcyoung/$</span>
+          <span class="na">access-token</span><span class="pi">:</span> <span class="s">$</span>
+</code></pre></div></div>]]></content><author><name>David Young</name></author><category term="automation" /><category term="software notes" /><summary type="html"><![CDATA[Automating free staging deployments for Github Pages using Github Actions.]]></summary></entry><entry><title type="html">Performant Clustering of Geo Coordinates w/ Custom Distance Functions</title><link href="https://dcyoung.github.io/pages/dcyoung/post-clustering-custom-distance/" rel="alternate" type="text/html" title="Performant Clustering of Geo Coordinates w/ Custom Distance Functions" /><published>2023-01-22T07:00:00+07:00</published><updated>2023-01-22T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/clustering-custom-distance</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-clustering-custom-distance/"><![CDATA[<p>Recently I worked on a project triangulating geo-coordinates of signals based on registrations in a radio network. Part of the approach involved clustering observations into distinct geographic regions. The clustering algorithms used weren’t anything special (nearest-neighbor, k-means), however measuring the distance between points in geo-coordinates is not as simple as measuring the distance between points in cartesian coordinates.</p>
+
+<p>Instead of the euclidean distance supported by most clustering algorithms, the ideal metric is <a href="https://en.wikipedia.org/wiki/Haversine_formula">Haversine Distance</a> which measures the shortest path between two points traveling along the surface of a sphere.</p>
+
+<p><img src="/images/clustering-custom-distance/haversine.webp" alt="placeholder" class="align-center" /></p>
+
+<p>Here is simple numpy implementation:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">haversine_np</span><span class="p">(</span>
+    <span class="n">lat_long_deg_1</span><span class="p">:</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">,</span>
+    <span class="n">lat_long_deg_2</span><span class="p">:</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">,</span>
+    <span class="n">radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">RADIUS_EARTH_KM</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">:</span>
+    <span class="s">"""
+    Calculate the great circle distance between two points on a sphere
+    ie: Shortest distance between two points on the surface of a sphere
+    """</span>
+    <span class="n">lat_1</span><span class="p">,</span> <span class="n">lon_1</span><span class="p">,</span> <span class="n">lat_2</span><span class="p">,</span> <span class="n">lon_2</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span>
+        <span class="n">np</span><span class="p">.</span><span class="n">deg2rad</span><span class="p">,</span>
+        <span class="p">[</span>
+            <span class="n">lat_long_deg_1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">lat_long_deg_1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">lat_long_deg_2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">lat_long_deg_2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="p">.</span><span class="n">sin</span><span class="p">((</span><span class="n">lat_2</span> <span class="o">-</span> <span class="n">lat_1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="o">+</span> <span class="n">np</span><span class="p">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat_1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat_2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">sin</span><span class="p">((</span><span class="n">lon_2</span> <span class="o">-</span> <span class="n">lon_1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="p">)</span>
+    <span class="n">arc_len</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">np</span><span class="p">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">arc_len</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>NOTE: this post is framed around an example of haversine distance, but this technique applies to many different scenarios. Maybe you need to measure the <a href="https://en.wikipedia.org/wiki/Levenshtein_distance">levenshtein edit distance</a> between strings or a compatibility score between potential wedding guests :)</p>
+</blockquote>
+
+<p>I was shocked to discover that most clustering tool kits (<a href="https://scikit-learn.org/stable/modules/clustering.html">scikit-learn</a>) do NOT support custom distance metrics. Those that do (<a href="https://www.nltk.org/api/nltk.cluster.html">NLTK</a>) are extremely slow, because they execute a provided distance function for every pair of points individually. This is ok for clustering a handful of data points…. but will NOT scale to millions of samples. Instead I wrote a pseudo vectorized implementation like so:</p>
+
+<h2 id="nearest-neighbor">Nearest-Neighbor</h2>
+
+<p>For my problem, I needed relatively even spacing between clusters. For this a nearest-neighbor algorithm was a better choice. While not completely vectorized, this approach scales more linearly than exponentially.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">haversine_cluster</span><span class="p">(</span>
+    <span class="n">points_lat_long_deg</span><span class="p">:</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">,</span>
+    <span class="n">centroids_lat_long_deg</span><span class="p">:</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">,</span>
+    <span class="n">trace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">npt</span><span class="p">.</span><span class="n">NDArray</span><span class="p">:</span>
+    <span class="s">"""Cluster points to the closest centroid based on haversine dist
+
+    Args:
+        points_lat_long_deg (npt.NDArray): the data points to cluster, shape (n, 2)
+        centroids_lat_long_deg (npt.NDArray): the cluster centroids, shape (k, 2)
+        trace (bool, optional): If True, display progress bar. Defaults to True.
+
+    Returns:
+        (npt.NDArray): labels (cluster indices) for each data point
+    """</span>
+    <span class="c1"># Cluster the data points to the nearest "cluster" based on haversine dist
+</span>    <span class="n">n</span> <span class="o">=</span> <span class="n">points_lat_long_deg</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="n">centroids_lat_long_deg</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Assign centroids based on minimum haversine distance
+</span>    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">trace</span><span class="p">):</span>
+        <span class="n">diff</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">haversine_np</span><span class="p">(</span>
+            <span class="n">points_lat_long_deg</span><span class="p">,</span> <span class="n">centroids_lat_long_deg</span><span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="p">)</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">diff</span><span class="p">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># n,
+</span>    <span class="k">return</span> <span class="n">labels</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Pre-define grid of clusters  
+# TODO: this could be further improved by initializing equidistant centroids (http://extremelearning.com.au/evenly-distributing-points-on-a-sphere/)
+# For now, just prune unpopulated clusters afterwards
+</span><span class="n">n_div_lat</span> <span class="o">=</span> <span class="mi">250</span>
+<span class="n">n_div_long</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">cluster_div_lat</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]),</span>  <span class="n">n_div_lat</span><span class="p">)</span>
+<span class="n">cluster_div_long</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="p">.</span><span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]),</span>  <span class="n">n_div_long</span><span class="p">)</span>
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">cluster_div_lat</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">cluster_div_long</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">2</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">lat</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cluster_div_lat</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="nb">long</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cluster_div_long</span><span class="p">):</span>
+        <span class="n">centroids</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">n_div_long</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">lat</span><span class="p">,</span> <span class="nb">long</span><span class="p">]</span>
+
+<span class="c1"># Then cluster the data points to the nearest "cluster" based on haversine dist
+</span><span class="n">labels</span> <span class="o">=</span> <span class="n">haversine_cluster</span><span class="p">(</span>
+    <span class="c1"># use only a subset of data points... since this is expensive
+</span>    <span class="n">points_lat_long_deg</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> 
+    <span class="n">centroids_lat_long_deg</span><span class="o">=</span><span class="n">centroids</span><span class="p">,</span>
+    <span class="n">trace</span><span class="o">=</span><span class="bp">True</span>
+<span class="p">)</span>
+
+<span class="c1"># Remove any clusters that have no data points... 
+# this reduces the final number of clusters while keeping an even spacing
+</span><span class="n">populated_centroid_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">unique</span><span class="p">(</span><span class="n">labels</span><span class="p">)))</span>
+<span class="n">centroids</span> <span class="o">=</span> <span class="n">centroids</span><span class="p">[</span><span class="n">populated_centroid_idxs</span><span class="p">,</span> <span class="p">:]</span>
+</code></pre></div></div>
+
+<p><img src="/images/clustering-custom-distance/nn.webp" alt="placeholder" class="align-center" /></p>
+
+<h2 id="k-means">K-Means</h2>
+
+<p>A k-means implementation just for grins :)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">k_means</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">num_iter</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">seed</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">trace</span><span class="p">:</span> <span class="nb">bool</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+
+    <span class="n">n</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">shape</span>
+    <span class="n">data_lla</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">stack</span><span class="p">([</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">))])</span>  <span class="c1"># 3, n
+</span>    
+    <span class="c1"># Initialize centroids as random selection of data points
+</span>    <span class="n">centroids</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">choice</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="bp">False</span><span class="p">)]</span> <span class="c1"># k, d 
+</span>    <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span><span class="n">k</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">num_iter</span><span class="p">),</span> <span class="n">disable</span><span class="o">=</span><span class="ow">not</span> <span class="n">trace</span><span class="p">):</span>
+        <span class="c1"># Assign centroids based on minimum haversine distance
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">diff</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">haversine_np</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">centroids</span><span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">i</span><span class="p">,:])</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="n">diff</span><span class="p">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># n,
+</span>
+        <span class="c1"># Update the centroids to be the projected centroid of the members of each cluster
+</span>        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+            <span class="n">member_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">labels</span><span class="o">==</span><span class="n">i</span><span class="p">).</span><span class="n">squeeze</span><span class="p">()</span>
+            <span class="n">members</span> <span class="o">=</span> <span class="n">data_lla</span><span class="p">[:,</span> <span class="n">member_idxs</span><span class="p">]</span> <span class="c1"># 3, x
+</span>            <span class="k">if</span> <span class="n">members</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># empty cluster... don't update
+</span>                <span class="k">continue</span>
+            <span class="n">centroid</span> <span class="o">=</span> <span class="n">calculate_centroid_geo</span><span class="p">(</span><span class="n">lat_long_alt</span><span class="o">=</span><span class="n">members</span><span class="p">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">members</span><span class="p">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">members</span>
+            <span class="n">centroids</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">centroid</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">break</span>
+    <span class="k">return</span> <span class="n">centroids</span>
+</code></pre></div></div>
+
+<p><img src="/images/clustering-custom-distance/kmeans.webp" alt="placeholder" class="align-center" /></p>
+
+<blockquote>
+  <p>For more details see associated repository <a href="https://github.com/dcyoung/ml-triangulation">https://github.com/dcyoung/ml-triangulation</a></p>
+</blockquote>]]></content><author><name>David Young</name></author><category term="machine learning" /><summary type="html"><![CDATA[Implementing vectorized clustering methods for distance metrics unsupported by common libraries.]]></summary></entry><entry><title type="html">Audio Source Separation w/ Deep Learning</title><link href="https://dcyoung.github.io/pages/dcyoung/post-spleeter-pytorch/" rel="alternate" type="text/html" title="Audio Source Separation w/ Deep Learning" /><published>2022-11-07T07:00:00+07:00</published><updated>2022-11-07T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/spleeter-pytorch</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-spleeter-pytorch/"><![CDATA[<p>I was curious about source separation tools and stumbled across <code class="language-plaintext highlighter-rouge">Spleeter</code> (<a href="https://github.com/deezer/spleeter">repo</a>, <a href="https://archives.ismir.net/ismir2019/latebreaking/000036.pdf">paper</a>) - a fairly simple architecture for separating audio sources from an input song. I like to learn by building, and the official implementation was written in Tensorflow… so I rewrote it in PyTorch.</p>
+
+<h2 id="architecture">Architecture</h2>
+
+<p>The goal of the network is to predict the vocal and instrumental components of an input song provided as an audio spectrogram.</p>
+
+<p>Each stem (audio source) is extracted by a separate UNet architecture similar to a convolutional autoencoder using strided convolutions and extra skip-connections.</p>
+
+<p><img src="/images/spleeter-pytorch/architecture.webp" alt="placeholder" class="align-center" /></p>
+
+<h2 id="pytorch-implementation">PyTorch Implementation</h2>
+
+<p>To create this UNet architecture, I first define the basic blocks required to build our encoding and decoding layers.</p>
+
+<p>Encoding (aka downsampling/compression) is accomplished by passing the source through a set of encoder blocks. In the forward pass, I include the pre-activation convolutional output as we’ll need it later when creating skip connections.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">EncoderBlock</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">conv</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span>
+            <span class="n">num_features</span><span class="o">=</span><span class="n">out_channels</span><span class="p">,</span>
+            <span class="n">track_running_stats</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">eps</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+            <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">LeakyReLU</span><span class="p">(</span><span class="n">negative_slope</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tensor</span><span class="p">]:</span>
+        <span class="n">down</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">conv</span><span class="p">(</span><span class="n">F</span><span class="p">.</span><span class="n">pad</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="s">"constant"</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">down</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">relu</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">bn</span><span class="p">(</span><span class="n">down</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Decoding (aka upsampling/de-compression) is accomplished by passing the encoded result through a set of decoder blocks. The block looks very similar to the encoder blocks - except we transpose convolution.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">DecoderBlock</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dropout_prob</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tconv</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ConvTranspose2d</span><span class="p">(</span>
+            <span class="n">in_channels</span><span class="p">,</span> <span class="n">out_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">relu</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ReLU</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">bn</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">BatchNorm2d</span><span class="p">(</span>
+            <span class="n">out_channels</span><span class="p">,</span> <span class="n">track_running_stats</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="mf">0.01</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">dropout</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">dropout_prob</span><span class="p">)</span> <span class="k">if</span> <span class="n">dropout_prob</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">nn</span><span class="p">.</span><span class="n">Identity</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">up</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tconv</span><span class="p">(</span><span class="nb">input</span><span class="p">)</span>
+        <span class="c1"># reverse padding
+</span>        <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span>
+        <span class="n">up</span> <span class="o">=</span> <span class="n">up</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">l</span><span class="p">:</span><span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span><span class="o">-</span><span class="n">b</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">.</span><span class="n">dropout</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">bn</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">relu</span><span class="p">(</span><span class="n">up</span><span class="p">)))</span>
+</code></pre></div></div>
+
+<p>Putting it all together into a UNet, we have:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">UNet</span><span class="p">(</span><span class="n">nn</span><span class="p">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span>
+        <span class="n">in_channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">()</span>
+
+        <span class="c1"># DownSample layers
+</span>        <span class="n">down_set</span> <span class="o">=</span> <span class="p">[</span><span class="n">in_channels</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">encoder_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ModuleList</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">EncoderBlock</span><span class="p">(</span><span class="n">in_channels</span><span class="o">=</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_channels</span><span class="o">=</span><span class="n">out_ch</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">down_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">down_set</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># UpSample layers
+</span>        <span class="n">up_set</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">4</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_layers</span><span class="p">)]</span>
+        <span class="n">up_set</span><span class="p">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">decoder_layers</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">ModuleList</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">DecoderBlock</span><span class="p">(</span>
+                    <span class="c1"># doubled for concatenated inputs (skip connections)
+</span>                    <span class="n">in_channels</span><span class="o">=</span><span class="n">in_ch</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">in_ch</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">out_channels</span><span class="o">=</span><span class="n">out_ch</span><span class="p">,</span>
+                    <span class="c1">#   50 % dropout... first 3 layers only
+</span>                    <span class="n">dropout_prob</span><span class="o">=</span><span class="mf">0.5</span> <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">up_set</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">up_set</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># reconstruct the final mask same as the original channels
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">up_final</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">in_channels</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">dilation</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">sigmoid</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">:</span> <span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tensor</span><span class="p">:</span>
+        <span class="n">encoder_outputs_pre_act</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">for</span> <span class="n">down</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">.</span><span class="n">encoder_layers</span><span class="p">:</span>
+            <span class="n">conv</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">down</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">encoder_outputs_pre_act</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">conv</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">up</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">decoder_layers</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">up</span><span class="p">(</span><span class="n">encoder_outputs_pre_act</span><span class="p">.</span><span class="n">pop</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># merge skip connection
+</span>                <span class="n">x</span> <span class="o">=</span> <span class="n">up</span><span class="p">(</span><span class="n">torch</span><span class="p">.</span><span class="n">concat</span><span class="p">([</span><span class="n">encoder_outputs_pre_act</span><span class="p">.</span><span class="n">pop</span><span class="p">(),</span> <span class="n">x</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">up_final</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">mask</span> <span class="o">*</span> <span class="nb">input</span>
+</code></pre></div></div>
+
+<p>I added some boilerplate to adapt the pre-trained tensorflow weights to PyTorch and borrowed some code for handling the spectrograms. I’ve uploaded the source here: <a href="https://github.com/dcyoung/pt-spleeter">https://github.com/dcyoung/pt-spleeter</a></p>
+
+<h2 id="results">Results</h2>
+
+<p>Testing the architecture, it works surprisingly well.</p>
+
+<p>Input - Song (original):</p>
+
+<audio controls="">
+    <source src="/images/spleeter-pytorch/output/over_input.wav" type="audio/mpeg" />
+    Your browser does not support the audio element.
+</audio>
+
+<p>Output - Vocals (predicted):</p>
+
+<audio controls="">
+    <source src="/images/spleeter-pytorch/output/over_vocals.wav" type="audio/mpeg" />
+    Your browser does not support the audio element.
+</audio>
+
+<p>Output - Accompaniment (predicted):</p>
+
+<audio controls="">
+    <source src="/images/spleeter-pytorch/output/over_accompaniment.wav" type="audio/mpeg" />
+    Your browser does not support the audio element.
+</audio>]]></content><author><name>David Young</name></author><category term="machine learning" /><category term="ai" /><summary type="html"><![CDATA[A from scratch pytorch implementation of Spleeter - a network to separate vocal and instrumental tracks from an input song.]]></summary></entry><entry><title type="html">Automating a Keep-Alive Probe for Deployed Apps</title><link href="https://dcyoung.github.io/pages/dcyoung/post-streamlit-keep-alive/" rel="alternate" type="text/html" title="Automating a Keep-Alive Probe for Deployed Apps" /><published>2022-09-01T07:00:00+07:00</published><updated>2022-09-01T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/streamlit-keep-alive</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-streamlit-keep-alive/"><![CDATA[<h2 id="problem">Problem</h2>
+
+<p>Streamlit cloud allows developers to easily host streamlit applications for free! However, public apps will eventually hibernate if unused for a period of time. This can result in an pesky and occasionally lengthy reboot time.  See <a href="https://docs.streamlit.io/streamlit-cloud/get-started/manage-your-app#app-hibernation">details</a></p>
+
+<p><img src="https://docs.streamlit.io/images/spin_down.png" alt="placeholder" class="align-center" /></p>
+
+<h2 id="solution">Solution</h2>
+
+<p>To make sure the app is always primed, I automated a <code class="language-plaintext highlighter-rouge">keep alive</code> probe which opens the website and clicks on the “reset” button if visible. I leveraged <a href="https://github.com/puppeteer/puppeteer">puppeteer</a> to navigate and interact with the webpage using a headless browser. Then I automated a cron-job using Github Actions.</p>
+
+<h3 id="creating-a-probe-script">Creating a Probe Script</h3>
+
+<p>First, create the probe script to poke the website and look for the relevant “wake-up” button:</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// probe-action/probe.js</span>
+
+<span class="kd">const</span> <span class="nx">puppeteer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">puppeteer</span><span class="dl">'</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">TARGET_URL</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://&lt;YOUR_STREAMLIT_APP_URL&gt;.streamlitapp.com/</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">WAKE_UP_BUTTON_TEXT</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">app back up</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">PAGE_LOAD_GRACE_PERIOD_MS</span> <span class="o">=</span> <span class="mi">8000</span><span class="p">;</span>
+
+<span class="p">(</span><span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">browser</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">puppeteer</span><span class="p">.</span><span class="nx">launch</span><span class="p">(</span>
+        <span class="p">{</span> <span class="na">args</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">--no-sandbox</span><span class="dl">"</span><span class="p">]</span> <span class="p">}</span>
+    <span class="p">);</span>
+
+    <span class="kd">const</span> <span class="nx">page</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nx">newPage</span><span class="p">();</span>
+    <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">goto</span><span class="p">(</span><span class="nx">TARGET_URL</span><span class="p">);</span>
+    <span class="c1">// Wait a grace period for the application to load</span>
+    <span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">waitForTimeout</span><span class="p">(</span><span class="nx">PAGE_LOAD_GRACE_PERIOD_MS</span><span class="p">);</span>
+
+    <span class="kd">const</span> <span class="nx">checkForHibernation</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">target</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="c1">// Look for any buttons containing the target text of the reboot button</span>
+        <span class="kd">const</span> <span class="p">[</span><span class="nx">button</span><span class="p">]</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">target</span><span class="p">.</span><span class="nx">$x</span><span class="p">(</span><span class="s2">`//button[contains(., '</span><span class="p">${</span><span class="nx">WAKE_UP_BUTTON_TEXT</span><span class="p">}</span><span class="s2">')]`</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">button</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">App hibernating. Attempting to wake up!</span><span class="dl">"</span><span class="p">);</span>
+            <span class="k">await</span> <span class="nx">button</span><span class="p">.</span><span class="nx">click</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">await</span> <span class="nx">checkForHibernation</span><span class="p">(</span><span class="nx">page</span><span class="p">);</span>
+    <span class="kd">const</span> <span class="nx">frames</span> <span class="o">=</span> <span class="p">(</span><span class="k">await</span> <span class="nx">page</span><span class="p">.</span><span class="nx">frames</span><span class="p">());</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">const</span> <span class="nx">frame</span> <span class="k">of</span> <span class="nx">frames</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">await</span> <span class="nx">checkForHibernation</span><span class="p">(</span><span class="nx">frame</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">await</span> <span class="nx">browser</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+<span class="p">})();</span>
+</code></pre></div></div>
+
+<h3 id="dockerize">Dockerize</h3>
+
+<p>Next, create a very simple dockerfile from an existing puppeteer image. Its only job is to run the probe script:</p>
+
+<div class="language-docker highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># probe-action/Dockerfile</span>
+<span class="k">FROM</span><span class="s"> ghcr.io/puppeteer/puppeteer:17.0.0</span>
+<span class="k">COPY</span><span class="s"> . /home/pptruser/src</span>
+<span class="k">ENTRYPOINT</span><span class="s"> [ "/bin/bash", "-c", "node -e \"$(&lt;/home/pptruser/src/probe.js)\"" ]</span>
+</code></pre></div></div>
+
+<p>You can test it locally like so:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker build <span class="nt">-t</span> probe:latest <span class="nb">.</span>
+docker run <span class="nt">-it</span> <span class="nt">--rm</span> probe:latest
+</code></pre></div></div>
+
+<h3 id="schedule-a-cron-job-with-github-actions">Schedule a cron-job with Github Actions</h3>
+
+<p>Now we’ll setup the github action and cron-job to run this probe routinely.</p>
+
+<p>The final repository for the streamlit app looks like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>repo/                   <span class="c"># The git repo deployed to streamlit cloud</span>
+  .github/
+    workflows/
+      keep-alive.yml    <span class="c"># The cron job</span>
+  probe-action/         <span class="c"># The keep-alive action</span>
+    Dockerfile
+    action.yml
+    probe.js
+  app.py                <span class="c"># The streamlit app</span>
+</code></pre></div></div>
+
+<p>Start by creating the action metadata file which Github Actions will use to build the docker image and run the script.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># probe-action/action.yml</span>
+<span class="na">name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Probe</span><span class="nv"> </span><span class="s">Deployed</span><span class="nv"> </span><span class="s">App"</span>
+<span class="na">description</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Probes</span><span class="nv"> </span><span class="s">a</span><span class="nv"> </span><span class="s">deployed</span><span class="nv"> </span><span class="s">streamlit</span><span class="nv"> </span><span class="s">app."</span>
+<span class="na">runs</span><span class="pi">:</span>
+  <span class="na">using</span><span class="pi">:</span> <span class="s2">"</span><span class="s">docker"</span>
+  <span class="na">image</span><span class="pi">:</span> <span class="s2">"</span><span class="s">Dockerfile"</span>
+</code></pre></div></div>
+
+<p>Finally, create a workflow file <code class="language-plaintext highlighter-rouge">.github/workflows/keep-alive.yml</code>. Every 2 days it will check out the repo and run the probe action.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># .github/workflows/keep-alive.yml</span>
+<span class="na">name</span><span class="pi">:</span> <span class="s">Trigger Probe of Deployed App on a CRON Schedule</span>
+<span class="na">on</span><span class="pi">:</span>
+  <span class="na">schedule</span><span class="pi">:</span>
+    <span class="c1"># Runs "at minute 0 past every 48 hour" (see https://crontab.guru)... ie: every 2 days</span>
+    <span class="pi">-</span> <span class="na">cron</span><span class="pi">:</span> <span class="s1">'</span><span class="s">0</span><span class="nv"> </span><span class="s">*/48</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*</span><span class="nv"> </span><span class="s">*'</span>
+
+<span class="na">jobs</span><span class="pi">:</span>
+  <span class="na">probe_deployed_app</span><span class="pi">:</span>
+    <span class="na">runs-on</span><span class="pi">:</span> <span class="s">ubuntu-latest</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">A job to probe deployed app</span>
+    <span class="na">steps</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Checkout</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">actions/checkout@v3</span>
+      <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">Probe Deployed App Action Step</span>
+        <span class="na">uses</span><span class="pi">:</span> <span class="s">./probe-action</span> <span class="c1"># Uses an action in the probe-action directory</span>
+        <span class="na">id</span><span class="pi">:</span> <span class="s">probe</span>
+</code></pre></div></div>]]></content><author><name>David Young</name></author><category term="automation" /><category term="software notes" /><summary type="html"><![CDATA[Automating a keep-alive probe for a deployed streamlit app using puppeteer and Github Actions.]]></summary></entry><entry><title type="html">Bert w/ Label Semantics</title><link href="https://dcyoung.github.io/pages/dcyoung/post-bert-with-label-semantics/" rel="alternate" type="text/html" title="Bert w/ Label Semantics" /><published>2022-08-16T07:00:00+07:00</published><updated>2022-08-16T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/bert-with-label-semantics</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-bert-with-label-semantics/"><![CDATA[<p>In real world applications, labeled data is often hard to come by. This makes learning based solutions difficult. If large datasets are NOT available, you have to get creative with whatever context is available. This post demonstrates a method of incorporating the semantic “meaning” of each label as a clue/prior when training few-shot systems for Named Entity Recognition. See the original <a href="https://aclanthology.org/2022.findings-acl.155.pdf">paper</a> for more details.</p>
+
+<p>Most systems treat labels as arbitrary monikers. That is, models typically learn ONLY from the data’s association w/ a label and NOT directly from the label itself. Labels are often provided to a model as an arbitrary ID, integer or one-hot encoded vector. In many cases, we can do better. The natural representation of a label (written text) can carry significant meaning for the task at hand. For example, a label like “First Name” is more highly correlated w/ the word “Jonathan” than with the word “screwdriver”.</p>
+
+<h2 id="architecture">Architecture</h2>
+
+<p>The main idea is to use a BERT model to encode not only the input text, but also the text representation of the label itself. The inputs and labels then exist in a similar embedding space where associations should be easier for the model to learn.</p>
+
+<p><img src="/images/bert-with-label-semantics/architecture.webp" alt="placeholder" class="align-center" /></p>
+
+<h2 id="pytorchhuggingface-implementation">PyTorch/HuggingFace Implementation</h2>
+
+<p>First, some helpers to convert BIO tag labels to the “natural form” described in the paper:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">remove_prefix</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pref</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">pref</span> <span class="ow">and</span> <span class="n">s</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">pref</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pref</span><span class="p">)</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">strip_bio_tag_prefix</span><span class="p">(</span><span class="n">bio_tag_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">"""
+    Removes the B- or I- prefix from bio-tags
+    example: "B-TAG_A" ---&gt; "TAG_A"
+    """</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">bio_tag_label</span>
+    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">{</span><span class="s">"B-"</span><span class="p">,</span> <span class="s">"I-"</span><span class="p">}:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">remove_prefix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pref</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">remove_prefix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pref</span><span class="o">=</span><span class="n">prefix</span><span class="p">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">get_natural_form_labels</span><span class="p">(</span><span class="n">id2label</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="c1"># Create natural language variants of the labels
+</span>    <span class="c1"># See paper: Label Semantics for Few Shot Named Entity Recognition
+</span>    <span class="c1"># https://aclanthology.org/2022.findings-acl.155.pdf
+</span>    <span class="n">id2natural_form_label</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">raw_bio_tag</span> <span class="ow">in</span> <span class="n">id2label</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">tag_natural_form</span> <span class="o">=</span> <span class="s">" "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">re</span><span class="p">.</span><span class="n">split</span><span class="p">(</span>
+                <span class="s">"[^a-zA-Z0-9]+"</span><span class="p">,</span>
+                <span class="n">strip_bio_tag_prefix</span><span class="p">(</span><span class="n">bio_tag_label</span><span class="o">=</span><span class="n">raw_bio_tag</span><span class="p">).</span><span class="n">lower</span><span class="p">(),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Retrieve the natural language version of the bio tag prefix
+</span>        <span class="k">if</span> <span class="n">raw_bio_tag</span><span class="p">.</span><span class="n">upper</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"B-"</span><span class="p">):</span>
+            <span class="n">final</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"begin </span><span class="si">{</span><span class="n">tag_natural_form</span><span class="si">}</span><span class="s">"</span>
+        <span class="k">elif</span> <span class="n">raw_bio_tag</span><span class="p">.</span><span class="n">upper</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"I-"</span><span class="p">):</span>
+            <span class="n">final</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"inside </span><span class="si">{</span><span class="n">tag_natural_form</span><span class="si">}</span><span class="s">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">raw_bio_tag</span> <span class="ow">in</span> <span class="p">{</span><span class="s">"other"</span><span class="p">,</span> <span class="s">"o"</span><span class="p">,</span> <span class="s">"0"</span><span class="p">,</span> <span class="s">"OTHER"</span><span class="p">,</span> <span class="s">"O"</span><span class="p">}</span> <span class="c1"># default "OTHER" tags
+</span>            <span class="p">),</span> <span class="sa">f</span><span class="s">"Unexpected bio tag: </span><span class="si">{</span><span class="n">raw_bio_tag</span><span class="si">}</span><span class="s">"</span>
+            <span class="n">final</span> <span class="o">=</span> <span class="s">"other"</span>
+        <span class="n">id2natural_form_label</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">final</span>
+    <span class="k">return</span> <span class="n">id2natural_form_label</span>
+</code></pre></div></div>
+
+<p>Next, an implementation of the model:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BertWithLabelSemantics</span><span class="p">(</span><span class="n">BertPreTrainedModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">BertConfig</span><span class="p">,</span>
+        <span class="n">tokenizer</span><span class="p">:</span> <span class="n">BertTokenizerFast</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span> <span class="o">=</span> <span class="n">get_natural_form_labels</span><span class="p">(</span>
+            <span class="n">id2label</span><span class="o">=</span><span class="n">config</span><span class="p">.</span><span class="n">id2label</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">num_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">token_encoder</span> <span class="o">=</span> <span class="n">BertModel</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">label_encoder</span> <span class="o">=</span> <span class="n">BertModel</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">tokenizer</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s">"label_representation"</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">num_labels</span><span class="p">,</span> <span class="mi">768</span><span class="p">))</span>
+
+        <span class="c1"># Initialize weights and apply final processing
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">post_init</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">post_init</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">label_representation</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">compute_label_embeddings</span><span class="p">(</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">device</span><span class="p">(</span><span class="s">"cpu"</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compute_label_embeddings</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="s">"""Computes the embedding representation of natural langauge labels
+        Each label is converted to natural language form, then fed as input
+        to a BERT encoder to yield a CLS token for the label.
+        returns: tensor of size (num_labels, bert_embedding_size) == (n, 768)
+        """</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">device</span><span class="p">(</span><span class="s">"cpu"</span><span class="p">)</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span><span class="p">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">]</span>
+        <span class="n">tag_max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">])</span>
+        <span class="n">tag_embeddings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="n">input_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tokenizer</span><span class="p">.</span><span class="n">encode_plus</span><span class="p">(</span>
+                <span class="n">label</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s">"pt"</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"max_length"</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">tag_max_len</span>
+            <span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">label_encoder</span><span class="p">(</span>
+                <span class="n">input_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">[</span><span class="s">"input_ids"</span><span class="p">].</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span>
+                <span class="n">token_type_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">[</span><span class="s">"token_type_ids"</span><span class="p">].</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span>
+                <span class="n">attention_mask</span><span class="o">=</span><span class="n">input_ids</span><span class="p">[</span><span class="s">"attention_mask"</span><span class="p">].</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">pooler_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">.</span><span class="n">pooler_output</span>
+            <span class="n">tag_embeddings</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">pooler_output</span><span class="p">)</span>
+        <span class="n">label_embeddings</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">tag_embeddings</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">label_embeddings</span> <span class="o">=</span> <span class="n">label_embeddings</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">label_embeddings</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_ids</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">attention_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">token_type_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TokenClassifierOutput</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">input_ids</span><span class="p">.</span><span class="n">device</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="c1"># If training, update/re-compute label embeddings
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">label_representation</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">compute_label_embeddings</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">label_representation</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">label_representation</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">token_encoder</span><span class="p">(</span>
+            <span class="n">input_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">,</span>
+            <span class="n">token_type_ids</span><span class="o">=</span><span class="n">token_type_ids</span><span class="p">,</span>
+            <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">token_embeddings</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">.</span><span class="n">last_hidden_state</span>
+        <span class="n">tag_lens</span><span class="p">,</span> <span class="n">hidden_size</span> <span class="o">=</span> <span class="n">label_representation</span><span class="p">.</span><span class="n">shape</span>
+        <span class="n">current_batch_size</span> <span class="o">=</span> <span class="n">token_embeddings</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">label_embedding</span> <span class="o">=</span> <span class="n">label_representation</span><span class="p">.</span><span class="n">expand</span><span class="p">(</span>
+            <span class="n">current_batch_size</span><span class="p">,</span> <span class="n">tag_lens</span><span class="p">,</span> <span class="n">hidden_size</span>
+        <span class="p">)</span>
+        <span class="n">label_embeddings</span> <span class="o">=</span> <span class="n">label_embedding</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># # Batched Matrix x Batched Matrix, where batch_size == b
+</span>        <span class="c1"># A.shape == (b,m,n);
+</span>        <span class="c1"># B.shape == (b,n,k);
+</span>        <span class="c1"># torch.matmul(A,B).shape == (b,m,k);
+</span>        <span class="n">logits</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">token_embeddings</span><span class="p">,</span> <span class="n">label_embeddings</span><span class="p">)</span>
+        <span class="c1"># So... expect logs of shape (batch_size, sequence_length, num_labels)
+</span>        <span class="c1"># Ex: (6, 512, 11)
+</span>
+        <span class="c1"># You can retrieve the label indices like so:
+</span>        <span class="c1">#       softmax_embedding = nn.Softmax(dim=-1)(logits)
+</span>        <span class="c1">#       label_indices = torch.argmax(softmax_embedding, dim=-1)
+</span>        <span class="c1">#       label_indices.shape == (batch_size, sequence_length) # ex: (6, 512)
+</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">loss_fct</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fct</span><span class="p">(</span><span class="n">logits</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">num_labels</span><span class="p">),</span> <span class="n">labels</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">TokenClassifierOutput</span><span class="p">(</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+            <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span>
+            <span class="n">hidden_states</span><span class="o">=</span><span class="n">outputs</span><span class="p">.</span><span class="n">hidden_states</span><span class="p">,</span>
+            <span class="n">attentions</span><span class="o">=</span><span class="n">outputs</span><span class="p">.</span><span class="n">attentions</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="o">@</span><span class="nb">classmethod</span>
+    <span class="k">def</span> <span class="nf">from_pretrained</span><span class="p">(</span>
+        <span class="n">cls</span><span class="p">,</span>
+        <span class="n">pretrained_model_name_or_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">PathLike</span><span class="p">]],</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BertConfig</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">AutoConfig</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+                <span class="n">pretrained_model_name_or_path</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="p">{</span><span class="s">"num_labels"</span><span class="p">,</span> <span class="s">"label2id"</span><span class="p">,</span> <span class="s">"id2label"</span><span class="p">}:</span>
+                <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span>
+                    <span class="n">config</span><span class="p">,</span> <span class="n">attr_name</span>
+                <span class="p">),</span> <span class="s">"Config is not sufficient to load model."</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">config</span><span class="p">.</span><span class="n">num_labels</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">label2id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">id2label</span><span class="p">)</span>
+            <span class="p">),</span> <span class="s">"Config is not sufficient to load model."</span>
+
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+            <span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="n">pretrained_model_name_or_path</span><span class="p">,</span>
+            <span class="n">use_fast</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">only_label_first_subword</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="p">):</span>
+            <span class="c1"># Assume model path is a default bert model...
+</span>            <span class="c1"># In this case, we need to instantiate a model and
+</span>            <span class="c1"># replace its encoders with pretrained bert models
+</span>            <span class="n">model</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span>
+                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="s">"label_encoder"</span><span class="p">,</span>
+                <span class="n">BertModel</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="s">"token_encoder"</span><span class="p">,</span>
+                <span class="n">BertModel</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">model</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">BertWithLabelSemantics</span><span class="p">,</span> <span class="n">cls</span><span class="p">).</span><span class="n">from_pretrained</span><span class="p">(</span>
+                <span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="n">pretrained_model_name_or_path</span><span class="p">,</span>
+                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+</code></pre></div></div>]]></content><author><name>David Young</name></author><category term="machine learning" /><category term="ai" /><summary type="html"><![CDATA[Incorporating label semantics in a BERT model for few shot Named Entity Recognition.]]></summary></entry><entry><title type="html">Interactive Audio Visualizer</title><link href="https://dcyoung.github.io/pages/dcyoung/post-r3f-audio-visualizer/" rel="alternate" type="text/html" title="Interactive Audio Visualizer" /><published>2021-12-25T07:00:00+07:00</published><updated>2021-12-25T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/interactive-music-visualization</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-r3f-audio-visualizer/"><![CDATA[<p><a href="https://dcyoung.github.io/r3f-audio-visualizer/"><img src="https://github.com/dcyoung/r3f-audio-visualizer/raw/dev/docs/waveform.gif" alt="" class="align-center" /></a></p>
+
+<p>While traveling for the holidays, I found myself with spare time but only a laptop on hand. So I tried re-creating a previous experiment using portable web technologies that can run on any device with a browser, including React and THREE.js. This ended up being a fun morning project.</p>
+
+<p><a href="https://dcyoung.github.io/r3f-audio-visualizer/">Click HERE for an Interactive Demo</a></p>
+
+<blockquote>
+  <p>Note: After navigating to the app with the link above, use the GUI controls in the app to select MIC input</p>
+</blockquote>
+
+<p><a href="https://github.com/dcyoung/r3f-audio-visualizer">See the source code</a></p>
+
+<h2 id="creating-a-reactive-grid">Creating a Reactive Grid</h2>
+
+<p>The grid is comprised of thousands of meshes. To keep things efficient, I used instanced meshes which are only created once.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nx">instancedMesh</span> <span class="nx">ref</span><span class="o">=</span><span class="p">{</span><span class="nx">meshRef</span><span class="p">}</span> <span class="nx">args</span><span class="o">=</span><span class="p">{[</span><span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="nx">nGridRows</span> <span class="o">*</span> <span class="nx">nGridCols</span><span class="p">]}</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nx">boxGeometry</span> <span class="nx">attach</span><span class="o">=</span><span class="dl">"</span><span class="s2">geometry</span><span class="dl">"</span> <span class="nx">args</span><span class="o">=</span><span class="p">{[</span><span class="nx">cubeSideLength</span><span class="p">,</span> <span class="nx">cubeSideLength</span><span class="p">,</span> <span class="nx">cubeSideLength</span><span class="p">,</span> <span class="mi">1</span><span class="p">]}</span> <span class="sr">/</span><span class="err">&gt;
+</span>  <span class="o">&lt;</span><span class="nx">meshBasicMaterial</span> <span class="nx">attach</span><span class="o">=</span><span class="dl">"</span><span class="s2">material</span><span class="dl">"</span> <span class="nx">color</span><span class="o">=</span><span class="p">{</span><span class="dl">"</span><span class="s2">white</span><span class="dl">"</span><span class="p">}</span> <span class="nx">toneMapped</span><span class="o">=</span><span class="p">{</span><span class="kc">false</span><span class="p">}</span> <span class="sr">/</span><span class="err">&gt;
+</span><span class="o">&lt;</span><span class="sr">/instancedMesh</span><span class="err">&gt;
+</span></code></pre></div></div>
+
+<p>The transform for each mesh is updated every frame, which is fairly lightweight operation. The meshes are indxed in <a href="https://en.wikipedia.org/wiki/Row-_and_column-major_order">row-major order</a>.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// minimal example to set transforms on each cube in the grid</span>
+<span class="nx">useFrame</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">row</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">row</span> <span class="o">&lt;</span> <span class="nx">nGridRows</span><span class="p">;</span> <span class="nx">row</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">col</span> <span class="o">&lt;</span> <span class="nx">nGridCols</span><span class="p">;</span> <span class="nx">col</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">let</span> <span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">,</span><span class="nx">z</span> <span class="o">=</span> <span class="p">...;</span>
+        <span class="kd">let</span> <span class="nx">instanceIdx</span> <span class="o">=</span> <span class="nx">row</span> <span class="o">*</span> <span class="nx">nGridCols</span> <span class="o">+</span> <span class="nx">col</span><span class="p">;</span>
+        <span class="kd">let</span> <span class="nx">tmpMatrix</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Matrix4</span><span class="p">();</span>
+        <span class="nx">meshRef</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">setMatrixAt</span><span class="p">(</span><span class="nx">instanceIdx</span><span class="p">,</span> <span class="nx">tmpMatrix</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>In reality, we want to set the transforms based on some data. To create the final animation, I apply effects to the z-offset in normalized radial coordinates measured out from the center of the grid. The following code changes z values for each cube in the grid to reflect a sin wave.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">useFrame</span><span class="p">(({</span> <span class="nx">clock</span> <span class="p">})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">//in ms</span>
+  <span class="kd">const</span> <span class="nx">time</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <span class="nx">clock</span><span class="p">.</span><span class="nx">getElapsedTime</span><span class="p">();</span>
+  <span class="kd">const</span> <span class="nx">gridSizeX</span> <span class="o">=</span> <span class="nx">nGridRows</span> <span class="o">*</span> <span class="nx">cubeSpacingScalar</span> <span class="o">*</span> <span class="nx">cubeSideLength</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">gridSizeY</span> <span class="o">=</span> <span class="nx">nGridCols</span> <span class="o">*</span> <span class="nx">cubeSpacingScalar</span> <span class="o">*</span> <span class="nx">cubeSideLength</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">periodSec</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="nx">frequencyHz</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">b</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">)</span> <span class="o">/</span> <span class="nx">periodSec</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">normQuadrantHypotenuse</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span>
+    <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+  <span class="p">);</span>
+  <span class="kd">let</span> <span class="nx">phaseShift</span> <span class="o">=</span> <span class="nx">time</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">;</span>
+  <span class="kd">let</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">,</span> <span class="nx">idx</span><span class="p">,</span> <span class="nx">normGridX</span><span class="p">,</span> <span class="nx">normGridY</span><span class="p">,</span> <span class="nx">normRadialOffset</span><span class="p">;</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">row</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">row</span> <span class="o">&lt;</span> <span class="nx">nGridRows</span><span class="p">;</span> <span class="nx">row</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">col</span> <span class="o">&lt;</span> <span class="nx">nGridCols</span><span class="p">;</span> <span class="nx">col</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">idx</span> <span class="o">=</span> <span class="nx">row</span> <span class="o">*</span> <span class="nx">nGridCols</span> <span class="o">+</span> <span class="nx">col</span><span class="p">;</span>
+      <span class="nx">normGridX</span> <span class="o">=</span> <span class="nx">row</span> <span class="o">/</span> <span class="nx">nGridRows</span><span class="p">;</span>
+      <span class="nx">normGridY</span> <span class="o">=</span> <span class="nx">col</span> <span class="o">/</span> <span class="nx">nGridCols</span><span class="p">;</span>
+      <span class="nx">x</span> <span class="o">=</span> <span class="nx">gridSizeX</span> <span class="o">*</span> <span class="p">(</span><span class="nx">normGridX</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">);</span>
+      <span class="nx">y</span> <span class="o">=</span> <span class="nx">gridSizeY</span> <span class="o">*</span> <span class="p">(</span><span class="nx">normGridY</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">);</span>
+      <span class="nx">normRadialOffset</span> <span class="o">=</span>
+        <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span>
+          <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="nx">normGridX</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="nx">normGridY</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="nx">normQuadrantHypotenuse</span><span class="p">;</span>
+      <span class="nx">z</span> <span class="o">=</span> <span class="nx">amplitude</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sin</span><span class="p">(</span><span class="nx">b</span> <span class="o">*</span> <span class="nx">normRadialOffset</span> <span class="o">+</span> <span class="nx">phaseShift</span><span class="p">);</span>
+      <span class="nx">ref</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">setMatrixAt</span><span class="p">(</span><span class="nx">idx</span><span class="p">,</span>  <span class="nx">tmpMatrix</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// Update the instance</span>
+  <span class="nx">ref</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">instanceMatrix</span><span class="p">.</span><span class="nx">needsUpdate</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Extending this idea, we can visualize arbitary data from a 1D array of values. The following code will map a referenced 1D data array into z values for each cube in the grid.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">useFrame</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">//in ms</span>
+  <span class="kd">const</span> <span class="nx">gridSizeX</span> <span class="o">=</span> <span class="nx">nGridRows</span> <span class="o">*</span> <span class="nx">cubeSpacingScalar</span> <span class="o">*</span> <span class="nx">cubeSideLength</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">gridSizeY</span> <span class="o">=</span> <span class="nx">nGridCols</span> <span class="o">*</span> <span class="nx">cubeSpacingScalar</span> <span class="o">*</span> <span class="nx">cubeSideLength</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">normQuadrantHypotenuse</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">hypot</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
+
+  <span class="kd">let</span> <span class="nx">instanceIdx</span><span class="p">,</span> <span class="nx">normGridX</span><span class="p">,</span> <span class="nx">normGridY</span><span class="p">,</span> <span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">,</span> <span class="nx">normRadialOffset</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">row</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">row</span> <span class="o">&lt;</span> <span class="nx">nGridRows</span><span class="p">;</span> <span class="nx">row</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">col</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">col</span> <span class="o">&lt;</span> <span class="nx">nGridCols</span><span class="p">;</span> <span class="nx">col</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">instanceIdx</span> <span class="o">=</span> <span class="nx">row</span> <span class="o">*</span> <span class="nx">nGridCols</span> <span class="o">+</span> <span class="nx">col</span><span class="p">;</span>
+      <span class="nx">normGridX</span> <span class="o">=</span> <span class="nx">row</span> <span class="o">/</span> <span class="nx">nGridRows</span><span class="p">;</span>
+      <span class="nx">normGridY</span> <span class="o">=</span> <span class="nx">col</span> <span class="o">/</span> <span class="nx">nGridCols</span><span class="p">;</span>
+      <span class="nx">x</span> <span class="o">=</span> <span class="nx">gridSizeX</span> <span class="o">*</span> <span class="p">(</span><span class="nx">normGridX</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">);</span>
+      <span class="nx">y</span> <span class="o">=</span> <span class="nx">gridSizeY</span> <span class="o">*</span> <span class="p">(</span><span class="nx">normGridY</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">);</span>
+      <span class="nx">normRadialOffset</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">hypot</span><span class="p">(</span><span class="nx">normGridX</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nx">normGridY</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">/</span> <span class="nx">normQuadrantHypotenuse</span><span class="p">;</span>
+      <span class="nx">z</span> <span class="o">=</span> <span class="nx">amplitude</span> <span class="o">*</span> <span class="nx">getValueForNormalizedCoord</span><span class="p">(</span><span class="nx">freqDataRef</span><span class="p">?.</span><span class="nx">current</span><span class="p">,</span> <span class="nx">normRadialOffset</span><span class="p">);</span>
+      <span class="nx">meshRef</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">setMatrixAt</span><span class="p">(</span><span class="nx">instanceIdx</span><span class="p">,</span> <span class="nx">tmpMatrix</span><span class="p">.</span><span class="nx">setPosition</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">,</span> <span class="nx">z</span><span class="p">));</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="c1">// Update the instance</span>
+  <span class="nx">meshRef</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">instanceMatrix</span><span class="p">.</span><span class="nx">needsUpdate</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Note the <code class="language-plaintext highlighter-rouge">freqDataRef</code> above. Using this reactive grid, we can reference arbitrary data to drive the animation… including audio :)</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Play some audio, assuming an audio element</span>
+<span class="c1">// &lt;audio ref={audioRef} crossOrigin="anonymous" /&gt;;</span>
+<span class="nx">audioRef</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://icecast2.ufpel.edu.br/live</span><span class="dl">"</span><span class="p">;</span>
+<span class="nx">audioRef</span><span class="p">.</span><span class="nx">current</span><span class="p">.</span><span class="nx">play</span><span class="p">();</span>
+
+<span class="kd">const</span> <span class="nx">updateFreqData</span> <span class="o">=</span> <span class="p">(</span><span class="nx">instance</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">bars</span> <span class="o">=</span> <span class="nx">instance</span><span class="p">.</span><span class="nx">getBars</span><span class="p">();</span>
+  <span class="nx">bars</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(({</span> <span class="nx">value</span> <span class="p">},</span> <span class="nx">index</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">freqDataRef</span><span class="p">.</span><span class="nx">current</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="nx">analyzer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AudioMotionAnalayzer</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">{</span>
+  <span class="na">source</span><span class="p">:</span> <span class="nx">audioRef</span><span class="p">.</span><span class="nx">current</span><span class="p">,</span>
+  <span class="na">mode</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="na">useCanvas</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+  <span class="na">onCanvasDraw</span><span class="p">:</span> <span class="nx">updateFreqData</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></div></div>]]></content><author><name>David Young</name></author><category term="webdev" /><category term="audio visualization" /><category term="3D" /><category term="art" /><summary type="html"><![CDATA[A portable 3D audio visualizer built with modern web technologies including React & THREE.js]]></summary></entry><entry><title type="html">Using AI to add dimensions to video</title><link href="https://dcyoung.github.io/pages/dcyoung/post-using-ai-to-add-dimensions-to-video/" rel="alternate" type="text/html" title="Using AI to add dimensions to video" /><published>2021-10-01T07:00:00+07:00</published><updated>2021-10-01T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/ai-distort-video-in-3d</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-using-ai-to-add-dimensions-to-video/"><![CDATA[<p>Previous experiments messing with video textures were so successful that I’m eager to see if the 3D effects can be used to target more semantically meaningful content in a video – that is, to drive video effects with a perceptual understanding of the content in the video. This experiment segments dancers in the video and applies depth effects to the geometry selectively. This is accomplished entirely inside the shader, and the 3D grid is a single mesh.</p>
+
+<div class="video-wrap" style="width:100%; max-width: 512px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/55A24omqleM" title="YouTube video player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+    </div>
+</div>
+<div class="video-wrap" style="width:100%; max-width: 512px; margin: auto;">
+    <div class="video-container" style="position: relative; overflow: hidden; height: 0; padding-bottom: 56.25%; text-align: center;">
+        <iframe src="https://www.youtube.com/embed/PkeDwmLdZPk" title="YouTube video player" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; max-width: 100%;" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+    </div>
+</div>
+
+<hr />
+
+<p>In the experiment above (ipod commercial), the effect is driven by a simple color threshold… which is far from a semantic understanding of the content. So to follow up, I decided to distort the 3D geometry of a mesh based on the content of a video, as interpreted by an artificial neural network. The rough process is as follows:
+​</p>
+<ol>
+  <li>Create masks for each frame of video using an Instance Segmentation Network trained to segment people from images. Funny enough…  this was easiest and quickest part of the experiment by far.</li>
+  <li>Create 2 synchronized videos (1 original, 1 mask) and media textures for each</li>
+  <li>Create a procedural grid mesh with vertices linked to the the 2 media textures through UVs</li>
+  <li>Color vertices of the mesh by sampling the media texture for the original video</li>
+  <li>Offset vertex positions by sampling the media texture for the mask video</li>
+</ol>
+
+<p>While the end result isn’t as exciting or visually pleasing as past explorations, I enjoyed incorporating aspects of AI and computer vision to drive the visual effects. I think this could be used to drive more subtle effects (particles, distortions etc) in something like a music video or hyper stylized film.</p>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/zAM2T98uUm8" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>]]></content><author><name>David Young</name></author><category term="ai" /><category term="3D" /><category term="unreal engine" /><category term="art" /><summary type="html"><![CDATA[Experiments adding dimension to video footage, using simple and AI driven approaches.]]></summary></entry><entry><title type="html">Using 3rd Party Python Libraries in Fusion 360</title><link href="https://dcyoung.github.io/pages/dcyoung/post-f360-py-modules/" rel="alternate" type="text/html" title="Using 3rd Party Python Libraries in Fusion 360" /><published>2021-08-31T07:00:00+07:00</published><updated>2021-08-31T07:00:00+07:00</updated><id>https://dcyoung.github.io/pages/dcyoung/f360-py-modules</id><content type="html" xml:base="https://dcyoung.github.io/pages/dcyoung/post-f360-py-modules/"><![CDATA[<p>I recently needed to use <code class="language-plaintext highlighter-rouge">numpy</code> in a Fusion 360 python script, and was surprised by how tricky it is to manage python environments w/ Fusion360.</p>
+
+<p>The <a href="https://help.autodesk.com/view/fusion360/ENU/?guid=GUID-743C88FB-CA3F-44B0-B0B9-FCC378D0D782#Additional%20Python%20Modules">recommended method</a> from Autodesk involves installing a local version of the desired module alongside your script. This method is ok for simple native python modules, but struggles in more complex scenarios. More specifically, using local import paths disturbs inter-module dependencies and often breaks with complex modules containing compiled code (ex: numpy).</p>
+
+<p>The easiest solution I came up with was using Fusion360’s registered python and environment to handle the install by executing from a shell within Fusion360 itself. A bit hacky, but works:</p>
+
+<p>First open the “Text Commands View” in Fusion360. You can find it under <code class="language-plaintext highlighter-rouge">File-&gt;View-&gt;Show Text Commands</code>:</p>
+
+<p><img src="/images/f360-py-modules/0.webp" alt="placeholder" class="align-center" /></p>
+
+<p>Enter the following commands to install a module (ex: <code class="language-plaintext highlighter-rouge">numpy</code>):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import sys
+import subprocess
+subprocess.check_call<span class="o">([</span>sys.executable, <span class="s2">"-m"</span>, <span class="s2">"pip"</span>, <span class="s2">"install"</span>, <span class="s2">"--upgrade"</span>, <span class="s2">"numpy"</span><span class="o">])</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p>Make sure the <code class="language-plaintext highlighter-rouge">py</code> radio button is enabled in the bottom right of the “Text Commands View”</p>
+</blockquote>
+
+<p><img src="/images/f360-py-modules/1.webp" alt="placeholder" class="align-center" /></p>
+
+<p>Now you can use that module in scripts/add-ins as normal. For example:</p>
+
+<div class="language-py highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+</code></pre></div></div>]]></content><author><name>David Young</name></author><category term="CAD" /><summary type="html"><![CDATA[Installing 3rd party python libraries in Fusion 360.]]></summary></entry></feed>

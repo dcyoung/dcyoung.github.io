@@ -1,0 +1,977 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Bert w/ Label Semantics</title>
+<meta name="description" content="Incorporating label semantics in a BERT model for few shot Named Entity Recognition.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Bert w/ Label Semantics">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-bert-with-label-semantics/">
+
+
+  <meta property="og:description" content="Incorporating label semantics in a BERT model for few shot Named Entity Recognition.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/bert-with-label-semantics/architecture.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-08-16T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2022-08-16T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-bert-with-label-semantics/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Bert w/ Label Semantics">
+    <meta itemprop="description" content="Incorporating label semantics in a BERT model for few shot Named Entity Recognition.">
+    <meta itemprop="datePublished" content="2022-08-16T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2022-08-16T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-bert-with-label-semantics/" itemprop="url">Bert w/ Label Semantics
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#architecture">Architecture</a></li><li><a href="#pytorchhuggingface-implementation">PyTorch/HuggingFace Implementation</a></li></ul>
+            </nav>
+          </aside>
+        
+        <p>In real world applications, labeled data is often hard to come by. This makes learning based solutions difficult. If large datasets are NOT available, you have to get creative with whatever context is available. This post demonstrates a method of incorporating the semantic “meaning” of each label as a clue/prior when training few-shot systems for Named Entity Recognition. See the original <a href="https://aclanthology.org/2022.findings-acl.155.pdf">paper</a> for more details.</p>
+
+<p>Most systems treat labels as arbitrary monikers. That is, models typically learn ONLY from the data’s association w/ a label and NOT directly from the label itself. Labels are often provided to a model as an arbitrary ID, integer or one-hot encoded vector. In many cases, we can do better. The natural representation of a label (written text) can carry significant meaning for the task at hand. For example, a label like “First Name” is more highly correlated w/ the word “Jonathan” than with the word “screwdriver”.</p>
+
+<h2 id="architecture">Architecture</h2>
+
+<p>The main idea is to use a BERT model to encode not only the input text, but also the text representation of the label itself. The inputs and labels then exist in a similar embedding space where associations should be easier for the model to learn.</p>
+
+<p><img src="/images/bert-with-label-semantics/architecture.webp" alt="placeholder" class="align-center" /></p>
+
+<h2 id="pytorchhuggingface-implementation">PyTorch/HuggingFace Implementation</h2>
+
+<p>First, some helpers to convert BIO tag labels to the “natural form” described in the paper:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">remove_prefix</span><span class="p">(</span><span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pref</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">pref</span> <span class="ow">and</span> <span class="n">s</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">pref</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">pref</span><span class="p">)</span> <span class="p">:]</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">strip_bio_tag_prefix</span><span class="p">(</span><span class="n">bio_tag_label</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="s">"""
+    Removes the B- or I- prefix from bio-tags
+    example: "B-TAG_A" ---&gt; "TAG_A"
+    """</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">bio_tag_label</span>
+    <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="p">{</span><span class="s">"B-"</span><span class="p">,</span> <span class="s">"I-"</span><span class="p">}:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">remove_prefix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pref</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">remove_prefix</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">pref</span><span class="o">=</span><span class="n">prefix</span><span class="p">.</span><span class="n">lower</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">get_natural_form_labels</span><span class="p">(</span><span class="n">id2label</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="c1"># Create natural language variants of the labels
+</span>    <span class="c1"># See paper: Label Semantics for Few Shot Named Entity Recognition
+</span>    <span class="c1"># https://aclanthology.org/2022.findings-acl.155.pdf
+</span>    <span class="n">id2natural_form_label</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">raw_bio_tag</span> <span class="ow">in</span> <span class="n">id2label</span><span class="p">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">tag_natural_form</span> <span class="o">=</span> <span class="s">" "</span><span class="p">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">re</span><span class="p">.</span><span class="n">split</span><span class="p">(</span>
+                <span class="s">"[^a-zA-Z0-9]+"</span><span class="p">,</span>
+                <span class="n">strip_bio_tag_prefix</span><span class="p">(</span><span class="n">bio_tag_label</span><span class="o">=</span><span class="n">raw_bio_tag</span><span class="p">).</span><span class="n">lower</span><span class="p">(),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Retrieve the natural language version of the bio tag prefix
+</span>        <span class="k">if</span> <span class="n">raw_bio_tag</span><span class="p">.</span><span class="n">upper</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"B-"</span><span class="p">):</span>
+            <span class="n">final</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"begin </span><span class="si">{</span><span class="n">tag_natural_form</span><span class="si">}</span><span class="s">"</span>
+        <span class="k">elif</span> <span class="n">raw_bio_tag</span><span class="p">.</span><span class="n">upper</span><span class="p">().</span><span class="n">startswith</span><span class="p">(</span><span class="s">"I-"</span><span class="p">):</span>
+            <span class="n">final</span> <span class="o">=</span> <span class="sa">f</span><span class="s">"inside </span><span class="si">{</span><span class="n">tag_natural_form</span><span class="si">}</span><span class="s">"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="n">raw_bio_tag</span> <span class="ow">in</span> <span class="p">{</span><span class="s">"other"</span><span class="p">,</span> <span class="s">"o"</span><span class="p">,</span> <span class="s">"0"</span><span class="p">,</span> <span class="s">"OTHER"</span><span class="p">,</span> <span class="s">"O"</span><span class="p">}</span> <span class="c1"># default "OTHER" tags
+</span>            <span class="p">),</span> <span class="sa">f</span><span class="s">"Unexpected bio tag: </span><span class="si">{</span><span class="n">raw_bio_tag</span><span class="si">}</span><span class="s">"</span>
+            <span class="n">final</span> <span class="o">=</span> <span class="s">"other"</span>
+        <span class="n">id2natural_form_label</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">final</span>
+    <span class="k">return</span> <span class="n">id2natural_form_label</span>
+</code></pre></div></div>
+
+<p>Next, an implementation of the model:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">BertWithLabelSemantics</span><span class="p">(</span><span class="n">BertPreTrainedModel</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">BertConfig</span><span class="p">,</span>
+        <span class="n">tokenizer</span><span class="p">:</span> <span class="n">BertTokenizerFast</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">__init__</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span> <span class="o">=</span> <span class="n">get_natural_form_labels</span><span class="p">(</span>
+            <span class="n">id2label</span><span class="o">=</span><span class="n">config</span><span class="p">.</span><span class="n">id2label</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">num_labels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">token_encoder</span> <span class="o">=</span> <span class="n">BertModel</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">label_encoder</span> <span class="o">=</span> <span class="n">BertModel</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">tokenizer</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">register_buffer</span><span class="p">(</span><span class="s">"label_representation"</span><span class="p">,</span> <span class="n">torch</span><span class="p">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">num_labels</span><span class="p">,</span> <span class="mi">768</span><span class="p">))</span>
+
+        <span class="c1"># Initialize weights and apply final processing
+</span>        <span class="bp">self</span><span class="p">.</span><span class="n">post_init</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">().</span><span class="n">post_init</span><span class="p">()</span>
+        <span class="bp">self</span><span class="p">.</span><span class="n">label_representation</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">compute_label_embeddings</span><span class="p">(</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">torch</span><span class="p">.</span><span class="n">device</span><span class="p">(</span><span class="s">"cpu"</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">compute_label_embeddings</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">device</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">:</span>
+        <span class="s">"""Computes the embedding representation of natural langauge labels
+        Each label is converted to natural language form, then fed as input
+        to a BERT encoder to yield a CLS token for the label.
+        returns: tensor of size (num_labels, bert_embedding_size) == (n, 768)
+        """</span>
+        <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">device</span><span class="p">(</span><span class="s">"cpu"</span><span class="p">)</span>
+
+        <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="p">.</span><span class="n">id2natural_form_label</span><span class="p">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">]</span>
+        <span class="n">tag_max_len</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">])</span>
+        <span class="n">tag_embeddings</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">labels</span><span class="p">:</span>
+            <span class="n">input_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">tokenizer</span><span class="p">.</span><span class="n">encode_plus</span><span class="p">(</span>
+                <span class="n">label</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s">"pt"</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s">"max_length"</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="n">tag_max_len</span>
+            <span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">label_encoder</span><span class="p">(</span>
+                <span class="n">input_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">[</span><span class="s">"input_ids"</span><span class="p">].</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span>
+                <span class="n">token_type_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">[</span><span class="s">"token_type_ids"</span><span class="p">].</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span>
+                <span class="n">attention_mask</span><span class="o">=</span><span class="n">input_ids</span><span class="p">[</span><span class="s">"attention_mask"</span><span class="p">].</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">pooler_output</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">.</span><span class="n">pooler_output</span>
+            <span class="n">tag_embeddings</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">pooler_output</span><span class="p">)</span>
+        <span class="n">label_embeddings</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">stack</span><span class="p">(</span><span class="n">tag_embeddings</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">label_embeddings</span> <span class="o">=</span> <span class="n">label_embeddings</span><span class="p">.</span><span class="n">squeeze</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">label_embeddings</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">input_ids</span><span class="p">:</span> <span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">,</span>
+        <span class="n">attention_mask</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">token_type_ids</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="n">labels</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="p">.</span><span class="n">Tensor</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TokenClassifierOutput</span><span class="p">:</span>
+        <span class="n">device</span> <span class="o">=</span> <span class="n">input_ids</span><span class="p">.</span><span class="n">device</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">.</span><span class="n">training</span><span class="p">:</span>
+            <span class="c1"># If training, update/re-compute label embeddings
+</span>            <span class="bp">self</span><span class="p">.</span><span class="n">label_representation</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">compute_label_embeddings</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+
+        <span class="n">label_representation</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">label_representation</span><span class="p">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="p">.</span><span class="n">token_encoder</span><span class="p">(</span>
+            <span class="n">input_ids</span><span class="o">=</span><span class="n">input_ids</span><span class="p">,</span>
+            <span class="n">token_type_ids</span><span class="o">=</span><span class="n">token_type_ids</span><span class="p">,</span>
+            <span class="n">attention_mask</span><span class="o">=</span><span class="n">attention_mask</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">token_embeddings</span> <span class="o">=</span> <span class="n">outputs</span><span class="p">.</span><span class="n">last_hidden_state</span>
+        <span class="n">tag_lens</span><span class="p">,</span> <span class="n">hidden_size</span> <span class="o">=</span> <span class="n">label_representation</span><span class="p">.</span><span class="n">shape</span>
+        <span class="n">current_batch_size</span> <span class="o">=</span> <span class="n">token_embeddings</span><span class="p">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">label_embedding</span> <span class="o">=</span> <span class="n">label_representation</span><span class="p">.</span><span class="n">expand</span><span class="p">(</span>
+            <span class="n">current_batch_size</span><span class="p">,</span> <span class="n">tag_lens</span><span class="p">,</span> <span class="n">hidden_size</span>
+        <span class="p">)</span>
+        <span class="n">label_embeddings</span> <span class="o">=</span> <span class="n">label_embedding</span><span class="p">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># # Batched Matrix x Batched Matrix, where batch_size == b
+</span>        <span class="c1"># A.shape == (b,m,n);
+</span>        <span class="c1"># B.shape == (b,n,k);
+</span>        <span class="c1"># torch.matmul(A,B).shape == (b,m,k);
+</span>        <span class="n">logits</span> <span class="o">=</span> <span class="n">torch</span><span class="p">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">token_embeddings</span><span class="p">,</span> <span class="n">label_embeddings</span><span class="p">)</span>
+        <span class="c1"># So... expect logs of shape (batch_size, sequence_length, num_labels)
+</span>        <span class="c1"># Ex: (6, 512, 11)
+</span>
+        <span class="c1"># You can retrieve the label indices like so:
+</span>        <span class="c1">#       softmax_embedding = nn.Softmax(dim=-1)(logits)
+</span>        <span class="c1">#       label_indices = torch.argmax(softmax_embedding, dim=-1)
+</span>        <span class="c1">#       label_indices.shape == (batch_size, sequence_length) # ex: (6, 512)
+</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">labels</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">loss_fct</span> <span class="o">=</span> <span class="n">nn</span><span class="p">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fct</span><span class="p">(</span><span class="n">logits</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="p">.</span><span class="n">num_labels</span><span class="p">),</span> <span class="n">labels</span><span class="p">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">TokenClassifierOutput</span><span class="p">(</span>
+            <span class="n">loss</span><span class="o">=</span><span class="n">loss</span><span class="p">,</span>
+            <span class="n">logits</span><span class="o">=</span><span class="n">logits</span><span class="p">,</span>
+            <span class="n">hidden_states</span><span class="o">=</span><span class="n">outputs</span><span class="p">.</span><span class="n">hidden_states</span><span class="p">,</span>
+            <span class="n">attentions</span><span class="o">=</span><span class="n">outputs</span><span class="p">.</span><span class="n">attentions</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="o">@</span><span class="nb">classmethod</span>
+    <span class="k">def</span> <span class="nf">from_pretrained</span><span class="p">(</span>
+        <span class="n">cls</span><span class="p">,</span>
+        <span class="n">pretrained_model_name_or_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="p">.</span><span class="n">PathLike</span><span class="p">]],</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BertConfig</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">AutoConfig</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+                <span class="n">pretrained_model_name_or_path</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="p">{</span><span class="s">"num_labels"</span><span class="p">,</span> <span class="s">"label2id"</span><span class="p">,</span> <span class="s">"id2label"</span><span class="p">}:</span>
+                <span class="k">assert</span> <span class="nb">hasattr</span><span class="p">(</span>
+                    <span class="n">config</span><span class="p">,</span> <span class="n">attr_name</span>
+                <span class="p">),</span> <span class="s">"Config is not sufficient to load model."</span>
+            <span class="k">assert</span> <span class="p">(</span>
+                <span class="mi">0</span> <span class="o">&lt;</span> <span class="n">config</span><span class="p">.</span><span class="n">num_labels</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">label2id</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">id2label</span><span class="p">)</span>
+            <span class="p">),</span> <span class="s">"Config is not sufficient to load model."</span>
+
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+            <span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="n">pretrained_model_name_or_path</span><span class="p">,</span>
+            <span class="n">use_fast</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+            <span class="n">only_label_first_subword</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="p">):</span>
+            <span class="c1"># Assume model path is a default bert model...
+</span>            <span class="c1"># In this case, we need to instantiate a model and
+</span>            <span class="c1"># replace its encoders with pretrained bert models
+</span>            <span class="n">model</span> <span class="o">=</span> <span class="n">cls</span><span class="p">(</span>
+                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="s">"label_encoder"</span><span class="p">,</span>
+                <span class="n">BertModel</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="s">"token_encoder"</span><span class="p">,</span>
+                <span class="n">BertModel</span><span class="p">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">pretrained_model_name_or_path</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">model</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">BertWithLabelSemantics</span><span class="p">,</span> <span class="n">cls</span><span class="p">).</span><span class="n">from_pretrained</span><span class="p">(</span>
+                <span class="n">pretrained_model_name_or_path</span><span class="o">=</span><span class="n">pretrained_model_name_or_path</span><span class="p">,</span>
+                <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+                <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+</code></pre></div></div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#ai" class="page__taxonomy-item p-category" rel="tag">ai</a><span class="sep">, </span>
+    
+      <a href="/pages/dcyoung/categories/#machine-learning" class="page__taxonomy-item p-category" rel="tag">machine learning</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2022-08-16">August 16, 2022</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Bert+w%2F+Label+Semantics+%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-bert-with-label-semantics%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-bert-with-label-semantics%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-bert-with-label-semantics/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-r3f-audio-visualizer/" class="pagination--pager" title="Interactive Audio Visualizer
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-streamlit-keep-alive/" class="pagination--pager" title="Automating a Keep-Alive Probe for Deployed Apps
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>

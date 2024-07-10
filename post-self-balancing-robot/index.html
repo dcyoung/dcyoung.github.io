@@ -1,0 +1,994 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.26.2 by Michael Rose
+  Copyright 2013-2024 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Hybrid Control of a Self Balancing Robot</title>
+<meta name="description" content="Designing a hybrid controller for a self-balancing robotic pendulum.">
+
+
+  <meta name="author" content="David Young">
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="David Young">
+<meta property="og:title" content="Hybrid Control of a Self Balancing Robot">
+<meta property="og:url" content="https://dcyoung.github.io/pages/dcyoung/post-self-balancing-robot/">
+
+
+  <meta property="og:description" content="Designing a hybrid controller for a self-balancing robotic pendulum.">
+
+
+
+  <meta property="og:image" content="https://dcyoung.github.io/pages/dcyoung/images/self-balancing-robot/preview.webp">
+
+
+
+
+
+  <meta property="article:published_time" content="2015-12-01T07:00:00+07:00">
+
+
+
+  <meta property="article:modified_time" content="2015-12-01T07:00:00+07:00">
+
+
+
+
+<link rel="canonical" href="https://dcyoung.github.io/pages/dcyoung/post-self-balancing-robot/">
+
+
+
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    
+      "@type": "Person",
+      "name": "David Young",
+      "url": "https://dcyoung.github.io/pages/dcyoung/",
+      "sameAs": ["https://www.linkedin.com/in/david-young-09509210a"]
+    
+  }
+</script>
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+  <link href="/pages/dcyoung/feed.xml" type="application/atom+xml" rel="alternate" title="David Young Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="text/javascript">
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/pages/dcyoung/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+<link rel="shortcut icon" href="/images/site/favicon.ico">
+<meta name="theme-color" content="#ffffff">
+
+<!-- end custom head snippets -->
+
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML">
+</script>
+<meta name="google-site-verification" content="zewSCzlO5JWAuo7MV_u4VoTRLfV4lUrqwxvfo4-3Xfc" />
+<script type="text/x-mathjax-config">
+   MathJax.Hub.Config({
+     extensions: ["tex2jax.js"],
+     jax: ["input/TeX", "output/HTML-CSS"],
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+       processEscapes: true,
+       preview: 'none'
+     },
+     messageStyle: 'none',
+     "HTML-CSS": { availableFonts: ["TeX"] }
+   });
+
+</script>
+
+<style>
+    .bg-color-red {
+        background-color: #ffebee;
+    }
+
+    .bg-color-green {
+        background-color: #e8f5e9;
+    }
+
+    .bg-color-yellow {
+        background-color: #fff3e0;
+    }
+
+    .bg-color-dark-green {
+        background-color: #c8e6c9;
+    }
+
+    .bg-color-pink {
+        background-color: #ffcdd2;
+    }
+
+    .bg-color-purple {
+        background-color: #c5cae9;
+    }
+
+    .pwc-icon {
+        width: 23px;
+        height: 23px;
+        position: relative;
+        top: 5px;
+        margin-right: 5px;
+    }
+
+</style>
+
+  </head>
+
+  <body class="layout--single wide" dir="ltr">
+    <nav class="skip-links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/pages/dcyoung/">
+          David Young
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/archives/"
+                
+                
+              >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/about/"
+                
+                
+              >About</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/resume/"
+                
+                
+              >Resume</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/ml-practitioners-guide/"
+                
+                
+              >ML Practitioner's Guide</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/pages/dcyoung/categories/"
+                
+                
+              >Categories</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">Toggle search</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://dcyoung.github.io/pages/dcyoung/">
+        <img src="/pages/dcyoung/images/site/profile_artsy.webp" alt="David Young" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://dcyoung.github.io/pages/dcyoung/" itemprop="url">David Young</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>systems thinker &amp; passionate engineer</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+        
+          
+            <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/david-young-09509210a" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">Linkedin</span></a></li>
+          
+        
+          
+            <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i><span class="label">Instagram</span></a></li>
+          
+        
+          
+            <li><a href="https://www.youtube.com/channel/UClQEBd-MzkWlkjbxcsve-UA" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-youtube" aria-hidden="true"></i><span class="label">YouTube</span></a></li>
+          
+        
+          
+            <li><a href="mailto:david@questionablyartificial.com" rel="nofollow noopener noreferrer me"><i class="fab fa-fw fa-envelope" aria-hidden="true"></i><span class="label">Email</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Hybrid Control of a Self Balancing Robot">
+    <meta itemprop="description" content="Designing a hybrid controller for a self-balancing robotic pendulum.">
+    <meta itemprop="datePublished" content="2015-12-01T07:00:00+07:00">
+    <meta itemprop="dateModified" content="2015-12-01T07:00:00+07:00">
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">
+            <a href="https://dcyoung.github.io/pages/dcyoung/post-self-balancing-robot/" itemprop="url">Hybrid Control of a Self Balancing Robot
+</a>
+          </h1>
+          
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+          <aside class="sidebar__right ">
+            <nav class="toc">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+              <ul class="toc__menu"><li><a href="#introduction-to-the-pendubot-retrieving-and-filtering-signals">Introduction to the Pendubot, Retrieving and Filtering Signals</a></li><li><a href="#oscillating-movement">Oscillating Movement</a></li><li><a href="#pid-controllers">PID Controllers</a></li><li><a href="#robot-animator">Robot Animator</a></li><li><a href="#simulating-movement-with-lagrangian-dynamics">Simulating Movement with Lagrangian Dynamics</a></li><li><a href="#enhancing-simulation-with-the-hamiltonian">Enhancing Simulation with the Hamiltonian</a></li><li><a href="#designing-a-hybrid-controller">Designing a Hybrid Controller</a></li><li><a href="#controlling-the-robot-with-a-kinect-sensor">Controlling the Robot with a Kinect Sensor</a><ul><li><a href="#drafting-a-client--server-to-acquire--retrieve-kinect-data">Drafting a Client + Server to Acquire + Retrieve Kinect Data</a></li><li><a href="#designing-an-asynchronous-parallel-client">Designing an Asynchronous Parallel Client</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/kjRBskEKIeU" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<h2 id="introduction-to-the-pendubot-retrieving-and-filtering-signals">Introduction to the Pendubot, Retrieving and Filtering Signals</h2>
+
+<object data="/images/self-balancing-robot/1-intro-filter.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/1-intro-filter.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/1-intro-filter.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="oscillating-movement">Oscillating Movement</h2>
+
+<object data="/images/self-balancing-robot/2-oscillating-movement-simple.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/2-oscillating-movement-simple.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/2-oscillating-movement-simple.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="pid-controllers">PID Controllers</h2>
+
+<object data="/images/self-balancing-robot/3-oscillating-movement-pid.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/3-oscillating-movement-pid.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/3-oscillating-movement-pid.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="robot-animator">Robot Animator</h2>
+
+<object data="/images/self-balancing-robot/4-transformations-and-animations.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/4-transformations-and-animations.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/4-transformations-and-animations.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="simulating-movement-with-lagrangian-dynamics">Simulating Movement with Lagrangian Dynamics</h2>
+
+<object data="/images/self-balancing-robot/5-lagrangian-dynamics-theoretical-parameters.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/5-lagrangian-dynamics-theoretical-parameters.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/5-lagrangian-dynamics-theoretical-parameters.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="enhancing-simulation-with-the-hamiltonian">Enhancing Simulation with the Hamiltonian</h2>
+
+<object data="/images/self-balancing-robot/6-hamiltonian-experimental-parameters.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/6-hamiltonian-experimental-parameters.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/6-hamiltonian-experimental-parameters.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="designing-a-hybrid-controller">Designing a Hybrid Controller</h2>
+
+<object data="/images/self-balancing-robot/7-hybrid-controller-extra.pdf" type="application/pdf" width="1000" height="1000">
+    <p>
+        This browser does not support embedded PDFs. To view,
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/7-hybrid-controller-extra.pdf" target="_blank" rel="noopener noreferrer">
+            Open the PDF directly
+        </a> or 
+        <a href="https://dcyoung.github.io/images/self-balancing-robot/7-hybrid-controller-extra.pdf" download="">
+            Download the PDF
+        </a>
+    </p>
+</object>
+
+<h2 id="controlling-the-robot-with-a-kinect-sensor">Controlling the Robot with a Kinect Sensor</h2>
+
+<!-- Courtesy of embedresponsively.com -->
+
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/75_WzvI9v3o" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+  </div>
+
+<p>I wanted to take the Pendubot a step further and the robotics lab on campus happened to have a few extra Microsoft Kinects laying around. What better fun that controlling a robot by waving your hands! There were a few design considerations that had to be fleshed out however.</p>
+
+<ul>
+  <li>The robot hardware was all setup with a computer running Matlab r2012b which makes implementing data acquisition for the kinect sensor a much more tedious process involving 3rd party solutions. Matlab r2013+ introduced much more simple implementations.</li>
+  <li>I had access to a computer running Matlab r2013b, but conducting the data acquisition on a different PC meant communicating that information over a network.</li>
+  <li>Assuming the network connection was operational in Matlab, there were still two functions that needed to execute simultaneously… 1) Simulink model controlling the robot… and 2) the client script receiving updated info from the server. Also the robot controller would still have to run lightning fast, whereas the updated commands from the server could come in relatively slowly (~20/second). Without being able to put the call in the control loop itself, the solution solution would have to involve two asynchronously parallel function. Of course Matlab doesn’t lend itself to simple asynchronous parallelism. Although there are some workarounds – I later discovered this was unnecessary, as the model was running externally and a simpler solution would suffice.</li>
+</ul>
+
+<h3 id="drafting-a-client--server-to-acquire--retrieve-kinect-data">Drafting a Client + Server to Acquire + Retrieve Kinect Data</h3>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%%%%%%%%%%%%%%%    CLIENT     %%%%%%%%%%%</span>
+<span class="nb">clear</span> <span class="nb">all</span><span class="p">;</span> <span class="nb">close</span> <span class="nb">all</span><span class="p">;</span> <span class="nb">clc</span><span class="p">;</span>
+<span class="n">tcpipClient</span> <span class="o">=</span> <span class="n">tcpip</span><span class="p">(</span><span class="s1">'172.16.1.71'</span><span class="p">,</span><span class="mi">55000</span><span class="p">,</span><span class="s1">'NetworkRole'</span><span class="p">,</span><span class="s1">'Client'</span><span class="p">)</span> <span class="c1">%for</span>
+<span class="c1">% server running on kinect computer</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="n">tcpipClient</span><span class="p">,</span><span class="s1">'InputBufferSize'</span><span class="p">,</span><span class="mi">8</span><span class="p">);</span>
+<span class="nb">set</span><span class="p">(</span><span class="n">tcpipClient</span><span class="p">,</span><span class="s1">'Timeout'</span><span class="p">,</span><span class="mi">1000</span><span class="p">);</span>
+<span class="nb">fopen</span><span class="p">(</span><span class="n">tcpipClient</span><span class="p">);</span>
+<span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">rawData</span> <span class="o">=</span> <span class="nb">fread</span><span class="p">(</span><span class="n">tcpipClient</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">'double'</span><span class="p">);</span>
+    <span class="nb">display</span><span class="p">(</span><span class="n">rawData</span><span class="p">);</span>
+    <span class="k">if</span> <span class="n">rawData</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="n">set_param</span><span class="p">(</span><span class="s1">'Hybrid_Controller/c'</span><span class="p">,</span><span class="s1">'Value'</span><span class="p">,</span><span class="s1">'0'</span><span class="p">);</span>
+    <span class="k">elseif</span> <span class="n">rawData</span> <span class="o">==</span> <span class="mi">1</span>
+        <span class="n">set_param</span><span class="p">(</span><span class="s1">'Hybrid_Controller/c'</span><span class="p">,</span><span class="s1">'Value'</span><span class="p">,</span><span class="s1">'1.57'</span><span class="p">);</span>
+    <span class="k">else</span>
+        <span class="n">set_param</span><span class="p">(</span><span class="s1">'Hybrid_Controller/c'</span><span class="p">,</span><span class="s1">'Value'</span><span class="p">,</span><span class="s1">'-1.57'</span><span class="p">);</span>
+    <span class="k">end</span>
+<span class="k">end</span>
+<span class="nb">fclose</span><span class="p">(</span><span class="n">tcpipClient</span><span class="p">);</span>
+<span class="nb">display</span><span class="p">(</span><span class="s1">'successfully retrieved data from server'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<div class="language-matlab highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">%%%%%%%%      Rough SERVER Draft    %%%%%%%%%%%%</span>
+<span class="nb">close</span> <span class="nb">all</span><span class="p">;</span> <span class="nb">clear</span> <span class="nb">all</span><span class="p">;</span> <span class="nb">clc</span><span class="p">;</span>
+
+<span class="c1">%define data to send over network as a 1x1 array (for simple command code)</span>
+<span class="n">dataPackage</span> <span class="o">=</span> <span class="nb">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">);</span>
+<span class="n">s</span> <span class="o">=</span> <span class="nb">whos</span><span class="p">(</span><span class="s1">'dataPackage'</span><span class="p">)</span>
+
+<span class="c1">%define server and open it</span>
+<span class="n">tcpipServer</span> <span class="o">=</span> <span class="n">tcpip</span><span class="p">(</span><span class="s1">'0.0.0.0'</span><span class="p">,</span><span class="mi">55000</span><span class="p">,</span><span class="s1">'NetworkRole'</span><span class="p">,</span><span class="s1">'Server'</span><span class="p">);</span>
+<span class="nb">set</span><span class="p">(</span><span class="n">tcpipServer</span><span class="p">,</span><span class="s1">'OutputBufferSize'</span><span class="p">,</span><span class="n">s</span><span class="o">.</span><span class="n">bytes</span><span class="p">);</span>
+<span class="nb">display</span><span class="p">(</span><span class="s1">'Initialized Server'</span><span class="p">);</span>
+<span class="nb">fopen</span><span class="p">(</span><span class="n">tcpipServer</span><span class="p">);</span>
+<span class="nb">display</span><span class="p">(</span><span class="s1">'Acquired Client, beginning Kinect Setup'</span><span class="p">);</span>
+
+<span class="c1">%setup path for kinect stuff</span>
+<span class="n">utilpath</span> <span class="o">=</span> <span class="nb">fullfile</span><span class="p">(</span><span class="nb">matlabroot</span><span class="p">,</span> <span class="s1">'toolbox'</span><span class="p">,</span> <span class="s1">'imaq'</span><span class="p">,</span> <span class="s1">'imaqdemos'</span><span class="p">,</span> <span class="k">...</span>
+    <span class="s1">'html'</span><span class="p">,</span> <span class="s1">'KinectForWindows'</span><span class="p">);</span>
+<span class="nb">addpath</span><span class="p">(</span><span class="n">utilpath</span><span class="p">);</span>
+
+<span class="c1">% The Kinect for Windows Sensor shows up as two separate devices in IMAQHWINFO.</span>
+<span class="n">hwInfo</span> <span class="o">=</span> <span class="n">imaqhwinfo</span><span class="p">(</span><span class="s1">'kinect'</span><span class="p">);</span>
+
+<span class="c1">% Create the VIDEOINPUT objects for the depth streeam, which is the 2nd device</span>
+<span class="n">depthVidOBJ</span> <span class="o">=</span> <span class="n">videoinput</span><span class="p">(</span><span class="s1">'kinect'</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+
+<span class="n">depthVidOBJ</span><span class="o">.</span><span class="n">TriggerRepeat</span> <span class="o">=</span> <span class="nb">Inf</span><span class="p">;</span>
+<span class="n">depthVidOBJ</span><span class="o">.</span><span class="n">FrameGrabInterval</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+<span class="c1">% Get the VIDEOSOURCE object from the depth device's VIDEOINPUT object.</span>
+<span class="n">depthSrc</span> <span class="o">=</span> <span class="n">getselectedsource</span><span class="p">(</span><span class="n">depthVidOBJ</span><span class="p">);</span>
+
+<span class="c1">% Turn on skeletal tracking.</span>
+<span class="n">depthSrc</span><span class="o">.</span><span class="n">TrackingMode</span> <span class="o">=</span> <span class="s1">'Skeleton'</span><span class="p">;</span>
+
+<span class="c1">%turn on the stream</span>
+<span class="nb">start</span><span class="p">(</span><span class="n">depthVidOBJ</span><span class="p">)</span>
+
+<span class="c1">%we will always be dealing with the first frame since we deal with them one at a time here</span>
+<span class="n">frameInQuestion</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+
+<span class="n">acquireCount</span> <span class="o">=</span> <span class="mi">50</span><span class="p">;</span> <span class="c1">%determines how long the data acquisition will continue for</span>
+<span class="nb">fprintf</span><span class="p">(</span><span class="s1">'Initiating Data Acquisition\n\n'</span><span class="p">);</span>
+<span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="c1">%acquireCount &gt;=0)</span>
+        <span class="c1">%acquire the data</span>
+        <span class="p">[</span><span class="n">frameDataDepth</span><span class="p">,</span> <span class="n">timeDataDepth</span><span class="p">,</span> <span class="n">metaDataDepth</span><span class="p">]</span> <span class="o">=</span> <span class="n">getdata</span><span class="p">(</span><span class="n">depthVidOBJ</span><span class="p">);</span>
+
+        <span class="n">anySkeletonsTracked</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span><span class="n">metaDataDepth</span><span class="p">(</span><span class="n">frameInQuestion</span><span class="p">)</span><span class="o">.</span><span class="n">IsSkeletonTracked</span> <span class="o">~=</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">anySkeletonsTracked</span><span class="p">)</span>            
+            <span class="c1">% See which skeletons were tracked.</span>
+            <span class="n">trackedSkeletons</span> <span class="o">=</span> <span class="nb">find</span><span class="p">(</span><span class="n">metaDataDepth</span><span class="p">(</span><span class="n">frameInQuestion</span><span class="p">)</span><span class="o">.</span><span class="n">IsSkeletonTracked</span><span class="p">);</span>
+            
+            <span class="c1">% Skeleton's joint indices with respect to the color image</span>
+            <span class="n">jointIndices</span> <span class="o">=</span> <span class="n">metaDataDepth</span><span class="p">(</span><span class="n">frameInQuestion</span><span class="p">)</span><span class="o">.</span><span class="n">JointImageIndices</span><span class="p">(:,</span> <span class="p">:,</span> <span class="n">trackedSkeletons</span><span class="p">);</span>
+
+            <span class="c1">%define specific joint Indices</span>
+            <span class="n">rightHand</span><span class="o">=</span> <span class="n">jointIndices</span><span class="p">(</span><span class="mi">8</span><span class="p">,:);</span>
+            <span class="n">leftHand</span><span class="o">=</span> <span class="n">jointIndices</span><span class="p">(</span><span class="mi">12</span><span class="p">,:);</span>
+
+
+            <span class="c1">%check for control gestures (currently simple 2 hand control gestures)</span>
+            <span class="k">if</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">rightHand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="n">leftHand</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">&gt;</span><span class="mi">25</span><span class="p">)</span> <span class="c1">%are the hands around the same heigh</span>
+                <span class="k">if</span><span class="p">(</span><span class="n">rightHand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">&gt;</span><span class="n">leftHand</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                    <span class="nb">fwrite</span><span class="p">(</span><span class="n">tcpipServer</span><span class="p">,</span><span class="n">dataPackage</span><span class="p">(:),</span><span class="s1">'double'</span><span class="p">);</span>
+                    <span class="nb">display</span><span class="p">(</span><span class="s1">'Move Robot Right'</span><span class="p">);</span>
+                    <span class="n">dataPackage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">2</span><span class="p">;</span>
+                <span class="k">else</span>
+                    <span class="nb">display</span><span class="p">(</span><span class="s1">'Move Robot Left'</span><span class="p">);</span>
+                    <span class="n">dataPackage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
+                <span class="k">end</span>
+            <span class="k">else</span>
+                <span class="nb">display</span><span class="p">(</span><span class="s1">'Keep Robot In Place'</span><span class="p">);</span>
+                <span class="n">dataPackage</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+            <span class="k">end</span>
+            <span class="nb">fwrite</span><span class="p">(</span><span class="n">tcpipServer</span><span class="p">,</span><span class="n">dataPackage</span><span class="p">(:),</span><span class="s1">'double'</span><span class="p">);</span>
+        <span class="k">else</span>
+            <span class="nb">display</span><span class="p">(</span><span class="s1">'No skeleton detected'</span><span class="p">);</span>
+        <span class="k">end</span>
+    <span class="n">acquireCount</span> <span class="o">=</span> <span class="n">acquireCount</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+<span class="k">end</span>
+
+<span class="nb">stop</span><span class="p">(</span><span class="n">depthVidOBJ</span><span class="p">)</span>
+<span class="nb">fprintf</span><span class="p">(</span><span class="s1">'\nDone Acquiring Data\n'</span><span class="p">);</span>
+
+
+<span class="nb">fclose</span><span class="p">(</span><span class="n">tcpipServer</span><span class="p">);</span>
+<span class="nb">display</span><span class="p">(</span><span class="s1">'Successfully closed server'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h3 id="designing-an-asynchronous-parallel-client">Designing an Asynchronous Parallel Client</h3>
+
+<p>After spending a great deal of time experimenting with asynchronous parallelism in Matlab (including getting into some java threading behind the scenes) it dawned on me that the controller was actually being run externally. I felt quite silly for wasting so much time but it was good experimentation nonetheless. In the end providing instructions to the model transformed into a dramatically simple task. To take care of the updates I used a “parameter set” command in the client that targeted a variable in the model and executed on update from the server.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/pages/dcyoung/categories/#robotics" class="page__taxonomy-item p-category" rel="tag">robotics</a>
+    
+    </span>
+  </p>
+
+
+        
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time class="dt-published" datetime="2015-12-01">December 1, 2015</time></p>
+
+      </footer>
+
+      <section class="page__share">
+  
+
+  <a href="https://twitter.com/intent/tweet?text=Hybrid+Control+of+a+Self+Balancing+Robot%20https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-self-balancing-robot%2F" class="btn btn--twitter" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Twitter"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdcyoung.github.io%2Fpages%2Fdcyoung%2Fpost-self-balancing-robot%2F" class="btn btn--facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://dcyoung.github.io/pages/dcyoung/post-self-balancing-robot/" class="btn btn--linkedin" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+
+      
+  <nav class="pagination">
+    
+      <a href="/pages/dcyoung/post-markov-decision-processes/" class="pagination--pager" title="Markov Decision Processes &amp; Reinforcement Q-Learning
+">Previous</a>
+    
+    
+      <a href="/pages/dcyoung/post-simulating-neuronal-learning-during-bci/" class="pagination--pager" title="Simlating Neuronal Learning during Brain Machine Interface
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+      <div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Comments</h4>
+      <section id="utterances-comments"></section>
+    
+</div>
+
+    
+  </article>
+
+  
+  
+    
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/r3f-nn-visualizer/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-r3f-nn-visualizer/" rel="permalink">Interactive Neural Network Visualizer
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          1 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">An interactive Neural Network visualization built w/ modern web technologies including tensorflow.js and react-three-fiber.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/mmle-scores/softmax.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-mmle-scores/" rel="permalink">Practical ML: Detecting Out-of-Distribution Data
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          4 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Detecting out of distribution samples using
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/gh-pages-staging-deployments/preview.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-gh-pages-staging-deployments/" rel="permalink">Automating Free Staging Deployments for Github Pages
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Automating free staging deployments for Github Pages using Github Actions.
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+      <div class="archive__item-teaser">
+        <img src="/pages/dcyoung/images/clustering-custom-distance/haversine.webp" alt="">
+      </div>
+    
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      
+        <a href="/pages/dcyoung/post-clustering-custom-distance/" rel="permalink">Performant Clustering of Geo Coordinates w/ Custom Distance Functions
+</a>
+      
+    </h2>
+    
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          3 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt" itemprop="description">Implementing vectorized clustering methods for distance metrics unsupported by common libraries.
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        <div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      Enter your search term...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="Enter your search term..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+      
+        
+          <li><a href="https://github.com/dcyoung" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.instagram.com/cycle_shadez/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-instagram" aria-hidden="true"></i> Instagram</a></li>
+        
+      
+    
+
+    
+      <li><a href="/pages/dcyoung/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2024 <a href="https://dcyoung.github.io">David Young</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/pages/dcyoung/assets/js/main.min.js"></script>
+
+
+
+
+<script src="/pages/dcyoung/assets/js/lunr/lunr.min.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-store.js"></script>
+<script src="/pages/dcyoung/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8LFRSKS1E8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8LFRSKS1E8', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function() {
+    var commentContainer = document.querySelector('#utterances-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+    script.setAttribute('src', 'https://utteranc.es/client.js');
+    script.setAttribute('repo', 'dcyoung/dcyoung.github.io');
+    script.setAttribute('issue-term', 'pathname');
+    script.setAttribute('label', 'comment');
+    script.setAttribute('theme', 'github-light');
+    script.setAttribute('crossorigin', 'anonymous');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
+
+
+
+
+  </body>
+</html>
