@@ -3,8 +3,7 @@ title: "How-to: Install XSPC Full Cover Waterblock"
 date: 2013-12-10T00:00:00-00:00
 last_modified_at: 2013-12-10T00:00:00-00:00
 categories:
-  - computers
-  - diy
+  - making
 permalink: /post-xspc-waterblock-install/
 classes: wide
 excerpt: A comprehensive installation guide and review of a GPU waterblock.

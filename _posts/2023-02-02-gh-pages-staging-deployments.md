@@ -3,8 +3,7 @@ title: "Automating Free Staging Deployments for Github Pages"
 date: 2023-02-02T00:00:00-00:00
 last_modified_at: 2023-02-02T00:00:00-00:00
 categories:
-  - automation
-  - software notes
+  - software
 permalink: /post-gh-pages-staging-deployments/
 classes: wide
 excerpt: Automating free staging deployments for Github Pages using Github Actions. 

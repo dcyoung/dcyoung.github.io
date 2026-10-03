@@ -3,9 +3,7 @@ title: "Optical Character Recognition w/ OpenCV and Deep Learning"
 date: 2015-10-15T00:00:00-00:00
 last_modified_at: 2015-10-15T00:00:00-00:00
 categories:
-  - computer vision
-  - ai
-  - school project
+  - machine-learning
 permalink: /post-optical-character-recongition/
 classes: wide
 toc: true

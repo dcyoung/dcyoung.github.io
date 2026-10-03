@@ -15,4 +15,5 @@ group :jekyll_plugins do
   gem "jekyll-include-cache"
   gem "jekyll-algolia"
   gem "webrick"
+  gem "logger", "~> 1.5.3" # logger 1.6 breaks Jekyll 3.9
 end

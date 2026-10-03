@@ -3,8 +3,7 @@ title: "Simulating Bin of Objects with Mel in Maya"
 date: 2015-04-01T00:00:00-00:00
 last_modified_at: 2015-04-01T00:00:00-00:00
 categories:
-  - game dev
-  - 3D
+  - interactive-media
 permalink: /post-maya-simulating-debris/
 classes: wide
 excerpt: Automating/Simulating a bin of objects (teddy bears) using Mel in Maya.

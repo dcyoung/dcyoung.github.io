@@ -3,7 +3,7 @@ title: "Useful S3 Python Snippets"
 date: 2019-06-30T00:00:00-00:00
 last_modified_at: 2019-06-30T00:00:00-00:00
 categories:
-  - software notes
+  - software
 permalink: /post-py-s3-snippets/
 classes: wide
 toc: true

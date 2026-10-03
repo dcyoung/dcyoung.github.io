@@ -3,9 +3,8 @@ title: "Simlating Neuronal Learning during Brain Machine Interface"
 date: 2015-12-02T00:00:00-00:00
 last_modified_at: 2015-12-02T00:00:00-00:00
 categories:
-  - ai
-  - biomedical engineering
-  - school project
+  - machine-learning
+  - biomedical
 permalink: /post-simulating-neuronal-learning-during-bci/
 classes: wide
 excerpt: Modeling a population of neurons learning to control a 2 dimensional cursor.

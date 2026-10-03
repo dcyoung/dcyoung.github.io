@@ -3,9 +3,7 @@ title: "Compound Action Potentials in Frog Sciatic Nerve"
 date: 2013-10-09T00:00:00-00:00
 last_modified_at: 2013-10-09T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-frog-skeletal-muscle/
 classes: wide
 excerpt:  Studying compound action potentials by dissecting and probing a frog's sciatic nerve.

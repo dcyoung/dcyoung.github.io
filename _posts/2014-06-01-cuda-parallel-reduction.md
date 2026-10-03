@@ -3,8 +3,7 @@ title: "Parallel Reduction w/ NVidia CUDA"
 date: 2014-06-01T00:00:00-00:00
 last_modified_at: 2014-06-01T00:00:00-00:00
 categories:
-  - computer architecture
-  - school project
+  - systems
 permalink: /post-cuda-parallel-reduction/
 classes: wide
 excerpt: Accelerating via interleaved addressing with NVidia CUDA Framework

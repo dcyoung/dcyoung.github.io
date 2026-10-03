@@ -3,8 +3,7 @@ title: "Multiplayer Networked Game of Set"
 date: 2014-05-01T00:00:00-00:00
 last_modified_at: 2014-05-01T00:00:00-00:00
 categories:
-  - game dev
-  - school project
+  - interactive-media
 permalink: /post-multiplayer-networked-game-of-set/
 classes: wide
 excerpt: A completely custom networked implementation of a card game called set.

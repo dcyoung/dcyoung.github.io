@@ -3,9 +3,7 @@ title: "Markov Decision Processes & Reinforcement Q-Learning"
 date: 2015-12-01T00:00:00-00:00
 last_modified_at: 2015-12-01T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
-  - school project
+  - machine-learning
 permalink: /post-markov-decision-processes/
 classes: wide
 excerpt: Navigating environments w/ Markov Decision Processes & Reinforced Learning.

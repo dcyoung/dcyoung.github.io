@@ -3,8 +3,7 @@ title: "​Photometric Stereo: Shape from Shading"
 date: 2016-01-15T00:00:00-00:00
 last_modified_at: 2016-01-15T00:00:00-00:00
 categories:
-  - computer vision
-  - school project
+  - machine-learning
 permalink: /post-photometric-stereo/
 classes: wide
 toc: true

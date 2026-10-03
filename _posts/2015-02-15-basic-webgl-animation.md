@@ -3,8 +3,8 @@ title: "Basic 2D Animation with WebGL"
 date: 2015-02-15T00:00:00-00:00
 last_modified_at: 2015-02-15T00:00:00-00:00
 categories:
-  - webdev
-  - school project
+  - interactive-media
+  - software
 permalink: /post-webgl-animation-2d/
 classes: wide
 excerpt: Animating a dancing letter w/ WebGL

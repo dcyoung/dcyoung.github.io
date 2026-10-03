@@ -3,8 +3,7 @@ title: "Automating a Keep-Alive Probe for Deployed Apps"
 date: 2022-09-01T00:00:00-00:00
 last_modified_at: 2022-09-01T00:00:00-00:00
 categories:
-  - automation
-  - software notes
+  - software
 permalink: /post-streamlit-keep-alive/
 classes: wide
 excerpt: Automating a keep-alive probe for a deployed streamlit app using puppeteer and Github Actions. 

@@ -3,8 +3,7 @@ title: "Multi-channel Time Series Classification w/ Deep Learning "
 date: 2017-08-05T00:00:00-00:00
 last_modified_at: 2017-08-05T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
+  - machine-learning
 permalink: /post-detect-tsc/
 classes: wide
 toc: true

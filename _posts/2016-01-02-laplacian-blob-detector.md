@@ -3,8 +3,7 @@ title: "Laplacian Blob Detector"
 date: 2016-01-02T00:00:00-00:00
 last_modified_at: 2016-01-02T00:00:00-00:00
 categories:
-  - computer vision
-  - school project
+  - machine-learning
 permalink: /post-laplacian-blob-detector/
 classes: wide
 toc: true

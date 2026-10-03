@@ -3,10 +3,8 @@ title: "Custom Racing Simulator Rig"
 date: 2015-03-01T00:00:00-00:00
 last_modified_at: 2015-03-01T00:00:00-00:00
 categories:
-  - diy
-  - automotive
+  - making
   - motorsports
-  - electronics
 permalink: /post-racing-simulator-rig/
 classes: wide
 toc: true

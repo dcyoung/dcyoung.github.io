@@ -3,8 +3,7 @@ title: "Estimating Homography w/ RANSAC"
 date: 2016-03-02T00:00:00-00:00
 last_modified_at: 2016-03-02T00:00:00-00:00
 categories:
-  - computer vision
-  - school project
+  - machine-learning
 permalink: /post-estimating-homography/
 classes: wide
 toc: true

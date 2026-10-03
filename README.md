@@ -6,13 +6,13 @@ The website is powered by [Jekyll](https://jekyllrb.com) — a static site gener
 
 ## Preview the Website
 
-You can serve the generated site so it can be previewed in your browser using Docker:
+Serve a local preview with Docker Compose (incremental rebuilds enabled; file watching is off due to a Jekyll 3.9/pathutil crash on this image):
 
 ```bash
-docker-compose up
+docker compose up -d
 ```
 
-And you should see the blog if you visit [http://localhost:4000](http://localhost:4000).
+Visit [http://localhost:4000](http://localhost:4000). Prefer `docker compose stop` / `docker compose start` over `down` so the named gem cache volume stays warm. Restart the container after content edits to rebuild.
 
 ## Hosting
 

@@ -3,8 +3,7 @@ title: "Single View Modeling"
 date: 2015-10-25T00:00:00-00:00
 last_modified_at: 2015-10-25T00:00:00-00:00
 categories:
-  - computer vision
-  - school project
+  - machine-learning
 permalink: /post-single-view-modeling/
 classes: wide
 toc: True

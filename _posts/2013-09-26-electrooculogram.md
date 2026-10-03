@@ -3,9 +3,7 @@ title: "The Electrooculogram (EOG)"
 date: 2013-09-26T00:00:00-00:00
 last_modified_at: 2013-09-26T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-electrooculogram/
 classes: wide
 excerpt:  Measuring angular displacement of the eyeball by sensing changes in the orientation of the electric dipole.

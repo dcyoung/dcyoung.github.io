@@ -3,9 +3,7 @@ title: "Interactive Robot Simulator"
 date: 2017-12-01T00:00:00-00:00
 last_modified_at: 2017-12-01T00:00:00-00:00
 categories:
-  - webdev
-  - robotics
-  - 3D
+  - interactive-media
 permalink: /post-stewart-platform-simulator/
 classes: wide
 excerpt: A 3D robot simulator built in React and THREE.js

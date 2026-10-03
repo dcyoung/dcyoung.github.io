@@ -3,8 +3,7 @@ title: "Paper: Architecture Support for Accelerator Rich CMPs"
 date: 2016-01-01T00:00:00-00:00
 last_modified_at: 2016-01-01T00:00:00-00:00
 categories:
-  - computer architecture
-  - school project
+  - systems
 permalink: /post-accelerator-rich-cmps/
 classes: wide
 excerpt: A presentation and summary of a paper on architecture support for domain-specific accelerator-rich CMPS

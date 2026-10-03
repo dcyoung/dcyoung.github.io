@@ -3,8 +3,7 @@ title: "Multi-Room Chat Server"
 date: 2014-01-15T00:00:00-00:00
 last_modified_at: 2014-01-15T00:00:00-00:00
 categories:
-  - webdev
-  - school project
+  - software
 permalink: /post-multi-room-chat-server/
 classes: wide
 excerpt: A simple multi-room chat server built using Node.JS and Socket.IO

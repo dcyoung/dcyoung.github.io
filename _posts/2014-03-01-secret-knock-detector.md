@@ -3,8 +3,7 @@ title: "Automatic Secret Knock-Detecting Door Opener"
 date: 2014-03-01T00:00:00-00:00
 last_modified_at: 2014-03-01T00:00:00-00:00
 categories:
-  - electronics
-  - diy
+  - making
 permalink: /post-secret-knock-detector/
 classes: wide
 excerpt: Tap a secret knock and a real door opens.

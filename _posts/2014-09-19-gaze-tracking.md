@@ -3,9 +3,7 @@ title: "Analyzing Reading Patterns using Consumer-Grade Gaze Tracking Hardware "
 date: 2014-09-19T00:00:00-00:00
 last_modified_at: 2014-09-19T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-gaze-recognition/
 classes: wide
 excerpt: Developing software to analyze and report reading patterns based on observed eye tracking data.

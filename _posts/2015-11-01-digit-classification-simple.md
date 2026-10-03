@@ -3,9 +3,7 @@ title: "Digit Classification"
 date: 2015-11-01T00:00:00-00:00
 last_modified_at: 2015-11-01T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
-  - school project
+  - machine-learning
 permalink: /post-digit-classification/
 classes: wide
 excerpt: Digit classification w/ Naive Bayes and Multi-class Perceptrons.

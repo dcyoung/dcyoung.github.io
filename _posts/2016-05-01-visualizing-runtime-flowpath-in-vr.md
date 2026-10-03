@@ -3,9 +3,7 @@ title: "Visualizing Runtime Flowpath in VR"
 date: 2016-05-01T00:00:00-00:00
 last_modified_at: 2016-05-01T00:00:00-00:00
 categories:
-  - game dev
-  - virtual reality
-  - 3D
+  - interactive-media
 permalink: /post-visualizing-runtime-flowpath-in-vr/
 classes: wide
 toc: true

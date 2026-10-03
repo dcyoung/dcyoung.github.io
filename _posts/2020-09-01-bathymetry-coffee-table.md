@@ -3,8 +3,7 @@ title: "Bathymetry Coffee Table - Data Driven Design"
 date: 2020-09-01T00:00:00-00:00
 last_modified_at: 2020-09-01T00:00:00-00:00
 categories:
-  - data driven design
-  - CAD
+  - making
   - art
 permalink: /post-bathymetry-coffee-table/
 classes: wide

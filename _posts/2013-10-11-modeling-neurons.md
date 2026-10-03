@@ -3,9 +3,7 @@ title: "Modeling Neurons & Action Potentials"
 date: 2013-10-11T00:00:00-00:00
 last_modified_at: 2013-10-11T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-modeling-neurons/
 classes: wide
 toc: true

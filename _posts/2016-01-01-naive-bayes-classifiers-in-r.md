@@ -3,9 +3,7 @@ title: "Naive Bayes Classifier in R"
 date: 2016-01-01T00:00:00-00:00
 last_modified_at: 2016-01-01T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
-  - school project
+  - machine-learning
 permalink: /post-naive-bayes-classifiers-in-r/
 classes: wide
 toc: True

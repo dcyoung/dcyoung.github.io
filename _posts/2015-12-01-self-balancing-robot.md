@@ -3,7 +3,7 @@ title: "Hybrid Control of a Self Balancing Robot"
 date: 2015-12-01T00:00:00-00:00
 last_modified_at: 2015-12-01T00:00:00-00:00
 categories:
-  - robotics
+  - making
 permalink: /post-self-balancing-robot/
 classes: wide
 toc: true

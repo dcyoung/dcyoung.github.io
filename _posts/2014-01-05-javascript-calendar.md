@@ -3,8 +3,7 @@ title: "Javascript Calendar"
 date: 2014-01-05T00:00:00-00:00
 last_modified_at: 2014-01-05T00:00:00-00:00
 categories:
-  - webdev
-  - school project
+  - software
 permalink: /post-javascript-calendar/
 classes: wide
 excerpt: A simple calendar coded in JS, Jquery, php and mySQL

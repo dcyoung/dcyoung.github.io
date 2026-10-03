@@ -3,10 +3,9 @@ title: "Interactive Neural Network Visualizer"
 date: 2023-02-15T00:00:00-00:00
 last_modified_at: 2023-02-15T00:00:00-00:00
 categories:
-  - webdev
-  - machine learning
-  - ai
-  - 3D
+  - machine-learning
+  - interactive-media
+  - software
   - art
 permalink: /post-r3f-nn-visualizer/
 classes: wide

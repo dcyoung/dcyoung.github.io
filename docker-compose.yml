@@ -1,9 +1,23 @@
-version: "3.3"
-
 services:
   jekyll:
-    image: bretfisher/jekyll-serve
+    # Prefer a pinned stable tag on the Ruby 3.1 line.
+    # Do NOT use :latest — it tracks Ruby 4.0 and breaks github-pages/Jekyll 3.x.
+    image: bretfisher/jekyll-serve:stable-20260315-2119a31
     volumes:
       - .:/site
+      - jekyll-bundle:/usr/local/bundle
     ports:
       - "4000:4000"
+    # --incremental speeds rebuilds. --force_polling/--watch crash here:
+    # pathutil 0.16.2 + Ruby 3.1 + Jekyll 3.9 → TypeError in Platforms.proc_version.
+    command: >
+      bundle exec jekyll serve
+      --no-watch
+      --incremental
+      --future
+      --unpublished
+      -H 0.0.0.0
+      -P 4000
+
+volumes:
+  jekyll-bundle:

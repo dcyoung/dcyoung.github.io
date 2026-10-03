@@ -3,11 +3,8 @@ title: "3D Printed Frog Muscle Holder"
 date: 2013-11-05T00:00:00-00:00
 last_modified_at: 2013-11-05T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
-  - 3D printing
-  - CAD
+  - biomedical
+  - making
 permalink: /post-bme-3d-printed-frog-muscle-holder/
 classes: wide
 toc: true

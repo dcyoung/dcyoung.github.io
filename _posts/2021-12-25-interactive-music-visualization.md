@@ -3,9 +3,8 @@ title: "Interactive Audio Visualizer"
 date: 2021-12-25T00:00:00-00:00
 last_modified_at: 2021-12-25T00:00:00-00:00
 categories:
-  - webdev
-  - audio visualization
-  - 3D
+  - interactive-media
+  - software
   - art
 permalink: /post-r3f-audio-visualizer/
 classes: wide

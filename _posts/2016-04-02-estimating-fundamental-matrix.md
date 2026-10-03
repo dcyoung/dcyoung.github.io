@@ -3,8 +3,7 @@ title: "​Estimating Fundamental Matrix ​& Triangulating 3D Points"
 date: 2016-04-02T00:00:00-00:00
 last_modified_at: 2016-04-02T00:00:00-00:00
 categories:
-  - computer vision
-  - school project
+  - machine-learning
 permalink: /post-estimating-fundamental-matrix/
 classes: wide
 toc: true

@@ -3,9 +3,7 @@ title: "Experimenting with PhysX and APEX Destruction"
 date: 2014-05-01T00:00:00-00:00
 last_modified_at: 2014-05-01T00:00:00-00:00
 categories:
-  - game dev
-  - unreal engine
-  - 3D
+  - interactive-media
 permalink: /post-experimenting-with-physx-apex/
 classes: wide
 toc: true

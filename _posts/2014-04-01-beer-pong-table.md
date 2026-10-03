@@ -3,8 +3,7 @@ title: "Custom Beer Pong Tables"
 date: 2014-04-01T00:00:00-00:00
 last_modified_at: 2014-04-01T00:00:00-00:00
 categories:
-  - electronics
-  - diy
+  - making
 permalink: /post-beer-pong-table/
 classes: wide
 excerpt: Building a custom beer pong table with audio reactive lighting.

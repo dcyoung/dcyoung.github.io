@@ -3,9 +3,7 @@ title: "​Image Segmentation w/ EM Algorithm"
 date: 2016-02-01T00:00:00-00:00
 last_modified_at: 2016-02-01T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
-  - school project
+  - machine-learning
 permalink: /post-image-segmentation-with-em/
 classes: wide
 toc: True

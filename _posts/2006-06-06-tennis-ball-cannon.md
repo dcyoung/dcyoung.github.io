@@ -3,7 +3,7 @@ title: "Pneumatic Tennis Ball Cannon"
 date: 2006-06-06T00:00:00-00:00
 last_modified_at: 2006-06-06T00:00:00-00:00
 categories:
-  - diy
+  - making
 permalink: /post-tennis-ball-cannon/
 classes: wide
 excerpt: A powerful pneumatic tennis ball cannon for funsies.

@@ -3,9 +3,7 @@ title: "Experimenting with Tracking & Depth Perception in VR"
 date: 2016-01-01T00:00:00-00:00
 last_modified_at: 2016-01-01T00:00:00-00:00
 categories:
-  - game dev
-  - virtual reality
-  - 3D
+  - interactive-media
 permalink: /post-experimenting-with-tracking-and-depth-perception-in-vr/
 classes: wide
 excerpt: Minor experiments in VR.

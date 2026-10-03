@@ -3,7 +3,7 @@ title: "Profiling Python w/ cProfile & Snakeviz"
 date: 2019-02-01T00:00:00-00:00
 last_modified_at: 2019-02-01T00:00:00-00:00
 categories:
-  - software notes
+  - software
 permalink: /post-profiling-python/
 classes: wide
 excerpt: Debugging and profiling python code using cProfile & snakeviz.

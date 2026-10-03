@@ -3,10 +3,8 @@ title: "Interactive Music Visualization in Unreal Engine"
 date: 2019-07-01T00:00:00-00:00
 last_modified_at: 2019-07-01T00:00:00-00:00
 categories:
-  - audio visualization
-  - 3D
+  - interactive-media
   - art
-  - unreal engine
 permalink: /post-ue4-music-visualization/
 classes: wide
 excerpt: Early experiments creating interactive AV tools enabling a user to play with sound in a 3D context.

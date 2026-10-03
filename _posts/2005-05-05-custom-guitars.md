@@ -3,8 +3,8 @@ title: "Custom Guitars"
 date: 2005-05-05T00:00:00-00:00
 last_modified_at: 2005-05-05T00:00:00-00:00
 categories:
+  - making
   - art
-  - diy
 permalink: /post-custom-guitars/
 classes: wide
 excerpt: Designing and building custom guitars.

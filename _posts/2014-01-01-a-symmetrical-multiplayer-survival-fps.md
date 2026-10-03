@@ -3,9 +3,7 @@ title: "A-Symmetrical Multiplayer Survival FPS"
 date: 2014-01-01T00:00:00-00:00
 last_modified_at: 2014-01-01T00:00:00-00:00
 categories:
-  - game dev
-  - unreal engine
-  - 3D
+  - interactive-media
 permalink: /post-a-symmetrical-multiplayer-survival-fps/
 classes: wide
 toc: true

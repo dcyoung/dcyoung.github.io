@@ -3,9 +3,7 @@ title: "CardioVascular Mechanics"
 date: 2014-02-28T00:00:00-00:00
 last_modified_at: 2014-02-28T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-cardiovascular-mechanics/
 classes: wide
 toc: true

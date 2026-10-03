@@ -3,9 +3,7 @@ title: "Fiducial Marker Tracking ​for Augmented Reality"
 date: 2016-04-01T00:00:00-00:00
 last_modified_at: 2016-04-01T00:00:00-00:00
 categories:
-  - game dev
-  - school project
-  - augmented reality
+  - interactive-media
 permalink: /post-fiducial-marker-tracking-for-ar/
 classes: wide
 toc: true

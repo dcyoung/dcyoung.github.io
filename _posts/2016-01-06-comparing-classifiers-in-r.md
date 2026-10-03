@@ -3,9 +3,7 @@ title: "Comparing Classifiers in R"
 date: 2016-01-06T00:00:00-00:00
 last_modified_at: 2016-01-06T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
-  - school project
+  - machine-learning
 permalink: /post-comparing-classifiers-in-r/
 classes: wide
 toc: True

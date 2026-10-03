@@ -3,7 +3,7 @@ title: "Performant Clustering of Geo Coordinates w/ Custom Distance Functions"
 date: 2023-01-22T00:00:00-00:00
 last_modified_at: 2023-01-22T00:00:00-00:00
 categories:
-  - machine learning
+  - machine-learning
 permalink: /post-clustering-custom-distance/
 classes: wide
 excerpt: Implementing vectorized clustering methods for distance metrics unsupported by common libraries.

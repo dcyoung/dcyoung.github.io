@@ -3,8 +3,8 @@ title: "Generating Terrain and a simple Flight Sim w/ WebGL"
 date: 2015-02-25T00:00:00-00:00
 last_modified_at: 2015-02-25T00:00:00-00:00
 categories:
-  - webdev
-  - school project
+  - interactive-media
+  - software
 permalink: /post-webgl-terrain/
 classes: wide
 excerpt: Simple implementation of the diamond square algorithm to generate a tile of terrain.

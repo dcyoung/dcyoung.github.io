@@ -3,9 +3,7 @@ title: "Myocardial Behavior w/ Frog Heart Muscle"
 date: 2014-04-08T00:00:00-00:00
 last_modified_at: 2014-04-08T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-frog-heart-muscle/
 classes: wide
 excerpt: Using an intact frog ventricle muscle to study myocardial behavior and the impact of various control mechanisms.

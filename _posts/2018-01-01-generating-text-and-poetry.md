@@ -3,8 +3,7 @@ title: "Generating Text & Poetry with AI"
 date: 2018-01-01T00:00:00-00:00
 last_modified_at: 2018-01-01T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
+  - machine-learning
 permalink: /post-generating-text-and-poetry/
 classes: wide
 excerpt: Generating text and poetry with language models.

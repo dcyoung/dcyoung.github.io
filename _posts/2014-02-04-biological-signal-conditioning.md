@@ -3,9 +3,7 @@ title: "EKG Amplifier - Biological Signal Conditioning"
 date: 2014-02-04T00:00:00-00:00
 last_modified_at: 2014-02-04T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-biological-signal-conditioning/
 classes: wide
 excerpt:  Constructing a simple analog EKG amplifier to produce clean Lead I EKG recordings with identifiable wave characteristics.

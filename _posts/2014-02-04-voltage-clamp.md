@@ -3,9 +3,7 @@ title: "Voltage Clamp"
 date: 2014-02-04T00:00:00-00:00
 last_modified_at: 2014-02-04T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-voltage-clamp/
 classes: wide
 excerpt:  Constructing a circuit to study the behavior of a voltage clamp.

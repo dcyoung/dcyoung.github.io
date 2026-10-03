@@ -3,8 +3,7 @@ title: "Facial Detection & Recognition"
 date: 2015-11-01T00:00:00-00:00
 last_modified_at: 2015-11-01T00:00:00-00:00
 categories:
-  - computer vision
-  - school project
+  - machine-learning
 permalink: /post-facial-detection-and-recognition/
 classes: wide
 toc: True

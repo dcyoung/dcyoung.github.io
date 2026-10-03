@@ -3,8 +3,7 @@ title: "Bert w/ Label Semantics "
 date: 2022-08-16T00:00:00-00:00
 last_modified_at: 2022-08-16T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
+  - machine-learning
 permalink: /post-bert-with-label-semantics/
 classes: wide
 toc: true

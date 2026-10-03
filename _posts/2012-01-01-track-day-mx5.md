@@ -3,8 +3,7 @@ title: "Track Day MX-5: the Supercharged Bathtub"
 date: 2012-01-01T00:00:00-00:00
 last_modified_at: 2012-01-01T00:00:00-00:00
 categories:
-  - diy
-  - automotive
+  - making
   - motorsports
 permalink: /post-track-day-mx5/
 classes: wide

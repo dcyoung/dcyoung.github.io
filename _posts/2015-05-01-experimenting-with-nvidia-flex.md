@@ -3,9 +3,7 @@ title: "Experimenting with NVidia FLEX"
 date: 2015-05-01T00:00:00-00:00
 last_modified_at: 2015-05-01T00:00:00-00:00
 categories:
-  - game dev
-  - unreal engine
-  - 3D
+  - interactive-media
 permalink: /post-experimenting-with-nvidia-flex/
 classes: wide
 excerpt: Particle based physics and interactive fluids w/ Nvidia Flex.

@@ -3,8 +3,7 @@ title: "Using hardware sensors in Python: I2C"
 date: 2017-08-15T00:00:00-00:00
 last_modified_at: 2017-08-15T00:00:00-00:00
 categories:
-  - electronics
-  - diy
+  - making
 permalink: /post-python-i2c-sensor/
 classes: wide
 toc: true

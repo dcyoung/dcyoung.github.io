@@ -3,9 +3,7 @@ title: "Dive Response"
 date: 2013-03-21T00:00:00-00:00
 last_modified_at: 2013-03-21T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-dive-response/
 classes: wide
 excerpt: Measuring and studying the natural mechanisms of the body in response to being submerged in water.

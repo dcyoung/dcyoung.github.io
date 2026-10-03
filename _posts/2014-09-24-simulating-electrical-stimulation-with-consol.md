@@ -3,9 +3,7 @@ title: "Simulating Electrical Stimulation w/ Comsol"
 date: 2014-09-24T00:00:00-00:00
 last_modified_at: 2014-09-24T00:00:00-00:00
 categories:
-  - quantitative physiology
-  - biomedical engineering
-  - school project
+  - biomedical
 permalink: /post-bme-simulating-electrical-stimulation-with-consol/
 classes: wide
 excerpt: Investigating the use of finite element solvers in basic electrode design and analysis.

@@ -3,8 +3,7 @@ title: "Practical ML: Detecting Out-of-Distribution Data"
 date: 2023-02-05T00:00:00-00:00
 last_modified_at: 2023-02-05T00:00:00-00:00
 categories:
-  - machine learning
-  - ai
+  - machine-learning
 permalink: /post-mmle-scores/
 classes: wide
 excerpt: Detecting out of distribution samples using  

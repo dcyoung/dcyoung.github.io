@@ -3,8 +3,7 @@ title: "Path Planning (Mazes + Pacman)"
 date: 2015-10-05T00:00:00-00:00
 last_modified_at: 2015-10-05T00:00:00-00:00
 categories:
-  - ai
-  - school project
+  - machine-learning
 permalink: /post-path-planning-mazes/
 classes: wide
 toc: true

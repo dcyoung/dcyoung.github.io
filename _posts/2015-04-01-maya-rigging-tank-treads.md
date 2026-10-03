@@ -3,8 +3,7 @@ title: "Rigging Tank Treads with Mel in Maya"
 date: 2015-04-01T00:00:00-00:00
 last_modified_at: 2015-04-01T00:00:00-00:00
 categories:
-  - game dev
-  - 3D
+  - interactive-media
 permalink: /post-maya-rigging-tank-treads/
 classes: wide
 excerpt: Programmatic rigging of tank treads in Maya.

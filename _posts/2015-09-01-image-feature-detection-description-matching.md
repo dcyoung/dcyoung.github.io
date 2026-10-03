@@ -3,8 +3,7 @@ title: "Image Feature Detection, Description and Matching"
 date: 2015-09-01T00:00:00-00:00
 last_modified_at: 2015-09-01T00:00:00-00:00
 categories:
-  - computer vision
-  - school project
+  - machine-learning
 permalink: /post-image-feature-detection-description-matching/
 classes: wide
 toc: True
