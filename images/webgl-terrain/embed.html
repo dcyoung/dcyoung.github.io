@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+
+    <!--- Load Scripts --->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.3.2/gl-matrix-min.js"
+        integrity="sha512-fQ4Od/Hz+3oZYpqM4Mrg8t12JPTWwic/qw1ULWyMRwXRE+LUvYFjxokHbUriaMn1tOawSx49EQBIqDuqDN1vog=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </script>
+    <script> WebGLUtils = function () { var e = function (e) { return '<table style="background-color: #8CE; width: 100%; height: 100%;"><tr><td align="center"><div style="display: table-cell; vertical-align: middle;"><div style="">' + e + "</div></div></td></tr></table>" }, t = 'This page requires a browser that supports WebGL.<br/><a href="http://get.webgl.org">Click here to upgrade your browser.</a>', r = 'It doesn\'t appear your computer can support WebGL.<br/><a href="http://get.webgl.org/troubleshooting/">Click here for more information.</a>', n = function (n, o, a) { function u(i) { var o = n.parentNode; if (o) { var a = window.WebGLRenderingContext ? r : t; i && (a += "<br/><br/>Status: " + i), o.innerHTML = e(a) } } a = a || u, n.addEventListener && n.addEventListener("webglcontextcreationerror", function (e) { a(e.statusMessage) }, !1); var d = i(n, o); return d || window.WebGLRenderingContext || a(""), d }, i = function (e, t) { for (var r = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"], n = null, i = 0; i < r.length; ++i) { try { n = e.getContext(r[i], t) } catch (o) { } if (n) break } return n }; return { create3DContext: i, setupWebGL: n } }(), window.requestAnimFrame = function () { return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (e, t) { window.setTimeout(e, 1e3 / 60) } }();</script>
+
+    <script>function planeFromIteration(e, r, i, v, a, n, u) { for (var s = (i - r) / e, p = (a - v) / e, c = 0; e >= c; c++)for (var l = 0; e >= l; l++)n.push(r + s * l), n.push(a - p * c), n.push(0); for (var c = 0; e > c; c++)for (var l = 0; e > l; l++) { var h = c * (e + 1) + l; u.push(h), u.push(h + (e + 1)), u.push(h + 1), u.push(h + 1), u.push(h + (e + 1)), u.push(h + 1 + (e + 1)) } } function pushVertex(e, r) { for (i = 0; i < 3; i++)r.push(e[i]) } function divideTriangle(e, r, i, v, a) { if (v > 0) { var n = 0, u = vec4.create(); vec4.lerp(u, e, r, .5); var s = vec4.create(); vec4.lerp(s, e, i, .5); var p = vec4.create(); return vec4.lerp(p, r, i, .5), n += divideTriangle(e, u, s, v - 1, a), n += divideTriangle(u, r, p, v - 1, a), n += divideTriangle(p, i, s, v - 1, a), n += divideTriangle(u, p, s, v - 1, a) } return pushVertex(e, a), pushVertex(r, a), pushVertex(i, a), 1 } function planeFromSubdivision(e, r, i, v, a, n) { var u = 0, s = vec4.fromValues(r, v, 0, 0), p = vec4.fromValues(i, v, 0, 0), c = vec4.fromValues(i, a, 0, 0), l = vec4.fromValues(r, a, 0, 0); return u += divideTriangle(s, p, l, e, n), u += divideTriangle(p, c, l, e, n) } function sphDivideTriangle(e, r, i, v, a, n) { if (v > 0) { var u = 0, s = vec4.create(); vec4.lerp(s, e, r, .5), vec4.normalize(s, s); var p = vec4.create(); vec4.lerp(p, e, i, .5), vec4.normalize(p, p); var c = vec4.create(); return vec4.lerp(c, r, i, .5), vec4.normalize(c, c), u += sphDivideTriangle(e, s, p, v - 1, a, n), u += sphDivideTriangle(s, r, c, v - 1, a, n), u += sphDivideTriangle(c, i, p, v - 1, a, n), u += sphDivideTriangle(s, c, p, v - 1, a, n) } return pushVertex(e, a), pushVertex(r, a), pushVertex(i, a), pushVertex(e, n), pushVertex(r, n), pushVertex(i, n), 1 } function sphereFromSubdivision(e, r, i) { var v = 0, a = vec4.fromValues(0, 0, -1, 0), n = vec4.fromValues(0, .942809, .333333, 0), u = vec4.fromValues(-.816497, -.471405, .333333, 0), s = vec4.fromValues(.816497, -.471405, .333333, 0); return v += sphDivideTriangle(a, n, u, e, r, i), v += sphDivideTriangle(s, u, n, e, r, i), v += sphDivideTriangle(a, s, n, e, r, i), v += sphDivideTriangle(a, u, s, e, r, i) }</script>
+
+    <script>function terrainFromIteration(e, r, t, a, c, s, o, h) { var n = (t - r) / e, u = (c - a) / e, i = .025, v = new DiamondSquareTerrainGenerator(e + 1); v.generate(); for (var p = 0; e >= p; p++)for (var f = 0; e >= f; f++) { height = v.getVertexHeight(p, f), scaledHeight = height * i; var V = vec3.fromValues(r + n * f, a + u * p, scaledHeight); s.pushVec3(V), h.pushVec3(vec3.fromValues(0, 0, 0)) } for (var g = 0, l = 0; e > l; l++)for (var m = 0; e > m; m++) { var y = l * (e + 1) + m, d = y + 1, A = y + (e + 1), T = A + 1, H = vec3.fromValues(y, d, A), b = vec3.fromValues(d, T, A); o.pushVec3(H), o.pushVec3(b), g += 2 } for (var x = 0; g > x; x++) { var F = o.getVec3(x), I = s.getVec3(F[0]), q = s.getVec3(F[1]), w = s.getVec3(F[2]), z = vec3.create(), D = vec3.create(); vec3.subtract(z, q, I), vec3.subtract(D, w, I); var G = vec3.create(); vec3.cross(G, z, D); for (var L = 0; 3 > L; L++) { var S = h.getVec3(F[L]), j = vec3.create(); vec3.add(j, S, G), h.replaceVec3(F[L], j) } } for (var e = 0; e < h.length / 3; e++) { var k = vec3.create(); vec3.normalize(k, h.getVec3(e)), h.replaceVec3(e, k) } return g } function generateLinesFromIndexedTriangles(e, r) { numTris = e.length / 3; for (var t = 0; t < numTris; t++) { var a = 3 * t; r.push(e[a]), r.push(e[a + 1]), r.push(e[a + 1]), r.push(e[a + 2]), r.push(e[a + 2]), r.push(e[a]) } } Array.prototype.contains = function (e) { for (var r = this.length; r--;)if (this[r] === e) return !0; return !1 }, Array.prototype.pushVec3 = function (e) { this.push(e[0]), this.push(e[1]), this.push(e[2]) }, Array.prototype.getVec3 = function (e) { var r = vec3.fromValues(this[3 * e], this[3 * e + 1], this[3 * e + 2]); return r }, Array.prototype.replaceVec3 = function (e, r) { this[3 * e] = r[0], this[3 * e + 1] = r[1], this[3 * e + 2] = r[2] };</script>
+
+    <script>function DiamondSquareTerrainGenerator(e) { this.size = e, this.max = this.size - 1, numHeightmapVertices = this.size * this.size, this.heightMap = new Float32Array(numHeightmapVertices), this.fluctionWeight = .4 } DiamondSquareTerrainGenerator.prototype.divideTile = function (e) { var t, i, r, h = e / 2, s = this.fluctionWeight * e; if (h >= 1) { for (i = h; i < this.max; i += e)for (t = h; t < this.max; t += e)r = Math.random() * s * 2 - s, this.squareStep(t, i, h, r); for (i = 0; i <= this.max; i += h)for (t = (i + h) % e; t <= this.max; t += e)r = Math.random() * s * 2 - s, this.diamondStep(t, i, h, r); this.divideTile(e / 2) } }, DiamondSquareTerrainGenerator.prototype.diamondStep = function (e, t, i, r) { var h, s = []; -1 != (h = this.getVertexHeight(e, t - i)) && s.push(h), -1 != (h = this.getVertexHeight(e + i, t)) && s.push(h), -1 != (h = this.getVertexHeight(e, t + i)) && s.push(h), -1 != (h = this.getVertexHeight(e - i, t)) && s.push(h); var a = this.getAverageOfArray(s); this.setVertexHeight(e, t, a + r) }, DiamondSquareTerrainGenerator.prototype.squareStep = function (e, t, i, r) { var h, s = []; -1 != (h = this.getVertexHeight(e - i, t - i)) && s.push(h), -1 != (h = this.getVertexHeight(e + i, t - i)) && s.push(h), -1 != (h = this.getVertexHeight(e + i, t + i)) && s.push(h), -1 != (h = this.getVertexHeight(e - i, t + i)) && s.push(h); var a = this.getAverageOfArray(s); this.setVertexHeight(e, t, a + r) }, DiamondSquareTerrainGenerator.prototype.getAverageOfArray = function (e) { var t = 0, i = e.reduce(function (e, t) { return reducedValue = e + t, reducedValue }, t), r = i / e.length; return r }, DiamondSquareTerrainGenerator.prototype.generate = function () { var e = 20; this.setVertexHeight(0, 0, e), this.setVertexHeight(this.size - 1, 0, e), this.setVertexHeight(this.size - 1, this.size - 1, e), this.setVertexHeight(0, this.size - 1, e), this.divideTile(this.max) }, DiamondSquareTerrainGenerator.prototype.getVertexHeight = function (e, t) { return 0 > t || 0 > e || t > this.max || e > this.max ? -1 : this.heightMap[this.size * t + e] }, DiamondSquareTerrainGenerator.prototype.setVertexHeight = function (e, t, i) { this.heightMap[this.size * t + e] = i };</script>
+
+    <script>function setupTerrainBuffers() { var e = [], r = [], t = [], a = [], i = Math.pow(2, 5), o = 1, n = terrainFromIteration(i, -o, o, -o, o, e, r, t); console.log("Generated ", n, " triangles"), tVertexPositionBuffer = gl.createBuffer(), gl.bindBuffer(gl.ARRAY_BUFFER, tVertexPositionBuffer), gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(e), gl.STATIC_DRAW), tVertexPositionBuffer.itemSize = 3, tVertexPositionBuffer.numItems = (i + 1) * (i + 1), tVertexNormalBuffer = gl.createBuffer(), gl.bindBuffer(gl.ARRAY_BUFFER, tVertexNormalBuffer), gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(t), gl.STATIC_DRAW), tVertexNormalBuffer.itemSize = 3, tVertexNormalBuffer.numItems = (i + 1) * (i + 1), tIndexTriBuffer = gl.createBuffer(), gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, tIndexTriBuffer), gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(r), gl.STATIC_DRAW), tIndexTriBuffer.itemSize = 1, tIndexTriBuffer.numItems = 3 * n, generateLinesFromIndexedTriangles(r, a), tIndexEdgeBuffer = gl.createBuffer(), gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, tIndexEdgeBuffer), gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(a), gl.STATIC_DRAW), tIndexEdgeBuffer.itemSize = 1, tIndexEdgeBuffer.numItems = a.length } function drawTerrain() { gl.polygonOffset(0, 0), gl.bindBuffer(gl.ARRAY_BUFFER, tVertexPositionBuffer), gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, tVertexPositionBuffer.itemSize, gl.FLOAT, !1, 0, 0), gl.bindBuffer(gl.ARRAY_BUFFER, tVertexNormalBuffer), gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, tVertexNormalBuffer.itemSize, gl.FLOAT, !1, 0, 0), gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, tIndexTriBuffer), gl.drawElements(gl.TRIANGLES, tIndexTriBuffer.numItems, gl.UNSIGNED_SHORT, 0) } function drawTerrainEdges() { gl.polygonOffset(1, 1), gl.bindBuffer(gl.ARRAY_BUFFER, tVertexPositionBuffer), gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, tVertexPositionBuffer.itemSize, gl.FLOAT, !1, 0, 0), gl.bindBuffer(gl.ARRAY_BUFFER, tVertexNormalBuffer), gl.vertexAttribPointer(shaderProgram.vertexNormalAttribute, tVertexNormalBuffer.itemSize, gl.FLOAT, !1, 0, 0), gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, tIndexEdgeBuffer), gl.drawElements(gl.LINES, tIndexEdgeBuffer.numItems, gl.UNSIGNED_SHORT, 0) } function uploadModelViewMatrixToShader() { gl.uniformMatrix4fv(shaderProgram.mvMatrixUniform, !1, mvMatrix) } function uploadProjectionMatrixToShader() { gl.uniformMatrix4fv(shaderProgram.pMatrixUniform, !1, pMatrix) } function uploadNormalMatrixToShader() { mat3.fromMat4(nMatrix, mvMatrix), mat3.transpose(nMatrix, nMatrix), mat3.invert(nMatrix, nMatrix), gl.uniformMatrix3fv(shaderProgram.nMatrixUniform, !1, nMatrix) } function mvPushMatrix() { var e = mat4.clone(mvMatrix); mvMatrixStack.push(e) } function mvPopMatrix() { if (0 == mvMatrixStack.length) throw "Invalid popMatrix!"; mvMatrix = mvMatrixStack.pop() } function setMatrixUniforms() { uploadModelViewMatrixToShader(), uploadNormalMatrixToShader(), uploadProjectionMatrixToShader() } function degToRad(e) { return e * Math.PI / 180 } function createGLContext(e) { for (var r = ["webgl", "experimental-webgl"], t = null, a = 0; a < r.length; a++) { try { t = e.getContext(r[a]) } catch (i) { } if (t) break } return t ? (t.viewportWidth = e.width, t.viewportHeight = e.height) : alert("Failed to create WebGL context!"), t } function loadShaderFromDOM(e) { var r = document.getElementById(e); if (!r) return null; for (var t = "", a = r.firstChild; a;)3 == a.nodeType && (t += a.textContent), a = a.nextSibling; var i; if ("x-shader/x-fragment" == r.type) i = gl.createShader(gl.FRAGMENT_SHADER); else { if ("x-shader/x-vertex" != r.type) return null; i = gl.createShader(gl.VERTEX_SHADER) } return gl.shaderSource(i, t), gl.compileShader(i), gl.getShaderParameter(i, gl.COMPILE_STATUS) ? i : (alert(gl.getShaderInfoLog(i)), null) } function setupShaders() { vertexShader = loadShaderFromDOM("shader-vs"), fragmentShader = loadShaderFromDOM("shader-fs"), shaderProgram = gl.createProgram(), gl.attachShader(shaderProgram, vertexShader), gl.attachShader(shaderProgram, fragmentShader), gl.linkProgram(shaderProgram), gl.getProgramParameter(shaderProgram, gl.LINK_STATUS) || alert("Failed to setup shaders"), gl.useProgram(shaderProgram), shaderProgram.vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition"), gl.enableVertexAttribArray(shaderProgram.vertexPositionAttribute), shaderProgram.vertexNormalAttribute = gl.getAttribLocation(shaderProgram, "aVertexNormal"), gl.enableVertexAttribArray(shaderProgram.vertexNormalAttribute), shaderProgram.mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix"), shaderProgram.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix"), shaderProgram.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix"), shaderProgram.uniformLightPositionLoc = gl.getUniformLocation(shaderProgram, "uLightPosition"), shaderProgram.uniformAmbientLightColorLoc = gl.getUniformLocation(shaderProgram, "uAmbientLightColor"), shaderProgram.uniformDiffuseLightColorLoc = gl.getUniformLocation(shaderProgram, "uDiffuseLightColor"), shaderProgram.uniformSpecularLightColorLoc = gl.getUniformLocation(shaderProgram, "uSpecularLightColor") } function uploadLightsToShader(e, r, t, a) { gl.uniform3fv(shaderProgram.uniformLightPositionLoc, e), gl.uniform3fv(shaderProgram.uniformAmbientLightColorLoc, r), gl.uniform3fv(shaderProgram.uniformDiffuseLightColorLoc, t), gl.uniform3fv(shaderProgram.uniformSpecularLightColorLoc, a) } function setupBuffers() { setupTerrainBuffers() } function updateHorizontalAngle(e) { horizontalViewingAngle = e, document.getElementById("horizontalAngleValueDisplay").value = e } function updateVerticleAngle(e) { verticleViewingAngle = e, document.getElementById("verticleAngleValueDisplay").value = e } function draw() { var e = vec3.create(); if (gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight), gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT), mat4.perspective(pMatrix, degToRad(45), gl.viewportWidth / gl.viewportHeight, .1, 200), vec3.add(viewPt, eyePt, viewDir), mat4.lookAt(mvMatrix, eyePt, viewPt, up), mvPushMatrix(), vec3.set(e, 0, -.25, -3), mat4.translate(mvMatrix, mvMatrix, e), mat4.rotateX(mvMatrix, mvMatrix, degToRad(verticleViewingAngle)), mat4.rotateZ(mvMatrix, mvMatrix, degToRad(horizontalViewingAngle)), setMatrixUniforms(), (document.getElementById("polygon").checked || document.getElementById("wirepoly").checked) && (uploadLightsToShader([0, 1, 1], [0, 0, 0], [1, .5, 0], [0, 0, 0]), drawTerrain()), document.getElementById("wirepoly").checked && (uploadLightsToShader([0, 1, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0]), drawTerrainEdges()), document.getElementById("wireframe").checked && (uploadLightsToShader([0, 1, 1], [1, 1, 1], [0, 0, 0], [0, 0, 0]), drawTerrainEdges()), document.getElementById("pointlight").checked) { var r = vec3.fromValues(0, 1, 1.5), t = vec3.fromValues(.3, .3, .3), a = vec3.fromValues(.5, .5, .75), i = vec3.fromValues(.2, .2, .2); uploadLightsToShader(r, t, a, i), drawTerrain(), uploadLightsToShader(r, t, a, i), drawTerrainEdges() } mvPopMatrix() } function animate() { } function startup() { canvas = document.getElementById("myGLCanvas"), canvas.width = Math.min(window.innerWidth, 800), canvas.height = canvas.width, gl = createGLContext(canvas), setupShaders(), setupBuffers(), gl.clearColor(0, 0, 0, 1), gl.enable(gl.DEPTH_TEST), tick() } function tick() { requestAnimFrame(tick), draw(), animate() } var gl, canvas, shaderProgram, vertexPositionBuffer, tVertexPositionBuffer, tVertexNormalBuffer, tIndexTriBuffer, tIndexEdgeBuffer, eyePt = vec3.fromValues(0, 0, 0), viewDir = vec3.fromValues(0, 0, -1), up = vec3.fromValues(0, 1, 0), viewPt = vec3.fromValues(0, 0, 0), nMatrix = mat3.create(), mvMatrix = mat4.create(), pMatrix = mat4.create(), mvMatrixStack = [], horizontalViewingAngle = 25, verticleViewingAngle = -75;</script>
+
+    <meta charset="utf-8">
+</head>
+
+<body onload="startup();">
+    <div style="text-align: center">
+        <canvas id="myGLCanvas"></canvas>
+        <form id="input_form">
+            <fieldset>
+                <legend>Rendering Parameters</legend>
+                <input type="radio" name="primitive" id="wireframe" value="wireframe"> Wireframe
+                <input type="radio" name="primitive" id="polygon" id="polygon" value="polygon"> Polygon
+                <input type="radio" name="primitive" id="pointlight" value="pointlight" checked> Point Light
+                <input type="radio" name="primitive" id="wirepoly" value="wirepoly" checked> Polygon with Edges
+
+
+                <br><span id="verticleAngleValBox"></span>
+                <input type="range" min="-90" max="90" step="1" oninput="updateVerticleAngle(this.value)"
+                    onchange="updateVerticleAngle(this.value)" value=-75>
+                Verticle Angle: <input type="text" id="verticleAngleValueDisplay" value="">
+
+                <br><span id="horizontalAngleValBox"></span>
+                <input type="range" min="-90" max="90" step="1" oninput="updateHorizontalAngle(this.value)"
+                    onchange="updateHorizontalAngle(this.value)" value=25>
+                Horizontal Angle: <input type="text" id="horizontalAngleValueDisplay" value="">
+            </fieldset>
+        </form>
+    </div>
+</body>
+
+
+
+
+<!------------------------------------------------ Define Vertex Shaders ------------------------------------------------>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+   attribute vec3 aVertexNormal;
+   attribute vec3 aVertexPosition;
+   
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+    uniform mat3 uNMatrix;
+    uniform vec3 uLightPosition;
+    uniform vec3 uAmbientLightColor;
+    uniform vec3 uDiffuseLightColor;
+    uniform vec3 uSpecularLightColor;
+    
+    const float shininess = 32.0;
+    
+    varying vec4 vColor;
+
+    void main(void) {
+    
+    // Get the vertex position in eye coordinates
+    vec4 vertexPositionEye4 = uMVMatrix * vec4(aVertexPosition, 1.0);
+    vec3 vertexPositionEye3 = vertexPositionEye4.xyz / vertexPositionEye4.w;
+  
+    // Calculate the vector (l) to the light source
+    //vec3 vectorToLightSource = normalize(uLightPosition - vertexPositionEye3);
+    //@dcyoung: changed to the following so that the point light would update with the terrain
+    vec3 tempLightPosition = (uMVMatrix * vec4(uLightPosition,1.0)).xyz;
+    vec3 vectorToLightSource = normalize(tempLightPosition - vertexPositionEye3);
+    
+    
+    // Transform the normal (n) to eye coordinates
+    vec3 normalEye = normalize(uNMatrix * aVertexNormal);
+    
+    // Calculate n dot l for diffuse lighting
+    float diffuseLightWeightning = max(dot(normalEye, 
+                                    vectorToLightSource), 0.0);
+                                       
+    // Calculate the reflection vector (r) that is needed for specular light
+    vec3 reflectionVector = normalize(reflect(-vectorToLightSource, 
+                                             normalEye));
+    
+    // The camera in eye coordinates is located in the origin and is pointing
+    // along the negative z-axis. Calculate viewVector (v) 
+    // in eye coordinates as:
+    // (0.0, 0.0, 0.0) - vertexPositionEye3
+    vec3 viewVectorEye = -normalize(vertexPositionEye3);
+    
+    float rdotv = max(dot(reflectionVector, viewVectorEye), 0.0);
+    
+    float specularLightWeightning = pow(rdotv, shininess);
+
+    // Sum up all three reflection components and send to the fragment shader
+    vColor = vec4((uAmbientLightColor
+                + uDiffuseLightColor * diffuseLightWeightning
+                + uSpecularLightColor * specularLightWeightning),1.0);
+    
+     gl_Position = uPMatrix*uMVMatrix*vec4(aVertexPosition, 1.0);
+        
+    }
+</script>
+
+
+
+<!------------------------------------------------ Define Fragment Shaders ------------------------------------------------>
+
+<script id="shader-fs" type="x-shader/x-fragment">
+precision mediump float;
+varying vec4 vColor;
+void main(void) {
+        gl_FragColor = vColor;
+ }
+</script>
+
+
+
+
+</html>
